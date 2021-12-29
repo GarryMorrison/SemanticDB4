@@ -30,6 +30,7 @@ private:
     wxPoint m_position_delta = wxPoint(0, 0);
 
     wxString m_knowledge;
+    bool m_use_active_text = true;
 
     wxArrayString m_literal_ops;
     wxArrayString m_active_literal_ops;

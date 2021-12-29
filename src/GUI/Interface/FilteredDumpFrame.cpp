@@ -45,6 +45,24 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     SetTitle(local_title);  // Ignore passed in title for now.
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
  
+    // Add context selector:
+    wxBoxSizer* hbox1 = new wxBoxSizer(wxHORIZONTAL);
+    wxArrayString context_list;  // Later wire in ContextList, for now just some dummy values.
+    context_list.Add("global");
+    context_list.Add("plurals");
+    context_list.Add("numbers to words");
+    context_list.Add("predicting integer sequences");
+    wxChoice* context_selector = new wxChoice(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, context_list);
+    context_selector->SetSelection(0);
+    hbox1->Add(new wxStaticText(panel, wxID_ANY, "Context", wxDefaultPosition, wxDefaultSize), wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    hbox1->Add(context_selector, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    wxCheckBox* use_active_text_checkbox = new wxCheckBox(panel, wxID_ANY, "Active text");
+    use_active_text_checkbox->SetValue(m_use_active_text);
+    hbox1->Add(use_active_text_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    wxCheckBox* op_ket_and = new wxCheckBox(panel, wxID_ANY, "And operators and kets");
+    hbox1->Add(op_ket_and, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    topsizer->AddSpacer(10);
+    topsizer->Add(hbox1);
 
     // wxCheckListBox "header":
     wxBoxSizer* literal_op_sizer = new wxBoxSizer(wxVERTICAL);
@@ -81,13 +99,13 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     }
     ket_sizer->Add(m_ket_list_box, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
 
-    wxCheckBox* op_ket_and = new wxCheckBox(panel, wxID_ANY, "And operators and kets");
+    // wxCheckBox* op_ket_and = new wxCheckBox(panel, wxID_ANY, "And operators and kets");
     // Maybe add an active-text checkbox here?
 
     wxBoxSizer* checklist_sizer = new wxBoxSizer(wxHORIZONTAL);
     checklist_sizer->Add(literal_op_sizer);
     checklist_sizer->Add(ket_sizer);
-    checklist_sizer->Add(op_ket_and, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
+    // checklist_sizer->Add(op_ket_and, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
     topsizer->Add(checklist_sizer);
     topsizer->AddSpacer(10);
 
@@ -109,6 +127,11 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         {
             Close();
         }
+        });
+
+    use_active_text_checkbox->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
+        m_use_active_text = use_active_text_checkbox->GetValue();
+        UpdateKnowledge();
         });
 
     m_literal_op_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckLiteralOpList, this);
@@ -177,7 +200,14 @@ void FilteredDumpFrame::UpdateKnowledge()
         m_knowledge += "knowledge for ket: " + op + "\n";  // Maybe sort the knowledge according to some criteria?
     }
     m_result_canvas->ClearCanvas();
-    m_result_canvas->AppendActiveText(m_knowledge);
+    if (m_use_active_text)
+    {
+        m_result_canvas->AppendActiveText(m_knowledge);
+    }
+    else
+    {
+        m_result_canvas->AppendText(m_knowledge);
+    }
 }
 
 FilteredDumpFrame::~FilteredDumpFrame()
