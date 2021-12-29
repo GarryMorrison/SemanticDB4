@@ -7,7 +7,7 @@
 //
 
 #pragma once
-#include "SDB.h"
+#include "../../SDB.h"
 
 class PrimaryFrame : public wxFrame
 {

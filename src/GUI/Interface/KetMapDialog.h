@@ -7,7 +7,7 @@
 //
 
 #pragma once
-#include "SDB.h"
+#include "../../SDB.h"
 
 class KetMapDialog : public wxDialog {
 

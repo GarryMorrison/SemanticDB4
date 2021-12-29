@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\GUI\Interface\SDB.h">
+    <ClInclude Include="src\SDB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\KetMap\KetMap.h">
@@ -71,7 +71,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\GUI\Interface\SDB.cpp">
+    <ClCompile Include="src\SDB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\KetMap\KetMap.cpp">

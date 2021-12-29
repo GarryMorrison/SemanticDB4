@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2021/12/27
+// Updated 2021/12/30
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2021/12/28"
+#define APP_BUILD_DATE "2021/12/30"
 #define APP_VERSION "0.1.pre-alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -65,24 +65,24 @@
 #include <streambuf>
 #include <sstream>
 
-#include "../../Function/SplitJoin.h"
-#include "../../KetMap/KetMap.h"
-#include "../../FunctionOperatorMap/FunctionOperatorMap.h"
-#include "../../OperatorUsageMap/OperatorUsageMap.h"
+#include "Function/SplitJoin.h"
+#include "KetMap/KetMap.h"
+#include "FunctionOperatorMap/FunctionOperatorMap.h"
+#include "OperatorUsageMap/OperatorUsageMap.h"
 // #include "src/Function/CoutRedirect.h"
-#include "../../Function/Timer.h"
+#include "Function/Timer.h"
 
-#include "PrimaryFrame.h"
-#include "AppAbout.h"
-#include "UsageFrame.h"
-#include "DumpFrame.h"
-#include "LinkedTextCtrl.h"
-#include "KetMapDialog.h"
-#include "SortedListCtrl.h"
-#include "SelectFromListDialog.h"
-#include "ResultCanvas.h"
-#include "CommandPanel.h"
-#include "FilteredDumpFrame.h"
+#include "GUI/Interface/PrimaryFrame.h"
+#include "GUI/Interface/AppAbout.h"
+#include "GUI/Interface/UsageFrame.h"
+#include "GUI/Interface/DumpFrame.h"
+#include "GUI/Interface/LinkedTextCtrl.h"
+#include "GUI/Interface/KetMapDialog.h"
+#include "GUI/Interface/SortedListCtrl.h"
+#include "GUI/Interface/SelectFromListDialog.h"
+#include "GUI/Interface/ResultCanvas.h"
+#include "GUI/Interface/CommandPanel.h"
+#include "GUI/Interface/FilteredDumpFrame.h"
 
 
 class SDBApp : public wxApp

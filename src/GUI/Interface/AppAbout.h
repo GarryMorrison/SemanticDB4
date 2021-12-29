@@ -7,7 +7,8 @@
 //
 
 #pragma once
-#include "SDB.h"
+#include "../../SDB.h"
+
 
 //! about box of the application APP_VENDOR-APP_NAME
 class AppAbout : public wxDialog {

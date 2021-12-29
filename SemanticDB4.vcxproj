@@ -164,7 +164,7 @@
     <ClInclude Include="src\OperatorUsageMap\OperatorUsageMap.h" />
     <ClInclude Include="src\FunctionOperatorMap\FunctionOperatorMap.h" />
     <ClInclude Include="src\KetMap\KetMap.h" />
-    <ClInclude Include="src\GUI\Interface\SDB.h" />
+    <ClInclude Include="src\SDB.h" />
     <ClInclude Include="src\Function\Timer.h" />
     <ClInclude Include="src\GUI\Interface\UsageFrame.h" />
   </ItemGroup>
@@ -184,7 +184,7 @@
     <ClCompile Include="src\OperatorUsageMap\OperatorUsageMap.cpp" />
     <ClCompile Include="src\FunctionOperatorMap\FunctionOperatorMap.cpp" />
     <ClCompile Include="src\KetMap\KetMap.cpp" />
-    <ClCompile Include="src\GUI\Interface\SDB.cpp" />
+    <ClCompile Include="src\SDB.cpp" />
     <ClCompile Include="src\Function\Timer.cpp" />
     <ClCompile Include="src\GUI\Interface\UsageFrame.cpp" />
   </ItemGroup>
