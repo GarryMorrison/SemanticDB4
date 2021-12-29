@@ -66,6 +66,9 @@
     <ClInclude Include="src\GUI\Interface\PrimaryFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI\Interface\FilteredDumpFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GUI\Interface\SDB.cpp">
@@ -117,6 +120,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\Interface\PrimaryFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\Interface\FilteredDumpFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

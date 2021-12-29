@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2021/12/29
 // Author Garry Morrison
 // License GPL v3
 //
@@ -68,7 +68,6 @@ void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix,
     }
 
     std::string token;
-    std::set<int> object_type;
 
     if (!prefix.empty())
     {
@@ -76,6 +75,7 @@ void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix,
     }
     for (const auto line : split_text)
     {
+        token.clear();
         bool inside_object = false;
         bool inside_ket = false;
         int the_object_type = RC_OBJECT_NONE;
@@ -229,7 +229,7 @@ void ResultCanvas::OnKeyUp(wxKeyEvent& event)
         if (!vect_of_kets.empty() || !vect_of_literal_operators.empty())
         {
             m_usage_frame_position_delta += wxPoint(40, 40);
-            DumpFrame* dump_frame = new DumpFrame(this, "Knowledge for stuff ...", vect_of_literal_operators, vect_of_kets, m_usage_frame_position_delta);
+            FilteredDumpFrame* dump_frame = new FilteredDumpFrame(this, "Knowledge for stuff ...", vect_of_literal_operators, vect_of_kets, m_usage_frame_position_delta);
             // m_usage_frame_position_delta += wxPoint(40, 40);
         }
     }

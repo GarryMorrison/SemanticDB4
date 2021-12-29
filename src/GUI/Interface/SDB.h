@@ -82,6 +82,7 @@
 #include "SelectFromListDialog.h"
 #include "ResultCanvas.h"
 #include "CommandPanel.h"
+#include "FilteredDumpFrame.h"
 
 
 class SDBApp : public wxApp

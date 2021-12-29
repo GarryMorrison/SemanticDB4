@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GUI\Interface\FilteredDumpFrame.h" />
     <ClInclude Include="src\GUI\Interface\PrimaryFrame.h" />
     <ClInclude Include="src\GUI\Interface\CommandPanel.h" />
     <ClInclude Include="src\GUI\Interface\ResultCanvas.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\GUI\Interface\UsageFrame.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\Interface\FilteredDumpFrame.cpp" />
     <ClCompile Include="src\GUI\Interface\PrimaryFrame.cpp" />
     <ClCompile Include="src\GUI\Interface\CommandPanel.cpp" />
     <ClCompile Include="src\GUI\Interface\ResultCanvas.cpp" />
