@@ -31,6 +31,7 @@ private:
 
     wxString m_knowledge;
     bool m_use_active_text = true;
+    bool m_use_op_ket_and = false;
 
     wxArrayString m_literal_ops;
     wxArrayString m_active_literal_ops;

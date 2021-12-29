@@ -59,8 +59,9 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     wxCheckBox* use_active_text_checkbox = new wxCheckBox(panel, wxID_ANY, "Active text");
     use_active_text_checkbox->SetValue(m_use_active_text);
     hbox1->Add(use_active_text_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
-    wxCheckBox* op_ket_and = new wxCheckBox(panel, wxID_ANY, "And operators and kets");
-    hbox1->Add(op_ket_and, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    wxCheckBox* op_ket_and_checkbox = new wxCheckBox(panel, wxID_ANY, "And operators and kets");
+    op_ket_and_checkbox->SetValue(m_use_op_ket_and);
+    hbox1->Add(op_ket_and_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
     topsizer->AddSpacer(10);
     topsizer->Add(hbox1);
 
@@ -134,6 +135,11 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         UpdateKnowledge();
         });
 
+    op_ket_and_checkbox->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
+        m_use_op_ket_and = op_ket_and_checkbox->GetValue();
+        UpdateKnowledge();
+        });
+
     m_literal_op_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckLiteralOpList, this);
     m_ket_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckKetList, this);
 
@@ -185,20 +191,36 @@ void FilteredDumpFrame::CheckKetList(wxCommandEvent& event)
 void FilteredDumpFrame::UpdateKnowledge()
 {
     m_knowledge.Clear();
-    for (unsigned int op_idx : m_set_active_literal_ops)  // Later: dump[op] rel-kets[op]
+    if (!m_use_op_ket_and)
     {
-        wxString op = m_literal_ops[op_idx];
-        m_knowledge += "knowledge for literal operator: " + op + "\n";  // Maybe sort the knowledge according to some criteria? For now, set sorts by list_idx. Which is good!
+        for (unsigned int op_idx : m_set_active_literal_ops)  // Later: dump[op] rel-kets[op]
+        {
+            wxString op = m_literal_ops[op_idx];
+            m_knowledge += "knowledge for literal operator: " + op + "\n";  // Maybe sort the knowledge according to some criteria? For now, set sorts by list_idx. Which is good!
+        }
+        if (!m_knowledge.empty())
+        {
+            m_knowledge += "\n";
+        }
+        for (unsigned int ket_idx : m_set_active_kets)  // Later: dump[*] |ket>
+        {
+            wxString k = m_kets[ket_idx];
+            m_knowledge += "knowledge for ket: " + k + "\n";  // Maybe sort the knowledge according to some criteria?
+        }
     }
-    if (!m_knowledge.empty())
+    else
     {
-        m_knowledge += "\n";
+        for (unsigned int op_idx : m_set_active_literal_ops)
+        {
+            wxString op = m_literal_ops[op_idx];
+            for (unsigned int ket_idx : m_set_active_kets)
+            {
+                wxString k = m_kets[ket_idx];
+                m_knowledge += wxString::Format("knowledge for literal operator: %s and ket: %s\n", op, k);
+            }
+        }
     }
-    for (unsigned int ket_idx : m_set_active_kets)  // Later: dump[*] |ket>
-    {
-        wxString op = m_kets[ket_idx];
-        m_knowledge += "knowledge for ket: " + op + "\n";  // Maybe sort the knowledge according to some criteria?
-    }
+
     m_result_canvas->ClearCanvas();
     if (m_use_active_text)
     {
