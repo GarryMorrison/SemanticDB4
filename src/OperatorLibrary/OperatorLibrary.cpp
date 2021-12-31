@@ -142,6 +142,7 @@ Ket op_floor(const Ket& k) {
         return Ket(label + float_to_int(value, default_decimal_places), k.value());
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return k;
     }
 }
@@ -157,6 +158,7 @@ Ket op_ceiling(const Ket& k) {
         return Ket(label + float_to_int(value, default_decimal_places), k.value());
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return k;
     }
 }
@@ -172,6 +174,7 @@ Ket op_log(const Ket& k) {
         return Ket(label + float_to_int(value, default_decimal_places), k.value());
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return k;
     }
 }
@@ -179,7 +182,7 @@ Ket op_log(const Ket& k) {
 
 
 Ket ket_length(const Ket k) {
-    unsigned int len = k.label().size();
+    size_t len = k.label().size();
     return Ket("number: " + std::to_string(len), k.value());
 }
 
@@ -211,6 +214,7 @@ Ket pop_float(const Ket& k) {
         return Ket(label_idx, value * k.value());
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return k;
     }
 }
@@ -437,7 +441,7 @@ Ket op_int_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundCons
     long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
     split_idx.pop_back();
     if (split_idx.empty()) {
-        return Ket(float_to_int((long long)(number / value), default_decimal_places), k.value());
+        return Ket(float_to_int((long double)(number / value), default_decimal_places), k.value());
     }
     else {
         std::string category = ket_map.get_str(split_idx) + ": ";
@@ -470,11 +474,11 @@ Ket op_modulus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
     split_idx.pop_back();
     long long result = static_cast<long long>(number) % static_cast<long long>(value);
     if (split_idx.empty()) {
-        return Ket(float_to_int(result, default_decimal_places), k.value());
+        return Ket(float_to_int((long double)result, default_decimal_places), k.value());
     }
     else {
         std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(result, default_decimal_places), k.value());
+        return Ket(category + float_to_int((long double)result, default_decimal_places), k.value());
     }
 }
 
@@ -552,8 +556,8 @@ Ket op_table(const Superposition& sp, ContextList& context, const std::vector<st
         }
     }
 
-    unsigned int width = operators.size();
-    unsigned int height = sp.size();
+    unsigned int width = (unsigned int)(operators.size());
+    unsigned int height = (unsigned int)(sp.size());
     std::vector<std::string> header;
     header.reserve(width);
     std::vector<unsigned int> column_widths;
@@ -564,7 +568,7 @@ Ket op_table(const Superposition& sp, ContextList& context, const std::vector<st
     for (const auto& op : operators) {
         std::string op_label = op.to_string();
         header.push_back(op_label);
-        unsigned int column_width = op_label.size();
+        unsigned int column_width = (unsigned int)(op_label.size());
         column_widths.push_back(column_width);  // initial size of columns is the header widths
     }
 
@@ -645,8 +649,8 @@ Ket op_transpose_table(const Superposition& sp, ContextList& context, const std:
         }
     }
 
-    unsigned int height = operators.size();
-    unsigned int width = sp.size() + 1;
+    unsigned int height = (unsigned int)(operators.size());
+    unsigned int width = (unsigned int)(sp.size()) + 1;
     std::vector<std::string> header;
     header.reserve(width);
     std::vector<unsigned int> column_widths;
@@ -655,10 +659,10 @@ Ket op_transpose_table(const Superposition& sp, ContextList& context, const std:
     table_body.reserve(width * (height - 1));
 
     header.push_back(operators[0].to_string());
-    column_widths.push_back(operators[0].to_string().size());
+    column_widths.push_back((unsigned int)(operators[0].to_string().size()));
     for (const auto& k : sp) {
         header.push_back(k.label());
-        column_widths.push_back(k.label().size());
+        column_widths.push_back((unsigned int)(k.label().size()));
     }
 
     unsigned int idx = 0;
@@ -751,7 +755,7 @@ ulong grid_element(const std::string& s, const unsigned int x, const unsigned in
 }
 
 bool is_in_grid(const int x, const int y, const unsigned int width, const unsigned int height) {
-    if (x < 0 || y < 0 || x >= width || y >= height) { return false; }
+    if (x < 0 || y < 0 || x >= (int)width || y >= (int)height) { return false; }
     return true;
 }
 
@@ -778,8 +782,8 @@ Ket op_learn_grid(const Superposition& sp, ContextList& context, const std::vect
     ulong west_idx = ket_map.get_idx("W");
     ulong north_west_idx = ket_map.get_idx("NW");
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
+    for (int y = 0; y < (int)height; y++) {
+        for (int x = 0; x < (int)width; x++) {
             ulong element_idx = grid_element(y, x);
             context.learn(op_idx, element_idx, zero_seq);
             if (is_in_grid(x, y - 1, width, height)) {   // I'm confused why is_in_grid() and grid_element() have opposite parameter orders?
@@ -855,13 +859,13 @@ Ket op_display_grid(const Superposition& sp, ContextList& context, const std::ve
     std::cout << "width:  " << width << "\n";
     std::cout << "height: " << height << "\n\n";
     std::cout << std::left << std::setfill(' ') << std::setw(3) << " ";
-    for (int x = 0; x < width; x++) {
+    for (int x = 0; x < (int)width; x++) {
         std::cout << std::right << std::setw(4) << x;
     }
     std::cout << "\n\n";
-    for (int y = 0; y < height; y++) {
+    for (int y = 0; y < (int)height; y++) {
         std::cout << std::left << std::setw(3) << y;
-        for (int x = 0; x < width; x++) {
+        for (int x = 0; x < (int)width; x++) {
             ulong element_idx = grid_element(cell_prefix, y, x);
             if (element_idx == ant_location) {
                 std::cout << std::right << std::setw(4) << the_ant;
@@ -898,6 +902,7 @@ Ket op_is_less_than(const Ket k, const std::vector<std::shared_ptr<CompoundConst
         return Ket("no");
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return Ket("");
     }
 }
@@ -915,6 +920,7 @@ Ket op_is_less_equal_than(const Ket k, const std::vector<std::shared_ptr<Compoun
         return Ket("no");
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return Ket("");
     }
 }
@@ -932,6 +938,7 @@ Ket op_is_equal(const Ket k, const std::vector<std::shared_ptr<CompoundConstant>
         return Ket("no");
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return Ket("");
     }
 }
@@ -949,6 +956,7 @@ Ket op_is_greater_than(const Ket k, const std::vector<std::shared_ptr<CompoundCo
         return Ket("no");
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return Ket("");
     }
 }
@@ -966,6 +974,7 @@ Ket op_is_greater_equal_than(const Ket k, const std::vector<std::shared_ptr<Comp
         return Ket("no");
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return Ket("");
     }
 }
@@ -984,6 +993,7 @@ Ket op_is_in_range(const Ket k, const std::vector<std::shared_ptr<CompoundConsta
         return Ket("no");
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return Ket("");
     }
 }
@@ -1015,6 +1025,7 @@ Ket op_is_prime(const Ket k) {
         return Ket("no");
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return Ket("");
     }
 }
@@ -1049,6 +1060,7 @@ Superposition op_prime_factors(const Ket k) {  // Just a naive prime_factors() f
         return result;
     }
     catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
         return Superposition("");
     }
 }
@@ -1074,14 +1086,14 @@ Sequence op_smap(const Sequence& seq, ContextList& context, const std::vector<st
     if (seq.size() == 0 || parameters.size() < 3) { return Sequence(""); }
     unsigned int min_ngram_size = parameters[0]->get_int();
     unsigned int max_ngram_size = parameters[1]->get_int();
-    unsigned int width = seq.size();
+    unsigned int width = (unsigned int)(seq.size());
     min_ngram_size = std::min(min_ngram_size, width);
     max_ngram_size = std::min(max_ngram_size, width);
     if (min_ngram_size <= 0 || max_ngram_size <= 0 || max_ngram_size < min_ngram_size) { return Sequence(""); }
     SimpleOperator op = parameters[2]->get_operator();
     Sequence result;
     Superposition empty("");
-    for (int i = 0; i < width; i++) {  // Pad the result sequence with empty superpositions.
+    for (int i = 0; i < (int)width; i++) {  // Pad the result sequence with empty superpositions.
         result.append(empty);          // This is needed so that result.set() works.
     }
     ulong the_idx = ket_map.get_idx("the");
@@ -1158,7 +1170,7 @@ Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<Compoun
         long double x = values[0];
         long double start = std::ceil((x - gauss_width) / dx);
         long double finish = std::floor((x + gauss_width) / dx);
-        unsigned int step_count = std::floor(finish - start + 1);
+        unsigned int step_count = (unsigned int)(std::floor(finish - start + 1));
         long double y = start * dx;
         for (unsigned int i = 0; i < step_count; i++) {
             long double value = Gaussian1(x, y, sigma);
@@ -1172,11 +1184,11 @@ Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<Compoun
         long double x2 = values[1];
         long double start1 = std::ceil((x1 - gauss_width) / dx);
         long double finish1 = std::floor((x1 + gauss_width) / dx);
-        unsigned int step_count1 = std::floor(finish1 - start1 + 1);
+        unsigned int step_count1 = (unsigned int)(std::floor(finish1 - start1 + 1));
 
         long double start2 = std::ceil((x2 - gauss_width) / dx);
         long double finish2 = std::floor((x2 + gauss_width) / dx);
-        unsigned int step_count2 = std::floor(finish2 - start2 + 1);
+        unsigned int step_count2 = (unsigned int)(std::floor(finish2 - start2 + 1));
 
         long double y1 = start1 * dx;
         for (unsigned int i = 0; i < step_count1; i++) {
@@ -1691,7 +1703,7 @@ Ket op_scompress(const Sequence& seq, ContextList& context, const std::vector<st
     }
 
     unsigned int compress_count = 0;
-    unsigned int working_ngram_len = max_seq_len;
+    unsigned int working_ngram_len = (unsigned int)max_seq_len;  // Unsigned int vs size_t .... 
     unsigned int min_ngram_len = 2;
     if (parameters.size() == 5) {
         min_ngram_len = std::min((unsigned int)max_seq_len, (unsigned int)(parameters[3]->get_int()));
@@ -1959,7 +1971,7 @@ Ket op_hash(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >& 
     unsigned int hash_size = parameters[0]->get_int();
     std::hash<std::string> str_hash;
     size_t ket_hash = str_hash(k.label());
-    size_t new_ket_hash = ket_hash % (1 << hash_size);
+    size_t new_ket_hash = ket_hash % (1i64 << hash_size);
     return Ket(std::to_string(new_ket_hash), k.value());
 }
 
@@ -2060,7 +2072,7 @@ Sequence op_random(const Sequence& seq, const std::vector<std::shared_ptr<Compou
     if (parameters.size() < 2) { return seq; }
     double mu = parameters[0]->get_float();
     double sigma = parameters[1]->get_float();
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned int seed = (unsigned int)(std::chrono::system_clock::now().time_since_epoch().count());
     std::default_random_engine generator(seed);
     std::normal_distribution<double> distribution(mu, sigma);
     Sequence result;

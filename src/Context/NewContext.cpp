@@ -476,7 +476,7 @@ unsigned int NewContext::fn_recall_type(const ulong op_idx, const int param_size
 }
 
 void NewContext::bound_fn_learn(ulong op_idx, std::vector<ulong>& op_ket_idx_vec, std::shared_ptr<BaseSequence> bSeq) {
-    unsigned int vec_size = op_ket_idx_vec.size() / 2;
+    unsigned int vec_size = (unsigned int)(op_ket_idx_vec.size()) / 2;
     BoundFunction bound_function;
     bound_fn_rules_dict[{op_idx, vec_size}] = bound_function;
     bound_fn_rules_dict[{op_idx, vec_size}].learn(op_ket_idx_vec, bSeq);

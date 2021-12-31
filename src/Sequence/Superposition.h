@@ -83,7 +83,7 @@ public:
     Superposition operator+(Superposition& sp);
 
     // SuperpositionIter:
-    Ket get(ulong idx) const;
+    Ket get(size_t pos) const;
     SuperpositionIter begin() const;
     SuperpositionIter end() const;
 

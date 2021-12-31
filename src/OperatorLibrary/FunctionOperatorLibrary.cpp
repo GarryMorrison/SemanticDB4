@@ -428,16 +428,16 @@ Sequence op_intersection2(const Sequence& input_seq, const Sequence& one, const 
     // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
     //     seq.append(sp_intersection(*one_iter, *two_iter));
     // }
-    /*
     size_t min_size = std::min(one.size(), two.size());
     for (size_t k = 0; k < min_size; k++) {
         seq.append(sp_intersection(one.get(k), two.get(k)));
     }
-    */
+    /*
     ulong min_size = (ulong)(std::min(one.size(), two.size()));  // Yeah, size_t vs ulong bug again!!!
     for (ulong k = 0; k < min_size; k++) {
         seq.append(sp_intersection(one.get(k), two.get(k)));
     }
+    */
     return seq;
 }
 
@@ -469,16 +469,17 @@ Sequence op_union2(const Sequence& input_seq, const Sequence& one, const Sequenc
     // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
     //     seq.append(sp_union(*one_iter, *two_iter));
     // }
-    /*
+    
     size_t max_size = std::max(one.size(), two.size());
     for (size_t k = 0; k < max_size; k++) {
         seq.append(sp_union(one.get(k), two.get(k)));
     }
-    */
+    /*
     ulong max_size = (ulong)(std::max(one.size(), two.size()));  // Yeah, size_t vs ulong bug again!!!
     for (ulong k = 0; k < max_size; k++) {
         seq.append(sp_union(one.get(k), two.get(k)));
     }
+    */
     return seq;
 }
 
@@ -510,16 +511,16 @@ Sequence op_sum2(const Sequence& input_seq, const Sequence& one, const Sequence&
     // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
     //     seq.append(sp_union(*one_iter, *two_iter));
     // }
-    /*
     size_t max_size = std::max(one.size(), two.size());
     for (size_t k = 0; k < max_size; k++) {
         seq.append(sp_sum(one.get(k), two.get(k)));
     }
-    */
+    /*
     ulong max_size = (ulong)(std::max(one.size(), two.size()));  // Yeah, size_t vs ulong bug again!!!
     for (ulong k = 0; k < max_size; k++) {
         seq.append(sp_sum(one.get(k), two.get(k)));
     }
+    */
     return seq;
 }
 

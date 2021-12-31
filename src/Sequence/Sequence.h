@@ -71,7 +71,7 @@ public:
     std::shared_ptr<BaseSequence> b_append(std::shared_ptr<BaseSequence> bSeq);
 
     // define an iterator for our sequence class:
-    Superposition get(ulong idx) const;
+    Superposition get(size_t pos) const;
     typedef typename std::vector<Superposition>::iterator iterator;
     typedef typename std::vector<Superposition>::const_iterator const_iterator;
 
@@ -82,7 +82,7 @@ public:
     const_iterator end() const { return seq.end(); }
     const_iterator cend() const { return seq.cend(); }
 
-    void set(ulong idx, const Superposition& sp);
+    void set(size_t pos, const Superposition& sp);
 
     Sequence apply_sigmoid(const std::function<double(double)>& sigmoid) const;
     Sequence apply_sigmoid(const std::function<double(double, double)>& sigmoid, const double t) const;

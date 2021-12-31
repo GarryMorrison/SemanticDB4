@@ -5,6 +5,8 @@
 //
 
 
+// Later replace with: https://internalpointers.com/post/writing-custom-iterators-modern-cpp
+
 #include "Ket.h"
 #include "Superposition.h"
 class Superposition;
@@ -12,13 +14,13 @@ class Ket;
 
 class SuperpositionIter : public std::iterator<std::random_access_iterator_tag, Superposition> {
 private:
-    ulong _pos;
+    size_t _pos;
     const Superposition* _p_sp;
 
 public:
     using difference_type = typename std::iterator<std::random_access_iterator_tag, Superposition>::difference_type;
 
-    SuperpositionIter(const Superposition* p_sp, ulong pos) { _pos = pos; _p_sp = p_sp; }
+    SuperpositionIter(const Superposition* p_sp, size_t pos) { _pos = pos; _p_sp = p_sp; }
 
     SuperpositionIter& operator+=(difference_type rhs) { _pos += rhs; return *this; }
     SuperpositionIter& operator-=(difference_type rhs) { _pos -= rhs; return *this; }

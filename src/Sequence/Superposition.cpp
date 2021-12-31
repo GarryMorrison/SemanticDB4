@@ -512,9 +512,9 @@ Superposition Superposition::operator+(Superposition& sp) {
 }
 
 // SuperpositionIter:
-Ket Superposition::get(ulong idx) const {
-    if (idx >= sort_order.size()) { return Ket(); }
-    ulong sp_idx = sort_order[idx];
+Ket Superposition::get(size_t pos) const {
+    if (pos >= sort_order.size()) { return Ket(); }
+    ulong sp_idx = sort_order[pos];
     double value = sp.at(sp_idx);
     return Ket(sp_idx, value);
 }
@@ -553,7 +553,7 @@ Ket Superposition::do_you_know() const {
 }
 
 Ket Superposition::how_many() const {
-    ulong count = sort_order.size();
+    size_t count = sort_order.size();
     Ket result("number: " + std::to_string(count));
     return result;
 }

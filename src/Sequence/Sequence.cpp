@@ -268,14 +268,14 @@ void Sequence::append(const std::string& s, const double v) {
 }
 
 
-Superposition Sequence::get(ulong idx) const {
-    if (idx >= seq.size()) { return Superposition(); }
-    return seq[idx];
+Superposition Sequence::get(size_t pos) const {
+    if (pos >= seq.size()) { return Superposition(); }
+    return seq[pos];
 }
 
-void Sequence::set(ulong idx, const Superposition& sp) {
-    if (idx >= seq.size()) { return; }
-    seq[idx] = sp;
+void Sequence::set(size_t pos, const Superposition& sp) {
+    if (pos >= seq.size()) { return; }
+    seq[pos] = sp;
 }
 
 /*
