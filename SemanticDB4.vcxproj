@@ -200,6 +200,7 @@
     <ClInclude Include="src\Sequence\BaseSequence.h" />
     <ClInclude Include="src\Sequence\Superposition.h" />
     <ClInclude Include="src\Sequence\SuperpositionIter.h" />
+    <ClInclude Include="src\Sequence\WhileStatement.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sequence\IfElseStatement.cpp" />
@@ -247,6 +248,7 @@
     <ClCompile Include="src\GUI\Interface\UsageFrame.cpp" />
     <ClCompile Include="src\Sequence\Superposition.cpp" />
     <ClCompile Include="src\Sequence\SuperpositionIter.cpp" />
+    <ClCompile Include="src\Sequence\WhileStatement.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
