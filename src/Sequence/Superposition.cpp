@@ -675,7 +675,8 @@ bidiiter random_unique(bidiiter begin, bidiiter end, size_t num_random) {
     std::random_device rd;
     std::mt19937 mt(rd());
 
-    size_t left = std::distance(begin, end);
+    // size_t left = std::distance(begin, end);
+    int left = (int)std::distance(begin, end);  // Else the type is the wrong size for std::uniform_int_distribution. Does this cause any bugs??
     while (num_random--) {
         bidiiter r = begin;
         std::uniform_int_distribution<> dis(0, left - 1);
@@ -707,7 +708,7 @@ Ket Superposition::pick_elt() const {
     if (this->sort_order[0] == ket_map.get_idx("")) { return Ket(); }
     std::random_device rd;  // is this correct to re-seed on every invoke?
     std::mt19937 eng(rd()); // code from here: https://stackoverflow.com/questions/7560114/random-number-c-in-some-range
-    std::uniform_int_distribution<> distr(0, sort_order.size() - 1);
+    std::uniform_int_distribution<> distr(0, (int)(sort_order.size() - 1));  // Cast to int for std::uniform_int_distribution. Does it cause any bugs??
     ulong pos = distr(eng);
     ulong idx = sort_order[pos];
     double value = sp.at(idx);
