@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\OperatorLibrary\SigmoidLibrary.h" />
     <ClInclude Include="src\Sequence\IfElseStatement.h" />
     <ClInclude Include="src\Sequence\ForStatement.h" />
     <ClInclude Include="src\Operator\FunctionOperator.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="src\Sequence\WhileStatement.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\OperatorLibrary\SigmoidLibrary.cpp" />
     <ClCompile Include="src\Sequence\IfElseStatement.cpp" />
     <ClCompile Include="src\Sequence\ForStatement.cpp" />
     <ClCompile Include="src\Operator\FunctionOperator.cpp" />

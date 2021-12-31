@@ -165,6 +165,9 @@
     <ClInclude Include="src\Sequence\WhileStatement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\OperatorLibrary\SigmoidLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -303,6 +306,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Sequence\WhileStatement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OperatorLibrary\SigmoidLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
