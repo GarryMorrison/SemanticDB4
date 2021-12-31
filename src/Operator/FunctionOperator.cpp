@@ -127,7 +127,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
           break;
     }
     }
-    if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
+    if (context.bound_fn_recall_type(idx, (int)(seq_vec.size())) == RULESTORED) { // NB: we are casting from size_t to int, but param_size should be small anyway!
         // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
         ulong input_idx = ket_map.get_idx("input");  // learn input|seq>. A little heavier and slower than I would like!
         ulong seq_idx = ket_map.get_idx("seq");      // Also, we have hard wired in the op/ket labels here. Is there a better way?
@@ -148,7 +148,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
         }
         std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[0]);
         context.learn(input_idx, seq_idx, bSeq);
-        std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
+        std::vector<ulong> params = context.bound_fn_params_recall(idx, (int)(seq_vec.size())); // NB: we are casting from size_t to int, but param_size should be small anyway!
         for (unsigned int i = 0; i < params.size(); i += 2) {
             ulong op_idx = params[i];
             ulong ket_idx = params[i + 1];
@@ -166,7 +166,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
             }
             context.learn(op_idx, ket_idx, bSeq);
         }
-        auto rule = context.bound_fn_body_recall(idx, seq_vec.size());
+        auto rule = context.bound_fn_body_recall(idx, (int)(seq_vec.size())); // NB: we are casting from size_t to int, but param_size should be small anyway!
         // return rule->Compile(context, empty_ket, args);
         Sequence result = rule->Compile(context, empty_ket, args);
 
@@ -263,7 +263,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
           break;
     }
     }
-    if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
+    if (context.bound_fn_recall_type(idx, (int)(seq_vec.size())) == RULESTORED) { // NB: we are casting from size_t to int, but param_size should be small anyway!
         // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
         ulong input_idx = ket_map.get_idx("input");
         ulong seq_idx = ket_map.get_idx("seq");
@@ -297,7 +297,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
         }
         std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[0]);
         context.learn(input_idx, seq_idx, bSeq);
-        std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
+        std::vector<ulong> params = context.bound_fn_params_recall(idx, (int)(seq_vec.size())); // NB: we are casting from size_t to int, but param_size should be small anyway!
         for (unsigned int i = 0; i < params.size(); i += 2) {
             ulong op_idx = params[i];
             ulong ket_idx = params[i + 1];
@@ -315,7 +315,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
             }
             context.learn(op_idx, ket_idx, bSeq);
         }
-        auto rule = context.bound_fn_body_recall(idx, seq_vec.size());
+        auto rule = context.bound_fn_body_recall(idx, (int)(seq_vec.size())); // NB: we are casting from size_t to int, but param_size should be small anyway!
         // return rule->Compile(context, empty_ket, args);
         Sequence result = rule->Compile(context, label_ket, args);
 
@@ -413,7 +413,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
           break;
     }
     }
-    if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
+    if (context.bound_fn_recall_type(idx, (int)(seq_vec.size())) == RULESTORED) { // NB: we are casting from size_t to int, but param_size should be small anyway!
         // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
         ulong input_idx = ket_map.get_idx("input");
         ulong seq_idx = ket_map.get_idx("seq");
@@ -447,7 +447,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
         }
         std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[0]);
         context.learn(input_idx, seq_idx, bSeq);
-        std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
+        std::vector<ulong> params = context.bound_fn_params_recall(idx, (int)(seq_vec.size())); // NB: we are casting from size_t to int, but param_size should be small anyway!
         for (unsigned int i = 0; i < params.size(); i += 2) {
             ulong op_idx = params[i];
             ulong ket_idx = params[i + 1];
@@ -465,7 +465,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
             }
             context.learn(op_idx, ket_idx, bSeq);
         }
-        auto rule = context.bound_fn_body_recall(idx, seq_vec.size());
+        auto rule = context.bound_fn_body_recall(idx, (int)(seq_vec.size())); // NB: we are casting from size_t to int, but param_size should be small anyway!
         // return rule->Compile(context, empty_ket, args);
         Sequence result = rule->Compile(context, label_ket, args);
 
@@ -562,7 +562,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
           break;
     }
     }
-    if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
+    if (context.bound_fn_recall_type(idx, (int)(seq_vec.size())) == RULESTORED) { // NB: we are casting from size_t to int, but param_size should be small anyway!
         // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
         ulong input_idx = ket_map.get_idx("input");
         ulong seq_idx = ket_map.get_idx("seq");
@@ -596,7 +596,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
         }
         std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[0]);
         context.learn(input_idx, seq_idx, bSeq);
-        std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
+        std::vector<ulong> params = context.bound_fn_params_recall(idx, (int)(seq_vec.size())); // NB: we are casting from size_t to int, but param_size should be small anyway!
         for (unsigned int i = 0; i < params.size(); i += 2) {
             ulong op_idx = params[i];
             ulong ket_idx = params[i + 1];
@@ -614,7 +614,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq, co
             }
             context.learn(op_idx, ket_idx, bSeq);
         }
-        auto rule = context.bound_fn_body_recall(idx, seq_vec.size());
+        auto rule = context.bound_fn_body_recall(idx, (int)(seq_vec.size())); // NB: we are casting from size_t to int, but param_size should be small anyway!
         // return rule->Compile(context, empty_ket, args);
         Sequence result = rule->Compile(context, label_ket, args);
 
