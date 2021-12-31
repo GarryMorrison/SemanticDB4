@@ -11,7 +11,7 @@
 #include "../Function/misc.h"
 #include "../Function/NaturalSort.h"
 #include "../Operator/SimpleOperator.h"
-// #include "../OperatorLibrary/FunctionOperatorLibrary.h"  // Comment out for now. Uncomment out later!
+#include "../OperatorLibrary/FunctionOperatorLibrary.h"
 #include "OperatorWithSequence.h"
 
 Superposition::Superposition(const ulong idx) {
@@ -481,8 +481,7 @@ void Superposition::insert_range(const Superposition& sp2) {
         ulong tail_idx = sp2.sort_order.front();
         double tail_value = sp2.sp.at(tail_idx); // does this work: sp2.sp[tail_idx] ?
 
-        // Superposition our_range = range2(head_idx, tail_idx); // Comment out for now, but reinstate later! #RESTORE
-        Superposition our_range;
+        Superposition our_range = range2(head_idx, tail_idx);
 
         double new_value = head_value * tail_value;
         our_range.multiply(new_value);
