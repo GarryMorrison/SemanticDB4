@@ -11,9 +11,9 @@
 #include "OperatorWithSequence.h"
 #include "LearnRule.h"
 #include "BaseSequence.h"
-// #include "IfElseStatement.h"  // Comment out for now! Reinstate later!
-// #include "ForStatement.h"
-// #include "WhileStatement.h"
+#include "IfElseStatement.h"
+#include "ForStatement.h"
+#include "WhileStatement.h"
 
 class IfElseStatement;
 class ForStatement;
@@ -28,14 +28,14 @@ public:
     MultiLearnRule() {}
     MultiLearnRule(const LearnRule& learn_rule);
     MultiLearnRule(const OperatorWithSequence& operator_with_sequence);
-    // MultiLearnRule(const IfElseStatement& if_else_statement);
-    // MultiLearnRule(const ForStatement& for_statement);
-    // MultiLearnRule(const WhileStatement& while_statement);
+    MultiLearnRule(const IfElseStatement& if_else_statement);
+    MultiLearnRule(const ForStatement& for_statement);
+    MultiLearnRule(const WhileStatement& while_statement);
     void append(const LearnRule& learn_rule);
     void append(const OperatorWithSequence& operator_with_sequence);
-    // void append(const IfElseStatement& if_else_statement);
-    // void append(const ForStatement& for_statement);
-    // void append(const WhileStatement& while_statement);
+    void append(const IfElseStatement& if_else_statement);
+    void append(const ForStatement& for_statement);
+    void append(const WhileStatement& while_statement);
 
     // methods needed to support BaseSequence:
     const int type() const { return MULTILEARNRULE; }

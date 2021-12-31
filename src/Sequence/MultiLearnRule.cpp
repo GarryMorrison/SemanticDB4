@@ -12,7 +12,7 @@ MultiLearnRule::MultiLearnRule(const OperatorWithSequence& operator_with_sequenc
     vec_rules.push_back(std::make_shared<OperatorWithSequence>(operator_with_sequence));
 }
 
-/*  // Reinstate later!
+
 MultiLearnRule::MultiLearnRule(const IfElseStatement& if_else_statement) {
     vec_rules.push_back(std::make_shared<IfElseStatement>(if_else_statement));
 }
@@ -24,7 +24,7 @@ MultiLearnRule::MultiLearnRule(const ForStatement& for_statement) {
 MultiLearnRule::MultiLearnRule(const WhileStatement& while_statement) {
     vec_rules.push_back(std::make_shared<WhileStatement>(while_statement));
 }
-*/
+
 
 void MultiLearnRule::append(const LearnRule& learn_rule) {
     vec_rules.push_back(std::make_shared<LearnRule>(learn_rule));
@@ -34,7 +34,7 @@ void MultiLearnRule::append(const OperatorWithSequence& operator_with_sequence) 
     vec_rules.push_back(std::make_shared<OperatorWithSequence>(operator_with_sequence));
 }
 
-/*  // Reinstate later!
+
 void MultiLearnRule::append(const IfElseStatement& if_else_statement) {
     vec_rules.push_back(std::make_shared<IfElseStatement>(if_else_statement));
 }
@@ -46,7 +46,7 @@ void MultiLearnRule::append(const ForStatement& for_statement) {
 void MultiLearnRule::append(const WhileStatement& while_statement) {
     vec_rules.push_back(std::make_shared<WhileStatement>(while_statement));
 }
-*/
+
 
 const std::string MultiLearnRule::to_string() const {
     std::string s = "\n";
