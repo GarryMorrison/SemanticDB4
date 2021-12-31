@@ -159,6 +159,9 @@
     <ClInclude Include="src\Sequence\ForStatement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sequence\IfElseStatement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -291,6 +294,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Sequence\ForStatement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sequence\IfElseStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
