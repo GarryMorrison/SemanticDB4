@@ -919,7 +919,7 @@ ulong Superposition::old_process_infix_compile(ulong idx1, unsigned int infix_ty
                 break;
             } // check for div by zero here!
             case OPMOD: {
-                value = static_cast<long long>(x) % static_cast<long long>(y);
+                value = static_cast<long double>(static_cast<long long>(x) % static_cast<long long>(y));
                 break;
             }
             case OPARITHPOWER: {
@@ -1028,7 +1028,7 @@ ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, 
                     break;
                 } // check for div by zero here!
                 case OPMOD: {
-                    value = static_cast<long long>(x) % static_cast<long long>(y);
+                    value = static_cast<long double>(static_cast<long long>(x) % static_cast<long long>(y));
                     break;
                 }
                 case OPARITHPOWER: {
@@ -1117,7 +1117,7 @@ ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, 
                 break;
             } // check for div by zero here!
             case OPMOD: {
-                value = static_cast<long long>(x) % static_cast<long long>(y);
+                value = static_cast<long double>(static_cast<long long>(x) % static_cast<long long>(y));
                 break;
             }
             case OPARITHPOWER: {
@@ -1158,8 +1158,8 @@ ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, 
                 break;
             } // check for div by zero here!
             case OPMOD: {
-                value1 = static_cast<long long>(x1) % static_cast<long long>(y1);
-                value2 = static_cast<long long>(x2) % static_cast<long long>(y2);
+                value1 = static_cast<long double>(static_cast<long long>(x1) % static_cast<long long>(y1));
+                value2 = static_cast<long double>(static_cast<long long>(x2) % static_cast<long long>(y2));
                 break;
             }
             case OPARITHPOWER: {
