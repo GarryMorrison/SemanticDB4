@@ -153,6 +153,9 @@
     <ClInclude Include="src\Operator\BracketOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Operator\FunctionOperator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -279,6 +282,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Operator\BracketOperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\FunctionOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
