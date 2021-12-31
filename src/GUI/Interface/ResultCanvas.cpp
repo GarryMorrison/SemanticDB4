@@ -202,7 +202,7 @@ void ResultCanvas::OnKeyUp(wxKeyEvent& event)
                 }
                 case RC_OBJECT_SIMPLE_OP: {
                     ulong idx = ket_map.get_idx(label);
-                    if (fn_map.simple_operators.find(idx) != fn_map.simple_operators.end())  // We have a simple operator, not a literal operator.
+                    if (fn_map.set_simple_operators.find(idx) != fn_map.set_simple_operators.end())  // We have a simple operator, not a literal operator.
                     {
                         m_usage_frame_position_delta += wxPoint(40, 40);
                         UsageFrame* usage_frame = new UsageFrame(this, label, m_usage_frame_position_delta);

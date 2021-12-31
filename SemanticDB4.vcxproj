@@ -122,6 +122,7 @@
       <ConformanceMode>true</ConformanceMode>
       <UndefinePreprocessorDefinitions>WXUSINGDLL;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +140,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <UndefinePreprocessorDefinitions>WXUSINGDLL;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
+      <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,6 +151,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Operator\EmptyOperator.h" />
+    <ClInclude Include="src\Operator\OperatorSequence.h" />
+    <ClInclude Include="src\Sequence\MultiLearnRule.h" />
+    <ClInclude Include="src\Sequence\MultiSelfKet.h" />
+    <ClInclude Include="src\Sequence\LearnRule.h" />
+    <ClInclude Include="src\Sequence\OperatorWithSequence.h" />
+    <ClInclude Include="src\Sequence\SelfKet.h" />
+    <ClInclude Include="src\Sequence\Sequence.h" />
+    <ClInclude Include="src\Sequence\Ket.h" />
+    <ClInclude Include="src\Operator\NumericOperator.h" />
+    <ClInclude Include="src\Operator\SimpleOperator.h" />
+    <ClInclude Include="src\Context\NewContext.h" />
+    <ClInclude Include="src\Context\Frame.h" />
+    <ClInclude Include="src\Context\ContextList.h" />
+    <ClInclude Include="src\Context\BoundFunction.h" />
+    <ClInclude Include="src\CompoundConstant\ConstantString.h" />
+    <ClInclude Include="src\CompoundConstant\ConstantOperator.h" />
+    <ClInclude Include="src\CompoundConstant\ConstantInteger.h" />
+    <ClInclude Include="src\CompoundConstant\ConstantFloat.h" />
+    <ClInclude Include="src\CompoundConstant\CompoundConstant.h" />
+    <ClInclude Include="src\Function\NaturalSort.h" />
     <ClInclude Include="src\GUI\Interface\FilteredDumpFrame.h" />
     <ClInclude Include="src\GUI\Interface\PrimaryFrame.h" />
     <ClInclude Include="src\GUI\Interface\CommandPanel.h" />
@@ -164,11 +187,34 @@
     <ClInclude Include="src\OperatorUsageMap\OperatorUsageMap.h" />
     <ClInclude Include="src\FunctionOperatorMap\FunctionOperatorMap.h" />
     <ClInclude Include="src\KetMap\KetMap.h" />
+    <ClInclude Include="src\Operator\BaseOperator.h" />
     <ClInclude Include="src\SDB.h" />
     <ClInclude Include="src\Function\Timer.h" />
     <ClInclude Include="src\GUI\Interface\UsageFrame.h" />
+    <ClInclude Include="src\Sequence\BaseSequence.h" />
+    <ClInclude Include="src\Sequence\Superposition.h" />
+    <ClInclude Include="src\Sequence\SuperpositionIter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Operator\OperatorSequence.cpp" />
+    <ClCompile Include="src\Sequence\MultiLearnRule.cpp" />
+    <ClCompile Include="src\Sequence\MultiSelfKet.cpp" />
+    <ClCompile Include="src\Sequence\LearnRule.cpp" />
+    <ClCompile Include="src\Sequence\OperatorWithSequence.cpp" />
+    <ClCompile Include="src\Sequence\SelfKet.cpp" />
+    <ClCompile Include="src\Sequence\Sequence.cpp" />
+    <ClCompile Include="src\Sequence\Ket.cpp" />
+    <ClCompile Include="src\Operator\NumericOperator.cpp" />
+    <ClCompile Include="src\Operator\SimpleOperator.cpp" />
+    <ClCompile Include="src\Context\NewContext.cpp" />
+    <ClCompile Include="src\Context\Frame.cpp" />
+    <ClCompile Include="src\Context\ContextList.cpp" />
+    <ClCompile Include="src\Context\BoundFunction.cpp" />
+    <ClCompile Include="src\CompoundConstant\ConstantString.cpp" />
+    <ClCompile Include="src\CompoundConstant\ConstantOperator.cpp" />
+    <ClCompile Include="src\CompoundConstant\ConstantInteger.cpp" />
+    <ClCompile Include="src\CompoundConstant\ConstantFloat.cpp" />
+    <ClCompile Include="src\CompoundConstant\CompoundConstant.cpp" />
     <ClCompile Include="src\GUI\Interface\FilteredDumpFrame.cpp" />
     <ClCompile Include="src\GUI\Interface\PrimaryFrame.cpp" />
     <ClCompile Include="src\GUI\Interface\CommandPanel.cpp" />
@@ -187,6 +233,8 @@
     <ClCompile Include="src\SDB.cpp" />
     <ClCompile Include="src\Function\Timer.cpp" />
     <ClCompile Include="src\GUI\Interface\UsageFrame.cpp" />
+    <ClCompile Include="src\Sequence\Superposition.cpp" />
+    <ClCompile Include="src\Sequence\SuperpositionIter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

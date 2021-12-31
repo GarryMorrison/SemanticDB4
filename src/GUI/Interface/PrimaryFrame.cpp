@@ -52,50 +52,50 @@ PrimaryFrame::PrimaryFrame()
 
     // menuInsert->Append(ID_Insert_Built_In_Op, "Built in operator", "Insert built in operator"); // Sub menu, normal vs compound
     // wxMenu* menuInsertBuiltInOp = new wxMenu;
-    // m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.built_in, m_usage_menu_map, m_usage_label_menu_map, "Built in operator", "Normal", "Usage for %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.built_in, m_insert_menu_map, m_insert_label_menu_map, "Built in operator", "Normal", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_built_in, m_insert_menu_map, m_insert_label_menu_map, "Built in operator", "Compound", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_context_built_in, m_insert_menu_map, m_insert_label_menu_map, "Built in operator", "Compound context", "Insert %s operator");
+    // m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_built_in, m_usage_menu_map, m_usage_label_menu_map, "Built in operator", "Normal", "Usage for %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_built_in, m_insert_menu_map, m_insert_label_menu_map, "Built in operator", "Normal", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_built_in, m_insert_menu_map, m_insert_label_menu_map, "Built in operator", "Compound", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_context_built_in, m_insert_menu_map, m_insert_label_menu_map, "Built in operator", "Compound context", "Insert %s operator");
 
 
     // menuInsert->Append(ID_Insert_Sigmoid_Op, "Sigmoid operator", "Insert sigmoid operator"); // Sub menu, normal vs compound
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.sigmoids, m_insert_menu_map, m_insert_label_menu_map, "Sigmoid operator", "Normal", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_sigmoids, m_insert_menu_map, m_insert_label_menu_map, "Sigmoid operator", "Compound", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_sigmoids, m_insert_menu_map, m_insert_label_menu_map, "Sigmoid operator", "Normal", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_sigmoids, m_insert_menu_map, m_insert_label_menu_map, "Sigmoid operator", "Compound", "Insert %s operator");
 
     // menuInsert->Append(ID_Insert_Ket_Op, "Ket operator", "Insert ket operator"); // Sub menu, normal vs compound
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.ket_fn, m_insert_menu_map, m_insert_label_menu_map, "Ket operator", "Normal", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_ket_fn, m_insert_menu_map, m_insert_label_menu_map, "Ket operator", "Compound", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.context_ket_fn, m_insert_menu_map, m_insert_label_menu_map, "Ket operator", "Context", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_ket_fn, m_insert_menu_map, m_insert_label_menu_map, "Ket operator", "Normal", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_ket_fn, m_insert_menu_map, m_insert_label_menu_map, "Ket operator", "Compound", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_context_ket_fn, m_insert_menu_map, m_insert_label_menu_map, "Ket operator", "Context", "Insert %s operator");
 
     // menuInsert->Append(ID_Insert_Superposition_Op, "Superposition operator", "Insert superposition operator"); // Sub menu, normal vs compound
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.sp_fn, m_insert_menu_map, m_insert_label_menu_map, "Superposition operator", "Normal", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_sp_fn, m_insert_menu_map, m_insert_label_menu_map, "Superposition operator", "Compound", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_context_sp_fn, m_insert_menu_map, m_insert_label_menu_map, "Superposition operator", "Compound context", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_sp_fn, m_insert_menu_map, m_insert_label_menu_map, "Superposition operator", "Normal", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_sp_fn, m_insert_menu_map, m_insert_label_menu_map, "Superposition operator", "Compound", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_context_sp_fn, m_insert_menu_map, m_insert_label_menu_map, "Superposition operator", "Compound context", "Insert %s operator");
 
     // menuInsert->Append(ID_Insert_Sequence_Op, "Sequence operator", "Insert sequence operator"); // Sub menu, normal vs compound
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.seq_fn, m_insert_menu_map, m_insert_label_menu_map, "Sequence operator", "Normal", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.context_seq_fn, m_insert_menu_map, m_insert_label_menu_map, "Sequence operator", "Context", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_seq_fn, m_insert_menu_map, m_insert_label_menu_map, "Sequence operator", "Compound", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_context_seq_fn, m_insert_menu_map, m_insert_label_menu_map, "Sequence operator", "Compound context", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_seq_fn, m_insert_menu_map, m_insert_label_menu_map, "Sequence operator", "Normal", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_context_seq_fn, m_insert_menu_map, m_insert_label_menu_map, "Sequence operator", "Context", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_seq_fn, m_insert_menu_map, m_insert_label_menu_map, "Sequence operator", "Compound", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_context_seq_fn, m_insert_menu_map, m_insert_label_menu_map, "Sequence operator", "Compound context", "Insert %s operator");
 
     // menuInsert->Append(ID_Insert_Function_Op, "Function operator", "Insert function operator"); // Sub menu, 1,2,3,4
 
     wxMenu* menuInsertFunctionOp = new wxMenu;
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.whitelist_1, m_insert_menu_map, m_insert_label_menu_map, "Normal", "1 param", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.whitelist_2, m_insert_menu_map, m_insert_label_menu_map, "Normal", "2 param", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.whitelist_3, m_insert_menu_map, m_insert_label_menu_map, "Normal", "3 param", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.whitelist_4, m_insert_menu_map, m_insert_label_menu_map, "Normal", "4 param", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.set_whitelist_1, m_insert_menu_map, m_insert_label_menu_map, "Normal", "1 param", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.set_whitelist_2, m_insert_menu_map, m_insert_label_menu_map, "Normal", "2 param", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.set_whitelist_3, m_insert_menu_map, m_insert_label_menu_map, "Normal", "3 param", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.set_whitelist_4, m_insert_menu_map, m_insert_label_menu_map, "Normal", "4 param", "Insert %s operator");
 
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.context_whitelist_1, m_insert_menu_map, m_insert_label_menu_map, "Context", "1 param", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.context_whitelist_2, m_insert_menu_map, m_insert_label_menu_map, "Context", "2 param", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.context_whitelist_3, m_insert_menu_map, m_insert_label_menu_map, "Context", "3 param", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.context_whitelist_4, m_insert_menu_map, m_insert_label_menu_map, "Context", "4 param", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.set_context_whitelist_1, m_insert_menu_map, m_insert_label_menu_map, "Context", "1 param", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.set_context_whitelist_2, m_insert_menu_map, m_insert_label_menu_map, "Context", "2 param", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.set_context_whitelist_3, m_insert_menu_map, m_insert_label_menu_map, "Context", "3 param", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsertFunctionOp, m_current_highest_insert_menu_id, fn_map.set_context_whitelist_4, m_insert_menu_map, m_insert_label_menu_map, "Context", "4 param", "Insert %s operator");
     menuInsert->AppendSubMenu(menuInsertFunctionOp, "Function operator");
 
     menuInsert->AppendSeparator();
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.simple_operators, m_insert_menu_map, m_insert_label_menu_map, "General operator", "Simple", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.compound_operators, m_insert_menu_map, m_insert_label_menu_map, "General operator", "Compound", "Insert %s operator");
-    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.function_operators, m_insert_menu_map, m_insert_label_menu_map, "General operator", "Function", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_simple_operators, m_insert_menu_map, m_insert_label_menu_map, "General operator", "Simple", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_compound_operators, m_insert_menu_map, m_insert_label_menu_map, "General operator", "Compound", "Insert %s operator");
+    m_current_highest_insert_menu_id = PopulateSubMenu(menuInsert, m_current_highest_insert_menu_id, fn_map.set_function_operators, m_insert_menu_map, m_insert_label_menu_map, "General operator", "Function", "Insert %s operator");
 
 
 
@@ -132,42 +132,42 @@ PrimaryFrame::PrimaryFrame()
     menuUsage->AppendSubMenu(menuUsageOperatorTypes, "Operator types", "Usage for operator types");
     menuUsage->AppendSeparator();
 
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.built_in, m_usage_menu_map, m_usage_label_menu_map, "Built in operator", "Normal", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_built_in, m_usage_menu_map, m_usage_label_menu_map, "Built in operator", "Compound", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_context_built_in, m_usage_menu_map, m_usage_label_menu_map, "Built in operator", "Compound context", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_built_in, m_usage_menu_map, m_usage_label_menu_map, "Built in operator", "Normal", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_built_in, m_usage_menu_map, m_usage_label_menu_map, "Built in operator", "Compound", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_context_built_in, m_usage_menu_map, m_usage_label_menu_map, "Built in operator", "Compound context", "Usage for %s operator");
 
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.sigmoids, m_usage_menu_map, m_usage_label_menu_map, "Sigmoid operator", "Normal", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_sigmoids, m_usage_menu_map, m_usage_label_menu_map, "Sigmoid operator", "Compound", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_sigmoids, m_usage_menu_map, m_usage_label_menu_map, "Sigmoid operator", "Normal", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_sigmoids, m_usage_menu_map, m_usage_label_menu_map, "Sigmoid operator", "Compound", "Usage for %s operator");
 
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.ket_fn, m_usage_menu_map, m_usage_label_menu_map, "Ket operator", "Normal", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_ket_fn, m_usage_menu_map, m_usage_label_menu_map, "Ket operator", "Compound", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.context_ket_fn, m_usage_menu_map, m_usage_label_menu_map, "Ket operator", "Context", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_ket_fn, m_usage_menu_map, m_usage_label_menu_map, "Ket operator", "Normal", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_ket_fn, m_usage_menu_map, m_usage_label_menu_map, "Ket operator", "Compound", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_context_ket_fn, m_usage_menu_map, m_usage_label_menu_map, "Ket operator", "Context", "Usage for %s operator");
 
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.sp_fn, m_usage_menu_map, m_usage_label_menu_map, "Superposition operator", "Normal", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_sp_fn, m_usage_menu_map, m_usage_label_menu_map, "Superposition operator", "Compound", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_context_sp_fn, m_usage_menu_map, m_usage_label_menu_map, "Superposition operator", "Compound context", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_sp_fn, m_usage_menu_map, m_usage_label_menu_map, "Superposition operator", "Normal", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_sp_fn, m_usage_menu_map, m_usage_label_menu_map, "Superposition operator", "Compound", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_context_sp_fn, m_usage_menu_map, m_usage_label_menu_map, "Superposition operator", "Compound context", "Usage for %s operator");
 
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.seq_fn, m_usage_menu_map, m_usage_label_menu_map, "Sequence operator", "Normal", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.context_seq_fn, m_usage_menu_map, m_usage_label_menu_map, "Sequence operator", "Context", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_seq_fn, m_usage_menu_map, m_usage_label_menu_map, "Sequence operator", "Compound", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_context_seq_fn, m_usage_menu_map, m_usage_label_menu_map, "Sequence operator", "Compound context", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_seq_fn, m_usage_menu_map, m_usage_label_menu_map, "Sequence operator", "Normal", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_context_seq_fn, m_usage_menu_map, m_usage_label_menu_map, "Sequence operator", "Context", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_seq_fn, m_usage_menu_map, m_usage_label_menu_map, "Sequence operator", "Compound", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_context_seq_fn, m_usage_menu_map, m_usage_label_menu_map, "Sequence operator", "Compound context", "Usage for %s operator");
 
     wxMenu* menuUsageFunctionOp = new wxMenu;
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.whitelist_1, m_usage_menu_map, m_usage_label_menu_map, "Normal", "1 param", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.whitelist_2, m_usage_menu_map, m_usage_label_menu_map, "Normal", "2 param", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.whitelist_3, m_usage_menu_map, m_usage_label_menu_map, "Normal", "3 param", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.whitelist_4, m_usage_menu_map, m_usage_label_menu_map, "Normal", "4 param", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.set_whitelist_1, m_usage_menu_map, m_usage_label_menu_map, "Normal", "1 param", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.set_whitelist_2, m_usage_menu_map, m_usage_label_menu_map, "Normal", "2 param", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.set_whitelist_3, m_usage_menu_map, m_usage_label_menu_map, "Normal", "3 param", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.set_whitelist_4, m_usage_menu_map, m_usage_label_menu_map, "Normal", "4 param", "Usage for %s operator");
 
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.context_whitelist_1, m_usage_menu_map, m_usage_label_menu_map, "Context", "1 param", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.context_whitelist_2, m_usage_menu_map, m_usage_label_menu_map, "Context", "2 param", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.context_whitelist_3, m_usage_menu_map, m_usage_label_menu_map, "Context", "3 param", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.context_whitelist_4, m_usage_menu_map, m_usage_label_menu_map, "Context", "4 param", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.set_context_whitelist_1, m_usage_menu_map, m_usage_label_menu_map, "Context", "1 param", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.set_context_whitelist_2, m_usage_menu_map, m_usage_label_menu_map, "Context", "2 param", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.set_context_whitelist_3, m_usage_menu_map, m_usage_label_menu_map, "Context", "3 param", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsageFunctionOp, m_current_highest_usage_menu_id, fn_map.set_context_whitelist_4, m_usage_menu_map, m_usage_label_menu_map, "Context", "4 param", "Usage for %s operator");
     menuUsage->AppendSubMenu(menuUsageFunctionOp, "Function operator");
 
     menuUsage->AppendSeparator();
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.simple_operators, m_usage_menu_map, m_usage_label_menu_map, "General operator", "Simple", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.compound_operators, m_usage_menu_map, m_usage_label_menu_map, "General operator", "Compound", "Usage for %s operator");
-    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.function_operators, m_usage_menu_map, m_usage_label_menu_map, "General operator", "Function", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_simple_operators, m_usage_menu_map, m_usage_label_menu_map, "General operator", "Simple", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_operators, m_usage_menu_map, m_usage_label_menu_map, "General operator", "Compound", "Usage for %s operator");
+    m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_function_operators, m_usage_menu_map, m_usage_label_menu_map, "General operator", "Function", "Usage for %s operator");
 
     wxMenu* menuInsertWindow = new wxMenu;
     menuInsertWindow->Append(ID_Insert_Window_Learn_Rules, "Learn Rules", "Insert a learn rule");
@@ -759,7 +759,7 @@ void PrimaryFrame::SelectFromInfix2(wxCommandEvent& event)
 void PrimaryFrame::SelectFromSimple(wxCommandEvent& event)
 {
     wxArrayString list_options;
-    for (const auto& idx : fn_map.simple_operators)
+    for (const auto& idx : fn_map.set_simple_operators)
     {
         list_options.Add(ket_map.get_str(idx));
     }
@@ -797,7 +797,7 @@ void PrimaryFrame::SelectFromSimple(wxCommandEvent& event)
 void PrimaryFrame::SelectFromCompound(wxCommandEvent& event)
 {
     wxArrayString list_options;
-    for (const auto& idx : fn_map.compound_operators)
+    for (const auto& idx : fn_map.set_compound_operators)
     {
         list_options.Add(ket_map.get_str(idx));
     }
@@ -835,7 +835,7 @@ void PrimaryFrame::SelectFromCompound(wxCommandEvent& event)
 void PrimaryFrame::SelectFromFunction(wxCommandEvent& event)
 {
     wxArrayString list_options;
-    for (const auto& idx : fn_map.function_operators)
+    for (const auto& idx : fn_map.set_function_operators)
     {
         list_options.Add(ket_map.get_str(idx));
     }
@@ -875,17 +875,17 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
 {
     std::string the_operator = m_insert_menu_map[event.GetId()].ToStdString();
     ulong idx = ket_map.get_idx(the_operator);
-    if (fn_map.simple_operators.find(idx) != fn_map.simple_operators.end())  // Note the precedence. If an operator is simple, and compound, it will be considered simple.
+    if (fn_map.set_simple_operators.find(idx) != fn_map.set_simple_operators.end())  // Note the precedence. If an operator is simple, and compound, it will be considered simple.
     {
         // wxMessageBox(wxString::Format("Insert simple operator %s", the_operator));
         m_frame_commandPanel->InsertSimpleOperator(the_operator);
     }
-    else if (fn_map.compound_operators.find(idx) != fn_map.compound_operators.end())  // If an operator is compound and function, it will be considered compound. Maybe make smarter later.
+    else if (fn_map.set_compound_operators.find(idx) != fn_map.set_compound_operators.end())  // If an operator is compound and function, it will be considered compound. Maybe make smarter later.
     {
         // wxMessageBox(wxString::Format("Insert compound operator %s", the_operator));
         m_frame_commandPanel->InsertCompoundOperator(the_operator);
     }
-    else if (fn_map.function_operators.find(idx) != fn_map.function_operators.end())
+    else if (fn_map.set_function_operators.find(idx) != fn_map.set_function_operators.end())
     {
         // wxMessageBox(wxString::Format("Insert function operator %s", the_operator));
         m_frame_commandPanel->InsertFunctionOperator(the_operator);
