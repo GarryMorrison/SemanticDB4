@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Operator\CompoundOperator.h" />
     <ClInclude Include="src\Operator\PoweredOperator.h" />
     <ClInclude Include="src\Operator\EmptyOperator.h" />
     <ClInclude Include="src\Operator\OperatorSequence.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="src\Sequence\SuperpositionIter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Operator\CompoundOperator.cpp" />
     <ClCompile Include="src\Operator\PoweredOperator.cpp" />
     <ClCompile Include="src\Operator\OperatorSequence.cpp" />
     <ClCompile Include="src\Sequence\MultiLearnRule.cpp" />
