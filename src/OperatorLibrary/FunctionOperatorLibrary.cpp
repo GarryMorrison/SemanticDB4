@@ -38,6 +38,7 @@ Superposition old_range2(ulong start_idx2, ulong stop_idx2) {
         return sp;
     }
     catch (const std::invalid_argument& e) {
+        (void)e;  // Needed to suppress C4101 warning.
         return Superposition();
     }
 }
@@ -58,6 +59,7 @@ Superposition range2(ulong start_idx, ulong stop_idx) {
             return sp;
         }
         catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
             return Superposition();
         }
     }
@@ -160,6 +162,7 @@ Sequence op_srange3(const Sequence& input_seq, const Sequence& start, const Sequ
         return seq;
     }
     catch (const std::invalid_argument& e) {
+        (void)e;  // Needed to suppress C4101 warning.
         return Sequence();
     }
 }
@@ -202,6 +205,7 @@ Superposition op_range3(const Sequence& input_seq, const Sequence& start, const 
         return sp;
     }
     catch (const std::invalid_argument& e) {
+        (void)e;  // Needed to suppress C4101 warning.
         return Superposition();
     }
 }
@@ -271,6 +275,7 @@ Sequence op_arithmetic3(const Sequence& input_seq, const Sequence& one, const Se
         return Sequence(label + float_to_int(value, default_decimal_places));
     }
     catch (const std::invalid_argument& e) {
+        (void)e;  // Needed to suppress C4101 warning.
         return Sequence();
     }
 }
@@ -1033,7 +1038,9 @@ Sequence op_smap3(ContextList& context, const Sequence& input_seq, const Sequenc
         return result;
     }
     catch (const std::invalid_argument& e) {
-        return Sequence("");
+        (void)e;  // Needed to suppress C4101 warning.
+        // return Sequence("");  // Should this be Sequence() instead?
+        return Sequence();
     }
 }
 
@@ -1186,6 +1193,7 @@ Sequence op_sread(const Sequence& input_seq, const Sequence& one) {
                 tmp.add(input_seq.get((ulong)idx));
             }
             catch (const std::invalid_argument& e) {
+                (void)e;  // Needed to suppress C4101 warning.
                 Superposition empty;
                 tmp.add(empty);
             }
@@ -1207,6 +1215,7 @@ Sequence op_not_sread(const Sequence& input_seq, const Sequence& one) {
             index_set.insert((ulong)idx);
         }
         catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
             continue;
         }
     }
@@ -1230,6 +1239,7 @@ Sequence op_read(const Sequence& input_seq, const Sequence& one) {
             index_vec.push_back(idx);
         }
         catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
             continue;
         }
     }
@@ -1256,6 +1266,7 @@ Sequence op_not_read(const Sequence& input_seq, const Sequence& one) {
             index_set.insert(idx);
         }
         catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
             continue;
         }
     }
