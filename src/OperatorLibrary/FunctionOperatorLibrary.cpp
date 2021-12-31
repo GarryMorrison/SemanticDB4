@@ -31,7 +31,7 @@ Superposition old_range2(ulong start_idx2, ulong stop_idx2) {
         Superposition sp;
         if (label.length() > 0) { label += ": "; }
         // unsigned int steps = std::ceil(v2 - v1);  // Do we need ceiling() or floor()?
-        unsigned int steps = std::floor(v2 - v1);  // Do we need ceiling() or floor()?
+        unsigned int steps = (unsigned int)(std::floor(v2 - v1));  // Do we need ceiling() or floor()?
         for (unsigned int i = 0; i <= steps; i++) {  // Fix float iteration variables issue!
             sp.add(label + float_to_int(i + v1, default_decimal_places));
         }
@@ -52,7 +52,7 @@ Superposition range2(ulong start_idx, ulong stop_idx) {
             long double v1 = std::stold(ket_map.get_str(start_vec[0]));
             long double v2 = std::stold(ket_map.get_str(stop_vec[0]));
             Superposition sp;
-            unsigned int steps = std::floor(v2 - v1);  // Do we need ceiling() or floor()?
+            unsigned int steps = (unsigned int)(std::floor(v2 - v1));  // Do we need ceiling() or floor()?
             for (unsigned int i = 0; i <= steps; i++) {
                 sp.add(float_to_int(i + v1, default_decimal_places));
             }
@@ -104,7 +104,7 @@ Superposition range2(ulong start_idx, ulong stop_idx) {
     if (categories1 != categories2 || values1.size() != values2.size()) { return Superposition(); }
     if (values1.size() == 1) {
         Superposition sp;
-        unsigned int steps = std::floor(values2[0] - values1[0]);  // Do we need ceiling() or floor()?
+        unsigned int steps = (unsigned int)(std::floor(values2[0] - values1[0]));  // Do we need ceiling() or floor()?
         for (unsigned int i = 0; i <= steps; i++) {
             sp.add(categories1 + float_to_int(i + values1[0], default_decimal_places));
         }
@@ -112,8 +112,8 @@ Superposition range2(ulong start_idx, ulong stop_idx) {
     }
     if (values1.size() == 2) {
         Superposition sp;
-        unsigned int steps0 = std::floor(values2[0] - values1[0]);  // Do we need ceiling() or floor()?
-        unsigned int steps1 = std::floor(values2[1] - values1[1]);  // Do we need ceiling() or floor()?
+        unsigned int steps0 = (unsigned int)(std::floor(values2[0] - values1[0]));  // Do we need ceiling() or floor()?
+        unsigned int steps1 = (unsigned int)(std::floor(values2[1] - values1[1]));  // Do we need ceiling() or floor()?
         for (unsigned int i = 0; i <= steps0; i++) {
             for (unsigned int j = 0; j <= steps1; j++) {
                 sp.add(categories1 + float_to_int(i + values1[0], default_decimal_places) + ": " + float_to_int(j + values1[1], default_decimal_places));
@@ -262,7 +262,7 @@ Sequence op_arithmetic3(const Sequence& input_seq, const Sequence& one, const Se
             break;
         } // check for div by zero here!
         case '%': {
-            value = static_cast<long long>(x) % static_cast<long long>(y);
+            value = (long double)(static_cast<long long>(x) % static_cast<long long>(y));
             break;
         }
         case '^': {
@@ -428,8 +428,14 @@ Sequence op_intersection2(const Sequence& input_seq, const Sequence& one, const 
     // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
     //     seq.append(sp_intersection(*one_iter, *two_iter));
     // }
+    /*
     size_t min_size = std::min(one.size(), two.size());
     for (size_t k = 0; k < min_size; k++) {
+        seq.append(sp_intersection(one.get(k), two.get(k)));
+    }
+    */
+    ulong min_size = (ulong)(std::min(one.size(), two.size()));  // Yeah, size_t vs ulong bug again!!!
+    for (ulong k = 0; k < min_size; k++) {
         seq.append(sp_intersection(one.get(k), two.get(k)));
     }
     return seq;
@@ -463,8 +469,14 @@ Sequence op_union2(const Sequence& input_seq, const Sequence& one, const Sequenc
     // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
     //     seq.append(sp_union(*one_iter, *two_iter));
     // }
+    /*
     size_t max_size = std::max(one.size(), two.size());
     for (size_t k = 0; k < max_size; k++) {
+        seq.append(sp_union(one.get(k), two.get(k)));
+    }
+    */
+    ulong max_size = (ulong)(std::max(one.size(), two.size()));  // Yeah, size_t vs ulong bug again!!!
+    for (ulong k = 0; k < max_size; k++) {
         seq.append(sp_union(one.get(k), two.get(k)));
     }
     return seq;
@@ -498,8 +510,14 @@ Sequence op_sum2(const Sequence& input_seq, const Sequence& one, const Sequence&
     // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
     //     seq.append(sp_union(*one_iter, *two_iter));
     // }
+    /*
     size_t max_size = std::max(one.size(), two.size());
     for (size_t k = 0; k < max_size; k++) {
+        seq.append(sp_sum(one.get(k), two.get(k)));
+    }
+    */
+    ulong max_size = (ulong)(std::max(one.size(), two.size()));  // Yeah, size_t vs ulong bug again!!!
+    for (ulong k = 0; k < max_size; k++) {
         seq.append(sp_sum(one.get(k), two.get(k)));
     }
     return seq;
@@ -994,10 +1012,10 @@ Sequence op_smap3(ContextList& context, const Sequence& input_seq, const Sequenc
     try {
         unsigned int min_ngram_size = std::stoi(one.to_ket().label());
         unsigned int max_ngram_size = std::stoi(two.to_ket().label());
-        unsigned int width = input_seq.size();
+        unsigned int width = (unsigned int)(input_seq.size());  // C4267 warning again!
         min_ngram_size = std::min(min_ngram_size, width);
         max_ngram_size = std::min(max_ngram_size, width);
-        if (min_ngram_size <= 0 || max_ngram_size <= 0 || max_ngram_size < min_ngram_size) { return Sequence(""); }
+        if (min_ngram_size <= 0 || max_ngram_size <= 0 || max_ngram_size < min_ngram_size) { return Sequence(""); }  // return Sequence(); instead??
         std::vector<SimpleOperator> operators;
         for (const auto& k : three.to_sp()) {
             auto k_vec = k.label_split_idx();
@@ -1011,8 +1029,8 @@ Sequence op_smap3(ContextList& context, const Sequence& input_seq, const Sequenc
             operators.push_back(op);
         }
         Sequence result;
-        Superposition empty("");
-        for (int i = 0; i < width; i++) {  // Pad the result sequence with empty superpositions.
+        Superposition empty("");  // Should this be Superposition empty(); ?? Possibly not.
+        for (unsigned int i = 0; i < width; i++) {  // Pad the result sequence with empty superpositions.
             result.append(empty);          // This is needed so that result.set() works.
         }
         ulong the_idx = ket_map.get_idx("the");
@@ -1449,7 +1467,7 @@ Sequence op_grid_simm2(ContextList& context, const Sequence& input_seq, const Se
     std::vector<ulong> one_kets = context.relevant_kets(one_idx);
     std::vector<ulong> two_kets = context.relevant_kets(two_idx);
     if (one_kets.empty() || two_kets.empty()) { return Sequence(ket_name, 0); }
-    unsigned int max_size = std::max(one_kets.size(), two_kets.size());
+    unsigned int max_size = (unsigned int)(std::max(one_kets.size(), two_kets.size()));  // Warning C4267 again.
     std::unordered_set<ulong> m(one_kets.begin(), one_kets.end());  // Find the intersection of one_kets and two_kets:
     std::vector<ulong> intersection_kets;
     for (auto a : two_kets) {
@@ -1491,7 +1509,7 @@ Superposition op_similar_grid(ContextList& context, const Sequence& input_seq, c
         if (input_kets.empty()) {
             continue;
         }
-        unsigned int max_size = std::max(one_kets.size(), input_kets.size());
+        unsigned int max_size = (unsigned int)(std::max(one_kets.size(), input_kets.size()));  // Warning C4267 again!
         std::unordered_set<ulong> m(one_kets.begin(), one_kets.end());  // Find the intersection of one_kets and two_kets:
         std::vector<ulong> intersection_kets;
         for (auto a : input_kets) {
