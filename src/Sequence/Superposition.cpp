@@ -519,6 +519,14 @@ Ket Superposition::get(size_t pos) const {
     return Ket(sp_idx, value);
 }
 
+/*
+Superposition::Iterator::reference Superposition::Iterator::operator*() const {
+    ulong sp_idx = sort_order[m_ptr];
+
+}
+*/
+
+
 SuperpositionIter Superposition::begin() const {
     return SuperpositionIter(this, 0);
 }
@@ -526,6 +534,7 @@ SuperpositionIter Superposition::begin() const {
 SuperpositionIter Superposition::end() const {
     return SuperpositionIter(this, this->sort_order.size());
 }
+
 
 
 // maybe more efficient to use:

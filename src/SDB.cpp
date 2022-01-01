@@ -24,6 +24,7 @@ unsigned int default_decimal_places = 5;
 wxIMPLEMENT_APP(SDBApp);
 bool SDBApp::OnInit()
 {                                           // Need a line to populate fn_map too, from maps to sets for operator names and types.
+    fn_map.PopulateOperatorSets();
     operator_usage_map.PopulateUsageMap();  // Need to add a line to this constructor to enable images in wxAutoBufferedPaintDC.
     PrimaryFrame* frame = new PrimaryFrame();
     frame->Show(true);

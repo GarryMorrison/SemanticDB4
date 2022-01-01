@@ -87,6 +87,34 @@ public:
     SuperpositionIter begin() const;
     SuperpositionIter end() const;
 
+    /*  // Broken with "a non static member reference must be relative to a specific object" error.
+    // New iterator, the last one was deprecated!
+    struct Iterator  // See here: https://internalpointers.com/post/writing-custom-iterators-modern-cpp
+    {
+        using iterator_category = std::forward_iterator_tag;
+        using difference_type = std::ptrdiff_t;
+        using value_type = Ket;
+        using pointer = size_t;
+        using reference = Ket&;
+
+        Iterator(pointer ptr) : m_ptr(ptr) {}
+
+        reference operator*() const { ulong ket_idx = sort_order[m_ptr]; double value = sp.at(ket_idx); return Ket(ket_idx, value); }
+        // reference operator*() const;
+        pointer operator->() { return m_ptr; }
+        Iterator& operator++() { m_ptr++; return *this; }
+        Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }
+        friend bool operator== (const Iterator& a, const Iterator& b) { return a.m_ptr == b.m_ptr; };
+        friend bool operator!= (const Iterator& a, const Iterator& b) { return a.m_ptr != b.m_ptr; };
+
+    private:
+        pointer m_ptr;
+    };
+
+    Iterator begin() { return Iterator(0); }
+    Iterator end() { return Iterator(sort_order.size()); }
+    */
+
     // A collection of built in operators:
     Superposition shuffle() const;
     double find_value(const Ket& k) const;

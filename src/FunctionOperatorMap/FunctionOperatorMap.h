@@ -18,6 +18,8 @@ class FunctionOperatorMap
 private:
 public:
     FunctionOperatorMap();
+    void PopulateOperatorSets();
+    
 
     // Our map versions:
     std::unordered_map<ulong, std::function<Sequence(const Sequence*)> > built_in;
