@@ -14,7 +14,7 @@ void BoundFunction::learn(const std::vector<ulong>& op_ket_idx_vec2, const std::
 }
 
 unsigned int BoundFunction::get_params_size() {
-    return op_ket_idx_vec.size();  // divide by 2 here?
+    return (unsigned int)(op_ket_idx_vec.size());  // divide by 2 here?
 }
 
 std::vector<ulong> BoundFunction::get_params() const {
