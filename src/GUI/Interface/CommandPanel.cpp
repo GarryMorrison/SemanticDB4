@@ -106,7 +106,7 @@ CommandPanel::CommandPanel(wxPanel* parent, wxWindowID id)
     hbox2->Add(reset_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
     vbox->Add(hbox2);
 
-    vbox->Add(m_command_text, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    vbox->Add(m_command_text, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
     vbox->AddSpacer(10);
 
     wxBoxSizer* hbox3 = new wxBoxSizer(wxHORIZONTAL);
@@ -132,7 +132,7 @@ CommandPanel::CommandPanel(wxPanel* parent, wxWindowID id)
 
     // vbox->Add(m_command_results, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
     m_command_result_canvas = new ResultCanvas(this, wxID_ANY, wxDefaultPosition, wxSize(600, 400));
-    vbox->Add(m_command_result_canvas, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    vbox->Add(m_command_result_canvas, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
     vbox->AddSpacer(10);
 
     m_timer_line = new wxStaticText(this, wxID_ANY, "Time taken: 0", wxDefaultPosition, wxDefaultSize);
