@@ -54,6 +54,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\..\..\winflexbison\win_flex_bison-2.5.24\custom_build_rules\win_flex_bison\win_flex_bison_custom_build.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -123,6 +124,7 @@
       <UndefinePreprocessorDefinitions>WXUSINGDLL;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(WINFLEXBISON)\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,6 +143,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <UndefinePreprocessorDefinitions>WXUSINGDLL;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <AdditionalOptions>/D _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(WINFLEXBISON)\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,9 +154,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Parser\Driver.h" />
     <ClInclude Include="src\OperatorLibrary\FunctionOperatorLibrary.h" />
     <ClInclude Include="src\OperatorLibrary\OperatorLibrary.h" />
     <ClInclude Include="src\OperatorLibrary\SigmoidLibrary.h" />
+    <ClInclude Include="src\Parser\Parser.tab.h" />
+    <ClInclude Include="src\Parser\Scanner.h" />
     <ClInclude Include="src\Sequence\IfElseStatement.h" />
     <ClInclude Include="src\Sequence\ForStatement.h" />
     <ClInclude Include="src\Operator\FunctionOperator.h" />
@@ -206,9 +212,12 @@
     <ClInclude Include="src\Sequence\WhileStatement.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Parser\Driver.cpp" />
     <ClCompile Include="src\OperatorLibrary\FunctionOperatorLibrary.cpp" />
     <ClCompile Include="src\OperatorLibrary\OperatorLibrary.cpp" />
     <ClCompile Include="src\OperatorLibrary\SigmoidLibrary.cpp" />
+    <ClCompile Include="src\Parser\Parser.tab.cpp" />
+    <ClCompile Include="src\Parser\Scanner.flex.cpp" />
     <ClCompile Include="src\Sequence\IfElseStatement.cpp" />
     <ClCompile Include="src\Sequence\ForStatement.cpp" />
     <ClCompile Include="src\Operator\FunctionOperator.cpp" />
@@ -256,7 +265,16 @@
     <ClCompile Include="src\Sequence\SuperpositionIter.cpp" />
     <ClCompile Include="src\Sequence\WhileStatement.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Bison Include="src\Parser\Parser.y">
+      <FileType>Text</FileType>
+    </Bison>
+    <Flex Include="src\Parser\Scanner.l">
+      <FileType>Text</FileType>
+    </Flex>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\winflexbison\win_flex_bison-2.5.24\custom_build_rules\win_flex_bison\win_flex_bison_custom_build.targets" />
   </ImportGroup>
 </Project>
