@@ -69,6 +69,11 @@ const size_t Sequence::size() const {
     return seq.size();
 }
 
+void Sequence::clear()
+{
+    seq.clear();
+}
+
 const std::string Sequence::to_string() const {
     if (seq.empty()) { return "|>"; }
     std::string s;

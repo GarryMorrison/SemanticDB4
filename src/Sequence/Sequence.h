@@ -38,6 +38,7 @@ public:
     // const size_t size() const { return seq.size(); };
     // const ulong size() const;
     const size_t size() const;
+    void clear();
     const std::string to_string() const;
     const std::string to_string(const std::string& prefix) const;
     const std::string readable_display() const;

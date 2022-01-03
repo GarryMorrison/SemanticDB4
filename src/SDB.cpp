@@ -23,8 +23,11 @@ unsigned int default_decimal_places = 5;
 // Start up global context:
 ContextList context("Global context");
 
+// Set up a location for parse results:
+Sequence result;
+
 // Start up global parser driver:
-SDB::Driver driver(context);
+SDB::Driver driver(context, result);
 
 wxIMPLEMENT_APP(SDBApp);
 bool SDBApp::OnInit()

@@ -12,10 +12,11 @@
 
 namespace SDB {
 
-    Driver::Driver(class ContextList& _context)
+    Driver::Driver(class ContextList& _context, class Sequence& _result)
         : trace_scanning(false),
         trace_parsing(false),
-        context(_context)
+        context(_context),
+        result(_result)
     {
     }
 

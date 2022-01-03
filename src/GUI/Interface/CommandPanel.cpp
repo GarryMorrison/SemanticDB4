@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/4
 // Author Garry Morrison
 // License GPL v3
 //
@@ -207,11 +207,15 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
                 // bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
                 std::stringstream buffer;
                 std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+                driver.result.clear();
                 bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
                 std::string captured_text = buffer.str();
                 std::cout.rdbuf(old_buffer);
                 m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
-
+                if (driver.result.size() > 0)
+                {
+                    m_command_result_canvas->AppendActiveText(driver.result.to_string());
+                }
                 if (!parse_success)
                 {
                     wxMessageBox("Parse failed for command: " + the_command);
@@ -226,15 +230,21 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             {
                 m_command_result_canvas->AppendText(AGENT_PROMPT, false);
                 m_command_result_canvas->AppendText(the_command, false);
+                m_command_result_canvas->AppendNewLine();
                 // std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
                 // m_command_result_canvas->AppendNewLine();
                 // m_command_result_canvas->AppendText(vect_str.back(), false);
                 std::stringstream buffer;
                 std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+                driver.result.clear();
                 bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
                 std::string captured_text = buffer.str();
                 std::cout.rdbuf(old_buffer);
                 m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
+                if (driver.result.size() > 0)
+                {
+                    m_command_result_canvas->AppendText(driver.result.to_string());
+                }
                 if (m_auto_insert_new_line)
                 {
                     m_command_result_canvas->AppendLine();
@@ -655,10 +665,15 @@ void CommandPanel::OnRunButtonDown(wxCommandEvent& event)
         // bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
         std::stringstream buffer;
         std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+        driver.result.clear();
         bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
         std::string captured_text = buffer.str();
         std::cout.rdbuf(old_buffer);
         m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
+        if (driver.result.size() > 0)
+        {
+            m_command_result_canvas->AppendActiveText(driver.result.to_string());
+        }
         // m_command_result_canvas->AppendNewLine();
         // wxMessageBox("Captured text:\n" + captured_text);
         if (!parse_success)
@@ -680,11 +695,16 @@ void CommandPanel::OnRunButtonDown(wxCommandEvent& event)
         // m_command_result_canvas->AppendText(vect_str.back(), false);
         std::stringstream buffer;
         std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+        driver.result.clear();
         bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
         std::string captured_text = buffer.str();
         std::cout.rdbuf(old_buffer);
         m_command_result_canvas->AppendNewLine();
-        m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);  // Bug here somewhere with regards locations of AppendLine's.
+        m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
+        if (driver.result.size() > 0)
+        {
+            m_command_result_canvas->AppendText(driver.result.to_string());
+        }
         if (!parse_success)
         {
             wxMessageBox("Parse failed for command: " + the_command);
@@ -722,10 +742,15 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
 
             std::stringstream buffer;
             std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+            driver.result.clear();
             bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
             std::string captured_text = buffer.str();
             std::cout.rdbuf(old_buffer);
             m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
+            if (driver.result.size() > 0)
+            {
+                m_command_result_canvas->AppendActiveText(driver.result.to_string());
+            }
             if (!parse_success)
             {
                 wxMessageBox("Parse failed for command: " + the_command);
@@ -751,11 +776,16 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
                 // m_command_result_canvas->AppendText(vect_str.back(), false);
                 std::stringstream buffer;
                 std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+                driver.result.clear();
                 bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
                 std::string captured_text = buffer.str();
                 std::cout.rdbuf(old_buffer);
                 m_command_result_canvas->AppendNewLine();  // Do we need this here?
-                m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);  // Bug here somewhere with regards locations of AppendLine's.
+                m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
+                if (driver.result.size() > 0)
+                {
+                    m_command_result_canvas->AppendText(driver.result.to_string());
+                }
                 if (!parse_success)  // This should probably be before Appending captured_text!
                 {
                     wxMessageBox("Parse failed for command: " + the_command);

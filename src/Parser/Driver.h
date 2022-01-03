@@ -13,11 +13,12 @@
 #include <string>
 #include "../SDB.h"
 class ContextList;
+class Sequence;
 
 namespace SDB {
     class Driver {
     public:
-        Driver(class ContextList& context);
+        Driver(class ContextList& context, class Sequence& result);
 
         /// enable debug output in the flex scanner
         bool trace_scanning;
@@ -66,6 +67,9 @@ namespace SDB {
         /** Reference to the calculator context filled during parsing of the
          * expressions. */
         class ContextList& context;
+
+        // Location to store parse results:
+        class Sequence& result;
     };
 }
 

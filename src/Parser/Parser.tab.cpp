@@ -666,7 +666,7 @@ namespace SDB {
             {
   case 6: // item: operator_or_general_sequence "end of line"
 #line 203 "Parser.y"
-                                        { std::cout << "\n" << (yystack_[1].value.opWithSeqVal)->Compile(driver.context).to_string() << "\n"; }
+                                        { driver.result = (yystack_[1].value.opWithSeqVal)->Compile(driver.context); }
 #line 671 "Parser.tab.cpp"
     break;
 
