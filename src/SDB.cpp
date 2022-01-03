@@ -20,6 +20,11 @@ OperatorUsageMap operator_usage_map;
 // Set default decimal places:
 unsigned int default_decimal_places = 5;
 
+// Start up global context:
+ContextList context("Global context");
+
+// Start up global parser driver:
+SDB::Driver driver(context);
 
 wxIMPLEMENT_APP(SDBApp);
 bool SDBApp::OnInit()

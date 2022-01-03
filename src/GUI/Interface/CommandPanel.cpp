@@ -7,6 +7,7 @@
 //
 
 #include "CommandPanel.h"
+extern SDB::Driver driver;
 
 CommandPanel::CommandPanel(wxPanel* parent, wxWindowID id)
     : wxPanel(parent, id, wxDefaultPosition, wxSize(400, 300), 0)
@@ -201,8 +202,13 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             if (m_use_active_text)
             {
                 m_command_result_canvas->AppendActiveText(the_command, AGENT_PROMPT, true);
-                std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
-                m_command_result_canvas->AppendActiveText(vect_str.back(), "", false);
+                // std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
+                // m_command_result_canvas->AppendActiveText(vect_str.back(), "", false);
+                bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
+                if (!parse_success)
+                {
+                    wxMessageBox("Parse failed for command: " + the_command);
+                }
                 if (m_auto_insert_new_line)
                 {
                     m_command_result_canvas->AppendLine();
@@ -438,6 +444,17 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         }
         break;
     }
+    case 45: {
+        if (event.ShiftDown())
+        {
+            m_command_text->WriteText("_");
+        }
+        else
+        {
+            m_command_text->WriteText("-");
+        }
+        break;
+    }
     case '1': {
         if (event.ShiftDown())
         {
@@ -593,7 +610,7 @@ void CommandPanel::OnRightMouseDown(wxMouseEvent& event)  // Should this be in C
 }
 
 
-void TestCout()
+void TestCout()  // Delete eventually!
 {
     std::cout << "Test text from cout ... \n";
 }
@@ -620,8 +637,20 @@ void CommandPanel::OnRunButtonDown(wxCommandEvent& event)
     if (m_use_active_text)
     {
         m_command_result_canvas->AppendActiveText(the_command, AGENT_PROMPT, true);
-        std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
-        m_command_result_canvas->AppendActiveText(vect_str.back(), "", false);
+        // std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
+        // m_command_result_canvas->AppendActiveText(vect_str.back(), "", false);
+        // bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
+        std::stringstream buffer;
+        std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+        bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
+        std::string captured_text = buffer.str();
+        std::cout.rdbuf(old_buffer);
+        m_command_result_canvas->AppendText(captured_text, false, RC_OBJECT_NONE, true);  // Bug here somewhere with regards locations of AppendLine's.
+        // m_command_result_canvas->AppendNewLine();
+        if (!parse_success)
+        {
+            wxMessageBox("Parse failed for command: " + the_command);
+        }
         if (m_auto_insert_new_line)
         {
             m_command_result_canvas->AppendLine();
@@ -632,9 +661,20 @@ void CommandPanel::OnRunButtonDown(wxCommandEvent& event)
     {
         m_command_result_canvas->AppendText(AGENT_PROMPT, false);
         m_command_result_canvas->AppendText(the_command, false);
-        std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
+        // std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
+        // m_command_result_canvas->AppendNewLine();
+        // m_command_result_canvas->AppendText(vect_str.back(), false);
+        std::stringstream buffer;
+        std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+        bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
+        std::string captured_text = buffer.str();
+        std::cout.rdbuf(old_buffer);
         m_command_result_canvas->AppendNewLine();
-        m_command_result_canvas->AppendText(vect_str.back(), false);
+        m_command_result_canvas->AppendText(captured_text, false, RC_OBJECT_NONE, true);  // Bug here somewhere with regards locations of AppendLine's.
+        if (!parse_success)
+        {
+            wxMessageBox("Parse failed for command: " + the_command);
+        }
         if (m_auto_insert_new_line)
         {
             m_command_result_canvas->AppendLine();
@@ -655,8 +695,27 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
         {
             the_command = m_command_text->GetLine(idx);
             m_command_result_canvas->AppendActiveText(the_command, AGENT_PROMPT, true);
-            std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
-            m_command_result_canvas->AppendActiveText(vect_str.back(), "", false);
+            // std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
+            // m_command_result_canvas->AppendActiveText(vect_str.back(), "", false);
+
+            /*
+            std::stringstream buffer;
+            std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+            context.print_universe();
+            std::string captured_text = buffer.str();
+            std::cout.rdbuf(old_buffer);
+            */
+
+            std::stringstream buffer;
+            std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+            bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
+            std::string captured_text = buffer.str();
+            std::cout.rdbuf(old_buffer);
+            m_command_result_canvas->AppendText(captured_text, false, RC_OBJECT_NONE, true);
+            if (!parse_success)
+            {
+                wxMessageBox("Parse failed for command: " + the_command);
+            }
             if (m_auto_insert_new_line)
             {
                 m_command_result_canvas->AppendLine();
@@ -673,9 +732,21 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
             if (the_command != "\n")  // Do we really want this here? Ie, to just print a prompt if the command is empty?
             {
                 m_command_result_canvas->AppendText(the_command, false);
+                // m_command_result_canvas->AppendNewLine();
+                // std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
+                // m_command_result_canvas->AppendText(vect_str.back(), false);
+                std::stringstream buffer;
+                std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+                bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
+                std::string captured_text = buffer.str();
+                std::cout.rdbuf(old_buffer);
                 m_command_result_canvas->AppendNewLine();
-                std::vector<std::string> vect_str = split(the_command.ToStdString(), "=> ");  // Just a dummy until we wire in the backend code.
-                m_command_result_canvas->AppendText(vect_str.back(), false);
+                m_command_result_canvas->AppendText(captured_text, false, RC_OBJECT_NONE, true);  // Bug here somewhere with regards locations of AppendLine's.
+                if (!parse_success)  // This should probably be before Appending captured_text!
+                {
+                    wxMessageBox("Parse failed for command: " + the_command);
+                }
+
                 if (m_auto_insert_new_line)
                 {
                     m_command_result_canvas->AppendLine();
@@ -697,7 +768,14 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
 
 void CommandPanel::OnDumpButtonDown(wxCommandEvent& event)
 {
-    DumpFrame* dump_frame = new DumpFrame(this, "Dump of the current context", EXAMPLE_STARTING_TEXT);
+    std::stringstream buffer;
+    std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+    context.print_universe();
+    std::string captured_text = buffer.str();
+    std::cout.rdbuf(old_buffer);
+    // wxMessageBox(captured_text);
+    // DumpFrame* dump_frame = new DumpFrame(this, "Dump of the current context", EXAMPLE_STARTING_TEXT);
+    DumpFrame* dump_frame = new DumpFrame(this, "Dump of the current context", captured_text);
 }
 
 void CommandPanel::OnSaveAsButtonDown(wxCommandEvent& event)

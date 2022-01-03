@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2021/12/30"
+#define APP_BUILD_DATE "2022/1/3"
 #define APP_VERSION "0.1.pre-alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -29,7 +29,7 @@
 #define AGENT_PROMPT "sa: "
 #define KET_MAP_DISPLAY_MAX_ROWS 200  // Max number of rows to display in the ket map window.
 
-#define EXAMPLE_STARTING_TEXT "age |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\nspelling |Fred> => |F> . |r> . |e> . |d>\n\nage |Sam> => |41>\nfriends |Sam> => |Fred> + |Liz> + |Emma>\nspelling |Sam> => |S> . |a> . |m>"
+#define EXAMPLE_STARTING_TEXT "age |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\nspelling |Fred> => |F> . |r> . |e> . |d>\n\nage |Sam> => |41>\nfriends |Sam> => |Fred> + |Liz> + |Emma>\nspelling |Sam> => |S> . |a> . |m>\n\ntable[name, age, friends] rel-kets[friends]\n"
 #define EXAMPLE_KET_KNOWLEDGE "age |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\nspelling |Fred> => |F> . |r> . |e> . |d>"
 #define EXAMPLE_OP_KNOWLEDGE "age |Fred> => |37>\nage |Sam> => |41>"
 
@@ -121,6 +121,10 @@
 #include "Sequence/IfElseStatement.h"
 #include "Sequence/ForStatement.h"
 #include "Sequence/WhileStatement.h"
+
+extern ContextList context;
+// extern SDB::Driver driver;
+
 
 class SDBApp : public wxApp
 {
