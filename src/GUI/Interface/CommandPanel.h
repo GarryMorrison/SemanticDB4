@@ -66,7 +66,7 @@ private:
     std::map<int, bool> m_line_has_learn_rule;
     long long m_run_time = 0;
     wxStaticText* m_timer_line;
-    bool m_auto_insert_new_line = true;
+    bool m_auto_insert_new_line = false;
     bool m_use_active_text = true;
     bool m_use_command_monospace = false;
     bool m_use_command_line_numbers = true;
