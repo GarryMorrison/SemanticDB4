@@ -96,3 +96,9 @@ std::string string_repeat(const std::string& input, unsigned num) {
 bool is_number(const std::string& str) {  // a quick check if a string is a number or not. NB: not perfect, since invalid numbers will return true.
     return !str.empty() && str.find_first_not_of("-.0123456789") == std::string::npos;
 }
+
+std::string strip_ket(const std::string& str)  // Test it, but should be correct. This function removes the first and last chars from a string. eg |Fred> converts to Fred.
+{
+    if (str.size() < 2) { return str; }
+    return str.substr(1, str.size() - 2);
+}
