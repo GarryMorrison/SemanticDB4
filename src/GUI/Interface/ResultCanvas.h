@@ -95,6 +95,7 @@ public:
     void ClearCanvas();
 
     void AppendText(const wxString& wxs, bool isactive = false, int object_type = RC_OBJECT_NONE, bool ismonospace = false);
+    void AppendMultiLineText(const wxString& wxs, bool isactive = false, int object_type = RC_OBJECT_NONE, bool ismonospace = false);
     void AppendNewLine();
     void AppendLine();
     void AppendActiveText(const wxString& wxs, const wxString& prefix = wxEmptyString, const bool is_mono = false);

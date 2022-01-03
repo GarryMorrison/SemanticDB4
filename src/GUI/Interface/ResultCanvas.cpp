@@ -56,7 +56,18 @@ void ResultCanvas::AppendText(const wxString& wxs, bool isactive, int object_typ
     Refresh();
 }
 
-
+void ResultCanvas::AppendMultiLineText(const wxString& wxs, bool isactive, int object_type, bool ismonospace)
+{
+    for (const auto& line : split(wxs.ToStdString(), "\n"))
+    {
+        AppendText(line, isactive, object_type, ismonospace);
+        // AppendNewLine();
+        m_x = 10;
+        m_y = m_last_y;
+        m_last_y = m_y;
+    }
+    Refresh();
+}
 
 void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix, const bool is_mono)  // Can we write a faster version!! Tidy it!!
 {
