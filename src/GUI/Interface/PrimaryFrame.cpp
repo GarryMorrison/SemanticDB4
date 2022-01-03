@@ -500,9 +500,16 @@ void PrimaryFrame::OnSave(wxCommandEvent& event)
 void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
 {
     wxArrayString list_options;
+    /*
     for (const auto& the_ket : m_known_kets)
     {
         list_options.Add(the_ket);
+    }
+    */
+    for (ulong ket_idx : context.relevant_kets("*"))
+    {
+        std::string ket_label = '|' + ket_map.get_str(ket_idx) + '>';
+        list_options.Add(ket_label);
     }
     unsigned int d = m_insert_window_open_count;
     SelectFromListDialog* select_dlg = new SelectFromListDialog(this, "Select ket", list_options, wxPoint(d * 40, d * 40));
@@ -581,12 +588,27 @@ void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
 void PrimaryFrame::SelectKnownOperator(wxCommandEvent& event)
 {
     wxArrayString list_options;
+    /*
     for (const auto& the_op : m_known_operators)
     {
         list_options.Add(the_op);
     }
+    */
+    std::set<std::string> known_literal_operators;
+    for (ulong ket_idx : context.relevant_kets("*"))
+    {
+        for (ulong op_idx : context.supported_ops(ket_idx))
+        {
+            std::string op_label = ket_map.get_str(op_idx);
+            known_literal_operators.insert(op_label);
+        }
+    }
+    for (const auto& ket_label : known_literal_operators)
+    {
+        list_options.Add(ket_label);
+    }
     unsigned int d = m_insert_window_open_count;
-    SelectFromListDialog* select_dlg = new SelectFromListDialog(this, "Select operator", list_options, wxPoint(d * 40, d * 40));
+    SelectFromListDialog* select_dlg = new SelectFromListDialog(this, "Select literal operator", list_options, wxPoint(d * 40, d * 40));
     m_insert_window_open_count++;
 
     select_dlg->Bind(wxEVT_LISTBOX, [=](wxCommandEvent& event) {
