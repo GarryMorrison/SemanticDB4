@@ -95,7 +95,15 @@ void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix,
         {
             if (!inside_ket && c == '|')
             {
-                AppendText(wxString(token), false, RC_OBJECT_NONE, is_mono);
+                if (inside_object)
+                {
+                    AppendText(wxString(token), true, RC_OBJECT_SIMPLE_OP, is_mono);
+                }
+                else
+                {
+                    AppendText(wxString(token), false, RC_OBJECT_NONE, is_mono);
+                }
+                inside_object = false;
                 inside_ket = true;
                 token = c;
             }
