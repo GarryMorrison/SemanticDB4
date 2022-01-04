@@ -2195,6 +2195,7 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
     ulong star_idx = ket_map.get_idx("*");
     for (const auto& k : input_sp)
     {
+        bool has_line_added = false;
         if (operators.size() == 1 && operators[0] == star_idx)
         {
             for (ulong op_idx : context.supported_ops(k.label_idx()))
@@ -2204,6 +2205,7 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
                 if (rhs_type == RULEUNDEFINED) {
                     continue;
                 }
+                has_line_added = true;
                 std::string rhs = context.recall(op_idx, k.label_idx())->to_string();
                 std::string rule_type_str;
                 switch (rhs_type) {
@@ -2229,6 +2231,7 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
                 if (rhs_type == RULEUNDEFINED) {
                     continue;
                 }
+                has_line_added = true;
                 std::string rhs = context.recall(op_idx, k.label_idx())->to_string();
                 std::string rule_type_str;
                 switch (rhs_type) {
@@ -2245,7 +2248,10 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
                 s += "\n";
             }
         }
-        s += "\n";
+        if (has_line_added)
+        {
+            s += "\n";
+        }
     }
     return s;
 }
