@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/29
+// Updated 2022/1/4
 // Author Garry Morrison
 // License GPL v3
 //
@@ -431,7 +431,12 @@ const void ResultCanvasString::OnMouseLeftClick() const
         {
         case RC_OBJECT_KET: {
             // wxMessageBox("Ket clicked: " + the_text_struct.text);
-            DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, EXAMPLE_KET_KNOWLEDGE, m_parent->GetPositionDelta());  // Change constructor later.
+            std::string ket_label = strip_ket(m_text.ToStdString());  // wxString vs std::string again!
+            Ket k(ket_label);
+            std::vector<ulong> operators;
+            operators.push_back(ket_map.get_idx("*"));
+            std::string knowledge = dump(k, context, operators);
+            DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, knowledge, m_parent->GetPositionDelta());  // Change constructor later.
             m_parent->IncreasePositionDelta(wxPoint(40, 40));
             break;
         }
@@ -443,7 +448,11 @@ const void ResultCanvasString::OnMouseLeftClick() const
             if (!operator_usage_map.usage_is_defined(the_operator))
             {
                 // wxMessageBox("No usage info available for operator: " + the_operator);
-                DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, EXAMPLE_OP_KNOWLEDGE, m_parent->GetPositionDelta());  // Change constructor later.
+                Superposition ket_sp(context.relevant_kets(the_operator));
+                std::vector<ulong> operators;
+                operators.push_back(ket_map.get_idx(the_operator));
+                std::string knowledge = dump(ket_sp, context, operators);
+                DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, knowledge, m_parent->GetPositionDelta());  // Change constructor later.
                 m_parent->IncreasePositionDelta(wxPoint(40, 40));
                 return;
             }

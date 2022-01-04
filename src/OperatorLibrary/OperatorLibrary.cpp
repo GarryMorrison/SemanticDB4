@@ -2187,3 +2187,57 @@ Ket op_save_as_dot(const Superposition& sp, ContextList& context, const std::vec
     }
     return Ket("We shouldn't be here in save-as-dot.");
 }
+
+
+std::string dump(const Superposition& input_sp, ContextList& context, const std::vector<ulong>& operators)
+{
+    std::string s;
+    ulong star_idx = ket_map.get_idx("*");
+    for (const auto& k : input_sp)
+    {
+        if (operators.size() == 1 && operators[0] == star_idx)
+        {
+            for (ulong op_idx : context.supported_ops(k.label_idx()))
+            {
+                std::string op_label = ket_map.get_str(op_idx);
+                std::string rhs = context.recall(op_idx, k.label_idx())->to_string();
+                std::string rule_type_str;
+                switch (context.recall_type(op_idx, k.label_idx())) {
+                case RULESTORED: {
+                    rule_type_str = "#";
+                    break;
+                }
+                case RULEMEMOIZE: {
+                    rule_type_str = "!";
+                    break;
+                }
+                }
+                s += op_label + ' ' + k.to_string() + ' ' + rule_type_str + "=> " + rhs;
+                s += "\n";
+            }
+        }
+        else
+        {
+            for (ulong op_idx : operators)
+            {
+                std::string op_label = ket_map.get_str(op_idx);
+                std::string rhs = context.recall(op_idx, k.label_idx())->to_string();
+                std::string rule_type_str;
+                switch (context.recall_type(op_idx, k.label_idx())) {
+                case RULESTORED: {
+                    rule_type_str = "#";
+                    break;
+                }
+                case RULEMEMOIZE: {
+                    rule_type_str = "!";
+                    break;
+                }
+                }
+                s += op_label + ' ' + k.to_string() + ' ' + rule_type_str + "=> " + rhs;
+                s += "\n";
+            }
+        }
+        s += "\n";
+    }
+    return s;
+}
