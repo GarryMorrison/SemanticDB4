@@ -4209,6 +4209,35 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        ";
 
+    operator_usage_map.map["rel-kets"] =
+        "\nrel-kets:\n"
+        "    description:\n"
+        "        rel-kets[*]\n"
+        "        rel-kets[op1, op2, ..., opn]\n"
+        "        If the parameter is *, then return a superposition of all kets that are defined with respect to a literal operator\n"
+        "        Else, return a superposition of all kets that are defined with respect to the given literal operators\n"
+        "        Very useful for generating input lists of objects of interest.\n"
+        "        Note, kets that are only on the RHS of a learn rule are not included in the rel-kets superpositions\n"
+        "        If this is desired, then one approach is to invoke find-inverse[op] first,\n"
+        "        so that now they are on the LHS of a learn rule.\n\n"
+        "    examples:\n"
+        "        \n\n"
+        "    see also:\n"
+        "        find-inverse, such-that, sort-by";
+
+    operator_usage_map.map["table"] =
+        "\ntable:\n"
+        "    description:\n"
+        "        table[label, op1, ..., opn] input-sp\n"
+        "        Generate a pretty print table, where:\n"
+        "        The first column consists of the kets in the input superposition\n"
+        "        Subsequent columns are the result of the given operator applied to those input kets\n"
+        "        Often it is useful to define operator alias's so that a column has the desired label\n"
+        "        If the operator applied to a ket returns the empty ket |> then that table cell will be empty\n\n"
+        "    examples:\n"
+        "        \n\n"
+        "    see also:\n"
+        "        transpose-table";
 
 
     // fill out statement_prototypes map:
