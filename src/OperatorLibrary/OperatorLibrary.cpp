@@ -2200,9 +2200,13 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
             for (ulong op_idx : context.supported_ops(k.label_idx()))
             {
                 std::string op_label = ket_map.get_str(op_idx);
+                unsigned int rhs_type = context.recall_type(op_idx, k.label_idx());
+                if (rhs_type == RULEUNDEFINED) {
+                    continue;
+                }
                 std::string rhs = context.recall(op_idx, k.label_idx())->to_string();
                 std::string rule_type_str;
-                switch (context.recall_type(op_idx, k.label_idx())) {
+                switch (rhs_type) {
                 case RULESTORED: {
                     rule_type_str = "#";
                     break;
@@ -2221,9 +2225,13 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
             for (ulong op_idx : operators)
             {
                 std::string op_label = ket_map.get_str(op_idx);
+                unsigned int rhs_type = context.recall_type(op_idx, k.label_idx());
+                if (rhs_type == RULEUNDEFINED) {
+                    continue;
+                }
                 std::string rhs = context.recall(op_idx, k.label_idx())->to_string();
                 std::string rule_type_str;
-                switch (context.recall_type(op_idx, k.label_idx())) {
+                switch (rhs_type) {
                 case RULESTORED: {
                     rule_type_str = "#";
                     break;
