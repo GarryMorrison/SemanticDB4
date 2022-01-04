@@ -813,10 +813,10 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
 void CommandPanel::OnDumpButtonDown(wxCommandEvent& event)
 {
     std::stringstream buffer;
-    std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
-    context.print_universe();
+//     std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+    context.print_universe(true, buffer);
     std::string captured_text = buffer.str();
-    std::cout.rdbuf(old_buffer);
+    // std::cout.rdbuf(old_buffer);
     // wxMessageBox(captured_text);
     // DumpFrame* dump_frame = new DumpFrame(this, "Dump of the current context", EXAMPLE_STARTING_TEXT);
     DumpFrame* dump_frame = new DumpFrame(this, "Dump of the current context", captured_text);
