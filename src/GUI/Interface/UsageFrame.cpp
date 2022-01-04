@@ -54,6 +54,7 @@ UsageFrame::UsageFrame(wxWindow* parent, std::string op, wxPoint position_delta,
     // defaultAttr.SetTextColour(*wxRED);
     defaultAttr.SetFont(defaultAttr.GetFont());
     LinkedTextCtrl* examplesCtrl = new LinkedTextCtrl(panel, wxID_ANY, clickable_words, split_chars, defaultAttr, usageInfo->Examples, wxDefaultPosition, wxSize(600, 300), wxTE_READONLY | wxTE_MULTILINE);
+    // examplesCtrl->SetCaretStyle(wxSTC_CARETSTYLE_INVISIBLE);  // Not yet sure how to hide the caret.
     topsizer->Add(examplesCtrl, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
 
     LinkedTextCtrl* seeAlsoCtrl = new LinkedTextCtrl(panel, wxID_ANY, clickable_words, split_chars, defaultAttr, usageInfo->SeeAlso, wxDefaultPosition, wxSize(400, 50), wxTE_READONLY);
