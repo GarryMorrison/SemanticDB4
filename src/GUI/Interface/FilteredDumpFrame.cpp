@@ -23,6 +23,7 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         local_title += join(op_list, ", ") + ", " + join(ket_list, ", ");
     }
 
+    /*
     for (const auto& op : op_list)  // Later put this section in UpdateKnowledge() method?
     {
         if (!m_knowledge.empty())
@@ -39,6 +40,7 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         }
         m_knowledge += EXAMPLE_KET_KNOWLEDGE;  // dump[*] |ket>
     }
+    */
 
     wxPanel* panel = new wxPanel(this, wxID_ANY);
 
@@ -143,6 +145,7 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     m_literal_op_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckLiteralOpList, this);
     m_ket_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckKetList, this);
 
+    UpdateKnowledge();
     panel->SetSizerAndFit(topsizer);
     CenterOnScreen();
     wxPoint dialog_position = GetScreenPosition();  // I think my position delta code is not working just yet ....
@@ -195,8 +198,13 @@ void FilteredDumpFrame::UpdateKnowledge()
     {
         for (unsigned int op_idx : m_set_active_literal_ops)  // Later: dump[op] rel-kets[op]
         {
-            wxString op = m_literal_ops[op_idx];
-            m_knowledge += "knowledge for literal operator: " + op + "\n";  // Maybe sort the knowledge according to some criteria? For now, set sorts by list_idx. Which is good!
+            // wxString op = m_literal_ops[op_idx];
+            // m_knowledge += "knowledge for literal operator: " + op + "\n";  // Maybe sort the knowledge according to some criteria? For now, set sorts by list_idx. Which is good!
+            std::string op = m_literal_ops[op_idx].ToStdString();
+            Superposition ket_sp(context.relevant_kets(op));
+            std::vector<ulong> operators;
+            operators.push_back(ket_map.get_idx(op));
+            m_knowledge += dump(ket_sp, context, operators);
         }
         if (!m_knowledge.empty())
         {
@@ -204,19 +212,30 @@ void FilteredDumpFrame::UpdateKnowledge()
         }
         for (unsigned int ket_idx : m_set_active_kets)  // Later: dump[*] |ket>
         {
-            wxString k = m_kets[ket_idx];
-            m_knowledge += "knowledge for ket: " + k + "\n";  // Maybe sort the knowledge according to some criteria?
+            // wxString k = m_kets[ket_idx];
+            // m_knowledge += "knowledge for ket: " + k + "\n";  // Maybe sort the knowledge according to some criteria?
+            std::string ket_label = strip_ket(m_kets[ket_idx].ToStdString());  // wxString vs std::string again!
+            Ket k(ket_label);
+            std::vector<ulong> operators;
+            operators.push_back(ket_map.get_idx("*"));
+            m_knowledge += dump(k, context, operators);
         }
     }
     else
     {
         for (unsigned int op_idx : m_set_active_literal_ops)
         {
-            wxString op = m_literal_ops[op_idx];
+            // wxString op = m_literal_ops[op_idx];
             for (unsigned int ket_idx : m_set_active_kets)
             {
-                wxString k = m_kets[ket_idx];
-                m_knowledge += wxString::Format("knowledge for literal operator: %s and ket: %s\n", op, k);
+                // wxString k = m_kets[ket_idx];
+                // m_knowledge += wxString::Format("knowledge for literal operator: %s and ket: %s\n", op, k);
+                std::string ket_label = strip_ket(m_kets[ket_idx].ToStdString());  // wxString vs std::string again!
+                Ket k(ket_label);
+                std::string op = m_literal_ops[op_idx].ToStdString();
+                std::vector<ulong> operators;
+                operators.push_back(ket_map.get_idx(op));
+                m_knowledge += dump(k, context, operators);
             }
         }
     }
