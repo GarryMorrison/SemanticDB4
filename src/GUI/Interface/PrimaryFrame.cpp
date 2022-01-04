@@ -535,7 +535,8 @@ void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
         }
         wxString the_ket = list_options[the_selection];  // Need to check bounds?
         if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_ket + " ");
+            m_frame_commandPanel->InsertKet(the_ket);
+
         }
         select_dlg->DeselectAll();
         }
@@ -549,7 +550,7 @@ void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
         }
         wxString the_ket = list_options[the_selection];  // Need to check bounds?
         if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_ket + " ");
+            m_frame_commandPanel->InsertKet(the_ket);
         }
         });
 
@@ -619,7 +620,7 @@ void PrimaryFrame::SelectKnownOperator(wxCommandEvent& event)
         }
         wxString the_operator = list_options[the_selection];  // Need to check bounds?
         if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_operator + " ");
+            m_frame_commandPanel->InsertSimpleOperator(the_operator);
         }
         select_dlg->DeselectAll();
         });
@@ -632,7 +633,7 @@ void PrimaryFrame::SelectKnownOperator(wxCommandEvent& event)
         }
         wxString the_operator = list_options[the_selection];  // Need to check bounds?
         if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_operator + " ");
+            m_frame_commandPanel->InsertSimpleOperator(the_operator);
         }
         });
 
