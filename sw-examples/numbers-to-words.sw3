@@ -1,6 +1,5 @@
 -- convert numbers to words:
 -- usage: n2w |12345>
--- updated to the version 3.1.1 language
 
 
 ones |1> => |one>
