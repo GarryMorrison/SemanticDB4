@@ -22,6 +22,13 @@ void OperatorWithSequence::append(const unsigned int the_sign, const OperatorWit
 }
 
 const size_t OperatorWithSequence::size() const {
+    if (sign_vec.size() == 1)
+    {
+        if (seq_vec[0]->size() == 0)  // We need this to fix non_empty_learn I think ....
+        {
+            return 0;
+        }
+    }
     return sign_vec.size();
 }
 

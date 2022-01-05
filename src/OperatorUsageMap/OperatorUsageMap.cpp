@@ -2851,7 +2851,37 @@ OperatorUsageMap::OperatorUsageMap() {
         "            close |Sunday> => |4 pm>\n"
         "            ------------------------------------------\n\n"
         "    see also:\n"
-        "        learn, unlearn, +=> , .=> , #=> , !=> \n";
+        "        learn, unlearn, _=>, +=> , .=> , #=> , !=> \n";
+
+    operator_usage_map.map[" _=> "] =
+        "\n _=> :\n"
+        "    description:\n"
+        "        op |ket> _=> sequence\n"
+        "        non empty learn rule\n"
+        "        if the sequence on the RHS is non-empty, then this is identical to a standard learn rule\n"
+        "        however, if the RHS sequence is empty, then don't learn anything\n"
+        "        frequently useful when you don't want to learn an empty ket |>\n"
+        "        or, you don't want to over-write an existing learn rule if the sequence is empty.\n"
+        "        Without this learn rule, you would require an \"if do-you-know\" wrapper around the learn rule.\n\n"
+        "    examples:\n"
+        "        -- an example of standard learn rule vs the non-empty learn rule:\n"
+        "        -- first, the standard learn rule:\n"
+        "        age |Fred> => |39>\n"
+        "        age |Fred> => |>\n\n"
+        "        -- now, the non-empty learn rule:\n"
+        "        age |Sam> => |41>\n"
+        "        age |Sam> _=> |>\n\n"
+        "        -- now see what we know:\n"
+        "        dump\n"
+        "            age |Fred> => |>\n"
+        "            age |Sam> => |41>\n\n"
+        "        -- So we see, Fred's age has been over-written with the empty ket,\n"
+        "        -- but Sam's has not.\n\n"
+        "        -- But if we do want to update Sam's age,\n"
+        "        -- then we use a non-empty sequence:\n"
+        "        age |Sam> _=> |37>\n\n"
+        "    see also:\n"
+        "        learn, unlearn, =>, +=> , .=> , #=> , !=> \n";
 
     operator_usage_map.map[" +=> "] =
         "\n +=> :\n"

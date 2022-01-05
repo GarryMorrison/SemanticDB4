@@ -553,7 +553,7 @@ void FunctionOperatorMap::PopulateOperatorSets() {
 
     
     list_of_statements = { "if", "if-else", "for", "sfor", "while" };
-    list_of_learn_rules = { "=>", "+=>", ".=>", "#=>", "!=>" };
+    list_of_learn_rules = { "=>", "_=>", "+=>", ".=>", "#=>", "!=>" };
     list_of_infix_type1 = { "+", "-", ".", "_", "__", ":_" };
     list_of_infix_type2 = { "==", "!=", ">=", ">", "<=", "<", "&&", "||", "++", "--", "**", "//", "%%", "^^", ".." };
     list_of_misc_elements = { "|>", "comment", "label descent", "|*>", "|category: *>", "|_self>", "(*,*)", "|__self>", "|context>", "supported-ops", "dump", "if-then machine" };

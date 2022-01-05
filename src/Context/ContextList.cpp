@@ -155,6 +155,38 @@ void ContextList::learn(const std::string& op, const std::string& label, const s
 }
 
 
+void ContextList::non_empty_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq)
+{
+    // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
+    // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
+    if (bSeq->size() == 0) { return; }
+    learn(op_idx, label_idx, bSeq);
+}
+
+void ContextList::non_empty_learn(const ulong op_idx, const Ket& label_ket, std::shared_ptr<BaseSequence> bSeq)
+{
+    // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
+    // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
+    if (bSeq->size() == 0) { return; }
+    learn(op_idx, label_ket, bSeq);
+}
+
+void ContextList::non_empty_learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq)
+{
+    // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
+    // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
+    if (bSeq->size() == 0) { return; }
+    learn(op, label, bSeq);
+}
+
+void ContextList::non_empty_learn(const std::string& op, const std::string& label, const std::string& srule)
+{
+    // std::cout << "Inside non_empty_learn, srule size: " << std::to_string(srule.size()) << "\n";
+    if (srule.empty()) { return; }
+    learn(op, label, srule);
+}
+
+
 void ContextList::add_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
     // data[index].add_learn(op_idx, label_idx, bSeq);
     if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.

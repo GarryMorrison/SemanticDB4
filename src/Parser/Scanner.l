@@ -105,6 +105,7 @@ yylloc->step();
 "#=>" { yylval->integerVal = RULESTORED; return token::LEARN_SYM; }
 "!=>" { yylval->integerVal = RULEMEMOIZE; return token::LEARN_SYM; }
 "=>" { yylval->integerVal = RULENORMAL; return token::LEARN_SYM; }
+"_=>" { yylval->integerVal = RULENONEMPTY; return token::LEARN_SYM; }
 
 "(*)" { yylval->integerVal = 1; return token::FN_SYM; }
 "(*,*)" { yylval->integerVal = 2; return token::FN_SYM; }
