@@ -289,7 +289,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             }
             else
             {
-                m_command_text->WriteText("( ) ");
+                m_command_text->WriteText("() ");
                 m_command_text->GotoPos(m_command_text->GetCurrentPos() - 2);
             }
         }
