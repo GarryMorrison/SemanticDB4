@@ -12,9 +12,19 @@ to-Kelvin |F: *> #=> |K:> __ round[2] times-by[5/9] plus[459.67] extract-value |
 to-Celsius |F: *> #=> |C:> __ round[2] times-by[5/9] minus[32] extract-value |_self>
 to-Fahrenheit |F: *> #=> |_self>
 
+-- some wrapper operators:
 to-K |*> #=> to-Kelvin |_self>
 to-C |*> #=> to-Celsius |_self>
 to-F |*> #=> to-Fahrenheit |_self>
+
+K-to-C |*> #=> to-Celsius (|K> :_ |_self>)
+K-to-F |*> #=> to-Fahrenheit (|K> :_ |_self>)
+
+C-to-K |*> #=> to-Kelvin (|C> :_ |_self>)
+C-to-F |*> #=> to-Fahrenheit (|C> :_ |_self>)
+
+F-to-K |*> #=> to-Kelvin (|F> :_ |_self>)
+F-to-C |*> #=> to-Celsius (|F> :_ |_self>)
 
 
 table[Celsius, to-Kelvin, to-Fahrenheit] range(|C: 0>, |C: 100>, |5>)
