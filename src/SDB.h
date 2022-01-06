@@ -56,6 +56,7 @@
 #include <wx/font.h>
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
+#include <wx/grid.h>
 #include <set>
 #include <map>
 #include <string>
@@ -83,6 +84,7 @@
 #include "GUI/Interface/ResultCanvas.h"
 #include "GUI/Interface/CommandPanel.h"
 #include "GUI/Interface/FilteredDumpFrame.h"
+#include "GUI/Interface/GeneralOperatorsFrame.h"
 
 // Back end includes:
 #include "KetMap/KetMap.h"

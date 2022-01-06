@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GUI\Interface\GeneralOperatorsFrame.h" />
     <ClInclude Include="src\Parser\Driver.h" />
     <ClInclude Include="src\OperatorLibrary\FunctionOperatorLibrary.h" />
     <ClInclude Include="src\OperatorLibrary\OperatorLibrary.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="src\Sequence\WhileStatement.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\Interface\GeneralOperatorsFrame.cpp" />
     <ClCompile Include="src\Parser\Driver.cpp" />
     <ClCompile Include="src\OperatorLibrary\FunctionOperatorLibrary.cpp" />
     <ClCompile Include="src\OperatorLibrary\OperatorLibrary.cpp" />

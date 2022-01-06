@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/29
-// Updated 2021/12/29
+// Updated 2022/1/6
 // Author Garry Morrison
 // License GPL v3
 //
@@ -9,7 +9,7 @@
 #include "FilteredDumpFrame.h"
 
 FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, const std::vector<std::string>& op_list, const std::vector<std::string>& ket_list, const wxPoint position_delta, long style)
-    : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(700, 680), style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
+    : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(700, 800), style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
 {
     m_parent = parent;
     m_position_delta = position_delta;
@@ -64,6 +64,9 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     wxCheckBox* op_ket_and_checkbox = new wxCheckBox(panel, wxID_ANY, "And operators and kets");
     op_ket_and_checkbox->SetValue(m_use_op_ket_and);
     hbox1->Add(op_ket_and_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    wxCheckBox* general_operators_checkbox = new wxCheckBox(panel, wxID_ANY, "General operators");
+    general_operators_checkbox->SetValue(m_show_general_operators);
+    hbox1->Add(general_operators_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
     topsizer->AddSpacer(10);
     topsizer->Add(hbox1);
 
@@ -125,6 +128,9 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     // topsizer->Add(button_sizer, wxSizerFlags(0).Center());
     topsizer->Add(button_sizer, wxSizerFlags(0).Left());
 
+    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", "Some content");  // Wire in supported-ops |*> later.
+    m_general_operators_frame->Hide();
+
     close_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
         if (event.GetId() == wxID_OK)
         {
@@ -140,6 +146,18 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     op_ket_and_checkbox->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
         m_use_op_ket_and = op_ket_and_checkbox->GetValue();
         UpdateKnowledge();
+        });
+
+    general_operators_checkbox->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
+        m_show_general_operators = general_operators_checkbox->GetValue();
+        if (m_show_general_operators)
+        {
+            m_general_operators_frame->Show();
+        }
+        else
+        {
+            m_general_operators_frame->Hide();
+        }
         });
 
     m_literal_op_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckLiteralOpList, this);

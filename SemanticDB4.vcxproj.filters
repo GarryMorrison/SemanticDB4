@@ -183,6 +183,9 @@
     <ClInclude Include="src\Parser\Parser.tab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI\Interface\GeneralOperatorsFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -339,6 +342,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Parser\Scanner.flex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\Interface\GeneralOperatorsFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
