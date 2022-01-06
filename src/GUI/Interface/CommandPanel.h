@@ -35,6 +35,8 @@ public:
     void OnDumpButtonDown(wxCommandEvent& event);
     void OnSaveAsButtonDown(wxCommandEvent& event);
     void OnGraphButtonDown(wxCommandEvent& event);
+    void OnResetContextButtonDown(wxCommandEvent& event);
+    void OnResetAllButtonDown(wxCommandEvent& event);
     void OnUseMonospaceCheckBox(wxCommandEvent& event);
     void OnUseLineNumbersCheckBox(wxCommandEvent& event);
 

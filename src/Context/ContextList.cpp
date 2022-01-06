@@ -47,6 +47,16 @@ void ContextList::reset() {
     data.push_back(tmp);
 }
 
+void ContextList::reset_current_context()
+{
+    data[index].reset();
+}
+
+std::string ContextList::get_context_name() const
+{
+    return data[index].get_name();
+}
+
 void ContextList::show_context_list() {
     std::cout << "\nContextList:\n";
     for (ulong k = 0; k < max_index; k++) {

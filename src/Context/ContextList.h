@@ -22,6 +22,8 @@ public:
     void set(const std::string& s);
     void set(const ulong idx);
     void reset();
+    void reset_current_context();
+    std::string get_context_name() const;
     void show_context_list();
 
     /*

@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/4
+// Updated 2022/1/6
 // Author Garry Morrison
 // License GPL v3
 //
@@ -94,7 +94,8 @@ CommandPanel::CommandPanel(wxPanel* parent, wxWindowID id)
     wxButton* dump_button = new wxButton(this, ID_Command_Dump, "Dump");
     wxButton* save_as_button = new wxButton(this, ID_Command_Save_As, "Save As");
     wxButton* graph_button = new wxButton(this, ID_Command_Graph, "Graph");
-    wxButton* reset_button = new wxButton(this, ID_Command_Reset, "Reset");
+    wxButton* reset_context_button = new wxButton(this, ID_Command_Reset_Context, "Reset Context");
+    wxButton* reset_all_button = new wxButton(this, ID_Command_Reset_All, "Reset All");
     hbox2->AddSpacer(10);
     hbox2->Add(run_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
     hbox2->Add(run_all_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
@@ -103,7 +104,8 @@ CommandPanel::CommandPanel(wxPanel* parent, wxWindowID id)
     hbox2->Add(dump_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
     hbox2->Add(save_as_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
     hbox2->Add(graph_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
-    hbox2->Add(reset_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
+    hbox2->Add(reset_context_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
+    hbox2->Add(reset_all_button, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 10));
     vbox->Add(hbox2);
 
     vbox->Add(m_command_text, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
@@ -163,6 +165,8 @@ CommandPanel::CommandPanel(wxPanel* parent, wxWindowID id)
     dump_button->Bind(wxEVT_BUTTON, &CommandPanel::OnDumpButtonDown, this);
     save_as_button->Bind(wxEVT_BUTTON, &CommandPanel::OnSaveAsButtonDown, this);
     graph_button->Bind(wxEVT_BUTTON, &CommandPanel::OnGraphButtonDown, this);
+    reset_context_button->Bind(wxEVT_BUTTON, &CommandPanel::OnResetContextButtonDown, this);
+    reset_all_button->Bind(wxEVT_BUTTON, &CommandPanel::OnResetAllButtonDown, this);
 
     m_command_monospace_checkbox->Bind(wxEVT_CHECKBOX, &CommandPanel::OnUseMonospaceCheckBox, this);
     m_command_line_numbers_checkbox->Bind(wxEVT_CHECKBOX, &CommandPanel::OnUseLineNumbersCheckBox, this);
@@ -831,6 +835,28 @@ void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
 {
     wxMessageBox("Graph button pressed. Later we will insert a graph!");
 }
+
+void CommandPanel::OnResetContextButtonDown(wxCommandEvent& event)
+{
+    wxString reset_context_text = wxString::Format("Are you really sure you want to erase current context \"%s\"?\nAll knowledge in this context will be deleted!", driver.context.get_context_name());
+    ResetContextDialog* dlg = new ResetContextDialog(this, "Reset context", reset_context_text);
+    if (dlg->ShowModal() == wxID_OK)
+    {
+        driver.context.reset_current_context();
+    }
+
+}
+
+void CommandPanel::OnResetAllButtonDown(wxCommandEvent& event)
+{
+    wxString reset_all_text = "Are you really sure you want to erase all knowledge?";
+    ResetContextDialog* dlg = new ResetContextDialog(this, "Reset all", reset_all_text);
+    if (dlg->ShowModal() == wxID_OK)
+    {
+        driver.context.reset();
+    }    
+}
+
 
 void CommandPanel::OnUseMonospaceCheckBox(wxCommandEvent& event)
 {

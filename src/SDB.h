@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/1/5"
+#define APP_BUILD_DATE "2022/1/6"
 #define APP_VERSION "0.1.pre-alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -85,6 +85,7 @@
 #include "GUI/Interface/CommandPanel.h"
 #include "GUI/Interface/FilteredDumpFrame.h"
 #include "GUI/Interface/GeneralOperatorsFrame.h"
+#include "GUI/Interface/ResetContextDialog.h"
 
 // Back end includes:
 #include "KetMap/KetMap.h"
@@ -142,6 +143,9 @@ enum
     ID_Open,
     ID_Save,
     ID_Insert,
+
+    ID_YES,
+    ID_NO,
     // ID_Insert_Known_Kets,
     // ID_Insert_Known_Literal_Operators,
 
@@ -245,7 +249,8 @@ enum
     ID_Command_Dump,
     ID_Command_Save_As,
     ID_Command_Graph,
-    ID_Command_Reset,
+    ID_Command_Reset_Context,
+    ID_Command_Reset_All,
     ID_Command_Clear_Results,
     ID_Command_Result_Insert_New_Line,
     ID_Command_Result_Insert_Line,

@@ -33,6 +33,7 @@ public:
     // NewContext(const std::string s) { name = s; };
     NewContext(const std::string& s);
     std::string get_name() const { return name; };
+    void reset();
 
     /*
         void learn(const ulong op_idx, const ulong label_idx, BaseSequence* bSeq);

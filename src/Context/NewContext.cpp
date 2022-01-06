@@ -17,6 +17,14 @@ NewContext::NewContext(const std::string& s) {
     name = s;
 }
 
+void NewContext::reset()
+{
+    rules_dict.clear();
+    sort_order.clear();
+    fn_rules_dict.clear();
+    bound_fn_rules_dict.clear();
+}
+
 /*
 void NewContext::learn(const ulong op_idx, const ulong label_idx, BaseSequence* bSeq) {
     if (op_idx == ket_map.get_idx("supported-ops")) { return; }  // maybe hard wire in "supported-ops" as ket_map idx = 1?
