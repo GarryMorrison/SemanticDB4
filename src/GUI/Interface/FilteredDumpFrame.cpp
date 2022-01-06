@@ -128,7 +128,20 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     // topsizer->Add(button_sizer, wxSizerFlags(0).Center());
     topsizer->Add(button_sizer, wxSizerFlags(0).Left());
 
-    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", "Some content");  // Wire in supported-ops |*> later.
+    wxArrayString grid_data;  // Later enter real data, ie: supported-ops |*>
+    grid_data.Add("zero");
+    grid_data.Add("one");
+    grid_data.Add("two");
+    grid_data.Add("three");
+    grid_data.Add("four");
+    grid_data.Add("five");
+    grid_data.Add("six");
+    grid_data.Add("seven");
+    grid_data.Add("eight");
+    grid_data.Add("nine");
+    grid_data.Add("ten");
+
+    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", grid_data);  // Wire in supported-ops |*> later.
     m_general_operators_frame->Hide();
 
     close_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {

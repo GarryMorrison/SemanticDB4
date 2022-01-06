@@ -8,43 +8,31 @@
 
 #include "GeneralOperatorsFrame.h"
 
-GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxString& title, const wxString& content, wxPoint position_delta, long style)
+GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxString& title, const wxArrayString& content, wxPoint position_delta, long style)
     : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
 {
     wxPanel* panel = new wxPanel(this, wxID_ANY);
 
     SetTitle(title);
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
-    
-    wxArrayString grid_data;  // Later enter real data, ie: supported-ops |*>
-    grid_data.Add("one");
-    grid_data.Add("two");
-    grid_data.Add("three");
-    grid_data.Add("four");
-    grid_data.Add("five");
-    grid_data.Add("six");
-    grid_data.Add("seven");
-    grid_data.Add("eight");
-    grid_data.Add("nine");
-    grid_data.Add("ten");
-    
-    unsigned int grid_data_size = grid_data.size();
-    unsigned int dim = (unsigned int)(std::ceil(sqrt(double(grid_data_size))));  // Given a size, find the smallest square with dimensions dim * dim.
+      
+    unsigned int content_size = content.size();
+    unsigned int dim = (unsigned int)(std::ceil(sqrt(double(content_size))));  // Given a size, find the smallest square with dimensions dim * dim.
     // wxMessageBox(wxString::Format("dim = %d", dim));
 
-    wxArrayString tmp_grid_data;
-    for (unsigned int i = 0; i < grid_data_size; i++)
+    wxArrayString grid_data;
+    for (unsigned int i = 0; i < content_size; i++)
     {
-        tmp_grid_data.Add(grid_data[i]);
-        if (i > 0 && ((i + 1) % dim) == 0)
+        grid_data.Add(content[i]);
+        if (((i + 1) % dim) == 0)
         {
-            m_our_arrays.push_back(tmp_grid_data);
-            tmp_grid_data.Clear();
+            m_our_arrays.push_back(grid_data);
+            grid_data.Clear();
         }
     }
-    if (tmp_grid_data.size() > 0)
+    if (grid_data.size() > 0)
     {
-        m_our_arrays.push_back(tmp_grid_data);
+        m_our_arrays.push_back(grid_data);
     }
 
     wxCheckListBox* col;

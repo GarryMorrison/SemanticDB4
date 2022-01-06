@@ -838,7 +838,7 @@ void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
 
 void CommandPanel::OnResetContextButtonDown(wxCommandEvent& event)
 {
-    wxString reset_context_text = wxString::Format("Are you really sure you want to erase current context \"%s\"?\nAll knowledge in this context will be deleted!", driver.context.get_context_name());
+    wxString reset_context_text = wxString::Format("Are you really sure you want to erase the current context \"%s\"?\nAll knowledge in this context will be deleted!", driver.context.get_context_name());
     ResetContextDialog* dlg = new ResetContextDialog(this, "Reset context", reset_context_text);
     if (dlg->ShowModal() == wxID_OK)
     {
