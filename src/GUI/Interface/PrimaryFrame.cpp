@@ -499,91 +499,10 @@ void PrimaryFrame::OnSave(wxCommandEvent& event)
 
 void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
 {
-    wxArrayString list_options;
-    /*
-    for (const auto& the_ket : m_known_kets)
-    {
-        list_options.Add(the_ket);
-    }
-    */
-    for (ulong ket_idx : context.relevant_kets("*"))
-    {
-        std::string ket_label = '|' + ket_map.get_str(ket_idx) + '>';
-        list_options.Add(ket_label);
-    }
     unsigned int d = m_insert_window_open_count;
-    SelectFromListDialog* select_dlg = new SelectFromListDialog(this, "Select ket", list_options, wxPoint(d * 40, d * 40));
+    SelectFromKetDialog* select_dlg = new SelectFromKetDialog(this, wxPoint(d * 40, d * 40));
     m_insert_window_open_count++;
 
-    /*select_dlg->Bind(wxEVT_CLOSE_WINDOW, [=](wxCloseEvent& event) {
-        wxMessageBox("Select Known Ket dialog closed");
-        select_dlg->Close();
-        });
-    */
-
-    /*
-    select_dlg->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
-        wxMessageBox("Select Known Ket dialog button clicked");
-        });
-    */
-
-    select_dlg->Bind(wxEVT_LISTBOX, [=](wxCommandEvent& event) {
-        int the_selection = event.GetSelection();
-        if (the_selection == wxNOT_FOUND)
-        {
-            return;
-        }
-        wxString the_ket = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertKet(the_ket);
-
-        }
-        select_dlg->DeselectAll();
-        }
-    );
-
-    select_dlg->Bind(wxEVT_LISTBOX_DCLICK, [=](wxCommandEvent& event) {
-        int the_selection = event.GetSelection();
-        if (the_selection == wxNOT_FOUND)
-        {
-            return;
-        }
-        wxString the_ket = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertKet(the_ket);
-        }
-        });
-
-    return;
-
-    if (!select_dlg->IsOK())
-    {
-        wxMessageBox("No item selected!");
-        return;
-    }
-    wxString the_ket = select_dlg->GetResult();
-    // wxMessageBox("Your selection: " + the_ket);
-
-    if (m_command_window_active)
-    {
-        // wxMessageBox("command window active");
-        m_frame_commandPanel->InsertCommandText(the_ket + " ");
-    }
-    else if (m_edit_window_active)
-    {
-        // wxMessageBox("Your selection: " + the_ket);
-
-        int page_idx = m_auiNotebook->GetSelection();  // Need to check we have an open tab first!
-        wxString file_name = m_auiNotebook->GetPageText(page_idx);
-        if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
-        {
-            wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-            return;
-        }
-        wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];
-        textCtrlLocal->WriteText(the_ket + " ");
-        // m_auiNotebook->Refresh();
-    }
 }
 
 void PrimaryFrame::SelectKnownOperator(wxCommandEvent& event)

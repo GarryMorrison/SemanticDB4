@@ -86,6 +86,7 @@
 #include "GUI/Interface/FilteredDumpFrame.h"
 #include "GUI/Interface/GeneralOperatorsFrame.h"
 #include "GUI/Interface/ResetContextDialog.h"
+#include "GUI/Interface/SelectFromKetDialog.h"
 
 // Back end includes:
 #include "KetMap/KetMap.h"
@@ -257,6 +258,8 @@ enum
     ID_Command_Result_Insert_Line,
     ID_Command_Left_Click,
     ID_On_Paint,
+
+    ID_Update_Button,
 
     ID_Ket_Map_Display_Title_Click,
     ID_Command_Insert_Text

@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GUI\Interface\SelectFromKetDialog.h" />
     <ClInclude Include="src\GUI\Interface\ResetContextDialog.h" />
     <ClInclude Include="src\GUI\Interface\GeneralOperatorsFrame.h" />
     <ClInclude Include="src\Parser\Driver.h" />
@@ -214,6 +215,7 @@
     <ClInclude Include="src\Sequence\WhileStatement.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\Interface\SelectFromKetDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\ResetContextDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\GeneralOperatorsFrame.cpp" />
     <ClCompile Include="src\Parser\Driver.cpp" />
