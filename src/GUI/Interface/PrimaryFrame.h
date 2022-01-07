@@ -8,7 +8,7 @@
 
 #pragma once
 #include "../../SDB.h"
-class SelectFromKetDialog;
+
 
 class PrimaryFrame : public wxFrame
 {
@@ -89,7 +89,6 @@ private:
 
     unsigned int m_insert_window_open_count = 0;
 
-    SelectFromKetDialog* m_select_ket_dialog;
 };
 
 

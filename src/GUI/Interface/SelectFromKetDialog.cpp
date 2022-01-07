@@ -9,7 +9,7 @@
 #include "SelectFromKetDialog.h"
 extern SDB::Driver driver;
 
-wxDEFINE_EVENT(EVT_KETWINDOW_CLICK, wxCommandEvent);
+wxDEFINE_EVENT(EVT_KET_WINDOW_CLICK, wxCommandEvent);
 
 
 SelectFromKetDialog::SelectFromKetDialog(wxWindow* parent, const wxPoint position_delta)
@@ -52,11 +52,9 @@ SelectFromKetDialog::SelectFromKetDialog(wxWindow* parent, const wxPoint positio
 
 void SelectFromKetDialog::OnKetListClick(wxCommandEvent& event)
 {
-    // wxMessageBox("Ket list clicked");
-    
     unsigned int selected_idx = m_data_list->GetSelection();
     wxString selected_item = m_data_list->GetString(selected_idx);
-    wxCommandEvent our_event(EVT_KETWINDOW_CLICK);
+    wxCommandEvent our_event(EVT_KET_WINDOW_CLICK);
     our_event.SetString(selected_item);
     wxPostEvent(this, our_event);
     m_data_list->DeselectAll();

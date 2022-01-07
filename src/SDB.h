@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2022/1/3
+// Updated 2022/1/7
 // Author Garry Morrison
 // License GPL v3
 //
@@ -132,7 +132,7 @@ extern ContextList context;
 // extern SDB::Driver driver;
 
 wxDECLARE_EVENT(EVT_GRID_CLICK, wxCommandEvent);
-wxDECLARE_EVENT(EVT_KETWINDOW_CLICK, wxCommandEvent);  // Put a space between Ket and Window?
+wxDECLARE_EVENT(EVT_KET_WINDOW_CLICK, wxCommandEvent);  // Put a space between Ket and Window?
 wxDECLARE_EVENT(EVT_LITERALOP_WINDOW_CLICK, wxCommandEvent);
 
 class SDBApp : public wxApp
