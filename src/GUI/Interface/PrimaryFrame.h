@@ -32,6 +32,7 @@ private:
     void SelectKnownKet(wxCommandEvent& event);
     void OnSelectKetDialogItem(wxCommandEvent& event);
     void SelectKnownOperator(wxCommandEvent& event);
+    void OnSelectLiteralOpDialogItem(wxCommandEvent& event);
     void SelectFromLearnRules(wxCommandEvent& event);
     void SelectFromInfix1(wxCommandEvent& event);
     void SelectFromInfix2(wxCommandEvent& event);

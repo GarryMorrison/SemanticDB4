@@ -87,6 +87,8 @@
 #include "GUI/Interface/GeneralOperatorsFrame.h"
 #include "GUI/Interface/ResetContextDialog.h"
 #include "GUI/Interface/SelectFromKetDialog.h"
+#include "GUI/Interface/SelectFromLiteralOpDialog.h"
+
 
 // Back end includes:
 #include "KetMap/KetMap.h"
@@ -130,7 +132,8 @@ extern ContextList context;
 // extern SDB::Driver driver;
 
 wxDECLARE_EVENT(EVT_GRID_CLICK, wxCommandEvent);
-wxDECLARE_EVENT(EVT_KETWINDOW_CLICK, wxCommandEvent);
+wxDECLARE_EVENT(EVT_KETWINDOW_CLICK, wxCommandEvent);  // Put a space between Ket and Window?
+wxDECLARE_EVENT(EVT_LITERALOP_WINDOW_CLICK, wxCommandEvent);
 
 class SDBApp : public wxApp
 {

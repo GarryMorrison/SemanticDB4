@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/7
 // Author Garry Morrison
 // License GPL v3
 //
@@ -500,7 +500,7 @@ void PrimaryFrame::OnSave(wxCommandEvent& event)
 void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
 {
     unsigned int d = m_insert_window_open_count;
-    m_select_ket_dialog = new SelectFromKetDialog(this, wxPoint(d * 40, d * 40));
+    m_select_ket_dialog = new SelectFromKetDialog(this, wxPoint(d * 40, d * 40));  // Remove from member variable, and make it local!
     m_insert_window_open_count++;
 
     m_select_ket_dialog->Bind(EVT_KETWINDOW_CLICK, &PrimaryFrame::OnSelectKetDialogItem, this);
@@ -513,85 +513,20 @@ void PrimaryFrame::OnSelectKetDialogItem(wxCommandEvent& event)
     }
 }
 
+
 void PrimaryFrame::SelectKnownOperator(wxCommandEvent& event)
 {
-    wxArrayString list_options;
-    /*
-    for (const auto& the_op : m_known_operators)
-    {
-        list_options.Add(the_op);
-    }
-    */
-    std::set<std::string> known_literal_operators;
-    for (ulong ket_idx : context.relevant_kets("*"))
-    {
-        for (ulong op_idx : context.supported_ops(ket_idx))
-        {
-            std::string op_label = ket_map.get_str(op_idx);
-            known_literal_operators.insert(op_label);
-        }
-    }
-    for (const auto& ket_label : known_literal_operators)
-    {
-        list_options.Add(ket_label);
-    }
     unsigned int d = m_insert_window_open_count;
-    SelectFromListDialog* select_dlg = new SelectFromListDialog(this, "Select literal operator", list_options, wxPoint(d * 40, d * 40));
+    SelectFromLiteralOpDialog* select_op_dialog = new SelectFromLiteralOpDialog(this, wxPoint(d * 40, d * 40));
     m_insert_window_open_count++;
 
-    select_dlg->Bind(wxEVT_LISTBOX, [=](wxCommandEvent& event) {
-        int the_selection = event.GetSelection();
-        if (the_selection == wxNOT_FOUND)
-        {
-            return;
-        }
-        wxString the_operator = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertSimpleOperator(the_operator);
-        }
-        select_dlg->DeselectAll();
-        });
+    select_op_dialog->Bind(EVT_LITERALOP_WINDOW_CLICK, &PrimaryFrame::OnSelectLiteralOpDialogItem, this);
+}
 
-    select_dlg->Bind(wxEVT_LISTBOX_DCLICK, [=](wxCommandEvent& event) {
-        int the_selection = event.GetSelection();
-        if (the_selection == wxNOT_FOUND)
-        {
-            return;
-        }
-        wxString the_operator = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertSimpleOperator(the_operator);
-        }
-        });
-
-    return;
-
-
-    if (!select_dlg->IsOK())
-    {
-        wxMessageBox("No item selected!");
-        return;
-    }
-    wxString the_op = select_dlg->GetResult();
-    // wxMessageBox("Your selection: " + select_dlg.GetResult());
-    if (m_command_window_active)
-    {
-        // wxMessageBox("command window active");
-        m_frame_commandPanel->InsertCommandText(the_op + " ");
-    }
-    else if (m_edit_window_active)
-    {
-        // wxMessageBox("Your selection: " + the_ket);
-
-        int page_idx = m_auiNotebook->GetSelection();  // Need to check we have an open tab first!
-        wxString file_name = m_auiNotebook->GetPageText(page_idx);
-        if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
-        {
-            wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-            return;
-        }
-        wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];  // Merge into one line?
-        textCtrlLocal->WriteText(the_op + " ");
+void PrimaryFrame::OnSelectLiteralOpDialogItem(wxCommandEvent& event)
+{
+    if (m_command_window_active) {
+        m_frame_commandPanel->InsertSimpleOperator(event.GetString());
     }
 }
 
