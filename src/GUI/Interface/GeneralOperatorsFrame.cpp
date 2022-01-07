@@ -75,24 +75,18 @@ void GeneralOperatorsFrame::OnCheckBoxClick(wxCommandEvent& event)
 {
     // wxMessageBox(wxString::Format("Check box clicked int: %d, id: %d", event.GetInt(), event.GetId()));
     wxString clicked_item = m_our_arrays[event.GetId()][event.GetInt()];
-    // unsigned int idx = event.GetId() * m_dim + event.GetInt();
-    bool item_is_checked = m_our_checkboxes[event.GetId()]->IsChecked(event.GetInt());
+    unsigned int idx = event.GetId() * m_dim + event.GetInt();
     wxCommandEvent our_event(EVT_GRID_CLICK);
     our_event.SetString(clicked_item);  // Send through the label with SetString().
-    // our_event.SetInt(idx);
-    our_event.SetInt((unsigned int)item_is_checked);  // Send through check/not-checked with SetInt(). Is there a better way to do this?
+    our_event.SetInt(idx);
     wxPostEvent(this, our_event);
-    /*
-    bool item_is_checked = m_our_checkboxes[event.GetId()]->IsChecked(event.GetInt());
-    if (item_is_checked)
-    {
-        wxMessageBox("Checked item: " + clicked_item);
-    }
-    else
-    {
-        wxMessageBox("Unchecked item: " + clicked_item);
-    }
-    */
+}
+
+bool GeneralOperatorsFrame::IsChecked(unsigned int list_idx)
+{
+    unsigned int column = list_idx / m_dim;
+    unsigned int row = list_idx % m_dim;
+    return m_our_checkboxes[column]->IsChecked(row);
 }
 
 GeneralOperatorsFrame::~GeneralOperatorsFrame()

@@ -129,7 +129,7 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     // topsizer->Add(button_sizer, wxSizerFlags(0).Center());
     topsizer->Add(button_sizer, wxSizerFlags(0).Left());
 
-    /*
+    
     wxArrayString grid_data;  // Later enter real data, ie: supported-ops |*>
     grid_data.Add("zero");
     grid_data.Add("one");
@@ -142,7 +142,7 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     grid_data.Add("eight");
     grid_data.Add("nine");
     grid_data.Add("ten");
-    */
+    
 
     wxArrayString general_ops;
     ulong star_idx = ket_map.get_idx("*");
@@ -151,7 +151,8 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         general_ops.Add(ket_map.get_str(op_idx));
     }
 
-    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
+    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", grid_data);
+    // m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
     m_general_operators_frame->Hide();
 
     close_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
@@ -243,9 +244,10 @@ void FilteredDumpFrame::CheckKetList(wxCommandEvent& event)
 void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
 {
     // wxMessageBox(wxString::Format("Item clicked: %s, Item idx: %d", event.GetString(), event.GetInt()));
+    
     wxString item_clicked = event.GetString();
-    bool is_checked = (bool)(event.GetInt());
-    if (is_checked)
+    unsigned int list_idx = event.GetInt();
+    if (m_general_operators_frame->IsChecked(list_idx))
     {
         wxMessageBox(item_clicked + " checked");
     }
@@ -253,6 +255,7 @@ void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
     {
         wxMessageBox(item_clicked + " unchecked");
     }
+    
 }
 
 void FilteredDumpFrame::UpdateKnowledge()

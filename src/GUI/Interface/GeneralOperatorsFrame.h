@@ -17,6 +17,7 @@ public:
     GeneralOperatorsFrame(wxWindow* parent, const wxString& title, const wxArrayString& content, const wxPoint position_delta = wxPoint(0, 0), long style = 0);
 
     void OnCheckBoxClick(wxCommandEvent& event);
+    bool IsChecked(unsigned int list_idx);
 
     ~GeneralOperatorsFrame();
 
