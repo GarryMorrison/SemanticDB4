@@ -500,9 +500,17 @@ void PrimaryFrame::OnSave(wxCommandEvent& event)
 void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
 {
     unsigned int d = m_insert_window_open_count;
-    SelectFromKetDialog* select_dlg = new SelectFromKetDialog(this, wxPoint(d * 40, d * 40));
+    m_select_ket_dialog = new SelectFromKetDialog(this, wxPoint(d * 40, d * 40));
     m_insert_window_open_count++;
 
+    m_select_ket_dialog->Bind(EVT_KETWINDOW_CLICK, &PrimaryFrame::OnSelectKetDialogItem, this);
+}
+
+void PrimaryFrame::OnSelectKetDialogItem(wxCommandEvent& event)
+{
+    if (m_command_window_active) {
+        m_frame_commandPanel->InsertKet(event.GetString());
+    }
 }
 
 void PrimaryFrame::SelectKnownOperator(wxCommandEvent& event)

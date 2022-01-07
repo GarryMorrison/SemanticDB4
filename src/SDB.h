@@ -130,6 +130,7 @@ extern ContextList context;
 // extern SDB::Driver driver;
 
 wxDECLARE_EVENT(EVT_GRID_CLICK, wxCommandEvent);
+wxDECLARE_EVENT(EVT_KETWINDOW_CLICK, wxCommandEvent);
 
 class SDBApp : public wxApp
 {

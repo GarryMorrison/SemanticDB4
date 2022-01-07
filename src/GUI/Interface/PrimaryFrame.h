@@ -8,6 +8,7 @@
 
 #pragma once
 #include "../../SDB.h"
+class SelectFromKetDialog;
 
 class PrimaryFrame : public wxFrame
 {
@@ -29,6 +30,7 @@ private:
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void SelectKnownKet(wxCommandEvent& event);
+    void OnSelectKetDialogItem(wxCommandEvent& event);
     void SelectKnownOperator(wxCommandEvent& event);
     void SelectFromLearnRules(wxCommandEvent& event);
     void SelectFromInfix1(wxCommandEvent& event);
@@ -40,6 +42,8 @@ private:
     void UsageForOperator(wxCommandEvent& event);
     void ShowKetMap(wxCommandEvent& event);
     void SwitchWindow(wxCommandEvent& event);
+
+    
 
     void OpenExampleWebpage(wxCommandEvent& event);
 
@@ -83,6 +87,8 @@ private:
     std::map<wxString, wxMenu*> m_usage_label_menu_map;
 
     unsigned int m_insert_window_open_count = 0;
+
+    SelectFromKetDialog* m_select_ket_dialog;
 };
 
 

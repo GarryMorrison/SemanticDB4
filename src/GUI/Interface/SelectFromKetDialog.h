@@ -16,6 +16,7 @@ class SelectFromKetDialog : public wxDialog
 public:
 	SelectFromKetDialog(wxWindow* parent, const wxPoint position_delta = wxPoint(0, 0));
 
+	void OnKetListClick(wxCommandEvent& event);
 	void OnUpdateButton(wxCommandEvent& event);
 	~SelectFromKetDialog();
 
