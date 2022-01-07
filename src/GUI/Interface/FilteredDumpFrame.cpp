@@ -7,7 +7,7 @@
 //
 
 #include "FilteredDumpFrame.h"
-
+extern SDB::Driver driver;
 
 FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, const std::vector<std::string>& op_list, const std::vector<std::string>& ket_list, const wxPoint position_delta, long style)
     : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(700, 800), style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
@@ -129,6 +129,7 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     // topsizer->Add(button_sizer, wxSizerFlags(0).Center());
     topsizer->Add(button_sizer, wxSizerFlags(0).Left());
 
+    /*
     wxArrayString grid_data;  // Later enter real data, ie: supported-ops |*>
     grid_data.Add("zero");
     grid_data.Add("one");
@@ -141,8 +142,16 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     grid_data.Add("eight");
     grid_data.Add("nine");
     grid_data.Add("ten");
+    */
 
-    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", grid_data);  // Wire in supported-ops |*> later.
+    wxArrayString general_ops;
+    ulong star_idx = ket_map.get_idx("*");
+    for (ulong op_idx : driver.context.supported_ops(star_idx))
+    {
+        general_ops.Add(ket_map.get_str(op_idx));
+    }
+
+    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
     m_general_operators_frame->Hide();
 
     close_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
@@ -251,6 +260,7 @@ void FilteredDumpFrame::UpdateKnowledge()
     m_knowledge.Clear();
     if (!m_use_op_ket_and)
     {
+        std::vector<ulong> general_operators;
         for (unsigned int op_idx : m_set_active_literal_ops)  // Later: dump[op] rel-kets[op]
         {
             // wxString op = m_literal_ops[op_idx];
@@ -259,12 +269,13 @@ void FilteredDumpFrame::UpdateKnowledge()
             Superposition ket_sp(context.relevant_kets(op));
             std::vector<ulong> operators;
             operators.push_back(ket_map.get_idx(op));
-            m_knowledge += dump(ket_sp, context, operators);
+            m_knowledge += dump(ket_sp, context, operators, general_operators);
         }
         if (!m_knowledge.empty())
         {
             m_knowledge += "\n";
         }
+
         for (unsigned int ket_idx : m_set_active_kets)  // Later: dump[*] |ket>
         {
             // wxString k = m_kets[ket_idx];
@@ -273,11 +284,12 @@ void FilteredDumpFrame::UpdateKnowledge()
             Ket k(ket_label);
             std::vector<ulong> operators;
             operators.push_back(ket_map.get_idx("*"));
-            m_knowledge += dump(k, context, operators);
+            m_knowledge += dump(k, context, operators, general_operators);
         }
     }
     else
     {
+        std::vector<ulong> general_operators;
         for (unsigned int op_idx : m_set_active_literal_ops)
         {
             // wxString op = m_literal_ops[op_idx];
@@ -290,7 +302,7 @@ void FilteredDumpFrame::UpdateKnowledge()
                 std::string op = m_literal_ops[op_idx].ToStdString();
                 std::vector<ulong> operators;
                 operators.push_back(ket_map.get_idx(op));
-                m_knowledge += dump(k, context, operators);
+                m_knowledge += dump(k, context, operators, general_operators);
             }
         }
     }

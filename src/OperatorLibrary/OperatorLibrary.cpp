@@ -2189,7 +2189,7 @@ Ket op_save_as_dot(const Superposition& sp, ContextList& context, const std::vec
 }
 
 
-std::string dump(const Superposition& input_sp, ContextList& context, const std::vector<ulong>& operators)
+std::string dump(const Superposition& input_sp, ContextList& context, const std::vector<ulong>& operators, const std::vector<ulong>& general_operators)
 {
     std::string s;
     ulong star_idx = ket_map.get_idx("*");
@@ -2221,6 +2221,13 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
                 s += op_label + ' ' + k.to_string() + ' ' + rule_type_str + "=> " + rhs;
                 s += "\n";
             }
+            for (ulong op_idx : general_operators)
+            {
+                std::string op_label = ket_map.get_str(op_idx);
+                Sequence seq = context.active_recall(op_idx, k.label_idx());
+                s += op_label + ' ' + k.to_string() + " => " + seq.to_string() + "\n";
+                has_line_added = true;
+            }
         }
         else
         {
@@ -2246,6 +2253,13 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
                 }
                 s += op_label + ' ' + k.to_string() + ' ' + rule_type_str + "=> " + rhs;
                 s += "\n";
+            }
+            for (ulong op_idx : general_operators)
+            {
+                std::string op_label = ket_map.get_str(op_idx);
+                Sequence seq = context.active_recall(op_idx, k.label_idx());
+                s += op_label + ' ' + k.to_string() + " => " + seq.to_string() + "\n";
+                has_line_added = true;
             }
         }
         if (has_line_added)

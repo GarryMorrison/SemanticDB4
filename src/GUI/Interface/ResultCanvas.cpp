@@ -443,7 +443,8 @@ const void ResultCanvasString::OnMouseLeftClick() const
             Ket k(ket_label);
             std::vector<ulong> operators;
             operators.push_back(ket_map.get_idx("*"));
-            std::string knowledge = dump(k, context, operators);
+            std::vector<ulong> general_operators;
+            std::string knowledge = dump(k, context, operators, general_operators);
             DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, knowledge, m_parent->GetPositionDelta());  // Change constructor later.
             m_parent->IncreasePositionDelta(wxPoint(40, 40));
             break;
@@ -459,7 +460,8 @@ const void ResultCanvasString::OnMouseLeftClick() const
                 Superposition ket_sp(context.relevant_kets(the_operator));
                 std::vector<ulong> operators;
                 operators.push_back(ket_map.get_idx(the_operator));
-                std::string knowledge = dump(ket_sp, context, operators);
+                std::vector<ulong> general_operators;
+                std::string knowledge = dump(ket_sp, context, operators, general_operators);
                 DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, knowledge, m_parent->GetPositionDelta());  // Change constructor later.
                 m_parent->IncreasePositionDelta(wxPoint(40, 40));
                 return;
