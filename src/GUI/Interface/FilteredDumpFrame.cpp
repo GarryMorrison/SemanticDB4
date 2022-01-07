@@ -8,6 +8,7 @@
 
 #include "FilteredDumpFrame.h"
 
+
 FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, const std::vector<std::string>& op_list, const std::vector<std::string>& ket_list, const wxPoint position_delta, long style)
     : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(700, 800), style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
 {
@@ -173,8 +174,16 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         }
         });
 
+    /*
+    m_general_operators_frame->Bind(EVT_GRID_CLICK, [=](wxCommandEvent& event) {
+        wxMessageBox("Grid click!");
+        }
+    );
+    */
+
     m_literal_op_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckLiteralOpList, this);
     m_ket_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckKetList, this);
+    m_general_operators_frame->Bind(EVT_GRID_CLICK, &FilteredDumpFrame::CheckGeneralOpList, this);
 
     UpdateKnowledge();
     panel->SetSizerAndFit(topsizer);
@@ -220,6 +229,21 @@ void FilteredDumpFrame::CheckKetList(wxCommandEvent& event)
         m_set_active_kets.erase(list_idx);
     }
     UpdateKnowledge();
+}
+
+void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
+{
+    // wxMessageBox(wxString::Format("Item clicked: %s, Item idx: %d", event.GetString(), event.GetInt()));
+    wxString item_clicked = event.GetString();
+    bool is_checked = (bool)(event.GetInt());
+    if (is_checked)
+    {
+        wxMessageBox(item_clicked + " checked");
+    }
+    else
+    {
+        wxMessageBox(item_clicked + " unchecked");
+    }
 }
 
 void FilteredDumpFrame::UpdateKnowledge()

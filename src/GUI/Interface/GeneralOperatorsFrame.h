@@ -21,7 +21,8 @@ public:
     ~GeneralOperatorsFrame();
 
 private:
+    wxWindow* m_parent;
     std::vector<wxArrayString> m_our_arrays;
     std::vector<wxCheckListBox*> m_our_checkboxes;
-
+    unsigned int m_dim = 0;
 };

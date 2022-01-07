@@ -21,6 +21,7 @@ public:
 
     void CheckLiteralOpList(wxCommandEvent& event);
     void CheckKetList(wxCommandEvent& event);
+    void CheckGeneralOpList(wxCommandEvent& event);
 
     ~FilteredDumpFrame();
 
