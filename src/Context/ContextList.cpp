@@ -57,6 +57,16 @@ std::string ContextList::get_context_name() const
     return data[index].get_name();
 }
 
+std::vector<std::string> ContextList::get_context_names() const
+{
+    std::vector<std::string> names;
+    for (ulong k = 0; k < max_index; k++)
+    {
+        names.push_back(data[k].get_name());
+    }
+    return names;
+}
+
 void ContextList::show_context_list() {
     std::cout << "\nContextList:\n";
     for (ulong k = 0; k < max_index; k++) {

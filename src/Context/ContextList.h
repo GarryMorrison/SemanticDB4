@@ -24,6 +24,8 @@ public:
     void reset();
     void reset_current_context();
     std::string get_context_name() const;
+    std::vector<std::string> get_context_names() const;
+    unsigned int get_context_index() const { return index; }
     void show_context_list();
 
     /*

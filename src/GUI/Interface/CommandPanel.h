@@ -50,6 +50,9 @@ public:
 
     void SetRunTime(long long time);
 
+    void OnContextSelect(wxCommandEvent& event);
+    void UpdateContextSelector();
+
     ~CommandPanel();
 
 private:
@@ -60,6 +63,7 @@ private:
     wxTextAttr* m_default_attr;
     wxRichTextCtrl* m_command_results;
     ResultCanvas* m_command_result_canvas;
+    wxChoice* m_context_selector;
     wxCheckBox* m_command_monospace_checkbox;
     wxCheckBox* m_command_line_numbers_checkbox;
     int m_current_line = 1;  // Maybe it starts from 1??
