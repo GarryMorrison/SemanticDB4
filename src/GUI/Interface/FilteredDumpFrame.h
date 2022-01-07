@@ -19,6 +19,7 @@ class FilteredDumpFrame : public wxFrame
 public:
     FilteredDumpFrame(wxWindow* parent, const wxString& title, const std::vector<std::string>& op_list, const std::vector<std::string>& ket_list, const wxPoint position_delta = wxPoint(0, 0), long style = 0);
 
+    void OnContextSelect(wxCommandEvent& event);
     void CheckLiteralOpList(wxCommandEvent& event);
     void CheckKetList(wxCommandEvent& event);
     void CheckGeneralOpList(wxCommandEvent& event);
@@ -32,6 +33,8 @@ private:
     ResultCanvas* m_result_canvas;
     GeneralOperatorsFrame* m_general_operators_frame;
     wxPoint m_position_delta = wxPoint(0, 0);
+
+    wxChoice* m_context_selector;
 
     wxString m_knowledge;
     bool m_use_active_text = true;

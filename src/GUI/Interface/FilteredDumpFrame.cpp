@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/29
-// Updated 2022/1/6
+// Updated 2022/1/8
 // Author Garry Morrison
 // License GPL v3
 //
@@ -24,25 +24,6 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         local_title += join(op_list, ", ") + ", " + join(ket_list, ", ");
     }
 
-    /*
-    for (const auto& op : op_list)  // Later put this section in UpdateKnowledge() method?
-    {
-        if (!m_knowledge.empty())
-        {
-            m_knowledge += "\n\n";
-        }
-        m_knowledge += EXAMPLE_OP_KNOWLEDGE;  // dump[op] rel-kets[op]
-    }
-    for (const auto& ket : ket_list)
-    {
-        if (!m_knowledge.empty())
-        {
-            m_knowledge += "\n\n";
-        }
-        m_knowledge += EXAMPLE_KET_KNOWLEDGE;  // dump[*] |ket>
-    }
-    */
-
     wxPanel* panel = new wxPanel(this, wxID_ANY);
 
     SetTitle(local_title);  // Ignore passed in title for now.
@@ -50,15 +31,15 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
  
     // Add context selector:
     wxBoxSizer* hbox1 = new wxBoxSizer(wxHORIZONTAL);
-    wxArrayString context_list;  // Later wire in ContextList, for now just some dummy values.
-    context_list.Add("global");
-    context_list.Add("plurals");
-    context_list.Add("numbers to words");
-    context_list.Add("predicting integer sequences");
-    wxChoice* context_selector = new wxChoice(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, context_list);
-    context_selector->SetSelection(0);
+    wxArrayString context_list;
+    for (const auto& name : driver.context.get_context_names())
+    {
+        context_list.Add(name);
+    }
+    m_context_selector = new wxChoice(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, context_list);
+    m_context_selector->SetSelection(driver.context.get_context_index());
     hbox1->Add(new wxStaticText(panel, wxID_ANY, "Context", wxDefaultPosition, wxDefaultSize), wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
-    hbox1->Add(context_selector, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    hbox1->Add(m_context_selector, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
     wxCheckBox* use_active_text_checkbox = new wxCheckBox(panel, wxID_ANY, "Active text");
     use_active_text_checkbox->SetValue(m_use_active_text);
     hbox1->Add(use_active_text_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
@@ -159,6 +140,8 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
     m_general_operators_frame->Hide();
 
+    m_context_selector->Bind(wxEVT_CHOICE, &FilteredDumpFrame::OnContextSelect, this);
+
     close_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
         if (event.GetId() == wxID_OK)
         {
@@ -211,6 +194,13 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     dialog_position += m_position_delta;
     SetPosition(dialog_position);
     Show();
+}
+
+void FilteredDumpFrame::OnContextSelect(wxCommandEvent& event)
+{
+    unsigned int new_selection = m_context_selector->GetSelection();
+    driver.context.set(new_selection);
+    UpdateKnowledge();
 }
 
 void FilteredDumpFrame::CheckLiteralOpList(wxCommandEvent& event)
