@@ -78,7 +78,7 @@ void GeneralOperatorsFrame::OnCheckBoxClick(wxCommandEvent& event)
     unsigned int idx = event.GetId() * m_dim + event.GetInt();
     wxCommandEvent our_event(EVT_GRID_CLICK);
     our_event.SetString(clicked_item);  // Send through the label with SetString().
-    our_event.SetInt(idx);
+    our_event.SetInt(idx);              // Send through the list idx with SetInt().
     wxPostEvent(this, our_event);
 }
 

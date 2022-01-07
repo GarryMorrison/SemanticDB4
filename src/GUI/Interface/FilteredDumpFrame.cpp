@@ -130,6 +130,7 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     topsizer->Add(button_sizer, wxSizerFlags(0).Left());
 
     
+    /*
     wxArrayString grid_data;  // Later enter real data, ie: supported-ops |*>
     grid_data.Add("zero");
     grid_data.Add("one");
@@ -142,17 +143,20 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     grid_data.Add("eight");
     grid_data.Add("nine");
     grid_data.Add("ten");
-    
+    */
 
     wxArrayString general_ops;
     ulong star_idx = ket_map.get_idx("*");
+    list_idx = 0;
     for (ulong op_idx : driver.context.supported_ops(star_idx))
     {
         general_ops.Add(ket_map.get_str(op_idx));
+        m_map_general_ops[list_idx] = op_idx;
+        list_idx++;
     }
 
-    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", grid_data);
-    // m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
+    // m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", grid_data);
+    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
     m_general_operators_frame->Hide();
 
     close_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
@@ -173,6 +177,11 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         });
 
     general_operators_checkbox->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
+        if (!general_operators_checkbox)
+        {
+            wxMessageBox("General operators window no longer exists!");  // Nope. It still crashes!
+            return;
+        }
         m_show_general_operators = general_operators_checkbox->GetValue();
         if (m_show_general_operators)
         {
@@ -249,13 +258,15 @@ void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
     unsigned int list_idx = event.GetInt();
     if (m_general_operators_frame->IsChecked(list_idx))
     {
-        wxMessageBox(item_clicked + " checked");
+        // wxMessageBox(item_clicked + " checked");
+        m_set_active_general_ops.insert(list_idx);
     }
     else
     {
-        wxMessageBox(item_clicked + " unchecked");
+        // wxMessageBox(item_clicked + " unchecked");
+        m_set_active_general_ops.erase(list_idx);
     }
-    
+    UpdateKnowledge();
 }
 
 void FilteredDumpFrame::UpdateKnowledge()
@@ -278,7 +289,11 @@ void FilteredDumpFrame::UpdateKnowledge()
         {
             m_knowledge += "\n";
         }
-
+        for (unsigned int list_idx : m_set_active_general_ops)
+        {
+            ulong op_idx = m_map_general_ops[list_idx];
+            general_operators.push_back(op_idx);
+        }
         for (unsigned int ket_idx : m_set_active_kets)  // Later: dump[*] |ket>
         {
             // wxString k = m_kets[ket_idx];

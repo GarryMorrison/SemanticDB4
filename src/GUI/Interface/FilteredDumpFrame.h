@@ -50,6 +50,9 @@ private:
     std::map<unsigned int, ulong> m_map_kets;
     std::set<unsigned int> m_set_active_kets;
 
+    std::map<unsigned int, ulong> m_map_general_ops;  // Can't we use a std::vector<> instead of a map??
+    std::set<unsigned int> m_set_active_general_ops;
+
     wxCheckListBox* m_literal_op_list_box;
     wxCheckListBox* m_ket_list_box;
 };
