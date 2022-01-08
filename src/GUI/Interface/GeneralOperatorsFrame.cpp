@@ -75,6 +75,7 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxString& t
     }
 
     m_panel->SetSizerAndFit(topsizer);
+    Fit();
     // CenterOnScreen();
     // wxPoint dialog_position = GetScreenPosition();
     // // dialog_position += m_position_delta;
@@ -158,6 +159,7 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxPoint pos
     }
 
     m_panel->SetSizerAndFit(m_topsizer);
+    Fit();
     // CenterOnScreen();
     // wxPoint dialog_position = GetScreenPosition();
     // // dialog_position += m_position_delta;

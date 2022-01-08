@@ -190,6 +190,7 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
 
     UpdateKnowledge();
     panel->SetSizerAndFit(topsizer);
+    Fit();
     CenterOnScreen();
     wxPoint dialog_position = GetScreenPosition();  // I think my position delta code is not working just yet ....
     dialog_position += m_position_delta;
