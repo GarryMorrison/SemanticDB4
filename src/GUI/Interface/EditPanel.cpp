@@ -46,6 +46,7 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 	bool parse_success = driver.parse_string(current_text + "\n");
 	std::string captured_text = buffer.str();
 	std::cout.rdbuf(old_buffer);
+	wxMessageBox("Captured text:\n" + captured_text);
 	if (!parse_success)
 	{
 		wxMessageBox("Parse failed!");
