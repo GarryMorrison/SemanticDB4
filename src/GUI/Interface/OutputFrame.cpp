@@ -17,7 +17,7 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
 
     SetTitle(title);
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
-    m_output_text = new wxRichTextCtrl(panel, wxID_ANY, content, wxDefaultPosition, wxSize(650, 600));
+    m_output_text = new wxRichTextCtrl(panel, wxID_ANY, content, wxDefaultPosition, wxSize(650, 600));  // Make read only?
     topsizer->Add(m_output_text, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
 
     wxButton* close_button = new wxButton(panel, wxID_OK, "OK");

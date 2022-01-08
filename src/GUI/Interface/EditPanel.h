@@ -21,4 +21,5 @@ public:
 	~EditPanel();
 private:
 	wxAuiNotebook* m_aui_notebook;
+	wxTextCtrl* m_text_ctrl;
 };
