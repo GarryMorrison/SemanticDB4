@@ -866,6 +866,7 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
         m_frame_edit_panel->Hide();
         m_panelSizer->Prepend(m_frame_commandPanel, 1, wxGROW);
         m_frame_commandPanel->Show();
+        m_frame_commandPanel->UpdateContextSelector();
         m_command_window_active = true;
         m_edit_window_active = false;
     }
