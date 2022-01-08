@@ -143,10 +143,10 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxPoint pos
     for (const auto& col : m_our_checkboxes)
     {
         hbox1->AddSpacer(10);
-        hbox1->Add(col, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 20));
+        hbox1->Add(col, wxSizerFlags(0).Center().Border(wxTOP | wxBOTTOM, 10));
     }
-
-    m_topsizer->Add(hbox1);
+    hbox1->AddSpacer(10);
+    m_topsizer->Add(hbox1, wxSizerFlags(0).Center().Border(wxTOP | wxBOTTOM, 0));
 
     m_update_button = new wxButton(m_panel, wxID_ANY, "Update");
     m_topsizer->Add(m_update_button, wxSizerFlags(0).Center().Border(wxALL, 10));
@@ -251,11 +251,10 @@ void GeneralOperatorsFrame::OnUpdateButton(wxCommandEvent& event)
     for (const auto& col : m_our_checkboxes)
     {
         hbox1->AddSpacer(10);
-        hbox1->Add(col, wxSizerFlags(0).Left().Border(wxTOP | wxBOTTOM, 20));
+        hbox1->Add(col, wxSizerFlags(0).Center().Border(wxTOP | wxBOTTOM, 10));
     }
     hbox1->AddSpacer(10);
-
-    m_topsizer->Add(hbox1);
+    m_topsizer->Add(hbox1, wxSizerFlags(0).Center().Border(wxTOP | wxBOTTOM, 0));
     
     m_update_button = new wxButton(m_panel, wxID_ANY, "Update");
     m_topsizer->Add(m_update_button, wxSizerFlags(0).Center().Border(wxALL, 10));
@@ -272,4 +271,3 @@ void GeneralOperatorsFrame::OnUpdateButton(wxCommandEvent& event)
 
 GeneralOperatorsFrame::~GeneralOperatorsFrame()
 {}
-
