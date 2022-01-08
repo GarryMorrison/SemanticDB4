@@ -52,7 +52,7 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 		wxMessageBox("Parse failed!");
 		return;
 	}
-	captured_text = driver.result.to_string();
+	// captured_text = driver.result.to_string();
 	OutputFrame* output_frame = new OutputFrame(this, "Output Window", captured_text);
 }
 

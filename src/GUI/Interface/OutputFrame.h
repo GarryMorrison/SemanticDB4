@@ -9,7 +9,7 @@
 #pragma once
 
 #include "../../SDB.h"
-
+class ResultCanvas;
 
 class OutputFrame : public wxFrame
 {
@@ -21,6 +21,7 @@ public:
 private:
     wxWindow* m_parent;
     wxRichTextCtrl* m_output_text;
+    ResultCanvas* m_result_canvas;
     wxPoint m_position_delta = wxPoint(0, 0);
 };
 

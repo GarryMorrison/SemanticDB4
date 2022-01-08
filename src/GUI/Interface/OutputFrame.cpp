@@ -17,8 +17,11 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
 
     SetTitle(title);
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
-    m_output_text = new wxRichTextCtrl(panel, wxID_ANY, content, wxDefaultPosition, wxSize(650, 600));  // Make read only?
-    topsizer->Add(m_output_text, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
+    // m_output_text = new wxRichTextCtrl(panel, wxID_ANY, content, wxDefaultPosition, wxSize(650, 600));  // Make read only?
+    // topsizer->Add(m_output_text, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
+    m_result_canvas = new ResultCanvas(panel, wxID_ANY, wxDefaultPosition, wxSize(600, 600));
+    m_result_canvas->AppendMultiLineText(content, false, RC_OBJECT_NONE, true);
+    topsizer->Add(m_result_canvas, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
 
     wxButton* close_button = new wxButton(panel, wxID_OK, "OK");
     topsizer->Add(close_button, wxSizerFlags(0).Left().Border(wxALL, 10));
@@ -35,6 +38,7 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
     wxPoint dialog_position = GetScreenPosition();
     dialog_position += m_position_delta;
     SetPosition(dialog_position);
+    Fit();
     Show();
 }
 
