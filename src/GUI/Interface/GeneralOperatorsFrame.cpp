@@ -24,12 +24,17 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxString& t
     m_dim = (unsigned int)(std::ceil(sqrt(double(content_size))));  // Given a size, find the smallest square with dimensions dim * dim.
     // wxMessageBox(wxString::Format("dim = %d", m_dim));
 
+    wxString message;
     if (content_size == 0)
     {
-        wxString empty_message = wxString::Format("There are no general operators in the current context \"%s\".", driver.context.get_context_name());
-        wxStaticText* static_message = new wxStaticText(m_panel, wxID_ANY, empty_message);
-        m_topsizer->Add(static_message, wxSizerFlags(0).Center().Border(wxALL, 10));
+        message = wxString::Format("There are no general operators in the current context \"%s\".", driver.context.get_context_name());
     }
+    else
+    {
+        message = wxString::Format("General operators in context \"%s\"", driver.context.get_context_name());
+    }
+    wxStaticText* static_message = new wxStaticText(m_panel, wxID_ANY, message);
+    m_topsizer->Add(static_message, wxSizerFlags(0).Center().Border(wxALL, 10));
 
     wxArrayString grid_data;
     for (unsigned int i = 0; i < content_size; i++)
@@ -97,12 +102,17 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxPoint pos
     m_dim = (unsigned int)(std::ceil(sqrt(double(content_size))));  // Given a size, find the smallest square with dimensions dim * dim.
     // wxMessageBox(wxString::Format("dim = %d", m_dim));
 
+    wxString message;
     if (content_size == 0)
     {
-        wxString empty_message = wxString::Format("There are no general operators in the current context \"%s\".", driver.context.get_context_name());
-        wxStaticText* static_message = new wxStaticText(m_panel, wxID_ANY, empty_message);
-        m_topsizer->Add(static_message, wxSizerFlags(0).Center().Border(wxALL, 10));
+        message = wxString::Format("There are no general operators in the current context \"%s\".", driver.context.get_context_name());
     }
+    else
+    {
+        message = wxString::Format("General operators in context \"%s\"", driver.context.get_context_name());
+    }
+    wxStaticText* static_message = new wxStaticText(m_panel, wxID_ANY, message);
+    m_topsizer->Add(static_message, wxSizerFlags(0).Center().Border(wxALL, 10));
 
     wxArrayString grid_data;
     for (unsigned int i = 0; i < content_size; i++)
@@ -199,12 +209,17 @@ void GeneralOperatorsFrame::OnUpdateButton(wxCommandEvent& event)
     unsigned int content_size = m_general_ops.size();
     m_dim = (unsigned int)(std::ceil(sqrt(double(content_size))));  // Given a size, find the smallest square with dimensions dim * dim.
 
+    wxString message;
     if (content_size == 0)
     {
-        wxString empty_message = wxString::Format("There are no general operators in the current context \"%s\".", driver.context.get_context_name());
-        wxStaticText* static_message = new wxStaticText(m_panel, wxID_ANY, empty_message);
-        m_topsizer->Add(static_message, wxSizerFlags(0).Center().Border(wxALL, 10));
+        message = wxString::Format("There are no general operators in the current context \"%s\".", driver.context.get_context_name());
     }
+    else
+    {
+        message = wxString::Format("General operators in context \"%s\"", driver.context.get_context_name());
+    }
+    wxStaticText* static_message = new wxStaticText(m_panel, wxID_ANY, message);
+    m_topsizer->Add(static_message, wxSizerFlags(0).Center().Border(wxALL, 10));
 
     wxArrayString grid_data;
     for (unsigned int i = 0; i < content_size; i++)
@@ -250,6 +265,7 @@ void GeneralOperatorsFrame::OnUpdateButton(wxCommandEvent& event)
     }
 
     m_panel->SetSizerAndFit(m_topsizer);
+    Fit();
 }
 
 GeneralOperatorsFrame::~GeneralOperatorsFrame()
