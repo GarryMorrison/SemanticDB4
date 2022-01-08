@@ -33,7 +33,8 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 
 void EditPanel::OnRunButtonDown(wxCommandEvent& event)
 {
-	wxMessageBox("Run button clicked");
+	// wxMessageBox("Run button clicked");
+	OutputFrame* output_frame = new OutputFrame(this, "Output Window", "Some stuff here ... ");
 }
 
 void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)

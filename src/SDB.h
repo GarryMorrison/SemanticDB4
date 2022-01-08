@@ -89,7 +89,7 @@
 #include "GUI/Interface/SelectFromKetDialog.h"
 #include "GUI/Interface/SelectFromLiteralOpDialog.h"
 #include "GUI/Interface/EditPanel.h"
-
+#include "GUI/Interface/OutputFrame.h"
 
 // Back end includes:
 #include "KetMap/KetMap.h"
