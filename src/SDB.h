@@ -88,6 +88,7 @@
 #include "GUI/Interface/ResetContextDialog.h"
 #include "GUI/Interface/SelectFromKetDialog.h"
 #include "GUI/Interface/SelectFromLiteralOpDialog.h"
+#include "GUI/Interface/EditPanel.h"
 
 
 // Back end includes:
@@ -262,6 +263,8 @@ enum
     ID_Command_Result_Insert_Line,
     ID_Command_Left_Click,
     ID_On_Paint,
+
+    ID_Edit_Run,
 
     ID_Update_Button,
 

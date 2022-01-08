@@ -188,6 +188,7 @@ PrimaryFrame::PrimaryFrame()
     m_menuWindow->AppendSeparator();
     m_menuWindow->AppendRadioItem(ID_Window_Command, "Command", "Show the command window");
     m_menuWindow->AppendRadioItem(ID_Window_Edit, "Edit", "Show the edit window");
+    
 
     wxMenu* menuVisualize = new wxMenu;
 
@@ -236,8 +237,11 @@ PrimaryFrame::PrimaryFrame()
     m_frame_commandPanel = new CommandPanel(panel, wxID_ANY);
     m_frame_commandPanel->InsertCommandText(EXAMPLE_STARTING_TEXT);
     m_frame_commandPanel->Show();
+    // m_frame_commandPanel->Hide();
 
-
+    m_frame_edit_panel = new EditPanel(panel, wxID_ANY);
+    m_frame_edit_panel->Hide();
+    // m_frame_edit_panel->Show();
 
     // Add some sample pages:
     // Don't need sample pages for now:
@@ -855,6 +859,7 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
     {
         m_panelSizer->Detach(0); // remove previous panel
         m_auiNotebook->Hide();
+        m_frame_edit_panel->Hide();
         m_panelSizer->Prepend(m_frame_commandPanel, 1, wxGROW);
         m_frame_commandPanel->Show();
         m_command_window_active = true;
@@ -864,8 +869,10 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
     {
         m_panelSizer->Detach(0); // remove previous panel
         m_frame_commandPanel->Hide();
-        m_panelSizer->Prepend(m_auiNotebook, 1, wxGROW);
-        m_auiNotebook->Show();
+        // m_panelSizer->Prepend(m_auiNotebook, 1, wxGROW);
+        // m_auiNotebook->Show();
+        m_panelSizer->Prepend(m_frame_edit_panel, 1, wxGROW);
+        m_frame_edit_panel->Show();
         m_command_window_active = false;
         m_edit_window_active = true;
     }

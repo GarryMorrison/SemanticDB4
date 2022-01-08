@@ -17,6 +17,7 @@ class PrimaryFrame : public wxFrame
     friend class KetMap;
     friend class KetMapDialog;
     friend class CommandPanel;
+    friend class EditPanel;
 
 public:
     PrimaryFrame();  // Do we need a destructor too?
@@ -70,6 +71,7 @@ private:
     wxMenu* m_menuWindow;
 
     CommandPanel* m_frame_commandPanel;
+    EditPanel* m_frame_edit_panel;
 
     std::set<std::string> m_known_kets = { "|Fred>", "|Sam>", "|37>", "|49>" };
     std::set<std::string> m_known_operators = { "age", "friends", "mother", "father" };

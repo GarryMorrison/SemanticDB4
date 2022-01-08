@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GUI\Interface\EditPanel.h" />
     <ClInclude Include="src\GUI\Interface\SelectFromLiteralOpDialog.h" />
     <ClInclude Include="src\GUI\Interface\SelectFromKetDialog.h" />
     <ClInclude Include="src\GUI\Interface\ResetContextDialog.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="src\Sequence\WhileStatement.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\Interface\EditPanel.cpp" />
     <ClCompile Include="src\GUI\Interface\SelectFromLiteralOpDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\SelectFromKetDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\ResetContextDialog.cpp" />
