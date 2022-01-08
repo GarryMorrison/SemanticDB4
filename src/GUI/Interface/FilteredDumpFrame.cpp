@@ -137,7 +137,8 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     }
 
     // m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", grid_data);
-    m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
+    // m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
+    m_general_operators_frame = new GeneralOperatorsFrame(this);
     m_general_operators_frame->Hide();
 
     m_context_selector->Bind(wxEVT_CHOICE, &FilteredDumpFrame::OnContextSelect, this);
