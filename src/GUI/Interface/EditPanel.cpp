@@ -22,9 +22,9 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	
 	// Sample content:
 	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "Enter your code here ... \n");
-	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "print |Hello world!>\n", wxDefaultPosition, wxDefaultSize, wxTC_MULTILINE);
-	m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "|context> => |Hello world>\n\nprint |Hello world!>\n");
-	m_aui_notebook->AddPage(m_text_ctrl, "empty-file.sw4", true);
+	m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "|context> => |Hello world>\n\nprint |Hello world!>\n", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "|context> => |Hello world>\n\nprint |Hello world!>\n");
+	m_aui_notebook->AddPage(m_text_ctrl, "hello-world.sw4", true);
 
 	vbox->Add(m_aui_notebook, 1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 	vbox->AddSpacer(10);
