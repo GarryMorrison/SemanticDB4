@@ -446,17 +446,21 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
     }
     // wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_auiNotebook, wxID_ANY, file_content);
     wxString file_name = openFileDialog.GetFilename();  // Check here if we already know this file name, before creating a new wxTextCtrl.
-    wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_auiNotebook, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
-    m_auiNotebook->AddPage(textCtrlLocal, file_name, true);
-    // m_auiNotebook->SetSelection(0);
+    // wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_auiNotebook, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    // m_auiNotebook->AddPage(textCtrlLocal, file_name, true);
+    // // m_auiNotebook->SetSelection(0);
+    wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
     m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?
 
     m_command_window_active = false;
     m_edit_window_active = true;
     m_panelSizer->Detach(0); // remove previous panel
     m_frame_commandPanel->Hide();
-    m_panelSizer->Prepend(m_auiNotebook, 1, wxGROW);
-    m_auiNotebook->Show();
+    // m_panelSizer->Prepend(m_auiNotebook, 1, wxGROW);
+    // m_auiNotebook->Show();
+    m_panelSizer->Prepend(m_frame_edit_panel, 1, wxGROW);
+    m_frame_edit_panel->Show();
     m_panelSizer->Layout();
     m_menuWindow->Check(ID_Window_Edit, true);  // Maybe store the full menu, not just the menuWindow menu?
 }
