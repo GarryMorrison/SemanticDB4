@@ -8,7 +8,7 @@
 
 #include "OutputFrame.h"
 
-OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString& content, const wxPoint position_delta, long style)
+OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString& content, const wxString& seq_result, const wxPoint position_delta, long style)
 	: wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(700, 680), style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
 {
     m_parent = parent;
@@ -21,6 +21,10 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
     // topsizer->Add(m_output_text, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
     m_result_canvas = new ResultCanvas(panel, wxID_ANY, wxDefaultPosition, wxSize(600, 600));
     m_result_canvas->AppendMultiLineText(content, false, RC_OBJECT_NONE, true);
+    if (!seq_result.empty())
+    {
+        m_result_canvas->AppendActiveText(seq_result);
+    }
     topsizer->Add(m_result_canvas, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
 
     wxButton* close_button = new wxButton(panel, wxID_OK, "OK");

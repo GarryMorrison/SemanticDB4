@@ -39,21 +39,21 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 	wxWindow* current_page = m_aui_notebook->GetCurrentPage();
 	wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
 	std::string current_text = current_text_ctrl->GetValue().ToStdString();
-	wxMessageBox("Current text:\n" + current_text);
+	// wxMessageBox("Current text:\n" + current_text);
 	std::stringstream buffer;
 	std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
 	driver.result.clear();
 	bool parse_success = driver.parse_string(current_text + "\n");
 	std::string captured_text = buffer.str();
 	std::cout.rdbuf(old_buffer);
-	wxMessageBox("Captured text:\n" + captured_text);
+	// wxMessageBox("Captured text:\n" + captured_text);
 	if (!parse_success)
 	{
 		wxMessageBox("Parse failed!");
 		return;
 	}
-	// captured_text = driver.result.to_string();
-	OutputFrame* output_frame = new OutputFrame(this, "Output Window", captured_text);
+	std::string result_string = driver.result.to_string();
+	OutputFrame* output_frame = new OutputFrame(this, "Output Window", captured_text, result_string);
 }
 
 void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)

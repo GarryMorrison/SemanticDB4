@@ -534,6 +534,7 @@ static const flex_int16_t yy_chk[305] =
 
 #pragma warning(disable : 4996)  // Looks like we need this for it to compile ...
 
+// #include <stdint.h>  // Nope. That didn't help.
 #include <string>
 #include <memory>
 
@@ -568,7 +569,7 @@ ulong get_op_idx(char *str, yy_size_t len) {
 
 }
 
-#line 571 "Scanner.flex.cpp"
+#line 572 "Scanner.flex.cpp"
 /*** Flex Declarations and Options ***/
 /* enable c++ scanner class generation */
 /* change the name of the scanner class. results in "SDBFlexLexer" */
@@ -580,10 +581,10 @@ ulong get_op_idx(char *str, yy_size_t len) {
 /* enables the use of start condition stacks */
 /* The following paragraph suffices to track locations accurately. Each time
  * yylex is invoked, the begin position is moved onto the end position. */
-#line 65 "Scanner.l"
+#line 66 "Scanner.l"
 #define YY_USER_ACTION  yylloc->columns(yyleng);
-#line 585 "Scanner.flex.cpp"
 #line 586 "Scanner.flex.cpp"
+#line 587 "Scanner.flex.cpp"
 
 #define INITIAL 0
 
@@ -712,17 +713,17 @@ YY_DECL
 		}
 
 	{
-#line 70 "Scanner.l"
+#line 71 "Scanner.l"
 
 
 
 
-#line 75 "Scanner.l"
+#line 76 "Scanner.l"
 // reset location
 yylloc->step();
 
 
-#line 725 "Scanner.flex.cpp"
+#line 726 "Scanner.flex.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -777,315 +778,315 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 79 "Scanner.l"
+#line 80 "Scanner.l"
 { return token::CONTEXT; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 80 "Scanner.l"
+#line 81 "Scanner.l"
 { return token::COMMENT; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 82 "Scanner.l"
+#line 83 "Scanner.l"
 { return token::SELF_KET; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 83 "Scanner.l"
+#line 84 "Scanner.l"
 { return token::MULTI_SELF_KET; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 85 "Scanner.l"
+#line 86 "Scanner.l"
 { yylval->integerVal = yytext[6] - '0'; return token::SELF_KETK; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 86 "Scanner.l"
+#line 87 "Scanner.l"
 { yylval->integerVal = yytext[7] - '0'; return token::MULTI_SELF_KETK; }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 88 "Scanner.l"
+#line 89 "Scanner.l"
 { yylval->ulongVal = get_ket_idx(yytext, yyleng); return token::KET_LABEL; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 90 "Scanner.l"
+#line 91 "Scanner.l"
 { return token::OPEN_IF; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 91 "Scanner.l"
+#line 92 "Scanner.l"
 { return token::OPEN_ELSE; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 92 "Scanner.l"
+#line 93 "Scanner.l"
 { return token::CLOSE; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 93 "Scanner.l"
+#line 94 "Scanner.l"
 { yylval->integerVal = SFOR_TYPE; return token::OPEN_FOR; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 94 "Scanner.l"
+#line 95 "Scanner.l"
 { yylval->integerVal = FOR_TYPE; return token::OPEN_FOR; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 95 "Scanner.l"
+#line 96 "Scanner.l"
 { return token::INFIX_IN; /* means we can't use "in" as a literal operator. Change? */ }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 96 "Scanner.l"
+#line 97 "Scanner.l"
 { return token::OPEN_WHILE; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 99 "Scanner.l"
+#line 100 "Scanner.l"
 { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 100 "Scanner.l"
+#line 101 "Scanner.l"
 { yylval->ulongVal = get_op_idx(yytext, yyleng - 1); return token::FN_LPAREN; }
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 102 "Scanner.l"
+#line 103 "Scanner.l"
 { yylval->stringVal = new std::string(++yytext, yyleng - 2); return token::STRING; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 104 "Scanner.l"
+#line 105 "Scanner.l"
 { yylval->integerVal = RULEADD; return token::LEARN_SYM; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 105 "Scanner.l"
+#line 106 "Scanner.l"
 { yylval->integerVal = RULESEQ; return token::LEARN_SYM; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 106 "Scanner.l"
+#line 107 "Scanner.l"
 { yylval->integerVal = RULESTORED; return token::LEARN_SYM; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 107 "Scanner.l"
+#line 108 "Scanner.l"
 { yylval->integerVal = RULEMEMOIZE; return token::LEARN_SYM; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 108 "Scanner.l"
+#line 109 "Scanner.l"
 { yylval->integerVal = RULENORMAL; return token::LEARN_SYM; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 109 "Scanner.l"
+#line 110 "Scanner.l"
 { yylval->integerVal = RULENONEMPTY; return token::LEARN_SYM; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 111 "Scanner.l"
+#line 112 "Scanner.l"
 { yylval->integerVal = 1; return token::FN_SYM; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 112 "Scanner.l"
+#line 113 "Scanner.l"
 { yylval->integerVal = 2; return token::FN_SYM; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 113 "Scanner.l"
+#line 114 "Scanner.l"
 { yylval->integerVal = 3; return token::FN_SYM; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 114 "Scanner.l"
+#line 115 "Scanner.l"
 { yylval->integerVal = 4; return token::FN_SYM; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 116 "Scanner.l"
+#line 117 "Scanner.l"
 { yylval->integerVal = SPLUS; return token::INFIX_OP; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 117 "Scanner.l"
+#line 118 "Scanner.l"
 { yylval->integerVal = SMINUS; return token::MINUS_OP; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 118 "Scanner.l"
+#line 119 "Scanner.l"
 { yylval->integerVal = SSEQ; return token::INFIX_OP; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 119 "Scanner.l"
+#line 120 "Scanner.l"
 { yylval->integerVal = SMERGE2; return token::INFIX_OP; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 120 "Scanner.l"
+#line 121 "Scanner.l"
 { yylval->integerVal = SMERGE; return token::INFIX_OP; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 121 "Scanner.l"
+#line 122 "Scanner.l"
 { yylval->integerVal = SCOLONMERGE; return token::INFIX_OP; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 123 "Scanner.l"
+#line 124 "Scanner.l"
 { yylval->integerVal = OPEQUAL; return token::INFIX_OP; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 124 "Scanner.l"
+#line 125 "Scanner.l"
 { yylval->integerVal = OPNOTEQUAL; return token::INFIX_OP; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 125 "Scanner.l"
+#line 126 "Scanner.l"
 { yylval->integerVal = OPGREATEREQUAL; return token::INFIX_OP; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 126 "Scanner.l"
+#line 127 "Scanner.l"
 { yylval->integerVal = OPGREATER; return token::INFIX_OP; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 127 "Scanner.l"
+#line 128 "Scanner.l"
 { yylval->integerVal = OPLESSEQUAL; return token::INFIX_OP; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 128 "Scanner.l"
+#line 129 "Scanner.l"
 { yylval->integerVal = OPLESS; return token::INFIX_OP; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 129 "Scanner.l"
+#line 130 "Scanner.l"
 { yylval->integerVal = OPAND; return token::INFIX_OP; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 130 "Scanner.l"
+#line 131 "Scanner.l"
 { yylval->integerVal = OPOR; return token::INFIX_OP; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 131 "Scanner.l"
+#line 132 "Scanner.l"
 { yylval->integerVal = OPPLUS; return token::INFIX_OP; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 132 "Scanner.l"
+#line 133 "Scanner.l"
 { yylval->integerVal = OPMINUS; return token::INFIX_OP; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 133 "Scanner.l"
+#line 134 "Scanner.l"
 { yylval->integerVal = OPMULT; return token::INFIX_OP; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 134 "Scanner.l"
+#line 135 "Scanner.l"
 { yylval->integerVal = OPDIV; return token::INFIX_OP; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 135 "Scanner.l"
+#line 136 "Scanner.l"
 { yylval->integerVal = OPMOD; return token::INFIX_OP; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 136 "Scanner.l"
+#line 137 "Scanner.l"
 { yylval->integerVal = OPARITHPOWER; return token::INFIX_OP; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 137 "Scanner.l"
+#line 138 "Scanner.l"
 { yylval->integerVal = OPRANGE; return token::INFIX_OP; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 139 "Scanner.l"
+#line 140 "Scanner.l"
 { return token::LPAREN; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 140 "Scanner.l"
+#line 141 "Scanner.l"
 { return token::RPAREN; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 141 "Scanner.l"
+#line 142 "Scanner.l"
 { return token::LSQUARE; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 142 "Scanner.l"
+#line 143 "Scanner.l"
 { return token::RSQUARE; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 143 "Scanner.l"
+#line 144 "Scanner.l"
 { return token::LCURLEY; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 144 "Scanner.l"
+#line 145 "Scanner.l"
 { return token::RCURLEY; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 146 "Scanner.l"
+#line 147 "Scanner.l"
 { return token::COMMA; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 147 "Scanner.l"
+#line 148 "Scanner.l"
 { return token::POWER; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 148 "Scanner.l"
+#line 149 "Scanner.l"
 { return token::QUOTE; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 149 "Scanner.l"
+#line 150 "Scanner.l"
 { return token::STAR; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 150 "Scanner.l"
+#line 151 "Scanner.l"
 { return token::DIVIDE; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 151 "Scanner.l"
+#line 152 "Scanner.l"
 { return token::COLON; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 152 "Scanner.l"
+#line 153 "Scanner.l"
 { return token::DOLLAR; }
 	YY_BREAK
 case 62:
 /* rule 62 can match eol */
 YY_RULE_SETUP
-#line 153 "Scanner.l"
+#line 154 "Scanner.l"
 { int indentation_delta = (yyleng - current_indentation - 1)/4;
               current_indentation = yyleng - 1;
               // yylval->integerVal = indentation_delta;
@@ -1096,7 +1097,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 160 "Scanner.l"
+#line 161 "Scanner.l"
 {
         yylval->integerVal = atoi(yytext);
         return token::INTEGER;
@@ -1104,7 +1105,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 164 "Scanner.l"
+#line 165 "Scanner.l"
 {
         yylval->doubleVal = atof(yytext);
         return token::DOUBLE;
@@ -1112,7 +1113,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 168 "Scanner.l"
+#line 169 "Scanner.l"
 {
         yylloc->step();
         //return token::SPACE;  // tends to cause parse errors!
@@ -1121,7 +1122,7 @@ YY_RULE_SETUP
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 172 "Scanner.l"
+#line 173 "Scanner.l"
 {
         yylloc->lines(yyleng); yylloc->step();
         // return token::EOL;  // switch off EOL_UNDENT code for now.
@@ -1134,17 +1135,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 181 "Scanner.l"
+#line 182 "Scanner.l"
 {
 return static_cast<token_type>(*yytext);
 }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 184 "Scanner.l"
+#line 185 "Scanner.l"
 ECHO;
 	YY_BREAK
-#line 1147 "Scanner.flex.cpp"
+#line 1148 "Scanner.flex.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2108,7 +2109,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 184 "Scanner.l"
+#line 185 "Scanner.l"
 
 namespace SDB {
     Scanner::Scanner(std::istream* in,

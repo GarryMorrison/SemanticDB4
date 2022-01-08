@@ -14,7 +14,7 @@ class ResultCanvas;
 class OutputFrame : public wxFrame
 {
 public:
-    OutputFrame(wxWindow* parent, const wxString& title, const wxString& content, const wxPoint position_delta = wxPoint(0, 0), long style = 0);
+    OutputFrame(wxWindow* parent, const wxString& title, const wxString& content, const wxString& seq_result = wxEmptyString, const wxPoint position_delta = wxPoint(0, 0), long style = 0);
 
     ~OutputFrame();
 

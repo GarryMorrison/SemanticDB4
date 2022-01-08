@@ -2,6 +2,7 @@
 
 #pragma warning(disable : 4996)  // Looks like we need this for it to compile ...
 
+// #include <stdint.h>  // Nope. That didn't help.
 #include <string>
 #include <memory>
 
