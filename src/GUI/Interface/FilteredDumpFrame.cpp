@@ -247,7 +247,19 @@ void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
     // wxMessageBox(wxString::Format("Item clicked: %s, Item idx: %d", event.GetString(), event.GetInt()));
     
     wxString item_clicked = event.GetString();
-    unsigned int list_idx = event.GetInt();
+    ulong item_idx = ket_map.get_idx(item_clicked.ToStdString());
+    unsigned int list_idx = event.GetInt();  // Bug to fix! If the general op frames context has changed, then the list_idx won't be correct!
+    if (m_map_general_ops.find(list_idx) == m_map_general_ops.end())
+    {
+        wxMessageBox("General operator out of bounds.");
+        return;
+    }
+    if (m_map_general_ops[list_idx] != item_idx)  // Bounds check needed? Yup!
+    {
+        wxMessageBox("General operator doesn't match.");
+        return;
+    }
+    
     if (m_general_operators_frame->IsChecked(list_idx))
     {
         // wxMessageBox(item_clicked + " checked");
