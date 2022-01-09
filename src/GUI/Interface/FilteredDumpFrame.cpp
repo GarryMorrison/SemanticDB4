@@ -126,12 +126,12 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     grid_data.Add("ten");
     */
 
-    wxArrayString general_ops;
+    // wxArrayString general_ops;
     ulong star_idx = ket_map.get_idx("*");
     list_idx = 0;
     for (ulong op_idx : driver.context.supported_ops(star_idx))
     {
-        general_ops.Add(ket_map.get_str(op_idx));
+        m_general_ops.Add(ket_map.get_str(op_idx));
         m_map_general_ops[list_idx] = op_idx;
         list_idx++;
     }
@@ -161,32 +161,29 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         });
 
     general_operators_checkbox->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
-        if (!general_operators_checkbox)
+        if (!m_general_operators_frame)                                  // Maybe we should create it here, if it doesn't exist?
         {
             wxMessageBox("General operators window no longer exists!");  // Nope. It still crashes!
-            return;
-        }
-        m_show_general_operators = general_operators_checkbox->GetValue();
-        if (m_show_general_operators)
-        {
-            m_general_operators_frame->Show();
         }
         else
         {
-            m_general_operators_frame->Hide();
+            m_show_general_operators = general_operators_checkbox->GetValue();
+            if (m_show_general_operators)
+            {
+                m_general_operators_frame->Show();
+            }
+            else
+            {
+                m_general_operators_frame->Hide();
+            }
         }
         });
 
-    /*
-    m_general_operators_frame->Bind(EVT_GRID_CLICK, [=](wxCommandEvent& event) {
-        wxMessageBox("Grid click!");
-        }
-    );
-    */
 
     m_literal_op_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckLiteralOpList, this);
     m_ket_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckKetList, this);
-    m_general_operators_frame->Bind(EVT_GRID_CLICK, &FilteredDumpFrame::CheckGeneralOpList, this);
+    m_general_operators_frame->Bind(EVT_GRID_CLICK, &FilteredDumpFrame::CheckGeneralOpList, this);  // How prevent crash if our gen-ops-frame is closed on us?
+    
 
     UpdateKnowledge();
     panel->SetSizerAndFit(topsizer);
@@ -247,6 +244,7 @@ void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
     // wxMessageBox(wxString::Format("Item clicked: %s, Item idx: %d", event.GetString(), event.GetInt()));
     
     wxString item_clicked = event.GetString();
+    /*
     ulong item_idx = ket_map.get_idx(item_clicked.ToStdString());
     unsigned int list_idx = event.GetInt();  // Bug to fix! If the general op frames context has changed, then the list_idx won't be correct!
     if (m_map_general_ops.find(list_idx) == m_map_general_ops.end())  // Maybe handle this in a smarter way? Eg, so we can use an operator based on its label, not its idx.
@@ -259,7 +257,16 @@ void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
         wxMessageBox("General operator doesn't match.");
         return;
     }
-    
+    */
+    int list_idx = m_general_ops.Index(item_clicked);
+    if (list_idx == wxNOT_FOUND)
+    {
+        if (m_general_operators_frame->IsChecked(event.GetInt()))
+        {
+            wxMessageBox(wxString::Format("General operator \"%s\" not found", item_clicked));
+        }
+        return;
+    }
     if (m_general_operators_frame->IsChecked(list_idx))
     {
         // wxMessageBox(item_clicked + " checked");
