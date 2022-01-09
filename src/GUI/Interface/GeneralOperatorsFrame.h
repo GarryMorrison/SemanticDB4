@@ -20,6 +20,8 @@ public:
     void OnCheckBoxClick(wxCommandEvent& event);
     bool IsChecked(unsigned int list_idx);
     void OnUpdateButton(wxCommandEvent& event);
+    void OnContextSelect(wxCommandEvent& event);
+    void UpdateFrame();
 
     ~GeneralOperatorsFrame();
 
@@ -31,5 +33,6 @@ private:
     std::vector<wxArrayString> m_our_arrays;
     std::vector<wxCheckListBox*> m_our_checkboxes;
     wxButton* m_update_button;
+    wxChoice* m_context_selector;
     unsigned int m_dim = 0;
 };
