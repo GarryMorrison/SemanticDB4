@@ -224,7 +224,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
                 std::string captured_text = buffer.str();
                 std::cout.rdbuf(old_buffer);
                 m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
-                if (driver.result.size() > 0)
+                if (!driver.result.is_empty_ket())
                 {
                     m_command_result_canvas->AppendActiveText(driver.result.to_string());
                 }
@@ -253,7 +253,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
                 std::string captured_text = buffer.str();
                 std::cout.rdbuf(old_buffer);
                 m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
-                if (driver.result.size() > 0)
+                if (!driver.result.is_empty_ket())
                 {
                     m_command_result_canvas->AppendText(driver.result.to_string());
                 }
@@ -682,7 +682,7 @@ void CommandPanel::OnRunButtonDown(wxCommandEvent& event)
         std::string captured_text = buffer.str();
         std::cout.rdbuf(old_buffer);
         m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
-        if (driver.result.size() > 0)
+        if (!driver.result.is_empty_ket())
         {
             m_command_result_canvas->AppendActiveText(driver.result.to_string());
         }
@@ -713,7 +713,7 @@ void CommandPanel::OnRunButtonDown(wxCommandEvent& event)
         std::cout.rdbuf(old_buffer);
         m_command_result_canvas->AppendNewLine();
         m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
-        if (driver.result.size() > 0)
+        if (!driver.result.is_empty_ket())
         {
             m_command_result_canvas->AppendText(driver.result.to_string());
         }
@@ -760,7 +760,7 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
             std::string captured_text = buffer.str();
             std::cout.rdbuf(old_buffer);
             m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
-            if (driver.result.size() > 0)
+            if (!driver.result.is_empty_ket())
             {
                 m_command_result_canvas->AppendActiveText(driver.result.to_string());
             }
@@ -795,7 +795,7 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
                 std::cout.rdbuf(old_buffer);
                 m_command_result_canvas->AppendNewLine();  // Do we need this here?
                 m_command_result_canvas->AppendMultiLineText(captured_text, false, RC_OBJECT_NONE, true);
-                if (driver.result.size() > 0)
+                if (!driver.result.is_empty_ket())
                 {
                     m_command_result_canvas->AppendText(driver.result.to_string());
                 }
