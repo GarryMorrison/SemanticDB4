@@ -14,12 +14,12 @@
 class GeneralOperatorsFrame : public wxFrame
 {
 public:
-    GeneralOperatorsFrame(wxWindow* parent, const wxString& title, const wxArrayString& content, const wxPoint position_delta = wxPoint(0, 0), long style = 0);
+    // GeneralOperatorsFrame(wxWindow* parent, const wxString& title, const wxArrayString& content, const wxPoint position_delta = wxPoint(0, 0), long style = 0);
     GeneralOperatorsFrame(wxWindow* parent, const wxPoint position_delta = wxPoint(0, 0));
 
     void OnCheckBoxClick(wxCommandEvent& event);
     bool IsChecked(unsigned int list_idx);
-    void OnUpdateButton(wxCommandEvent& event);
+    // void OnUpdateButton(wxCommandEvent& event);
     void OnContextSelect(wxCommandEvent& event);
     void UpdateFrame();
 

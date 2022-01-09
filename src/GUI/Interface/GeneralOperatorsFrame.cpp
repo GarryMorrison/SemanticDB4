@@ -11,6 +11,7 @@ extern SDB::Driver driver;
 
 wxDEFINE_EVENT(EVT_GRID_CLICK, wxCommandEvent);
 
+/*
 GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxString& title, const wxArrayString& content, wxPoint position_delta, long style)
     : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
 {
@@ -84,6 +85,7 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxString& t
     SetPosition(wxPoint(100, 100));
     // Show();  // We want it hidden by default. Only show when FilteredDumpFrame wants it visible.
 }
+*/
 
 GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxPoint position_delta)
     : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
@@ -212,6 +214,7 @@ bool GeneralOperatorsFrame::IsChecked(unsigned int list_idx)
     return m_our_checkboxes[column]->IsChecked(row);
 }
 
+/*
 void GeneralOperatorsFrame::OnUpdateButton(wxCommandEvent& event)
 {
     // wxMessageBox("Update button pressed");
@@ -293,13 +296,17 @@ void GeneralOperatorsFrame::OnUpdateButton(wxCommandEvent& event)
     m_panel->SetSizerAndFit(m_topsizer);
     Fit();
 }
+*/
 
 void GeneralOperatorsFrame::OnContextSelect(wxCommandEvent& event)
 {
     // wxMessageBox("context changed");
-    unsigned int new_selection = m_context_selector->GetSelection();
-    driver.context.set(new_selection);
-    UpdateFrame();
+    int new_selection = m_context_selector->GetSelection();
+    if (new_selection != wxNOT_FOUND && new_selection != driver.context.get_context_index())
+    {
+        driver.context.set(new_selection);
+        UpdateFrame();
+    }
 }
 
 void GeneralOperatorsFrame::UpdateFrame()
@@ -310,6 +317,7 @@ void GeneralOperatorsFrame::UpdateFrame()
         col->Unbind(wxEVT_CHECKLISTBOX, &GeneralOperatorsFrame::OnCheckBoxClick, this);
     }
     // m_update_button->Unbind(wxEVT_BUTTON, &GeneralOperatorsFrame::OnUpdateButton, this);
+    m_context_selector->Unbind(wxEVT_CHOICE, &GeneralOperatorsFrame::OnContextSelect, this);
     m_topsizer->Clear(true);
     m_general_ops.Clear();
     m_our_arrays.clear();
