@@ -203,13 +203,13 @@ void NewContext::learn(const std::string& op, const std::string& label, const st
 
 void NewContext::non_empty_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq)
 {
-    if (bSeq->size() == 0) { return; }
+    if (bSeq->is_empty_ket()) { return; }
     learn(op_idx, label_idx, bSeq);
 }
 
 void NewContext::non_empty_learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq)
 {
-    if (bSeq->size() == 0) { return; }
+    if (bSeq->is_empty_ket()) { return; }
     learn(op, label, bSeq);
 }
 

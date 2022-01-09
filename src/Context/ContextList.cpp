@@ -179,7 +179,7 @@ void ContextList::non_empty_learn(const ulong op_idx, const ulong label_idx, std
 {
     // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
     // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
-    if (bSeq->size() == 0) { return; }
+    if (bSeq->is_empty_ket()) { return; }
     learn(op_idx, label_idx, bSeq);
 }
 
@@ -187,7 +187,7 @@ void ContextList::non_empty_learn(const ulong op_idx, const Ket& label_ket, std:
 {
     // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
     // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
-    if (bSeq->size() == 0) { return; }
+    if (bSeq->is_empty_ket()) { return; }
     learn(op_idx, label_ket, bSeq);
 }
 
@@ -195,7 +195,7 @@ void ContextList::non_empty_learn(const std::string& op, const std::string& labe
 {
     // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
     // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
-    if (bSeq->size() == 0) { return; }
+    if (bSeq->is_empty_ket()) { return; }
     learn(op, label, bSeq);
 }
 
