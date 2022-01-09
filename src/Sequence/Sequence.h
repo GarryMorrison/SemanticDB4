@@ -34,6 +34,7 @@ public:
 
     const int type() const { return SEQUENCE; };
     const bool is_ket() const;
+    const bool is_empty_ket() const;
     // const ulong size() const { return seq.size(); };  // Should this be in Sequence.cpp?
     // const size_t size() const { return seq.size(); };
     // const ulong size() const;
