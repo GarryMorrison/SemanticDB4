@@ -376,14 +376,21 @@ Ket op_minus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >&
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number - value, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number - value, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number - value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number - value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -391,14 +398,21 @@ Ket op_plus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >& 
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number + value, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number + value, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number + value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number + value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -406,14 +420,21 @@ Ket op_times_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant>
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number * value, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number * value, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number * value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number * value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -422,14 +443,21 @@ Ket op_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant
     long double value = parameters[0]->get_float();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number / value, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number / value, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -438,14 +466,21 @@ Ket op_int_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundCons
     long double value = parameters[0]->get_float();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int((long double)(number / value), default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int((long double)(number / value), default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -454,14 +489,21 @@ Ket op_round(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >&
     unsigned int value = parameters[0]->get_int();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number, value), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number, value), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number, value), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number, value), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -470,15 +512,22 @@ Ket op_modulus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    long long result = static_cast<long long>(number) % static_cast<long long>(value);
-    if (split_idx.empty()) {
-        return Ket(float_to_int((long double)result, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        long long result = static_cast<long long>(number) % static_cast<long long>(value);
+        if (split_idx.empty()) {
+            return Ket(float_to_int((long double)result, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int((long double)result, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int((long double)result, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 

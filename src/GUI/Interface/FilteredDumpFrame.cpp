@@ -249,7 +249,7 @@ void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
     wxString item_clicked = event.GetString();
     ulong item_idx = ket_map.get_idx(item_clicked.ToStdString());
     unsigned int list_idx = event.GetInt();  // Bug to fix! If the general op frames context has changed, then the list_idx won't be correct!
-    if (m_map_general_ops.find(list_idx) == m_map_general_ops.end())
+    if (m_map_general_ops.find(list_idx) == m_map_general_ops.end())  // Maybe handle this in a smarter way? Eg, so we can use an operator based on its label, not its idx.
     {
         wxMessageBox("General operator out of bounds.");
         return;
