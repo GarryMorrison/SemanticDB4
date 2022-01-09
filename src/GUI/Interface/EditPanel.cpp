@@ -40,6 +40,7 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 	wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
 	std::string current_text = current_text_ctrl->GetValue().ToStdString();
 	// wxMessageBox("Current text:\n" + current_text);
+	Timer_ms the_timer;
 	std::stringstream buffer;
 	std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
 	driver.result.clear();
@@ -54,6 +55,9 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 	}
 	std::string result_string = driver.result.to_string();
 	OutputFrame* output_frame = new OutputFrame(this, "Output Window", captured_text, result_string);
+	the_timer.Stop();
+	long long run_time = the_timer.GetTime();
+	output_frame->SetRunTime(run_time);
 }
 
 void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)

@@ -27,8 +27,14 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
     }
     topsizer->Add(m_result_canvas, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
 
+    // Add a close button:
     wxButton* close_button = new wxButton(panel, wxID_OK, "OK");
     topsizer->Add(close_button, wxSizerFlags(0).Left().Border(wxALL, 10));
+
+    // Add a timer string:
+    wxString timer_string = "Timer: " + display_time(m_run_time_ms);
+    m_timer_line = new wxStaticText(panel, wxID_ANY, timer_string);
+    topsizer->Add(m_timer_line, wxSizerFlags(0).Left().Border(wxALL, 10));
 
     close_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
         if (event.GetId() == wxID_OK)
@@ -44,6 +50,13 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
     SetPosition(dialog_position);
     Fit();
     Show();
+}
+
+void OutputFrame::SetRunTime(long long time)
+{
+    m_run_time_ms = time;
+    wxString timer_string = "Timer: " + display_time(m_run_time_ms);
+    m_timer_line->SetLabel(timer_string);
 }
 
 OutputFrame::~OutputFrame()
