@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/7
+// Updated 2022/1/9
 // Author Garry Morrison
 // License GPL v3
 //
@@ -14,7 +14,8 @@ PrimaryFrame::PrimaryFrame()
 {
     // Set up the menu:
     wxMenu* menuFile = new wxMenu;
-    menuFile->Append(ID_Open, "&Open", "Open a new file");
+    menuFile->Append(ID_New, "&New", "Create a new file");
+    menuFile->Append(ID_Open, "&Open", "Open a file");
     menuFile->Append(ID_Save, "&Save", "Save a file");
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
@@ -274,6 +275,7 @@ PrimaryFrame::PrimaryFrame()
     // Bind(wxEVT_MENU, &PrimaryFrame::OnAbout, this, wxID_ABOUT);
     // Bind(wxEVT_MENU, &PrimaryFrame::ShowSimpleAboutDialog, this, wxID_ABOUT);
     Bind(wxEVT_MENU, &PrimaryFrame::ShowPrettyAboutDialog, this, wxID_ABOUT);
+    Bind(wxEVT_MENU, &PrimaryFrame::OnNew, this, ID_New);
     Bind(wxEVT_MENU, &PrimaryFrame::OnOpen, this, ID_Open);
     Bind(wxEVT_MENU, &PrimaryFrame::OnSave, this, ID_Save);
     Bind(wxEVT_MENU, &PrimaryFrame::SelectKnownKet, this, ID_Insert_Window_Known_Kets);
@@ -419,6 +421,24 @@ void PrimaryFrame::ShowPrettyAboutDialog(wxCommandEvent& event)
     AppAbout* dlg = new AppAbout(this);
 }
 
+void PrimaryFrame::OnNew(wxCommandEvent& event)
+{
+    // wxMessageBox("Create a new file ... ");
+    wxString file_name = "empty.sw4";  // Do something better later? A dialog that prompts for filename and starting context perhaps?
+    wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, "Enter your code here ... ", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
+    m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice??
+
+    m_command_window_active = false;
+    m_edit_window_active = true;
+    m_panelSizer->Detach(0); // remove previous panel
+    m_frame_commandPanel->Hide();
+    m_panelSizer->Prepend(m_frame_edit_panel, 1, wxGROW);
+    m_frame_edit_panel->Show();
+    m_panelSizer->Layout();
+    m_menuWindow->Check(ID_Window_Edit, true);
+}
+
 void PrimaryFrame::OnOpen(wxCommandEvent& event)
 {
     bool content_has_been_saved = true;  // shift this to the PrimaryFrame class member variables!
@@ -427,7 +447,7 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
         if (wxMessageBox("Current content has not been saved! Proceed?", "Please confirm", wxICON_QUESTION | wxYES_NO, this) == wxNO)
             return;
     }
-    wxFileDialog openFileDialog(this, "Open sw file", "", "", "sw file (*.sw;*.sw3)|*.sw;*.sw3|Text file (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, "Open sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     if (openFileDialog.ShowModal() == wxID_CANCEL)
         return;
     wxFileInputStream input_stream(openFileDialog.GetPath());

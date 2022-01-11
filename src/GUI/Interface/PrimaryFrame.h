@@ -28,6 +28,7 @@ private:
     void OnAbout(wxCommandEvent& event);
     void ShowSimpleAboutDialog(wxCommandEvent& event);
     void ShowPrettyAboutDialog(wxCommandEvent& event);
+    void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void SelectKnownKet(wxCommandEvent& event);

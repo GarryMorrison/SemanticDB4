@@ -147,6 +147,7 @@ public:
 enum
 {
     ID_Hello = wxID_HIGHEST + 1,
+    ID_New,
     ID_Open,
     ID_Save,
     ID_Insert,
