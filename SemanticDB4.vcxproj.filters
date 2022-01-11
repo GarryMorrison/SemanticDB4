@@ -204,6 +204,9 @@
     <ClInclude Include="src\GUI\Interface\CreateNewFileDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI\OperatorLibrary\ActiveTableDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -381,6 +384,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\Interface\CreateNewFileDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\OperatorLibrary\ActiveTableDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

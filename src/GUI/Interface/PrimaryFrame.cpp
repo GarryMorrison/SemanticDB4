@@ -192,6 +192,7 @@ PrimaryFrame::PrimaryFrame()
     
 
     wxMenu* menuVisualize = new wxMenu;
+    menuVisualize->Append(ID_Visualize_Active_Table, "Active Table", "Generate active table");
 
     wxMenu* menuExamples = new wxMenu;
     menuExamples->Append(ID_Example_Fibonacci, "Fibonacci", "Open Fibonacci example");
@@ -291,6 +292,7 @@ PrimaryFrame::PrimaryFrame()
     Bind(wxEVT_MENU, &PrimaryFrame::ShowKetMap, this, ID_Help_Ket_Map);  // This ID looks wrong! Fix.
     Bind(wxEVT_MENU, &PrimaryFrame::SwitchWindow, this, ID_Window_Command);
     Bind(wxEVT_MENU, &PrimaryFrame::SwitchWindow, this, ID_Window_Edit);
+    Bind(wxEVT_MENU, &PrimaryFrame::InvokeActiveTable, this, ID_Visualize_Active_Table);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenExampleWebpage, this, ID_Example_Fibonacci, ID_Example_More);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenWebUsage, this, ID_Help_Usage);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenWebsite, this, ID_Help_Website);
@@ -916,6 +918,12 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
         m_edit_window_active = true;
     }
     m_panelSizer->Layout();
+}
+
+void PrimaryFrame::InvokeActiveTable(wxCommandEvent& event)
+{
+    // wxMessageBox("Invoking active table");
+    ActiveTableDialog* active_table = new ActiveTableDialog(this);
 }
 
 void PrimaryFrame::OpenExampleWebpage(wxCommandEvent& event)

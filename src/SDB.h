@@ -91,6 +91,7 @@
 #include "GUI/Interface/EditPanel.h"
 #include "GUI/Interface/OutputFrame.h"
 #include "GUI/Interface/CreateNewFileDialog.h"
+#include "GUI/OperatorLibrary/ActiveTableDialog.h"
 
 
 // Back end includes:
@@ -235,6 +236,9 @@ enum
     ID_Insert_Window_Simple,
     ID_Insert_Window_Compound,
     ID_Insert_Window_Function,
+
+    ID_Visualize_Active_Table,
+    ID_Table_Run,
 
     ID_Example_Fibonacci,
     ID_Example_Temperature,

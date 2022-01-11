@@ -46,7 +46,7 @@ private:
     void ShowKetMap(wxCommandEvent& event);
     void SwitchWindow(wxCommandEvent& event);
 
-    
+    void InvokeActiveTable(wxCommandEvent& event);
 
     void OpenExampleWebpage(wxCommandEvent& event);
 
