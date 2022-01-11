@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/1/9"
+#define APP_BUILD_DATE "2022/1/11"
 #define APP_VERSION "0.1.alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -90,6 +90,8 @@
 #include "GUI/Interface/SelectFromLiteralOpDialog.h"
 #include "GUI/Interface/EditPanel.h"
 #include "GUI/Interface/OutputFrame.h"
+#include "GUI/Interface/CreateNewFileDialog.h"
+
 
 // Back end includes:
 #include "KetMap/KetMap.h"
@@ -268,6 +270,8 @@ enum
     ID_Edit_Run,
 
     ID_Update_Button,
+
+    ID_Create_File,
 
     ID_Ket_Map_Display_Title_Click,
     ID_Command_Insert_Text

@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GUI\Interface\CreateNewFileDialog.h" />
     <ClInclude Include="src\GUI\Interface\OutputFrame.h" />
     <ClInclude Include="src\GUI\Interface\EditPanel.h" />
     <ClInclude Include="src\GUI\Interface\SelectFromLiteralOpDialog.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="src\Sequence\WhileStatement.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\Interface\CreateNewFileDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\OutputFrame.cpp" />
     <ClCompile Include="src\GUI\Interface\EditPanel.cpp" />
     <ClCompile Include="src\GUI\Interface\SelectFromLiteralOpDialog.cpp" />
