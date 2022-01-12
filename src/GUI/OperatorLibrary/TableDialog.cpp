@@ -65,6 +65,7 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 		}
 		column_idx++;
 	}
+	grid_table->AutoSize();
 	topsizer->Add(grid_table, wxSizerFlags(1).Expand().Border(wxALL, 10));
 	topsizer->AddSpacer(10);
 
