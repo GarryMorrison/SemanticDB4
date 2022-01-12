@@ -85,7 +85,7 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	for (unsigned int i = 0; i < content_size; i++)
 	{
 		grid_data.Add(known_operators[i]);
-		if (((i + 1) % dim) == 0)
+		if (((i + 1) % (dim + 4)) == 0)  // Small compensation for checklistbox not being perfect squares.
 		{
 			m_our_arrays.push_back(grid_data);
 			grid_data.Clear();
