@@ -207,6 +207,9 @@
     <ClInclude Include="src\GUI\OperatorLibrary\ActiveTableDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI\OperatorLibrary\TableDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -387,6 +390,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\OperatorLibrary\ActiveTableDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\OperatorLibrary\TableDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

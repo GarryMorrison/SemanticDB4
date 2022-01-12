@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/11
-// Updated 2022/1/11
+// Updated 2022/1/12
 // Author Garry Morrison
 // License GPL v3
 //
@@ -18,6 +18,7 @@ public:
     void OnUsageButton(wxCommandEvent& event);
     void OnGenerateButton(wxCommandEvent& event);
     void GenerateCommand();
+    void OnRunButton(wxCommandEvent& event);
 
     //! destructor
     ~ActiveTableDialog();
@@ -33,5 +34,8 @@ private:
 
     std::vector<wxArrayString> m_our_arrays;
     std::vector<wxCheckListBox*> m_our_checkboxes;
+
+    std::vector<std::string> m_checked_items;
+    std::string m_input_sp_str;
 };
 

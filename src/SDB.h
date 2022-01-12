@@ -92,6 +92,7 @@
 #include "GUI/Interface/OutputFrame.h"
 #include "GUI/Interface/CreateNewFileDialog.h"
 #include "GUI/OperatorLibrary/ActiveTableDialog.h"
+#include "GUI/OperatorLibrary/TableDialog.h"
 
 
 // Back end includes:

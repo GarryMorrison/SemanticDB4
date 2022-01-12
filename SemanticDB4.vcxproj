@@ -218,6 +218,7 @@
     <ClInclude Include="src\Sequence\Superposition.h" />
     <ClInclude Include="src\Sequence\SuperpositionIter.h" />
     <ClInclude Include="src\Sequence\WhileStatement.h" />
+    <ClInclude Include="src\GUI\OperatorLibrary\TableDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GUI\OperatorLibrary\ActiveTableDialog.cpp" />
@@ -280,6 +281,7 @@
     <ClCompile Include="src\Sequence\Superposition.cpp" />
     <ClCompile Include="src\Sequence\SuperpositionIter.cpp" />
     <ClCompile Include="src\Sequence\WhileStatement.cpp" />
+    <ClCompile Include="src\GUI\OperatorLibrary\TableDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="src\Parser\Parser.y">

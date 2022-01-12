@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/11
-// Updated 2022/1/11
+// Updated 2022/1/12
 // Author Garry Morrison
 // License GPL v3
 //
@@ -162,6 +162,7 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 
 	usage_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnUsageButton, this);
 	generate_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnGenerateButton, this);
+	run_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnRunButton, this);
 
 	SetSizerAndFit(topsizer);
 	CenterOnScreen();
@@ -197,21 +198,28 @@ void ActiveTableDialog::GenerateCommand()
 		reverse_sort = "reverse ";
 	}
 	wxArrayInt checked_items_idx;
-	std::vector<std::string> checked_items;
-	checked_items.push_back(m_input_label_ctrl->GetValue().ToStdString());
+	m_checked_items;
+	m_checked_items.push_back(m_input_label_ctrl->GetValue().ToStdString());
 	unsigned int list_idx = 0;
 	for (const auto& check_box : m_our_checkboxes)
 	{
 		check_box->GetCheckedItems(checked_items_idx);
 		for (const auto idx : checked_items_idx)
 		{
-			checked_items.push_back(m_our_arrays[list_idx][idx].ToStdString());
+			m_checked_items.push_back(m_our_arrays[list_idx][idx].ToStdString());
 		}
 		list_idx++;
 	}
-	std::string operators = join(checked_items, ", ");
-	wxString s = "table[" + operators + "] " + reverse_sort + sort_by + filter_sp + m_input_superposition_ctrl->GetValue();
+	std::string operators = join(m_checked_items, ", ");
+	m_input_sp_str = reverse_sort + sort_by + filter_sp + m_input_superposition_ctrl->GetValue();
+	wxString s = "table[" + operators + "] " + m_input_sp_str;
 	m_command_text_ctrl->SetValue(s);
+}
+
+void ActiveTableDialog::OnRunButton(wxCommandEvent& event)
+{
+	// wxMessageBox("Run button pressed.");
+	TableDialog* table_dialog = new TableDialog(this, m_checked_items, m_input_sp_str);
 }
 
 ActiveTableDialog::~ActiveTableDialog()
