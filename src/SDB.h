@@ -238,7 +238,10 @@ enum
     ID_Insert_Window_Function,
 
     ID_Visualize_Active_Table,
+    ID_Table_Usage,
+    ID_Table_Generate,
     ID_Table_Run,
+
 
     ID_Example_Fibonacci,
     ID_Example_Temperature,
