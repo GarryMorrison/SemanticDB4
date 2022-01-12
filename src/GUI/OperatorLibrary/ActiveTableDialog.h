@@ -26,6 +26,7 @@ public:
 private:
     wxTextCtrl* m_input_superposition_ctrl;
     wxTextCtrl* m_input_label_ctrl;
+    wxTextCtrl* m_such_that_ctrl;
     wxTextCtrl* m_lhs_ctrl;
     wxTextCtrl* m_rhs_ctrl;
     wxTextCtrl* m_sort_by_ctrl;

@@ -27,6 +27,10 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	input_label_header->SetFont(wxFontInfo(12));
 	m_input_label_ctrl = new wxTextCtrl(this, wxID_ANY, "ket");
 
+	wxStaticText* such_that_header = new wxStaticText(this, wxID_ANY, "Such-that operator (empty for none)");
+	such_that_header->SetFont(wxFontInfo(12));
+	m_such_that_ctrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
+
 	wxBoxSizer* hbox1 = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* filter_header = new wxStaticText(this, wxID_ANY, "Filter");
 	filter_header->SetFont(wxFontInfo(12));
@@ -59,13 +63,9 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	m_sort_by_ctrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(250, -1));
 
 
-	// wxStaticText* known_operators_header = new wxStaticText(this, wxID_ANY, "Known operators");
 	wxStaticText* known_operators_header = new wxStaticText(this, wxID_ANY, "Select from known operators");
 	known_operators_header->SetFont(wxFontInfo(12));
 	wxArrayString known_operators;
-	// known_operators.Add("age");
-	// known_operators.Add("friends");
-	// known_operators.Add("spelling");
 	std::set<std::string> set_of_operators;
 	for (ulong idx : driver.context.relevant_kets("*"))
 	{
@@ -133,6 +133,11 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	topsizer->AddSpacer(5);
 	topsizer->Add(m_input_label_ctrl, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
 	topsizer->AddSpacer(10);
+	topsizer->Add(such_that_header, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+	topsizer->AddSpacer(5);
+	topsizer->Add(m_such_that_ctrl, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
+	topsizer->AddSpacer(10);
+
 	topsizer->Add(hbox1, wxSizerFlags(0).Expand().Left().Border(wxLEFT | wxRIGHT, 10));
 	topsizer->AddSpacer(5);
 	topsizer->Add(hbox2, wxSizerFlags(0).Expand().Left().Border(wxLEFT | wxRIGHT, 10));
@@ -182,6 +187,11 @@ void ActiveTableDialog::OnGenerateButton(wxCommandEvent& event)
 
 void ActiveTableDialog::GenerateCommand()
 {
+	wxString such_that;
+	if (!m_such_that_ctrl->IsEmpty())
+	{
+		such_that = "such-that[" + m_such_that_ctrl->GetValue() + "] ";
+	}
 	wxString filter_sp;
 	if (!m_lhs_ctrl->IsEmpty() && !m_rhs_ctrl->IsEmpty())  // Use filter now.
 	{
@@ -211,7 +221,7 @@ void ActiveTableDialog::GenerateCommand()
 		list_idx++;
 	}
 	std::string operators = join(m_checked_items, ", ");
-	m_input_sp_str = reverse_sort + sort_by + filter_sp + m_input_superposition_ctrl->GetValue();
+	m_input_sp_str = reverse_sort + sort_by + filter_sp + such_that + m_input_superposition_ctrl->GetValue();
 	wxString s = "table[" + operators + "] " + m_input_sp_str;
 	m_command_text_ctrl->SetValue(s);
 }

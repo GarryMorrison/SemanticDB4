@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/1/11"
+#define APP_BUILD_DATE "2022/1/12"
 #define APP_VERSION "0.1.alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
