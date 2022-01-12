@@ -198,7 +198,7 @@ void ActiveTableDialog::GenerateCommand()
 		reverse_sort = "reverse ";
 	}
 	wxArrayInt checked_items_idx;
-	m_checked_items;
+	m_checked_items.clear();
 	m_checked_items.push_back(m_input_label_ctrl->GetValue().ToStdString());
 	unsigned int list_idx = 0;
 	for (const auto& check_box : m_our_checkboxes)
