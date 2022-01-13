@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include "misc.h"
+#include <regex>
 
 
 bool double_eq(const double v1, const double v2) {
@@ -101,4 +102,10 @@ std::string strip_ket(const std::string& str)  // Test it, but should be correct
 {
     if (str.size() < 2) { return str; }
     return str.substr(1, str.size() - 2);
+}
+
+std::string strip_leading_spaces(const std::string& s, const unsigned int spaces_count)
+{
+    // return std::regex_replace(s, std::regex("^    "), "");
+    return std::regex_replace(s, std::regex("^ {" + std::to_string(spaces_count) + "}"), "");
 }

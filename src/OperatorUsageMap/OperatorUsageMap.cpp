@@ -4328,7 +4328,7 @@ bool OperatorUsageMap::has_statement_prototype(const std::string& s) const {
     return it != statement_prototypes.end();
 }
 
-void OperatorUsageMap::PopulateUsageMap()
+void OperatorUsageMap::PopulateUsageMap()  // Is there a smarter and faster way to do this??
 {
     for (const auto& it : map)
     {
@@ -4348,10 +4348,10 @@ void OperatorUsageMap::PopulateUsageMap()
 
         OpUsageInfo* opUsageInfo = new OpUsageInfo;
         opUsageInfo->Name = Op;
-        opUsageInfo->Description = Description;
-        opUsageInfo->Examples = Examples;
+        opUsageInfo->Description = strip_leading_spaces(Description, 8);
+        opUsageInfo->Examples = strip_leading_spaces(Examples, 8);
         // opUsageInfo->SeeAlso = new std::string(linkify_text(SeeAlso));
-        opUsageInfo->SeeAlso = SeeAlso;
+        opUsageInfo->SeeAlso = strip_leading_spaces(SeeAlso, 8);
         m_usage_info_map[it.first] = opUsageInfo;
     }
 }
