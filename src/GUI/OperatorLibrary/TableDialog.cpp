@@ -13,7 +13,7 @@ extern SDB::Driver driver;
 TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, const std::string& input_sp_str, long style)
 	: wxDialog(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER), m_operators(operators)
 {
-	SetTitle("Active Table");
+	SetTitle("Table");
 	wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
 
 	wxStaticText* header = new wxStaticText(this, wxID_ANY, "Table");
@@ -35,6 +35,7 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 	for (const auto& op : operators)
 	{
 		m_grid_table->SetColLabelValue(list_idx, op);
+		m_sort_ascending.push_back(-1);  // -1 for not sorted by this column. 0 for ascending, 1 for descending.
 		list_idx++;
 	}
 	list_idx = 0;
@@ -56,14 +57,12 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 			{
 				first_column = false;
 				row_data.push_back(k.label());
-				m_sort_ascending.push_back(-1);  // -1 for not sorted by this column. 0 for ascending, 1 for descending.
 				continue;
 			}
 			ulong op_idx = ket_map.get_idx(op);
 			std::string cell_value = driver.context.active_recall(op_idx, k.label_idx()).readable_display();
 			m_grid_table->SetCellValue(row_idx, column_idx, cell_value);
 			row_data.push_back(cell_value);
-			m_sort_ascending.push_back(-1);   // -1 for not sorted by this column. 0 for ascending, 1 for descending.
 			column_idx++;
 		}
 		m_table_data.push_back(row_data);
