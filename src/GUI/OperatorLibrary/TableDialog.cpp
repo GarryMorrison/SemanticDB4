@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/12
-// Updated 2022/1/12
+// Updated 2022/1/13
 // Author Garry Morrison
 // License GPL v3
 //
@@ -29,7 +29,6 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 	}
 	Superposition input_sp = driver.result.to_sp();
 
-	// wxGridStringTable* grid_table = new wxGridStringTable(operators.size(), operators.size());  // Nope. Can't get it to work.
 	m_grid_table = new wxGrid(this, wxID_ANY);
 	m_grid_table->CreateGrid(input_sp.size(), operators.size());
 	unsigned int list_idx = 0;
@@ -44,29 +43,6 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 		m_grid_table->SetCellValue(list_idx, 0, k.label());
 		list_idx++;
 	}
-	/*
-	bool first_column = true;
-	unsigned int column_idx = 1;
-	unsigned int row_idx = 0;
-	for (const auto& op : operators)
-	{
-		ulong op_idx = ket_map.get_idx(op);
-		if (first_column)
-		{
-			first_column = false;
-			continue;
-		}
-		row_idx = 0;
-		for (const auto k : input_sp)
-		{
-			// std::string cell_value = driver.context.active_recall(op_idx, k.label_idx()).to_string();
-			std::string cell_value = driver.context.active_recall(op_idx, k.label_idx()).readable_display();
-			grid_table->SetCellValue(row_idx, column_idx, cell_value);
-			row_idx++;
-		}
-		column_idx++;
-	}
-	*/
 	unsigned int column_idx = 1;
 	unsigned int row_idx = 0;
 	for (const auto k : input_sp)
@@ -80,16 +56,17 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 			{
 				first_column = false;
 				row_data.push_back(k.label());
+				m_sort_ascending.push_back(-1);  // -1 for not sorted by this column. 0 for ascending, 1 for descending.
 				continue;
 			}
 			ulong op_idx = ket_map.get_idx(op);
 			std::string cell_value = driver.context.active_recall(op_idx, k.label_idx()).readable_display();
 			m_grid_table->SetCellValue(row_idx, column_idx, cell_value);
 			row_data.push_back(cell_value);
+			m_sort_ascending.push_back(-1);   // -1 for not sorted by this column. 0 for ascending, 1 for descending.
 			column_idx++;
 		}
 		m_table_data.push_back(row_data);
-		m_sort_ascending.push_back(-1);  // -1 for not sorted by this column. 0 for ascending, 1 for descending.
 		row_idx++;
 	}
 	m_grid_table->AutoSize();
@@ -108,11 +85,37 @@ void TableDialog::OnTableColumnClick(wxGridEvent& event)
 {
 	int column = event.GetCol();
 	if (column < 0 || column >= m_operators.size()) { return; }
-	// wxMessageBox("Table column: " + m_operators[column]);
+	int sorting_order = m_sort_ascending[column];
+	bool sort_asc = true;
+	switch (sorting_order) {
+	case -1: {  // Currently not sorted by this column, so default to asc.
+		sort_asc = true;
+		break;
+	}
+	case 0: {  // Currently desc, so switch to asc.
+		sort_asc = true;
+		break;
+	}
+	case 1: {  // Currently asc, so switch to desc.
+		sort_asc = false;
+		break;
+	}
+	default: {  // Default is asc.
+		sort_asc = true;
+	}
+	}
+	m_sort_ascending[column] = sort_asc;
 
 	// Sort the table:
-	std::sort(m_table_data.begin(), m_table_data.end(), [&column](std::vector<std::string>& row1, std::vector<std::string>& row2) {
-		return row1[column] < row2[column];
+	std::sort(m_table_data.begin(), m_table_data.end(), [&column, sort_asc](std::vector<std::string>& row1, std::vector<std::string>& row2) {
+		if (sort_asc)
+		{
+			return row1[column] < row2[column];
+		}
+		else
+		{
+			return row1[column] > row2[column];
+		}
 		});
 
 	// Rebuild the table:
