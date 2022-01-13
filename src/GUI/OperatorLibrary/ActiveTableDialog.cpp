@@ -27,19 +27,26 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	input_label_header->SetFont(wxFontInfo(12));
 	m_input_label_ctrl = new wxTextCtrl(this, wxID_ANY, "ket");
 
+	wxBoxSizer* hbox0 = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* such_that_header = new wxStaticText(this, wxID_ANY, "Such-that operator (empty for none)");
 	such_that_header->SetFont(wxFontInfo(12));
+	wxButton* such_that_usage_button = new wxButton(this, 1, "Usage");
+	hbox0->Add(such_that_header);
+	hbox0->AddSpacer(20);
+	hbox0->Add(such_that_usage_button);
+
 	m_such_that_ctrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
 
 	wxBoxSizer* hbox1 = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* filter_header = new wxStaticText(this, wxID_ANY, "Filter");
 	filter_header->SetFont(wxFontInfo(12));
-	wxButton* usage_button = new wxButton(this, ID_Table_Usage, "Usage");
+	// wxButton* filter_usage_button = new wxButton(this, ID_Table_Usage, "Usage");
+	wxButton* filter_usage_button = new wxButton(this, 2, "Usage");
 	// wxCheckBox* usage_checkbox = new wxCheckBox(this, wxID_ANY, "Usage");
 	hbox1->Add(filter_header);
 	hbox1->AddSpacer(20);
 	// hbox1->Add(usage_checkbox);
-	hbox1->Add(usage_button);
+	hbox1->Add(filter_usage_button);
 
 	wxBoxSizer* hbox2 = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* lhs = new wxStaticText(this, wxID_ANY, "LHS");
@@ -56,8 +63,11 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	wxBoxSizer* hbox4 = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* sort_by_header = new wxStaticText(this, wxID_ANY, "Sort-by operator (empty for none)");
 	sort_by_header->SetFont(wxFontInfo(12));
+	wxButton* sort_by_usage_button = new wxButton(this, 3, "Usage");
 	m_sort_reverse_checkbox = new wxCheckBox(this, wxID_ANY, "reverse");
 	hbox4->Add(sort_by_header);
+	hbox4->AddSpacer(20);
+	hbox4->Add(sort_by_usage_button);
 	hbox4->AddSpacer(20);
 	hbox4->Add(m_sort_reverse_checkbox);
 	m_sort_by_ctrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(250, -1));
@@ -133,11 +143,11 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	topsizer->AddSpacer(5);
 	topsizer->Add(m_input_label_ctrl, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
 	topsizer->AddSpacer(10);
-	topsizer->Add(such_that_header, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+	// topsizer->Add(such_that_header, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+	topsizer->Add(hbox0, wxSizerFlags(0).Expand().Left().Border(wxLEFT | wxRIGHT, 10));
 	topsizer->AddSpacer(5);
 	topsizer->Add(m_such_that_ctrl, wxSizerFlags(0).Left().Expand().Border(wxLEFT | wxRIGHT, 10));
 	topsizer->AddSpacer(10);
-
 	topsizer->Add(hbox1, wxSizerFlags(0).Expand().Left().Border(wxLEFT | wxRIGHT, 10));
 	topsizer->AddSpacer(5);
 	topsizer->Add(hbox2, wxSizerFlags(0).Expand().Left().Border(wxLEFT | wxRIGHT, 10));
@@ -165,7 +175,10 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	topsizer->AddSpacer(10);
 	topsizer->Add(run_button, wxSizerFlags(0).Left().Border(wxALL, 10));
 
-	usage_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnUsageButton, this);
+	such_that_usage_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnUsageButton, this);
+	filter_usage_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnUsageButton, this);
+	sort_by_usage_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnUsageButton, this);
+
 	generate_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnGenerateButton, this);
 	run_button->Bind(wxEVT_BUTTON, &ActiveTableDialog::OnRunButton, this);
 
@@ -177,7 +190,20 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 
 void ActiveTableDialog::OnUsageButton(wxCommandEvent& event)
 {
-	UsageFrame* usage_frame = new UsageFrame(this, "filter");
+	switch (event.GetId()) {
+	case 1: {
+		UsageFrame* usage_frame = new UsageFrame(this, "such-that");
+		break;
+	}
+	case 2: {
+		UsageFrame* usage_frame = new UsageFrame(this, "filter");
+		break;
+	}
+	case 3: {
+		UsageFrame* usage_frame = new UsageFrame(this, "sort-by");
+		break;
+	}
+	}
 }
 
 void ActiveTableDialog::OnGenerateButton(wxCommandEvent& event)
