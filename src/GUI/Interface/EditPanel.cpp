@@ -13,9 +13,18 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	: wxPanel(parent, id, wxDefaultPosition, wxSize(400, 300), 0)
 {
 	wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
+
 	wxButton* run_button = new wxButton(this, ID_Edit_Run, "Run");
+	wxButton* dump_button = new wxButton(this, ID_Edit_Dump, "Dump");
+	hbox->AddSpacer(10);
+	hbox->Add(run_button);
+	hbox->AddSpacer(10);
+	hbox->Add(dump_button);
+
 	vbox->AddSpacer(5);
-	vbox->Add(run_button, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+	// vbox->Add(run_button, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+	vbox->Add(hbox);
 	vbox->AddSpacer(5);
 
 	m_aui_notebook = new wxAuiNotebook(this, wxID_ANY);
@@ -32,6 +41,7 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	// Layout();
 
 	run_button->Bind(wxEVT_BUTTON, &EditPanel::OnRunButtonDown, this);
+	dump_button->Bind(wxEVT_BUTTON, &EditPanel::OnDumpButtonDown, this);
 }
 
 void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
@@ -58,6 +68,15 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 	the_timer.Stop();
 	long long run_time = the_timer.GetTime();
 	output_frame->SetRunTime(run_time);
+}
+
+void EditPanel::OnDumpButtonDown(wxCommandEvent& event)
+{
+	std::stringstream buffer;
+	context.print_universe(true, buffer);
+	std::string captured_text = buffer.str();
+	wxString title = wxString::Format("Dump of the current context \"%s\"", driver.context.get_context_name());
+	DumpFrame* dump_frame = new DumpFrame(this, title, captured_text);
 }
 
 void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)

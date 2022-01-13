@@ -17,6 +17,7 @@ class EditPanel : public wxPanel
 public:
 	EditPanel(wxPanel* parent, wxWindowID id);
 	void OnRunButtonDown(wxCommandEvent& event);
+	void OnDumpButtonDown(wxCommandEvent& event);
 	void AddPage(wxWindow* page, const wxString& caption, bool select = false);
 	~EditPanel();
 private:
