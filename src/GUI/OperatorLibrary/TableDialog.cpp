@@ -106,7 +106,7 @@ void TableDialog::OnTableColumnClick(wxGridEvent& event)
 	m_sort_ascending[column] = sort_asc;
 
 	// Sort the table:
-	std::sort(m_table_data.begin(), m_table_data.end(), [&column, sort_asc](std::vector<std::string>& row1, std::vector<std::string>& row2) {
+	std::sort(m_table_data.begin(), m_table_data.end(), [column, sort_asc](std::vector<std::string>& row1, std::vector<std::string>& row2) {
 		if (sort_asc)
 		{
 			return row1[column] < row2[column];
