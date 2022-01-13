@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/13
 // Author Garry Morrison
 // License GPL v3
 //
@@ -1926,7 +1926,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "\nsort-by:\n"
         "    description:\n"
         "        sort-by[op] input-seq\n"
-        "        sort the superpositions in input-seq with respect to op applied to the kets in those superpositions\n\n"
+        "        sort the superpositions in input-seq with respect to op applied to the kets in those superpositions\n"
+        "        if you wish to reverse sort, then use the reverse operator\n\n"
         "    examples:\n"
         "        -- learn some knowledge:\n"
         "        age |Fred> => |47>\n"
@@ -1936,8 +1937,11 @@ OperatorUsageMap::OperatorUsageMap() {
         "        -- now sort them:\n"
         "        sort-by[age] split[\" \"] |Rob Sam Emma Fred>\n"
         "            |Emma> + |Rob> + |Sam> + |Fred>\n\n"
+        "        -- reverse sort them:\n"
+        "        reverse sort-by[age] split[\" \"] |Rob Sam Emma Fred>\n"
+        "            |Fred> + |Sam> + |Rob> + |Emma>\n\n"
         "    see also:\n"
-        "        ket-sort, coeff-sort, natural-sort, ket-length\n";
+        "        reverse, ket-sort, coeff-sort, natural-sort, ket-length\n";
 
     operator_usage_map.map["ket-length"] =
         "\nket-length:\n"
