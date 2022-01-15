@@ -28,7 +28,8 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	m_input_label_ctrl = new wxTextCtrl(this, wxID_ANY, "ket");
 
 	wxBoxSizer* hbox0 = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* such_that_header = new wxStaticText(this, wxID_ANY, "Such-that operator (empty for none)");
+	// wxStaticText* such_that_header = new wxStaticText(this, wxID_ANY, "Such-that operator (empty for none)");
+	wxStaticText* such_that_header = new wxStaticText(this, wxID_ANY, "Such-that operator");
 	such_that_header->SetFont(wxFontInfo(12));
 	wxButton* such_that_usage_button = new wxButton(this, 1, "Usage");
 	hbox0->Add(such_that_header);
@@ -61,7 +62,8 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	hbox3->Add(m_rhs_ctrl, wxSizerFlags(1).Left().Expand().Border(wxLEFT | wxRIGHT, 0));
 
 	wxBoxSizer* hbox4 = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* sort_by_header = new wxStaticText(this, wxID_ANY, "Sort-by operator (empty for none)");
+	// wxStaticText* sort_by_header = new wxStaticText(this, wxID_ANY, "Sort-by operator (empty for none)");
+	wxStaticText* sort_by_header = new wxStaticText(this, wxID_ANY, "Sort-by operator");
 	sort_by_header->SetFont(wxFontInfo(12));
 	wxButton* sort_by_usage_button = new wxButton(this, 3, "Usage");
 	m_sort_reverse_checkbox = new wxCheckBox(this, wxID_ANY, "reverse");
