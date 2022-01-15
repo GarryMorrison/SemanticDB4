@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/1/15"
+#define APP_BUILD_DATE "2022/1/16"
 #define APP_VERSION "0.1.alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -242,7 +242,9 @@ enum
     ID_Table_Usage,
     ID_Table_Generate,
     ID_Table_Run,
-
+    ID_Active_Table_Usage_Suchthat,
+    ID_Active_Table_Usage_Filter,
+    ID_Active_Table_Usage_Sortby,
 
     ID_Example_Fibonacci,
     ID_Example_Temperature,

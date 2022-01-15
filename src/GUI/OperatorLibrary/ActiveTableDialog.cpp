@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/11
-// Updated 2022/1/12
+// Updated 2022/1/16
 // Author Garry Morrison
 // License GPL v3
 //
@@ -31,7 +31,7 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	// wxStaticText* such_that_header = new wxStaticText(this, wxID_ANY, "Such-that operator (empty for none)");
 	wxStaticText* such_that_header = new wxStaticText(this, wxID_ANY, "Such-that operator");
 	such_that_header->SetFont(wxFontInfo(12));
-	wxButton* such_that_usage_button = new wxButton(this, 1, "Usage");
+	wxButton* such_that_usage_button = new wxButton(this, ID_Active_Table_Usage_Suchthat, "Usage");
 	hbox0->Add(such_that_header);
 	hbox0->AddSpacer(20);
 	hbox0->Add(such_that_usage_button);
@@ -42,7 +42,7 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	wxStaticText* filter_header = new wxStaticText(this, wxID_ANY, "Filter");
 	filter_header->SetFont(wxFontInfo(12));
 	// wxButton* filter_usage_button = new wxButton(this, ID_Table_Usage, "Usage");
-	wxButton* filter_usage_button = new wxButton(this, 2, "Usage");
+	wxButton* filter_usage_button = new wxButton(this, ID_Active_Table_Usage_Filter, "Usage");
 	// wxCheckBox* usage_checkbox = new wxCheckBox(this, wxID_ANY, "Usage");
 	hbox1->Add(filter_header);
 	hbox1->AddSpacer(20);
@@ -65,7 +65,7 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	// wxStaticText* sort_by_header = new wxStaticText(this, wxID_ANY, "Sort-by operator (empty for none)");
 	wxStaticText* sort_by_header = new wxStaticText(this, wxID_ANY, "Sort-by operator");
 	sort_by_header->SetFont(wxFontInfo(12));
-	wxButton* sort_by_usage_button = new wxButton(this, 3, "Usage");
+	wxButton* sort_by_usage_button = new wxButton(this, ID_Active_Table_Usage_Sortby, "Usage");
 	m_sort_reverse_checkbox = new wxCheckBox(this, wxID_ANY, "reverse");
 	hbox4->Add(sort_by_header);
 	hbox4->AddSpacer(20);
@@ -93,11 +93,12 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	}
 	unsigned int content_size = known_operators.size();
 	unsigned int dim = (unsigned int)(std::ceil(sqrt(double(content_size))));  // Given a size, find the smallest square with dimensions dim * dim.
+	dim += 4;
 	wxArrayString grid_data;
 	for (unsigned int i = 0; i < content_size; i++)
 	{
 		grid_data.Add(known_operators[i]);
-		if (((i + 1) % (dim + 4)) == 0)  // Small compensation for checklistbox not being perfect squares.
+		if (((i + 1) % dim) == 0)  // Small compensation for checklistbox not being perfect squares.
 		{
 			m_our_arrays.push_back(grid_data);
 			grid_data.Clear();
@@ -193,15 +194,15 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 void ActiveTableDialog::OnUsageButton(wxCommandEvent& event)
 {
 	switch (event.GetId()) {
-	case 1: {
+	case ID_Active_Table_Usage_Suchthat: {
 		UsageFrame* usage_frame = new UsageFrame(this, "such-that");
 		break;
 	}
-	case 2: {
+	case ID_Active_Table_Usage_Filter: {
 		UsageFrame* usage_frame = new UsageFrame(this, "filter");
 		break;
 	}
-	case 3: {
+	case ID_Active_Table_Usage_Sortby: {
 		UsageFrame* usage_frame = new UsageFrame(this, "sort-by");
 		break;
 	}
