@@ -861,7 +861,8 @@ void CommandPanel::OnResetAllButtonDown(wxCommandEvent& event)
     if (dlg->ShowModal() == wxID_OK)
     {
         driver.context.reset();
-    }    
+    } 
+    UpdateContextSelector();
 }
 
 
