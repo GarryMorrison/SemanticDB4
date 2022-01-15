@@ -117,6 +117,7 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxPoint pos
     }
     unsigned int content_size = m_general_ops.size();
     m_dim = (unsigned int)(std::ceil(sqrt(double(content_size))));  // Given a size, find the smallest square with dimensions dim * dim.
+    m_dim *= 2;  // Compensate for checkbox lists being not square.
     // wxMessageBox(wxString::Format("dim = %d", m_dim));
 
     /*/
