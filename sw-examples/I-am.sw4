@@ -1,5 +1,7 @@
 -- auto learn some knowledge given my name, your name, his name, her name or their name:
--- untested code ...
+-- this general idea of auto learning given a small seed of information generalizes easily.
+-- Eg, I-live-in-the-city-of |*>, we can then automatically conclude which country you live in,
+-- the population of your home city, which state you live in, and so on.
 
 I-am |*> #=>
     of |me> => |__self>
