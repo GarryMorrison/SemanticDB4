@@ -738,7 +738,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "            a, b, c\n"
         "            |a, b, c>\n\n"
         "    see also:\n"
-        "        to-upper, to-lower, smerge";
+        "        sprint, to-upper, to-lower, smerge";
 
     operator_usage_map.map["threshold-filter"] =
         "\nthreshold-filter:\n"

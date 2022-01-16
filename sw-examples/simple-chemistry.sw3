@@ -1,0 +1,56 @@
+-- represent some simple chemical reactions, using our transform() operator
+-- and define an operator that splits a chemical into component atoms
+-- created 2021/6/23
+-- updated 2021/6/24
+
+-- define the individual reactions:
+make-carbon-dioxide (*) #=> drop transform(|C> + |O2>, |CO2>) |__self>
+make-sodium-bicarbonate (*) #=> drop transform(|CO2> + |NaOH>, |NaHCO3>) |__self>
+make-sodium-chloride (*) #=> drop transform(|NaHCO3> + |HCl>, |H2O> + |NaCl> + |CO2>) |__self>
+
+
+-- now chain them:
+chained-reaction |*> #=>
+    step |one> => make-carbon-dioxide (|C> + |O2>)
+    step |two> => make-sodium-bicarbonate (step |one> + |NaOH>)
+    step |three> => make-sodium-chloride (step |two> + |HCl>)
+
+
+-- now invoke our sample chemical reaction:
+sprint["chained reaction: "] chained-reaction
+
+
+
+-- learn classes:
+is-lower-case split |abcdefghijklmnopqrstuvwxyz> => |yes>
+is-upper-case split |ABCDEFGHIJKLMNOPQRSTUVWXYZ> => |yes>
+is-digit split |0123456789> => |yes>
+
+
+-- split molecules into single atoms, using a simple parser:
+split-molecule |*> #=>
+    unlearn[the] (|atom label> + |atom digits> + |atoms>)
+    for( the |char> in ssplit |__self>):
+        if( is-upper-case the |char>):
+            the |atom> => smerge the |atom label>
+            the |atom count> => value-if( do-you-know the |atom digits>, smerge the |atom digits>, |1>)
+            the |atoms> +=> pop-float (push-float the |atom> ** the |atom count>)
+            the |atom label> => the |char>
+            the |atom digits> => |>
+        end:
+        if( is-lower-case the |char>):
+            the |atom label> .=> the |char>
+        end:
+        if( is-digit the |char>):
+            the |atom digits> .=> the |char>
+        end:
+    end:
+    the |atom> => smerge the |atom label>
+    the |atom count> => value-if( do-you-know the |atom digits>, smerge the |atom digits>, |1>)
+    the |atoms> +=> pop-float (push-float the |atom> ** the |atom count>)
+    the |atoms>
+
+
+
+-- test our split-molecule operator with some sample molecules:
+table[molecule, split-molecule] split[" "] |H Na H2 H2O C6H12O6 NaHCO3 NaCl CO2>
