@@ -84,21 +84,21 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 		for (ulong op_idx : driver.context.supported_ops(idx))
 		{
 			std::string op_label = ket_map.get_str(op_idx);
-			set_of_operators.insert(op_label);
+			if (set_of_operators.find(op_label) == set_of_operators.end())
+			{
+				known_operators.Add(op_label);
+				set_of_operators.insert(op_label);
+			}
 		}
-	}
-	for (const auto& op_label : set_of_operators)
-	{
-		known_operators.Add(op_label);
 	}
 	unsigned int content_size = known_operators.size();
 	unsigned int dim = (unsigned int)(std::ceil(sqrt(double(content_size))));  // Given a size, find the smallest square with dimensions dim * dim.
-	dim += 4;
+	dim += 4;    // Small compensation for checklistbox not being perfect squares.
 	wxArrayString grid_data;
 	for (unsigned int i = 0; i < content_size; i++)
 	{
 		grid_data.Add(known_operators[i]);
-		if (((i + 1) % dim) == 0)  // Small compensation for checklistbox not being perfect squares.
+		if (((i + 1) % dim) == 0)  
 		{
 			m_our_arrays.push_back(grid_data);
 			grid_data.Clear();
