@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/4
+// Updated 2022/1/18
 // Author Garry Morrison
 // License GPL v3
 //
@@ -55,6 +55,7 @@ void ResultCanvas::AppendText(const wxString& wxs, bool isactive, int object_typ
     m_canvas_objects.push_back(std::make_shared<ResultCanvasString>(this, wxs, isactive, object_type, ismonospace, wxRect(m_x, m_y, textWidth, textHeight)));
     m_x += textWidth;
     m_last_y = std::max(m_last_y, m_y + textHeight);
+    m_max_x = std::max(m_max_x, m_x);
     Refresh();
 }
 
@@ -182,6 +183,7 @@ void ResultCanvas::AppendNewLine()
     m_x = 10;
     m_y = m_last_y + 5;  // Maybe something bigger than 5? 10?
     m_last_y = m_y;
+    SetVirtualSize(m_max_x, m_y);
     Refresh();
 }
 
@@ -193,6 +195,7 @@ void ResultCanvas::AppendLine()
     m_last_y = m_y;
     m_canvas_objects.push_back(std::make_shared<ResultCanvasLine>(this, m_y));
     m_y += 5;
+    SetVirtualSize(m_max_x, m_y);
     Refresh();
 }
 
@@ -307,6 +310,7 @@ void ResultCanvas::ClearCanvas()  // Tidy!
     m_x = 10;
     m_y = 10;
     m_last_y = 10;
+    m_max_x = 10;
     m_mouse_pos = wxPoint(0, 0);
     m_mouse_positions.clear();
 
@@ -328,7 +332,7 @@ void ResultCanvas::Draw(wxAutoBufferedPaintDC& pdc)
     {
         object->Draw(pdc);
     }
-    SetVirtualSize(m_x, m_y);
+    // SetVirtualSize(m_x, m_y); // Not the best location for it.
 }
 
 

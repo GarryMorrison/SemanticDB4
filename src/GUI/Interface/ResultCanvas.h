@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/18
 // Author Garry Morrison
 // License GPL v3
 //
@@ -121,6 +121,7 @@ private:
     int m_x = 10;
     int m_y = 10;
     int m_last_y = 10;
+    int m_max_x = 10;
 
     std::vector<std::shared_ptr<ResultCanvasObject> > m_canvas_objects;
 
