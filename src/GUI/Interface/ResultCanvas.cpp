@@ -328,6 +328,7 @@ void ResultCanvas::Draw(wxAutoBufferedPaintDC& pdc)
     {
         object->Draw(pdc);
     }
+    SetVirtualSize(m_x, m_y);
 }
 
 
