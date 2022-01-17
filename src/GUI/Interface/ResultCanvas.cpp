@@ -12,6 +12,7 @@
 ResultCanvas::ResultCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
     : wxScrolledWindow(parent, id, pos, size, style | wxBORDER_THEME)
 {
+    SetScrollbars(20, 20, 50, 50);  // Finally solved my scrolling issue!
     m_mouse_pos = wxPoint(0, 0);
 
     // Set font types:
@@ -33,6 +34,7 @@ void ResultCanvas::OnPaint(wxPaintEvent& event)
 {
     //wxPaintDC pdc(this);
     wxAutoBufferedPaintDC pdc(this);
+    // DoPrepareDC(pdc);
     Draw(pdc);
     event.Skip(true);
 }
