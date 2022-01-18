@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/1/18"
+#define APP_BUILD_DATE "2022/1/19"
 #define APP_VERSION "0.1.alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -279,6 +279,7 @@ enum
 
     ID_Edit_Run,
     ID_Edit_Dump,
+    ID_Edit_Reset,
 
     ID_Update_Button,
 

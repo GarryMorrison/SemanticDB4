@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/1/8
+// Updated 2022/1/19
 // Author Garry Morrison
 // License GPL v3
 //
@@ -18,6 +18,7 @@ public:
 	EditPanel(wxPanel* parent, wxWindowID id);
 	void OnRunButtonDown(wxCommandEvent& event);
 	void OnDumpButtonDown(wxCommandEvent& event);
+	void OnResetButtonDown(wxCommandEvent& event);
 	void AddPage(wxWindow* page, const wxString& caption, bool select = false);
 	~EditPanel();
 private:

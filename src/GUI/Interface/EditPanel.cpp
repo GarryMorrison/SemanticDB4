@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/1/8
+// Updated 2022/1/19
 // Author Garry Morrison
 // License GPL v3
 //
@@ -17,10 +17,13 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 
 	wxButton* run_button = new wxButton(this, ID_Edit_Run, "Run");
 	wxButton* dump_button = new wxButton(this, ID_Edit_Dump, "Dump");
+	wxButton* reset_button = new wxButton(this, ID_Edit_Reset, "Reset");
 	hbox->AddSpacer(10);
 	hbox->Add(run_button);
 	hbox->AddSpacer(10);
 	hbox->Add(dump_button);
+	hbox->AddSpacer(10);
+	hbox->Add(reset_button);
 
 	vbox->AddSpacer(5);
 	// vbox->Add(run_button, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
@@ -42,6 +45,7 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 
 	run_button->Bind(wxEVT_BUTTON, &EditPanel::OnRunButtonDown, this);
 	dump_button->Bind(wxEVT_BUTTON, &EditPanel::OnDumpButtonDown, this);
+	reset_button->Bind(wxEVT_BUTTON, &EditPanel::OnResetButtonDown, this);
 }
 
 void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
@@ -77,6 +81,16 @@ void EditPanel::OnDumpButtonDown(wxCommandEvent& event)
 	std::string captured_text = buffer.str();
 	wxString title = wxString::Format("Dump of the current context \"%s\"", driver.context.get_context_name());
 	DumpFrame* dump_frame = new DumpFrame(this, title, captured_text);
+}
+
+void EditPanel::OnResetButtonDown(wxCommandEvent& event)
+{
+	wxString reset_context_text = wxString::Format("Are you really sure you want to erase the current context \"%s\"?\nAll knowledge in this context will be deleted!", driver.context.get_context_name());
+	ResetContextDialog* dlg = new ResetContextDialog(this, "Reset context", reset_context_text);
+	if (dlg->ShowModal() == wxID_OK)
+	{
+		driver.context.reset_current_context();
+	}
 }
 
 void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)
