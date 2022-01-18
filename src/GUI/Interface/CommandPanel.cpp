@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/6
+// Updated 2022/1/19
 // Author Garry Morrison
 // License GPL v3
 //
@@ -334,6 +334,16 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         }
         break;
     }
+    case ';': {
+        if (event.ShiftDown())
+        {
+            m_command_text->WriteText(":");
+        }
+        else
+        {
+            m_command_text->WriteText(";");
+        }
+    }
     case 306: {  // Ignore shift key press.
         break;
     }
@@ -546,7 +556,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         }
         else
         {
-            if (!m_inside_ket && !m_line_has_learn_rule[m_current_line])
+            if (false && !m_inside_ket && !m_line_has_learn_rule[m_current_line])  // Disable for now, because of conflicts with .. and decimals 3.9
             {
                 m_command_text->WriteText(".=> ");
                 m_line_has_learn_rule[m_current_line] = true;
