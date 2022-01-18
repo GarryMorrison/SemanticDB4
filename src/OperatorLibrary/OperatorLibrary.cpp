@@ -2318,3 +2318,33 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
     }
     return s;
 }
+
+
+Superposition op_transitive(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.empty()) { return Ket(); }
+    Superposition full_sp;
+    if (parameters.size() == 1)
+    {
+        if (parameters[0]->type() != COPERATOR) { return Ket(); }
+        SimpleOperator op = parameters[0]->get_operator();
+        Superposition working_sp = op.Compile(context, input_seq).to_sp();
+        if (working_sp.is_empty_ket()) { return working_sp; }
+        full_sp = working_sp;
+        Superposition previous_sp = full_sp;
+        size_t previous_len = 0;
+        size_t current_len = working_sp.size();
+        while (true)
+        {
+            working_sp = op.Compile(context, working_sp).to_sp();
+            if (working_sp.is_empty_ket()) { std::cout << "empty\n"; return full_sp; }
+            full_sp.add(working_sp);
+            current_len = full_sp.size();
+            if (previous_len == current_len) { std::cout << "equal\n"; return previous_sp; }  // Prevent infinite loop if graph has a loop.
+            previous_sp = full_sp;
+            previous_len = current_len;
+        }
+    }
+    return full_sp;
+}
+

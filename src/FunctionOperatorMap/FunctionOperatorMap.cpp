@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/1
+// Updated 2022/1/18
 // Author Garry Morrison
 // License GPL v3
 //
@@ -471,6 +471,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("save-as-dot");
     fn_map.compound_context_sp_fn.emplace(idx, &op_save_as_dot);
+
+    idx = ket_map.get_idx("transitive");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_transitive);
 }
 
 
