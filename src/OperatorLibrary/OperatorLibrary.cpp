@@ -2345,6 +2345,34 @@ Superposition op_transitive(const Sequence& input_seq, ContextList& context, con
             previous_len = current_len;
         }
     }
+    if (parameters.size() == 2)
+    {
+        if (parameters[0]->type() != COPERATOR || parameters[1]->type() != CINT) { return Ket(); }
+        SimpleOperator op = parameters[0]->get_operator();
+        int max_steps = parameters[1]->get_int();
+        if (max_steps < 1) { return Ket(); }
+        int steps = 0;
+        Superposition working_sp = op.Compile(context, input_seq).to_sp();
+        if (working_sp.is_empty_ket()) { return working_sp; }
+        full_sp = working_sp;
+        Superposition previous_sp = full_sp;
+        steps++;
+        if (steps >= max_steps) { return full_sp; }
+        size_t previous_len = 0;
+        size_t current_len = working_sp.size();
+        while (true)
+        {
+            working_sp = op.Compile(context, working_sp).to_sp();
+            if (working_sp.is_empty_ket()) { /* std::cout << "empty\n" */; return full_sp; }
+            full_sp.add(working_sp);
+            current_len = full_sp.size();
+            if (previous_len == current_len) { std::cout << "equal\n"; return previous_sp; }  // Prevent infinite loop if graph has a loop.
+            previous_sp = full_sp;
+            previous_len = current_len;
+            steps++;
+            if (steps >= max_steps) { return full_sp; }
+        }
+    }
     return full_sp;
 }
 

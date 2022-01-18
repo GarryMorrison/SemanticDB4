@@ -13,7 +13,12 @@ is-a |B> => 0.5|C>
 is-a |C> => 0.9|D>
 is-a |D> => 0.2|E>
 sprint["A is a: "] transitive[is-a] |A>
-
+sprint["A is a 1: "] transitive[is-a, 1] |A>
+sprint["A is a 2: "] transitive[is-a, 2] |A>
+sprint["A is a 3: "] transitive[is-a, 3] |A>
+sprint["A is a 4: "] transitive[is-a, 4] |A>
+sprint["A is a 5: "] transitive[is-a, 5] |A>
+sprint["A is a 6: "] transitive[is-a, 6] |A>
 
 
 -- now a slightly less abstract example:
