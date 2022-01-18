@@ -2337,7 +2337,7 @@ Superposition op_transitive(const Sequence& input_seq, ContextList& context, con
         while (true)
         {
             working_sp = op.Compile(context, working_sp).to_sp();
-            if (working_sp.is_empty_ket()) { std::cout << "empty\n"; return full_sp; }
+            if (working_sp.is_empty_ket()) { /* std::cout << "empty\n" */; return full_sp; }
             full_sp.add(working_sp);
             current_len = full_sp.size();
             if (previous_len == current_len) { std::cout << "equal\n"; return previous_sp; }  // Prevent infinite loop if graph has a loop.

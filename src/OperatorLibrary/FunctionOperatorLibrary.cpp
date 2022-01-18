@@ -576,6 +576,7 @@ Sequence op_filter(ContextList& context, const Sequence& input_seq, const Sequen
 
     ulong two_idx = two.to_ket().label_idx();
     ulong star_idx = ket_map.get_idx("*");
+    Superposition two_sp = two.to_sp();
 
     if (two_idx == star_idx) {
         for (const auto& sp : input_seq) {
@@ -605,11 +606,30 @@ Sequence op_filter(ContextList& context, const Sequence& input_seq, const Sequen
                 for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
                     seq = (*it).Compile(context, seq);
                 }
-                ulong result_idx = seq.to_ket().label_idx();
+                /*
+                ulong result_idx = seq.to_ket().label_idx();  // This line is buggy! seq.to_ket() only returns the first ket in the sequence.
                 for (const auto& k2 : two.to_sp()) {
                     if (result_idx == k2.label_idx()) {
                         tmp.add(k);
                         break;
+                    }
+                }
+                */
+                Superposition result_sp = seq.to_sp();
+                if (!result_sp.is_empty_ket())
+                {
+                    bool is_subset = true;  // What about the case two_sp is the empty ket? How do we want to handle that?
+                    for (const auto& two_ket : two_sp)
+                    {
+                        if (two_ket.value() > result_sp.find_value(two_ket))
+                        {
+                            is_subset = false;
+                            break;
+                        }
+                    }
+                    if (is_subset)
+                    {
+                        tmp.add(k);
                     }
                 }
             }
