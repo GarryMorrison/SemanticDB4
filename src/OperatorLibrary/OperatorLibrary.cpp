@@ -2376,3 +2376,24 @@ Superposition op_transitive(const Sequence& input_seq, ContextList& context, con
     return full_sp;
 }
 
+Sequence op_stransitive(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 2) { return Ket(); }
+    if (parameters[0]->type() != COPERATOR || parameters[1]->type() != CINT) { return Ket(); }
+    SimpleOperator op = parameters[0]->get_operator();
+    int max_steps = parameters[1]->get_int();
+    if (max_steps < 1) { return Ket(); }
+    int steps = 0;
+    Sequence working_seq = op.Compile(context, input_seq);
+    if (working_seq.is_empty_ket()) { return working_seq; }
+    Sequence full_seq = working_seq;
+    steps++;
+    while (steps < max_steps)  // Convert it into a for loop?
+    {
+        working_seq = op.Compile(context, working_seq);
+        if (working_seq.is_empty_ket()) { return full_seq; }
+        full_seq.append(working_seq);
+        steps++;
+    }
+    return full_seq;
+}

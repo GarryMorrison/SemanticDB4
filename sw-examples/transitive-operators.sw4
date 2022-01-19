@@ -20,6 +20,14 @@ sprint["A is a 4: "] transitive[is-a, 4] |A>
 sprint["A is a 5: "] transitive[is-a, 5] |A>
 sprint["A is a 6: "] transitive[is-a, 6] |A>
 
+-- sequence transitive operator:
+sprint["A is a seq 1: "] stransitive[is-a, 1] |A>
+sprint["A is a seq 2: "] stransitive[is-a, 2] |A>
+sprint["A is a seq 3: "] stransitive[is-a, 3] |A>
+sprint["A is a seq 4: "] stransitive[is-a, 4] |A>
+sprint["A is a seq 5: "] stransitive[is-a, 5] |A>
+sprint["A is a seq 6: "] stransitive[is-a, 6] |A>
+
 
 -- now a slightly less abstract example:
 -- first learn some sample knowledge (it extends in an obvious way to a larger example):

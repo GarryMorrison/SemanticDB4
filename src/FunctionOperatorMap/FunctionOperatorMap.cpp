@@ -474,6 +474,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("transitive");
     fn_map.compound_context_seq_fn.emplace(idx, &op_transitive);
+
+    idx = ket_map.get_idx("stransitive");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_stransitive);
 }
 
 
