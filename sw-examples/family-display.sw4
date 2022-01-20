@@ -5,15 +5,15 @@
 plural |*> #=> |_self> _ |s>
 plural |child> => |children>
 
+-- first plural (apply plural to right most word):
+first-plural |*> #=> smerge[" "] ( sselect[1, -2] . plural sselect[-1,-1] ) ssplit[" "] |_self>
+
+
 -- simple possesive noun:
 possesive-noun |*> #=> |_self> _ |'s>
 
 -- convert a list into a comma-and list:
 and-list (*) #=> smerge[" and "] ( smerge[", "] sselect[1, -2] . sselect[-1,-1] ) sp2seq |__self>
-
--- implement is-are:
-is-are |number: 1> => |is>
-is-are |number: *> => |are>
 
 
 -- define some basic family relations:
@@ -23,6 +23,11 @@ sibling |*> #=> drop (clean child parent + -1) |_self>
 brother |*> #=> drop (clean son parent + -1) |_self>
 sister |*> #=> drop (clean daughter parent + -1) |_self>
 brother-and-sister |*> #=> sibling |_self>
+
+grand-parent |*> #=> parent parent |_self>
+great-grand-parent |*> #=> parent^3 |_self>
+grand-child |*> #=> child^2 |_self>
+great-grand-child |*> #=> child^3 |_self>
 
 
 -- define parent-prefix, 
@@ -35,6 +40,10 @@ parent-prefix |4> => |great great grand>
 parent-prefix |5> => |great great great grand>
 
 
+-- replace dashes with spaces:
+dash-to-space |*> #=> string-replace(|->, | >) |_self>
+
+
 -- define a wrapper operator that converts a "dynamic" operator into a "constant" operator:
 op (*) #=> apply(the|op>, |__self>)
 
@@ -44,10 +53,10 @@ display { the |person>, the |op> } #=>
     the |relation> => extract-value the |op>
     the |relatives> => op the |person>
     if( how-many the |relatives> == |number: 1>):
-        print (to-upper[1] possesive-noun the |person> __ the |relation> __ |is> __ to-upper[1] the |relatives> _ |.> )
+        print (to-upper[1] possesive-noun the |person> __ dash-to-space the |relation> __ |is> __ to-upper[1] the |relatives> _ |.> )
     else:
         if( how-many the |relatives> > |number: 1>):
-            print (to-upper[1] possesive-noun the |person> __ plural the |relation> __ |are> __ and-list to-upper[1] the |relatives> _ |.> )
+            print (to-upper[1] possesive-noun the |person> __ first-plural dash-to-space the |relation> __ |are> __ and-list to-upper[1] the |relatives> _ |.> )
         end:
     end:
 
@@ -55,10 +64,20 @@ display { the |person>, the |op> } #=>
 display-sisters |*> #=> display(|_self>, |op: sister>)
 display-brothers |*> #=> display(|_self>, |op: brother>)
 display-parents |*> #=> display(|_self>, |op: parent>)
+display-grand-parents |*> #=> display(|_self>, |op: grand-parent>)
+display-great-grand-parents |*> #=> display(|_self>, |op: great-grand-parent>)
+display-grand-children |*> #=> display(|_self>, |op: grand-child>)
+display-great-grand-children |*> #=> display(|_self>, |op: great-grand-child>)
+
 
 display-sisters |sally>
 display-brothers |erica>
 display-parents |erica>
+display-grand-parents |sally>
+display-great-grand-parents |erica>
+display-grand-children |mary>
+display-great-grand-children |mark>
+print |---------------------------------------------------->
 
 
 -- our second major operator, display-line(person, operator):
