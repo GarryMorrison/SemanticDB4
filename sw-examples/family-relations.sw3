@@ -8,6 +8,7 @@ not |yes> => |no>
 not |no> => |yes>
 not |don't know> => |don't know>
 
+start |rule count> => how-many supported-ops |*>
 
 child |*> #=> (son + daughter) |_self>
 parent |*> #=> (mother + father) |_self>
@@ -126,3 +127,7 @@ have-1-child |*> #=> is-equal[1] how-many-children |_self>
 have-2-children |*> #=> is-equal[2] how-many-children |_self>
 have-3-children |*> #=> is-equal[3] how-many-children |_self>
 have-4-children |*> #=> is-equal[4] how-many-children |_self>
+
+
+end |rule count> => how-many supported-ops |*>
+print ( |Learned> __ extract-value (end -- start) |rule count> __ |new rules.> )
