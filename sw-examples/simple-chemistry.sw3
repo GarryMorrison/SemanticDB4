@@ -1,8 +1,12 @@
-|context> => |simple chemistry>
--- represent some simple chemical reactions, using our transform() operator
--- and define an operator that splits a chemical into component atoms
+-- Author: Garry Morrison
 -- created 2021/6/23
 -- updated 2021/6/24
+--
+-- represent some simple chemical reactions, using our transform() operator
+-- and define an operator that splits a chemical into component atoms
+
+
+|context> => |simple chemistry>
 
 -- define the individual reactions:
 make-carbon-dioxide (*) #=> drop transform(|C> + |O2>, |CO2>) |__self>

@@ -1,4 +1,8 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
 -- use smap and if-then machines to predict next digits from an integer sequence fragment:
+
 |context> => |predict integer sequences>
 
 -- min and max ngram lenghts for the prediction if-then machines:

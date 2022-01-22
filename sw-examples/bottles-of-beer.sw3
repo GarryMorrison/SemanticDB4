@@ -1,3 +1,6 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
 -- Implement, and run, the bottles of beer song:
 
 |context> => |Bottles of beer song>

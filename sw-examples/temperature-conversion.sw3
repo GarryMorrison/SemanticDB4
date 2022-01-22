@@ -1,3 +1,6 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
 -- Convert between Kelvin, Celsius and Fahrenheit:
 
 to-Kelvin |K: *> #=> |_self>
@@ -25,6 +28,13 @@ C-to-F |*> #=> to-Fahrenheit (|C> :_ |_self>)
 
 F-to-K |*> #=> to-Kelvin (|F> :_ |_self>)
 F-to-C |*> #=> to-Celsius (|F> :_ |_self>)
+
+is-Kelvin |K: *> => |yes>
+is-Kelvin |*> => |no>
+is-Celsius |C: *> => |yes>
+is-Celsius |*> => |no>
+is-Fahrenheit |F: *> => |yes>
+is-Fahrenheit |*> => |no>
 
 
 table[Celsius, to-Kelvin, to-Fahrenheit] range(|C: 0>, |C: 100>, |5>)

@@ -1,3 +1,6 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
 -- Family relations operators:
 -- Given only operators for: mother, father, son, daughter, wife, husband, age
 -- We can construct the following collection of family related operators:

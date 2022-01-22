@@ -1,3 +1,8 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
+-- a good start to defining plurals and their inverse:
+
 plural |*> #=> |_self> _ |s>
 inverse-plural |*> #=> remove-suffix["s"] |_self>
 

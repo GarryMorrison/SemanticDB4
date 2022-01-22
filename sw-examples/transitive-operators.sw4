@@ -1,3 +1,9 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
+-- some simple applications of the transitive[] and stranstive[] operators.
+
+
 |context> => |transitive operators example>
 
 -- first, the famous Socrates example:

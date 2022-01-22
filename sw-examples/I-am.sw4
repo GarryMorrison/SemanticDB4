@@ -1,3 +1,6 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
 -- auto learn some knowledge given my name, your name, his name, her name or their name:
 -- this general idea of auto learning given a small seed of information generalizes easily.
 -- Eg, I-live-in-the-city-of |*>, we can then automatically conclude which country you live in,
