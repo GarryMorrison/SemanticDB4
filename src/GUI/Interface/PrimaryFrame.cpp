@@ -867,22 +867,6 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
         wxMessageBox(wxString::Format("Special case %s, will handle later.", the_operator));
         m_frame_commandPanel->InsertCommandText(the_operator);  // Later handle all the special cases.
     }
-
-    /*
-    wxString the_operator = m_insert_menu_map[event.GetId()];
-    // wxMessageBox("Your selected id: " + std::to_string(event.GetId()));
-    wxMessageBox("Your selected operator: " + the_operator);
-    int page_idx = m_auiNotebook->GetSelection();  // Need to check we have an open tab first!
-    wxString file_name = m_auiNotebook->GetPageText(page_idx);
-    if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
-    {
-        wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-        return;
-    }
-    wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];
-    // (*textCtrlLocal) << the_operator << " ";   // This appends. We want it to insert.
-    textCtrlLocal->WriteText(the_operator + " ");
-    */
 }
 
 void PrimaryFrame::OnIfThenInsert(wxCommandEvent& event)
