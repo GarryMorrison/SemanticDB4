@@ -47,6 +47,7 @@ private:
     void SwitchWindow(wxCommandEvent& event);
 
     void InvokeActiveTable(wxCommandEvent& event);
+    void OnIfThenInsert(wxCommandEvent& event);
 
     void OpenExampleWebpage(wxCommandEvent& event);
 

@@ -114,5 +114,10 @@ void EditPanel::SaveFile(const wxString& filename)
 	text.WriteString(current_text);
 }
 
+void EditPanel::WriteText(const wxString& text)
+{
+	m_text_ctrl->WriteText(text);
+}
+
 EditPanel::~EditPanel()
 {}

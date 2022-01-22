@@ -21,6 +21,7 @@ public:
 	void OnResetButtonDown(wxCommandEvent& event);
 	void AddPage(wxWindow* page, const wxString& caption, bool select = false);
 	void SaveFile(const wxString& filename);
+	void WriteText(const wxString& text);
 
 	~EditPanel();
 private:

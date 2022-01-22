@@ -860,6 +860,7 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
     else if (the_operator == "if-then machine")
     {
         IfThenMachineDialog* if_then_dialog = new IfThenMachineDialog(this);
+        if_then_dialog->Bind(EVT_INSERT_IFTHEN_MACHINE, &PrimaryFrame::OnIfThenInsert, this);
     }
     else
     {
@@ -882,6 +883,19 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
     // (*textCtrlLocal) << the_operator << " ";   // This appends. We want it to insert.
     textCtrlLocal->WriteText(the_operator + " ");
     */
+}
+
+void PrimaryFrame::OnIfThenInsert(wxCommandEvent& event)
+{
+    wxString machine_string = event.GetString();
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertCommandText(machine_string);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->WriteText(machine_string);
+    }
 }
 
 void PrimaryFrame::UsageForOperator(wxCommandEvent& event)

@@ -8,6 +8,8 @@
 
 
 #include "IfThenMachineDialog.h"
+wxDEFINE_EVENT(EVT_INSERT_IFTHEN_MACHINE, wxCommandEvent);
+
 
 IfThenMachineDialog::IfThenMachineDialog(wxWindow* parent)
 	: wxDialog(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
@@ -85,7 +87,10 @@ IfThenMachineDialog::IfThenMachineDialog(wxWindow* parent)
 
 void IfThenMachineDialog::OnInsertButton(wxCommandEvent& event)
 {
-	wxMessageBox("if-then insert pressed:\n" + GenerateMachine());
+	// wxMessageBox("if-then insert pressed:\n" + GenerateMachine());
+	wxCommandEvent our_event(EVT_INSERT_IFTHEN_MACHINE);
+	our_event.SetString(GenerateMachine());
+	wxPostEvent(this, our_event);
 }
 
 wxString IfThenMachineDialog::GenerateMachine()
@@ -95,12 +100,12 @@ wxString IfThenMachineDialog::GenerateMachine()
 	wxString then_operator = m_then_operator_ctrl->GetValue();
 	int starting_idx = m_starting_index_ctrl->GetValue();
 	int pattern_count = m_pattern_count_ctrl->GetValue();
-	wxString machine_string = "\n\n";
+	wxString machine_string = "\n";
 	for (int i = 1; i <= pattern_count; i++)
 	{
 		machine_string += wxString::Format("%s |%s: %d: %d> => $%d\n", pattern_operator, node_label, starting_idx, i, i);
 	}
-	machine_string += wxString::Format("%s |%s: %d: *> => $%d\n\n", then_operator, node_label, starting_idx, pattern_count+1);
+	machine_string += wxString::Format("%s |%s: %d: *> => $%d\n", then_operator, node_label, starting_idx, pattern_count+1);
 	return machine_string;
 }
 

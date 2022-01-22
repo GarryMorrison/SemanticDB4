@@ -57,8 +57,7 @@ void SelectFromKetDialog::OnKetListClick(wxCommandEvent& event)
     wxCommandEvent our_event(EVT_KET_WINDOW_CLICK);
     our_event.SetString(selected_item);
     wxPostEvent(this, our_event);
-    m_data_list->DeselectAll();
-    
+    m_data_list->DeselectAll();   
 }
 
 void SelectFromKetDialog::OnUpdateButton(wxCommandEvent& event)
