@@ -787,7 +787,13 @@ void CommandPanel::OnDumpButtonDown(wxCommandEvent& event)
 
 void CommandPanel::OnSaveAsButtonDown(wxCommandEvent& event)
 {
-    wxMessageBox("Save as the current command window to a .sw3 file");
+    // wxMessageBox("Save as the current command window to a .sw3 file");
+    wxFileDialog saveFileDialog(this, "Save sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    SaveFile(saveFileDialog.GetPath());
 }
 
 void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)

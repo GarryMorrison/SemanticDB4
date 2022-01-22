@@ -505,7 +505,9 @@ void PrimaryFrame::OnSave(wxCommandEvent& event)
 {
     wxFileDialog saveFileDialog(this, "Save sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
+    {
         return;
+    }
 
     if (m_command_window_active)
     {
