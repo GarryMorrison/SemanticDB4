@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/22
 // Author Garry Morrison
 // License GPL v3
 //
@@ -52,6 +52,8 @@ public:
 
     void OnContextSelect(wxCommandEvent& event);
     void UpdateContextSelector();
+
+    void SaveFile(const wxString& filename);
 
     ~CommandPanel();
 

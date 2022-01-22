@@ -20,6 +20,8 @@ public:
 	void OnDumpButtonDown(wxCommandEvent& event);
 	void OnResetButtonDown(wxCommandEvent& event);
 	void AddPage(wxWindow* page, const wxString& caption, bool select = false);
+	void SaveFile(const wxString& filename);
+
 	~EditPanel();
 private:
 	wxAuiNotebook* m_aui_notebook;

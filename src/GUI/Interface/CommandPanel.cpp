@@ -959,6 +959,19 @@ void CommandPanel::UpdateContextSelector()
     m_context_selector->SetSelection(driver.context.get_context_index());
 }
 
+void CommandPanel::SaveFile(const wxString& filename)
+{
+    // wxMessageBox("Command panel SaveFile: " + filename);
+    wxFileOutputStream output_stream(filename);
+    if (!output_stream.IsOk())
+    {
+        wxLogError("Cannot save to file '%s'.", filename);
+        return;
+    }
+    wxTextOutputStream text(output_stream);
+    text.WriteString(m_command_text->GetText());
+}
+
 CommandPanel::~CommandPanel()
 {}
 

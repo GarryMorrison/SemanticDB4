@@ -503,9 +503,21 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
 
 void PrimaryFrame::OnSave(wxCommandEvent& event)
 {
-    wxFileDialog saveFileDialog(this, "Save sw file", "", "", "sw file (*.sw;*.sw3)|*.sw;*.sw3|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    wxFileDialog saveFileDialog(this, "Save sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
         return;
+
+    if (m_command_window_active)
+    {
+        // wxMessageBox("Save command window: " + saveFileDialog.GetPath());
+        m_frame_commandPanel->SaveFile(saveFileDialog.GetPath());
+    }
+    else if (m_edit_window_active)
+    {
+        // wxMessageBox("Save edit window");
+        m_frame_edit_panel->SaveFile(saveFileDialog.GetPath());
+    }
+    return;
     // save the current contents in the file;
     // this can be done with e.g. wxWidgets output streams:
     /*

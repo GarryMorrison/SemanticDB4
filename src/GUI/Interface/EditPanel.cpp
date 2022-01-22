@@ -98,5 +98,21 @@ void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)
 	m_aui_notebook->AddPage(page, caption, select);
 }
 
+void EditPanel::SaveFile(const wxString& filename)
+{
+	// wxMessageBox("Edit panel SaveFile: " + filename);
+	wxWindow* current_page = m_aui_notebook->GetCurrentPage();
+	wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
+	wxString current_text = current_text_ctrl->GetValue();
+	wxFileOutputStream output_stream(filename);
+	if (!output_stream.IsOk())
+	{
+		wxLogError("Cannot save to file '%s'.", filename);
+		return;
+	}
+	wxTextOutputStream text(output_stream);
+	text.WriteString(current_text);
+}
+
 EditPanel::~EditPanel()
 {}
