@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GUI\OperatorLibrary\IfThenMachineDialog.h" />
     <ClInclude Include="src\GUI\OperatorLibrary\ActiveTableDialog.h" />
     <ClInclude Include="src\GUI\Interface\CreateNewFileDialog.h" />
     <ClInclude Include="src\GUI\Interface\OutputFrame.h" />
@@ -221,6 +222,7 @@
     <ClInclude Include="src\GUI\OperatorLibrary\TableDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\OperatorLibrary\IfThenMachineDialog.cpp" />
     <ClCompile Include="src\GUI\OperatorLibrary\ActiveTableDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\CreateNewFileDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\OutputFrame.cpp" />

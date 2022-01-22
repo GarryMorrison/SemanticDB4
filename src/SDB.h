@@ -57,6 +57,7 @@
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
 #include <wx/grid.h>
+#include <wx/spinctrl.h>
 #include <set>
 #include <map>
 #include <string>
@@ -93,6 +94,7 @@
 #include "GUI/Interface/CreateNewFileDialog.h"
 #include "GUI/OperatorLibrary/ActiveTableDialog.h"
 #include "GUI/OperatorLibrary/TableDialog.h"
+#include "GUI/OperatorLibrary/IfThenMachineDialog.h"
 
 
 // Back end includes:
@@ -284,6 +286,8 @@ enum
     ID_Update_Button,
 
     ID_Create_File,
+
+    ID_If_Then_Insert,
 
     ID_Ket_Map_Display_Title_Click,
     ID_Command_Insert_Text
