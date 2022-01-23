@@ -1,5 +1,6 @@
 //
 // Created by Garry Morrison on 13/09/2020.
+// Updated 2022/1/23
 //
 
 #include <iostream>
@@ -13,9 +14,11 @@ ContextList::ContextList(const std::string& s) {
     max_index = 1;
     NewContext tmp(name);
     data.push_back(tmp);
+    m_name_idx_map[name] = index;
 }
 
 void ContextList::set(const std::string& s) {
+    /*
     bool match = false;
     for (ulong k = 0; k < max_index; k++) {
         if (data[k].get_name() == s) {
@@ -30,6 +33,19 @@ void ContextList::set(const std::string& s) {
         NewContext tmp(s);
         data.push_back(tmp);
     }
+    */
+    if (m_name_idx_map.find(s) != m_name_idx_map.end())
+    {
+        index = m_name_idx_map[s];
+    }
+    else
+    {
+        index = max_index;
+        max_index++;
+        NewContext tmp(s);
+        data.push_back(tmp);
+        m_name_idx_map[s] = index;
+    }
 }
 
 void ContextList::set(const ulong idx) {
@@ -39,12 +55,22 @@ void ContextList::set(const ulong idx) {
     index = idx;
 }
 
+void ContextList::switch_context(const std::string& s)
+{
+    if (m_name_idx_map.find(s) != m_name_idx_map.end())
+    {
+        index = m_name_idx_map[s];
+    }
+}
+
 void ContextList::reset() {
     index = 0;
     max_index = 1;
     NewContext tmp(name);
     data.clear();
     data.push_back(tmp);
+    m_name_idx_map.clear();
+    m_name_idx_map[name] = index;
 }
 
 void ContextList::reset_current_context()

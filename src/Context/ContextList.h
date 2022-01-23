@@ -2,11 +2,13 @@
 
 //
 // Created by Garry Morrison on 13/09/2020.
+// Updated 2022/1/23
 //
 
 
 #include <string>
 #include <vector>
+#include <map>
 #include "NewContext.h"
 
 
@@ -16,11 +18,13 @@ private:
     ulong index;
     ulong max_index;
     std::vector<NewContext> data;
+    std::map<std::string, ulong> m_name_idx_map;
 
 public:
     ContextList(const std::string& s);
     void set(const std::string& s);
     void set(const ulong idx);
+    void switch_context(const std::string& s);
     void reset();
     void reset_current_context();
     std::string get_context_name() const;
