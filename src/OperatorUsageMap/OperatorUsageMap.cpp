@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/13
+// Updated 2022/1/23
 // Author Garry Morrison
 // License GPL v3
 //
@@ -4369,6 +4369,37 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        transitive\n"
         "        transitive-operators.sw4, family-tree.sw3, family-relations.sw3\n";
+
+    operator_usage_map.map["borrow-from-context"] =
+        "\nborrow-from-context:\n"
+        "    description:\n"
+        "        borrow-from-context[\"context name\", op] input-seq\n"
+        "        borrow an operator from the given context\n"
+        "        usually rules in different context are completely separate from each other\n"
+        "        borrow-from-context[] allows you to \"peek\" at an operator in a different context\n"
+        "        this allows you to keep your working context clean, while the back-end code is in another context\n\n"
+        "    examples:\n"
+        "        -- just an abstract example:\n"
+        "        -- define an operator in some different contexts:\n"
+        "        |context> => |alpha>\n"
+        "        op |*> #=> |alpha> :_ |_self>\n"
+        "        |context> => |beta>\n"
+        "        op |*> #=> |beta> :_ |_self>\n"
+        "        |context> => |gamma>\n"
+        "        op |*> #=> |gamma> :_ |_self>\n\n"
+        "        -- now make use of the borrow-from-context[] operator:\n"
+        "        alpha-op |*> #=> borrow-from-context[\"alpha\", op] |_self>\n"
+        "        beta-op |*> #=> borrow-from-context[\"beta\", op] |_self>\n"
+        "        gamma-op |*> #=> borrow-from-context[\"gamma\", op] |_self>\n\n"
+        "        -- now invoke them:\n"
+        "        alpha-op |input ket>\n"
+        "            |alpha: input ket>\n\n"
+        "        beta-op |input ket>\n"
+        "            |beta: input ket>\n\n"
+        "        gamma-op |input ket>\n"
+        "            |gamma: input ket>\n\n"
+        "    see also:\n";
+
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["if"] =
