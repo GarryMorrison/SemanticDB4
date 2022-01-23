@@ -55,12 +55,14 @@ void ContextList::set(const ulong idx) {
     index = idx;
 }
 
-void ContextList::switch_context(const std::string& s)
+bool ContextList::switch_context(const std::string& s)
 {
     if (m_name_idx_map.find(s) != m_name_idx_map.end())
     {
         index = m_name_idx_map[s];
+        return true;
     }
+    return false;
 }
 
 void ContextList::reset() {

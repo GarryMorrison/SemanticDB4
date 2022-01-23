@@ -24,7 +24,7 @@ public:
     ContextList(const std::string& s);
     void set(const std::string& s);
     void set(const ulong idx);
-    void switch_context(const std::string& s);
+    bool switch_context(const std::string& s);
     void reset();
     void reset_current_context();
     std::string get_context_name() const;

@@ -2406,8 +2406,11 @@ Sequence op_borrow_from_context(const Sequence& input_seq, ContextList& context,
     SimpleOperator op = parameters[1]->get_operator();
     Sequence seq;
     std::string starting_context_name = context.get_context_name();
-    context.switch_context(context_name);
-    seq = op.Compile(context, input_seq);
-    context.switch_context(starting_context_name);
+    bool switch_success = context.switch_context(context_name);
+    if (switch_success)
+    {
+        seq = op.Compile(context, input_seq);
+        context.switch_context(starting_context_name);  // Only need to switch back to the original context if it successfully changed.
+    }
     return seq;
 }
