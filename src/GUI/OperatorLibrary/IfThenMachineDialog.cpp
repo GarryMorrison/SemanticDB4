@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/22
-// Updated 2022/1/22
+// Updated 2022/1/23
 // Author Garry Morrison
 // License GPL v3
 //
@@ -24,11 +24,11 @@ IfThenMachineDialog::IfThenMachineDialog(wxWindow* parent)
 	node_label_header->SetFont(wxFontInfo(12));
 	m_node_label_ctrl = new wxTextCtrl(this, wxID_ANY, "node", wxDefaultPosition, wxSize(200, -1));
 
-	wxStaticText* pattern_operator_header = new wxStaticText(this, wxID_ANY, "Pattern operator");
+	wxStaticText* pattern_operator_header = new wxStaticText(this, wxID_ANY, "Pattern operator (required)");
 	pattern_operator_header->SetFont(wxFontInfo(12));
 	m_pattern_operator_ctrl = new wxTextCtrl(this, wxID_ANY, "pattern");
 
-	wxStaticText* then_operator_header = new wxStaticText(this, wxID_ANY, "Then operator");
+	wxStaticText* then_operator_header = new wxStaticText(this, wxID_ANY, "Then operator (required)");
 	then_operator_header->SetFont(wxFontInfo(12));
 	m_then_operator_ctrl = new wxTextCtrl(this, wxID_ANY, "then");
 
@@ -87,20 +87,36 @@ IfThenMachineDialog::IfThenMachineDialog(wxWindow* parent)
 
 void IfThenMachineDialog::OnInsertButton(wxCommandEvent& event)
 {
-	// wxMessageBox("if-then insert pressed:\n" + GenerateMachine());
+	wxString machine_string = GenerateMachine();
+	if (machine_string.IsEmpty())
+	{
+		return;
+	}
+	m_starting_index_ctrl->SetValue(m_starting_index_ctrl->GetValue() + 1);  // Testing if we want this.
 	wxCommandEvent our_event(EVT_INSERT_IFTHEN_MACHINE);
-	our_event.SetString(GenerateMachine());
+	our_event.SetString(machine_string);
 	wxPostEvent(this, our_event);
 }
 
 wxString IfThenMachineDialog::GenerateMachine()
 {
+	wxString machine_string;
+	if (m_pattern_operator_ctrl->GetValue().IsEmpty())
+	{
+		wxMessageBox("Pattern operator is required.");
+		return machine_string;
+	}
+	if (m_then_operator_ctrl->GetValue().IsEmpty())
+	{
+		wxMessageBox("Then operator is required.");
+		return machine_string;
+	}
 	wxString node_label = m_node_label_ctrl->GetValue();
-	wxString pattern_operator = m_pattern_operator_ctrl->GetValue();
+	wxString pattern_operator = m_pattern_operator_ctrl->GetValue();  // Check pattern operator and then operator are not empty?
 	wxString then_operator = m_then_operator_ctrl->GetValue();
 	int starting_idx = m_starting_index_ctrl->GetValue();
 	int pattern_count = m_pattern_count_ctrl->GetValue();
-	wxString machine_string = "\n";
+	machine_string = "\n";
 	for (int i = 1; i <= pattern_count; i++)
 	{
 		machine_string += wxString::Format("%s |%s: %d: %d> => $%d\n", pattern_operator, node_label, starting_idx, i, i);

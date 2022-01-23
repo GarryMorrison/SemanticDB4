@@ -864,7 +864,6 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
     }
     else if (the_operator == "if-then operator")
     {
-        // wxMessageBox("if then operator dialog");
         IfThenOperatorDialog* if_then_op_dialog = new IfThenOperatorDialog(this);
         if_then_op_dialog->Bind(EVT_INSERT_IFTHEN_OPERATOR, &PrimaryFrame::OnIfThenInsert, this);
     }
