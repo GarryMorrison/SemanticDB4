@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/18
+// Updated 2022/1/23
 // Author Garry Morrison
 // License GPL v3
 //
@@ -562,8 +562,8 @@ void FunctionOperatorMap::PopulateOperatorSets() {
     list_of_learn_rules = { "=>", "_=>", "+=>", ".=>", "#=>", "!=>" };
     list_of_infix_type1 = { "+", "-", ".", "_", "__", ":_" };
     list_of_infix_type2 = { "==", "!=", ">=", ">", "<=", "<", "&&", "||", "++", "--", "**", "//", "%%", "^^", ".." };
-    list_of_misc_elements = { "|>", "comment", "label descent", "|*>", "|category: *>", "|_self>", "(*,*)", "|__self>", "|context>", "supported-ops", "dump", "if-then machine" };
-    list_of_filtered_misc_elements = { "|>", "comment", "|*>", "|category: *>", "|_self>", "(*,*)", "|__self>", "|context>", "if-then machine" };
+    list_of_misc_elements = { "|>", "comment", "label descent", "|*>", "|category: *>", "|_self>", "(*,*)", "|__self>", "|context>", "supported-ops", "dump", "if-then machine", "if-then operator" };
+    list_of_filtered_misc_elements = { "|>", "comment", "|*>", "|category: *>", "|_self>", "(*,*)", "|__self>", "|context>", "if-then machine", "if-then operator" };
     list_of_object_types = { "ket", "superposition", "sequence" };
     list_of_operator_types = { "sigmoid", "numeric", "simple", "compound", "function", "bracket", "powered", "op-sequence" };
 

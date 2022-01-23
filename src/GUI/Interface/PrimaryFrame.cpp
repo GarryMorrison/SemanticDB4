@@ -862,6 +862,12 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
         IfThenMachineDialog* if_then_dialog = new IfThenMachineDialog(this);
         if_then_dialog->Bind(EVT_INSERT_IFTHEN_MACHINE, &PrimaryFrame::OnIfThenInsert, this);
     }
+    else if (the_operator == "if-then operator")
+    {
+        // wxMessageBox("if then operator dialog");
+        IfThenOperatorDialog* if_then_op_dialog = new IfThenOperatorDialog(this);
+        if_then_op_dialog->Bind(EVT_INSERT_IFTHEN_OPERATOR, &PrimaryFrame::OnIfThenInsert, this);
+    }
     else
     {
         wxMessageBox(wxString::Format("Special case %s, will handle later.", the_operator));

@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2022/1/22
+// Updated 2022/1/23
 // Author Garry Morrison
 // License GPL v3
 //
@@ -95,6 +95,7 @@
 #include "GUI/OperatorLibrary/ActiveTableDialog.h"
 #include "GUI/OperatorLibrary/TableDialog.h"
 #include "GUI/OperatorLibrary/IfThenMachineDialog.h"
+#include "GUI/OperatorLibrary/IfThenOperatorDialog.h"
 
 
 // Back end includes:
@@ -142,6 +143,8 @@ wxDECLARE_EVENT(EVT_GRID_CLICK, wxCommandEvent);
 wxDECLARE_EVENT(EVT_KET_WINDOW_CLICK, wxCommandEvent);  // Put a space between Ket and Window?
 wxDECLARE_EVENT(EVT_LITERALOP_WINDOW_CLICK, wxCommandEvent);
 wxDECLARE_EVENT(EVT_INSERT_IFTHEN_MACHINE, wxCommandEvent);
+wxDECLARE_EVENT(EVT_INSERT_IFTHEN_OPERATOR, wxCommandEvent);
+
 
 class SDBApp : public wxApp
 {
@@ -289,6 +292,7 @@ enum
     ID_Create_File,
 
     ID_If_Then_Insert,
+    ID_If_Then_Insert_Operator,
 
     ID_Ket_Map_Display_Title_Click,
     ID_Command_Insert_Text
