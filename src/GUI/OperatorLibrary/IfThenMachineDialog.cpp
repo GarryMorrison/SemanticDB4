@@ -92,7 +92,7 @@ void IfThenMachineDialog::OnInsertButton(wxCommandEvent& event)
 	{
 		return;
 	}
-	m_starting_index_ctrl->SetValue(m_starting_index_ctrl->GetValue() + 1);  // Testing if we want this.
+	m_starting_index_ctrl->SetValue(m_starting_index_ctrl->GetValue() + 1);
 	wxCommandEvent our_event(EVT_INSERT_IFTHEN_MACHINE);
 	our_event.SetString(machine_string);
 	wxPostEvent(this, our_event);
@@ -112,7 +112,7 @@ wxString IfThenMachineDialog::GenerateMachine()
 		return machine_string;
 	}
 	wxString node_label = m_node_label_ctrl->GetValue();
-	wxString pattern_operator = m_pattern_operator_ctrl->GetValue();  // Check pattern operator and then operator are not empty?
+	wxString pattern_operator = m_pattern_operator_ctrl->GetValue();
 	wxString then_operator = m_then_operator_ctrl->GetValue();
 	int starting_idx = m_starting_index_ctrl->GetValue();
 	int pattern_count = m_pattern_count_ctrl->GetValue();
