@@ -2397,3 +2397,17 @@ Sequence op_stransitive(const Sequence& input_seq, ContextList& context, const s
     }
     return full_seq;
 }
+
+Sequence op_borrow_from_context(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 2) { return Ket(); }
+    if (parameters[0]->type() != CSTRING || parameters[1]->type() != COPERATOR) { return Ket(); }
+    std::string context_name = parameters[0]->get_string();
+    SimpleOperator op = parameters[1]->get_operator();
+    Sequence seq;
+    std::string starting_context_name = context.get_context_name();
+    context.switch_context(context_name);
+    seq = op.Compile(context, input_seq);
+    context.switch_context(starting_context_name);
+    return seq;
+}

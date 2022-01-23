@@ -97,3 +97,5 @@ std::string dump(const Superposition& input_sp, ContextList& context, const std:
 
 Superposition op_transitive(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 Sequence op_stransitive(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+
+Sequence op_borrow_from_context(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);

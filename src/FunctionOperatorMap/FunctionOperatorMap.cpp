@@ -477,6 +477,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("stransitive");
     fn_map.compound_context_seq_fn.emplace(idx, &op_stransitive);
+
+    idx = ket_map.get_idx("borrow-from-context");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_borrow_from_context);
 }
 
 
