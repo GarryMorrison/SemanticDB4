@@ -111,7 +111,11 @@ wxString IfThenMachineDialog::GenerateMachine()
 		wxMessageBox("Then operator is required.");
 		return machine_string;
 	}
-	wxString node_label = m_node_label_ctrl->GetValue();
+	wxString node_label;
+	if (!m_node_label_ctrl->GetValue().IsEmpty())
+	{
+		node_label = m_node_label_ctrl->GetValue() + ": ";
+	}
 	wxString pattern_operator = m_pattern_operator_ctrl->GetValue();
 	wxString then_operator = m_then_operator_ctrl->GetValue();
 	int starting_idx = m_starting_index_ctrl->GetValue();
@@ -119,9 +123,9 @@ wxString IfThenMachineDialog::GenerateMachine()
 	machine_string = "\n";
 	for (int i = 1; i <= pattern_count; i++)
 	{
-		machine_string += wxString::Format("%s |%s: %d: %d> => $%d\n", pattern_operator, node_label, starting_idx, i, i);
+		machine_string += wxString::Format("%s |%s%d: %d> => $%d\n", pattern_operator, node_label, starting_idx, i, i);
 	}
-	machine_string += wxString::Format("%s |%s: %d: *> => $%d\n", then_operator, node_label, starting_idx, pattern_count+1);
+	machine_string += wxString::Format("%s |%s%d: *> => $%d\n", then_operator, node_label, starting_idx, pattern_count+1);
 	return machine_string;
 }
 
