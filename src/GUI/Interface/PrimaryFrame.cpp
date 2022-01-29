@@ -1049,3 +1049,5 @@ void PrimaryFrame::InsertComment()
     }
 }
 
+PrimaryFrame::~PrimaryFrame()
+{}

@@ -22,6 +22,17 @@ class PrimaryFrame : public wxFrame
 public:
     PrimaryFrame();  // Do we need a destructor too?
     
+    void InsertText(const wxString& wxs);
+    void InsertStatement(const wxString& wxs);
+    void InsertLearnRule(const wxString& wxs);
+    void InsertInfixOperator(const wxString& wxs);
+    void InsertSimpleOperator(const wxString& wxs);
+    void InsertCompoundOperator(const wxString& wxs);
+    void InsertFunctionOperator(const wxString& wxs);
+    void InsertKet(const wxString& wxs);
+    void InsertComment();
+
+    ~PrimaryFrame();
 
 private:
     void OnExit(wxCommandEvent& event);
@@ -46,15 +57,6 @@ private:
     void ShowKetMap(wxCommandEvent& event);
     void SwitchWindow(wxCommandEvent& event);
 
-    void InsertText(const wxString& wxs);
-    void InsertStatement(const wxString& wxs);
-    void InsertLearnRule(const wxString& wxs);
-    void InsertInfixOperator(const wxString& wxs);
-    void InsertSimpleOperator(const wxString& wxs);
-    void InsertCompoundOperator(const wxString& wxs);
-    void InsertFunctionOperator(const wxString& wxs);
-    void InsertKet(const wxString& wxs);
-    void InsertComment();
 
     void InvokeActiveTable(wxCommandEvent& event);
     void OnIfThenInsert(wxCommandEvent& event);
@@ -85,10 +87,6 @@ private:
     CommandPanel* m_frame_commandPanel;
     EditPanel* m_frame_edit_panel;
 
-    std::set<std::string> m_known_kets = { "|Fred>", "|Sam>", "|37>", "|49>" };
-    std::set<std::string> m_known_operators = { "age", "friends", "mother", "father" };
-    std::vector<wxString> m_built_in_operators = { "coeff-sort", "do-you-know", "drop", "how-many", "ket-sort" };
-    std::vector<wxString> m_built_in_compound_operators = { "drop-above", "drop-below", "normalize", "pick" };
     // int m_starting_highest_menu_id = ID_Help_Website + 1;
     // int m_current_highest_menu_id = m_starting_highest_menu_id;
     int m_starting_highest_insert_menu_id;
