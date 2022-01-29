@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/30
 // Author Garry Morrison
 // License GPL v3
 //
@@ -45,6 +45,16 @@ private:
     void UsageForOperator(wxCommandEvent& event);
     void ShowKetMap(wxCommandEvent& event);
     void SwitchWindow(wxCommandEvent& event);
+
+    void InsertText(const wxString& wxs);
+    void InsertStatement(const wxString& wxs);
+    void InsertLearnRule(const wxString& wxs);
+    void InsertInfixOperator(const wxString& wxs);
+    void InsertSimpleOperator(const wxString& wxs);
+    void InsertCompoundOperator(const wxString& wxs);
+    void InsertFunctionOperator(const wxString& wxs);
+    void InsertKet(const wxString& wxs);
+    void InsertComment();
 
     void InvokeActiveTable(wxCommandEvent& event);
     void OnIfThenInsert(wxCommandEvent& event);

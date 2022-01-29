@@ -1017,3 +1017,111 @@ void PrimaryFrame::OpenWebsite(wxCommandEvent& event)
         wxLogError("Failed to open browser.");
 }
 
+void PrimaryFrame::InsertText(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertText(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertText(wxs);
+    }
+}
+
+void PrimaryFrame::InsertStatement(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertStatement(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertStatement(wxs);
+    }
+}
+
+void PrimaryFrame::InsertLearnRule(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertLearnRule(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertLearnRule(wxs);
+    }
+}
+
+void PrimaryFrame::InsertInfixOperator(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertInfixOperator(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertInfixOperator(wxs);
+    }
+}
+
+void PrimaryFrame::InsertSimpleOperator(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertSimpleOperator(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertSimpleOperator(wxs);
+    }
+}
+
+void PrimaryFrame::InsertCompoundOperator(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertCompoundOperator(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertCompoundOperator(wxs);
+    }
+}
+
+void PrimaryFrame::InsertFunctionOperator(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertFunctionOperator(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertFunctionOperator(wxs);
+    }
+}
+
+void PrimaryFrame::InsertKet(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertKet(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertKet(wxs);
+    }
+}
+
+void PrimaryFrame::InsertComment()
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertComment();
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertComment();
+    }
+}
+
