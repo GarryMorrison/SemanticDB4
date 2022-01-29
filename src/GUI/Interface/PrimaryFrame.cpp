@@ -857,6 +857,10 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
     {
         m_frame_commandPanel->InsertComment();
     }
+    else if (the_operator == "|context>")
+    {
+        m_frame_commandPanel->InsertStatement("context");
+    }
     else if (the_operator == "if-then machine")
     {
         IfThenMachineDialog* if_then_dialog = new IfThenMachineDialog(this);

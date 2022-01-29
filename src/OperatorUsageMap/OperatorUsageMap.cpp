@@ -4403,7 +4403,10 @@ OperatorUsageMap::OperatorUsageMap() {
 
 
     // fill out statement_prototypes map:
-    operator_usage_map.statement_prototypes["if"] =
+    operator_usage_map.statement_prototypes["context"] =
+        "|context> => |$1>\n";
+
+    operator_usage_map.statement_prototypes["if"] =  // Does it need leading \n?
         "if( $1 ):\n"
         "    $2\n"
         "end:\n";
