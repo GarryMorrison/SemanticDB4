@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/1/19
+// Updated 2022/1/30
 // Author Garry Morrison
 // License GPL v3
 //
@@ -117,6 +117,57 @@ void EditPanel::SaveFile(const wxString& filename)
 void EditPanel::WriteText(const wxString& text)
 {
 	m_text_ctrl->WriteText(text);
+}
+
+void EditPanel::InsertText(const wxString& wxs)
+{
+	m_text_ctrl->WriteText(wxs);
+}
+
+void EditPanel::InsertStatement(const wxString& wxs)
+{
+	std::string statement_name = wxs.ToStdString();
+	if (operator_usage_map.has_statement_prototype(statement_name))
+	{
+		m_text_ctrl->WriteText(operator_usage_map.statement_prototypes[statement_name]);
+	}
+}
+
+void EditPanel::InsertLearnRule(const wxString& wxs)
+{
+	m_text_ctrl->WriteText(wxs + " ");
+}
+
+void EditPanel::InsertInfixOperator(const wxString& wxs)
+{
+	m_text_ctrl->WriteText(wxs + " ");
+}
+
+void EditPanel::InsertSimpleOperator(const wxString& wxs)
+{
+	m_text_ctrl->WriteText(wxs + " ");
+}
+
+void EditPanel::InsertCompoundOperator(const wxString& wxs)
+{
+	m_text_ctrl->WriteText(wxs + "[ ] ");
+	m_text_ctrl->SetInsertionPoint(m_text_ctrl->GetInsertionPoint() - 3);
+}
+
+void EditPanel::InsertFunctionOperator(const wxString& wxs)
+{
+	m_text_ctrl->WriteText(wxs + "( ) ");
+	m_text_ctrl->SetInsertionPoint(m_text_ctrl->GetInsertionPoint() - 3);
+}
+
+void EditPanel::InsertKet(const wxString& wxs)
+{
+	m_text_ctrl->WriteText(wxs + " ");
+}
+
+void EditPanel::InsertComment()
+{
+	m_text_ctrl->WriteText("\n--  ");
 }
 
 EditPanel::~EditPanel()
