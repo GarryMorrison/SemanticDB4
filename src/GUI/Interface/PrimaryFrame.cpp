@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/9
+// Updated 2022/1/30
 // Author Garry Morrison
 // License GPL v3
 //
@@ -511,48 +511,12 @@ void PrimaryFrame::OnSave(wxCommandEvent& event)
 
     if (m_command_window_active)
     {
-        // wxMessageBox("Save command window: " + saveFileDialog.GetPath());
         m_frame_commandPanel->SaveFile(saveFileDialog.GetPath());
     }
     else if (m_edit_window_active)
     {
-        // wxMessageBox("Save edit window");
         m_frame_edit_panel->SaveFile(saveFileDialog.GetPath());
     }
-    return;
-    // save the current contents in the file;
-    // this can be done with e.g. wxWidgets output streams:
-    /*
-    wxFileOutputStream output_stream(saveFileDialog.GetPath());
-    if (!output_stream.IsOk())
-    {
-        wxLogError("Cannot save current contents in file '%s'.", saveFileDialog.GetPath());
-        return;
-    }
-    wxTextOutputStream text(output_stream);
-    text.WriteString("testing ...");  // Need to get the text from m_auiNotebook somehow ....
-    // wxTextCtrl* textCtrlLocal;
-    // textCtrlLocal = m_auiNotebook->GetCurrentPage();
-    wxString file_name = m_auiNotebook->GetPageText(0);  // Nope! This is just the tab label. Choose correct page too!
-    // wxMessageBox("File name is " + file_name);
-    if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
-    {
-        wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-        return;
-    }
-    wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];
-    wxMessageBox(textCtrlLocal->Get);
-    */
-    // wxMessageBox("Notebook GetSelection: " + std::to_string(m_auiNotebook->GetSelection()));
-    int page_idx = m_auiNotebook->GetSelection();
-    wxString file_name = m_auiNotebook->GetPageText(page_idx);
-    if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
-    {
-        wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-        return;
-    }
-    wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];
-    textCtrlLocal->SaveFile(saveFileDialog.GetPath());
 }
 
 void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
