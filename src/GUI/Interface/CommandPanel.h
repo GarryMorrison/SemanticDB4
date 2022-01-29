@@ -17,7 +17,7 @@ class CommandPanel : public wxPanel
 public:
     CommandPanel(wxPanel* parent, wxWindowID id);
 
-    void InsertCommandText(const wxString& wxs);
+    void InsertText(const wxString& wxs);
     void InsertStatement(const wxString& wxs);
     void InsertLearnRule(const wxString& wxs);
     void InsertInfixOperator(const wxString& wxs);

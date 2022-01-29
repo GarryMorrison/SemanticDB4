@@ -237,7 +237,7 @@ PrimaryFrame::PrimaryFrame()
 
 
     m_frame_commandPanel = new CommandPanel(panel, wxID_ANY);
-    m_frame_commandPanel->InsertCommandText(EXAMPLE_STARTING_TEXT);
+    m_frame_commandPanel->InsertText(EXAMPLE_STARTING_TEXT);
     m_frame_commandPanel->Show();
     // m_frame_commandPanel->Hide();
 
@@ -607,7 +607,7 @@ void PrimaryFrame::SelectFromLearnRules(wxCommandEvent& event)
         }
         wxString the_learn_rule = list_options[the_selection];  // Need to check bounds?
         if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_learn_rule + " ");
+            m_frame_commandPanel->InsertText(the_learn_rule + " ");
         }
         select_dlg->DeselectAll();
         });
@@ -620,7 +620,7 @@ void PrimaryFrame::SelectFromLearnRules(wxCommandEvent& event)
         }
         wxString the_learn_rule = list_options[the_selection];  // Need to check bounds?
         if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_learn_rule + " ");
+            m_frame_commandPanel->InsertText(the_learn_rule + " ");
         }
         });
 }
@@ -644,7 +644,7 @@ void PrimaryFrame::SelectFromInfix1(wxCommandEvent& event)
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
         if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_op + " ");
+            m_frame_commandPanel->InsertText(the_op + " ");
         }
         select_dlg->DeselectAll();
         });
@@ -657,7 +657,7 @@ void PrimaryFrame::SelectFromInfix1(wxCommandEvent& event)
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
         if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_op + " ");
+            m_frame_commandPanel->InsertText(the_op + " ");
         }
         });
 }
@@ -874,7 +874,7 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
     else
     {
         wxMessageBox(wxString::Format("Special case %s, will handle later.", the_operator));
-        m_frame_commandPanel->InsertCommandText(the_operator);  // Later handle all the special cases.
+        m_frame_commandPanel->InsertText(the_operator);  // Later handle all the special cases.
     }
 }
 
@@ -883,7 +883,7 @@ void PrimaryFrame::OnIfThenInsert(wxCommandEvent& event)
     wxString machine_string = event.GetString();
     if (m_command_window_active)
     {
-        m_frame_commandPanel->InsertCommandText(machine_string);
+        m_frame_commandPanel->InsertText(machine_string);
     }
     else if (m_edit_window_active)
     {

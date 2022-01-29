@@ -882,7 +882,7 @@ void CommandPanel::OnClearResultsButtonDown(wxCommandEvent& event)
     m_command_result_canvas->ClearCanvas();
 }
 
-void CommandPanel::InsertCommandText(const wxString& wxs)
+void CommandPanel::InsertText(const wxString& wxs)
 {
     m_command_text->WriteText(wxs);
 }
