@@ -530,9 +530,7 @@ void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
 
 void PrimaryFrame::OnSelectKetDialogItem(wxCommandEvent& event)
 {
-    if (m_command_window_active) {
-        m_frame_commandPanel->InsertKet(event.GetString());
-    }
+    InsertKet(event.GetString());
 }
 
 
@@ -547,9 +545,7 @@ void PrimaryFrame::SelectKnownOperator(wxCommandEvent& event)
 
 void PrimaryFrame::OnSelectLiteralOpDialogItem(wxCommandEvent& event)
 {
-    if (m_command_window_active) {
-        m_frame_commandPanel->InsertSimpleOperator(event.GetString());
-    }
+    InsertSimpleOperator(event.GetString());
 }
 
 void PrimaryFrame::SelectFromLearnRules(wxCommandEvent& event)
@@ -570,9 +566,7 @@ void PrimaryFrame::SelectFromLearnRules(wxCommandEvent& event)
             return;
         }
         wxString the_learn_rule = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertText(the_learn_rule + " ");
-        }
+        InsertLearnRule(the_learn_rule);
         select_dlg->DeselectAll();
         });
 
@@ -583,9 +577,7 @@ void PrimaryFrame::SelectFromLearnRules(wxCommandEvent& event)
             return;
         }
         wxString the_learn_rule = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertText(the_learn_rule + " ");
-        }
+        InsertLearnRule(the_learn_rule);
         });
 }
 
@@ -607,9 +599,7 @@ void PrimaryFrame::SelectFromInfix1(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertText(the_op + " ");
-        }
+        InsertInfixOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -620,9 +610,7 @@ void PrimaryFrame::SelectFromInfix1(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertText(the_op + " ");
-        }
+        InsertInfixOperator(the_op);
         });
 }
 
@@ -644,9 +632,7 @@ void PrimaryFrame::SelectFromInfix2(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertInfixOperator(the_op);
-        }
+        InsertInfixOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -657,9 +643,7 @@ void PrimaryFrame::SelectFromInfix2(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertInfixOperator(the_op);
-        }
+        InsertInfixOperator(the_op);
         });
 }
 
@@ -682,9 +666,7 @@ void PrimaryFrame::SelectFromSimple(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertSimpleOperator(the_op);
-        }
+        InsertSimpleOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -695,9 +677,7 @@ void PrimaryFrame::SelectFromSimple(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertSimpleOperator(the_op);
-        }
+        InsertSimpleOperator(the_op);
         });
 }
 
@@ -720,9 +700,7 @@ void PrimaryFrame::SelectFromCompound(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCompoundOperator(the_op);
-        }
+        InsertCompoundOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -733,9 +711,7 @@ void PrimaryFrame::SelectFromCompound(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCompoundOperator(the_op);
-        }
+        InsertCompoundOperator(the_op);
         });
 }
 
@@ -758,9 +734,7 @@ void PrimaryFrame::SelectFromFunction(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertFunctionOperator(the_op);
-        }
+        InsertFunctionOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -771,9 +745,7 @@ void PrimaryFrame::SelectFromFunction(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertFunctionOperator(the_op);
-        }
+        InsertFunctionOperator(the_op);
         });
 }
 
@@ -784,46 +756,43 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
     ulong idx = ket_map.get_idx(the_operator);
     if (fn_map.set_simple_operators.find(idx) != fn_map.set_simple_operators.end())  // Note the precedence. If an operator is simple, and compound, it will be considered simple.
     {
-        // wxMessageBox(wxString::Format("Insert simple operator %s", the_operator));
-        m_frame_commandPanel->InsertSimpleOperator(the_operator);
+        InsertSimpleOperator(the_operator);
     }
     else if (fn_map.set_compound_operators.find(idx) != fn_map.set_compound_operators.end())  // If an operator is compound and function, it will be considered compound. Maybe make smarter later.
     {
-        // wxMessageBox(wxString::Format("Insert compound operator %s", the_operator));
-        m_frame_commandPanel->InsertCompoundOperator(the_operator);
+        InsertCompoundOperator(the_operator);
     }
     else if (fn_map.set_function_operators.find(idx) != fn_map.set_function_operators.end())
     {
-        // wxMessageBox(wxString::Format("Insert function operator %s", the_operator));
-        m_frame_commandPanel->InsertFunctionOperator(the_operator);
+        InsertFunctionOperator(the_operator);
     }
     else if (std::find(fn_map.list_of_statements.begin(), fn_map.list_of_statements.end(), the_operator) != fn_map.list_of_statements.end())
     {
-        m_frame_commandPanel->InsertStatement(the_operator);
+        InsertStatement(the_operator);
     }
     else if (std::find(fn_map.list_of_learn_rules.begin(), fn_map.list_of_learn_rules.end(), the_operator) != fn_map.list_of_learn_rules.end())
     {
-        m_frame_commandPanel->InsertLearnRule(the_operator);
+        InsertLearnRule(the_operator);
     }
     else if (std::find(fn_map.list_of_infix_type1.begin(), fn_map.list_of_infix_type1.end(), the_operator) != fn_map.list_of_infix_type1.end())
     {
-        m_frame_commandPanel->InsertInfixOperator(the_operator);
+        InsertInfixOperator(the_operator);
     }
     else if (std::find(fn_map.list_of_infix_type2.begin(), fn_map.list_of_infix_type2.end(), the_operator) != fn_map.list_of_infix_type2.end())
     {
-        m_frame_commandPanel->InsertInfixOperator(the_operator);
+        InsertInfixOperator(the_operator);
     }
     else if (the_operator == "|>" || the_operator == "|*>" || the_operator == "|_self>")
     {
-        m_frame_commandPanel->InsertKet(the_operator);
+        InsertKet(the_operator);
     }
     else if (the_operator == "comment")
     {
-        m_frame_commandPanel->InsertComment();
+        InsertComment();
     }
     else if (the_operator == "|context>")
     {
-        m_frame_commandPanel->InsertStatement("context");
+        InsertStatement("context");
     }
     else if (the_operator == "if-then machine")
     {
@@ -838,21 +807,13 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
     else
     {
         wxMessageBox(wxString::Format("Special case %s, will handle later.", the_operator));
-        m_frame_commandPanel->InsertText(the_operator);  // Later handle all the special cases.
+        InsertText(the_operator);  // Later handle all the special cases.
     }
 }
 
 void PrimaryFrame::OnIfThenInsert(wxCommandEvent& event)
 {
-    wxString machine_string = event.GetString();
-    if (m_command_window_active)
-    {
-        m_frame_commandPanel->InsertText(machine_string);
-    }
-    else if (m_edit_window_active)
-    {
-        m_frame_edit_panel->WriteText(machine_string);
-    }
+    InsertText(event.GetString());
 }
 
 void PrimaryFrame::UsageForOperator(wxCommandEvent& event)
@@ -911,7 +872,6 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
 
 void PrimaryFrame::InvokeActiveTable(wxCommandEvent& event)
 {
-    // wxMessageBox("Invoking active table");
     ActiveTableDialog* active_table = new ActiveTableDialog(this);
 }
 
