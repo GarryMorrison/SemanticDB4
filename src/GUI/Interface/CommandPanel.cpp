@@ -206,7 +206,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
                 {
                     m_command_result_canvas->AppendActiveText(driver.result.to_string());
                 }
-                if (!parse_success)
+                if (!parse_success)  // Should we shift this to up higher?
                 {
                     wxMessageBox("Parse failed for command: " + the_command);
                 }
@@ -245,6 +245,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             m_run_time = the_timer.GetTime();
             m_timer_line->SetLabel("Time taken: " + display_time(m_run_time));
         }
+        /*
         else
         {
 
@@ -253,6 +254,8 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             m_current_line++;  // Handle cursor movements later too! And mouse movements!
             m_command_text->GotoLine(m_current_line);
         }
+        */
+        event.Skip();
         break;
     }
     case '\\': {
@@ -266,8 +269,15 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         break;
     }
     case '[': {
-        m_command_text->WriteText("[] ");
-        m_command_text->GotoPos(m_command_text->GetCurrentPos() - 2);
+        if (m_inside_ket)
+        {
+            m_command_text->WriteText("[");
+        }
+        else
+        {
+            m_command_text->WriteText("[] ");
+            m_command_text->GotoPos(m_command_text->GetCurrentPos() - 2);
+        }
         break;
     }
     case '9': {
@@ -303,8 +313,15 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
     case '\'': {
         if (event.ShiftDown())
         {
-            m_command_text->WriteText("\"\"");
-            m_command_text->GotoPos(m_command_text->GetCurrentPos() - 1);
+            if (m_inside_ket)
+            {
+                m_command_text->WriteText("\"");
+            }
+            else
+            {
+                m_command_text->WriteText("\"\"");
+                m_command_text->GotoPos(m_command_text->GetCurrentPos() - 1);
+            }
         }
         else
         {
@@ -354,7 +371,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         int local_char = m_command_text->GetCharAt(m_command_text->GetCurrentPos() - 1);
         if (local_char == '|')
         {
-            wxMessageBox("local char is ket start");
+            // wxMessageBox("local char is ket start");
             m_inside_ket = false;
         }
         if (local_char == '>')
@@ -362,11 +379,11 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             int prev_char = m_command_text->GetCharAt(m_command_text->GetCurrentPos() - 2);
             if (prev_char == '=')
             {
-                wxMessageBox("local char is learn rule end");  // Probably need something a bit smarter! Eg, if have the ket |bah something => Is this even a valid ket?
+                // wxMessageBox("local char is learn rule end");  // Probably need something a bit smarter! Eg, if have the ket |bah something => Is this even a valid ket?
             }
             else
             {
-                wxMessageBox("local char is ket end");
+                // wxMessageBox("local char is ket end");
                 m_inside_ket = true;
             }
         }
@@ -390,7 +407,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         int local_char = m_command_text->GetCharAt(m_command_text->GetCurrentPos());
         if (local_char == '|')  // Convert this to a switch statement.
         {
-            wxMessageBox("local char is ket start");
+            // wxMessageBox("local char is ket start");
             m_inside_ket = true;
         }
         if (local_char == '>')
@@ -398,18 +415,18 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             int prev_char = m_command_text->GetCharAt(m_command_text->GetCurrentPos() - 1);
             if (prev_char == '=')
             {
-                wxMessageBox("local char is learn rule end");  // Probably need something a bit smarter! Eg, if have the ket |bah something => Is this even a valid ket?
+                // wxMessageBox("local char is learn rule end");  // Probably need something a bit smarter! Eg, if have the ket |bah something => Is this even a valid ket?
             }
             else
             {
-                wxMessageBox("local char is ket end");
+                // wxMessageBox("local char is ket end");
                 m_inside_ket = false;
             }
         }
         if (local_char == '=') {
             int next_char = m_command_text->GetCharAt(m_command_text->GetCurrentPos());
             if (next_char == '>') {
-                wxMessageBox("local char is learn rule start");
+                // wxMessageBox("local char is learn rule start");
             }
         }
         break;
@@ -599,13 +616,6 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         }
     }
     }
-    return;
-
-    wxString c(static_cast<char>(event.GetKeyCode()));
-    // wxMessageBox(wxString::Format("Event detected, ID: %d, key: %s, x: %d, y: %d", event.GetKeyCode(), c, event.GetX(), event.GetY()));
-    // m_command_text->WriteText(static_cast<wxChar>(event.GetKeyCode()));
-    m_command_text->WriteText(c);
-    // event.Skip();  // If we enable this, the char still gets printed in the command_text window.
 }
 
 void CommandPanel::OnLeftMouseDown(wxStyledTextEvent& event)  // Nope. Is never invoked.
