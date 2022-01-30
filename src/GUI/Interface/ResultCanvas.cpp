@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/29
+// Updated 2022/1/18
 // Author Garry Morrison
 // License GPL v3
 //
@@ -12,6 +12,7 @@
 ResultCanvas::ResultCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
     : wxScrolledWindow(parent, id, pos, size, style | wxBORDER_THEME)
 {
+    SetScrollbars(20, 20, 50, 50);  // Finally solved my scrolling issue!
     m_mouse_pos = wxPoint(0, 0);
 
     // Set font types:
@@ -33,6 +34,7 @@ void ResultCanvas::OnPaint(wxPaintEvent& event)
 {
     //wxPaintDC pdc(this);
     wxAutoBufferedPaintDC pdc(this);
+    // DoPrepareDC(pdc);
     Draw(pdc);
     event.Skip(true);
 }
@@ -53,6 +55,7 @@ void ResultCanvas::AppendText(const wxString& wxs, bool isactive, int object_typ
     m_canvas_objects.push_back(std::make_shared<ResultCanvasString>(this, wxs, isactive, object_type, ismonospace, wxRect(m_x, m_y, textWidth, textHeight)));
     m_x += textWidth;
     m_last_y = std::max(m_last_y, m_y + textHeight);
+    m_max_x = std::max(m_max_x, m_x);
     Refresh();
 }
 
@@ -95,7 +98,15 @@ void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix,
         {
             if (!inside_ket && c == '|')
             {
-                AppendText(wxString(token), false, RC_OBJECT_NONE, is_mono);
+                if (inside_object)
+                {
+                    AppendText(wxString(token), true, RC_OBJECT_SIMPLE_OP, is_mono);
+                }
+                else
+                {
+                    AppendText(wxString(token), false, RC_OBJECT_NONE, is_mono);
+                }
+                inside_object = false;
                 inside_ket = true;
                 token = c;
             }
@@ -172,6 +183,7 @@ void ResultCanvas::AppendNewLine()
     m_x = 10;
     m_y = m_last_y + 5;  // Maybe something bigger than 5? 10?
     m_last_y = m_y;
+    SetVirtualSize(m_max_x, m_y);
     Refresh();
 }
 
@@ -183,6 +195,7 @@ void ResultCanvas::AppendLine()
     m_last_y = m_y;
     m_canvas_objects.push_back(std::make_shared<ResultCanvasLine>(this, m_y));
     m_y += 5;
+    SetVirtualSize(m_max_x, m_y);
     Refresh();
 }
 
@@ -297,6 +310,7 @@ void ResultCanvas::ClearCanvas()  // Tidy!
     m_x = 10;
     m_y = 10;
     m_last_y = 10;
+    m_max_x = 10;
     m_mouse_pos = wxPoint(0, 0);
     m_mouse_positions.clear();
 
@@ -318,6 +332,7 @@ void ResultCanvas::Draw(wxAutoBufferedPaintDC& pdc)
     {
         object->Draw(pdc);
     }
+    // SetVirtualSize(m_x, m_y); // Not the best location for it.
 }
 
 
@@ -431,7 +446,13 @@ const void ResultCanvasString::OnMouseLeftClick() const
         {
         case RC_OBJECT_KET: {
             // wxMessageBox("Ket clicked: " + the_text_struct.text);
-            DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, EXAMPLE_KET_KNOWLEDGE, m_parent->GetPositionDelta());  // Change constructor later.
+            std::string ket_label = strip_ket(m_text.ToStdString());  // wxString vs std::string again!
+            Ket k(ket_label);
+            std::vector<ulong> operators;
+            operators.push_back(ket_map.get_idx("*"));
+            std::vector<ulong> general_operators;
+            std::string knowledge = dump(k, context, operators, general_operators);
+            DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, knowledge, m_parent->GetPositionDelta());  // Change constructor later.
             m_parent->IncreasePositionDelta(wxPoint(40, 40));
             break;
         }
@@ -443,7 +464,12 @@ const void ResultCanvasString::OnMouseLeftClick() const
             if (!operator_usage_map.usage_is_defined(the_operator))
             {
                 // wxMessageBox("No usage info available for operator: " + the_operator);
-                DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, EXAMPLE_OP_KNOWLEDGE, m_parent->GetPositionDelta());  // Change constructor later.
+                Superposition ket_sp(context.relevant_kets(the_operator));
+                std::vector<ulong> operators;
+                operators.push_back(ket_map.get_idx(the_operator));
+                std::vector<ulong> general_operators;
+                std::string knowledge = dump(ket_sp, context, operators, general_operators);
+                DumpFrame* dump_frame = new DumpFrame(m_parent, "Knowledge for " + m_text, knowledge, m_parent->GetPositionDelta());  // Change constructor later.
                 m_parent->IncreasePositionDelta(wxPoint(40, 40));
                 return;
             }

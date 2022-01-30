@@ -44,6 +44,7 @@ const std::string LearnRule::to_string() const {
     std::string rule_sym;
     switch (_rule_type) {
     case RULENORMAL: { rule_sym = " => "; break; }
+    case RULENONEMPTY: { rule_sym = " _=> "; break; }  // Not sure we need this here, but we will include it anyway.
     case RULEADD: { rule_sym = " +=> "; break; }
     case RULESEQ: { rule_sym = " .=> "; break; }
     case RULESTORED: { rule_sym = " #=> "; break; }
@@ -70,6 +71,7 @@ Sequence LearnRule::Compile(ContextList& context) const {  // Maybe we should co
             ulong label_idx = _ket_like_seq->to_ket().label_idx();    // Can we instead directly invoke .label_idx() ?
             switch (_rule_type) {
             case RULENORMAL: { context.learn(_first_op_idx, label_idx, _RHS_seq); break; }
+            case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, label_idx, _RHS_seq); break; }
             case RULEADD: { context.add_learn(_first_op_idx, label_idx, _RHS_seq); break; }
             case RULESEQ: { context.seq_learn(_first_op_idx, label_idx, _RHS_seq); break; }
             case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, _RHS_seq); break; }
@@ -83,6 +85,7 @@ Sequence LearnRule::Compile(ContextList& context) const {  // Maybe we should co
                 ulong label_idx = k.label_idx();
                 switch (_rule_type) {
                 case RULENORMAL: { context.learn(_first_op_idx, label_idx, _RHS_seq); break; }
+                case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, label_idx, _RHS_seq); break; }
                 case RULEADD: { context.add_learn(_first_op_idx, label_idx, _RHS_seq); break; }
                 case RULESEQ: { context.seq_learn(_first_op_idx, label_idx, _RHS_seq); break; }
                 case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, _RHS_seq); break; }
@@ -98,6 +101,7 @@ Sequence LearnRule::Compile(ContextList& context) const {  // Maybe we should co
         ulong label_idx = k.label_idx();
         switch (_rule_type) {
         case RULENORMAL: { context.learn(_first_op_idx, k, _RHS_seq); break; }
+        case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, k, _RHS_seq); break; }
         case RULEADD: { context.add_learn(_first_op_idx, k, _RHS_seq); break; }
         case RULESEQ: { context.seq_learn(_first_op_idx, k, _RHS_seq); break; }
         case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, _RHS_seq); break; }
@@ -131,13 +135,14 @@ Sequence LearnRule::Compile(ContextList& context, const Ket& label_ket1, const K
             // Ket label_ket = _ket_like_seq->to_ket();
             Ket label_ket = _ket_like_seq->Compile(context, label_ket1, multi_label_ket).to_ket();
             ulong label_idx = label_ket.label_idx();
-            if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
+            if (_rule_type == RULENORMAL || _rule_type == RULENONEMPTY || _rule_type == RULEADD || _rule_type == RULESEQ) {
                 Sequence RHS = _RHS_seq->Compile(context, label_ket, multi_label_ket);
                 bSeq2 = std::make_shared<Sequence>(RHS);
             }
 
             switch (_rule_type) {
             case RULENORMAL: { context.learn(_first_op_idx, label_idx, bSeq2); break; }
+            case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, label_idx, bSeq2); break; }
             case RULEADD: { context.add_learn(_first_op_idx, label_idx, bSeq2); break; }
             case RULESEQ: { context.seq_learn(_first_op_idx, label_idx, bSeq2); break; }
             case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, bSeq2); break; }
@@ -149,13 +154,14 @@ Sequence LearnRule::Compile(ContextList& context, const Ket& label_ket1, const K
         else {
             for (const auto k : _ket_like_seq->to_sp()) {  // Not sure this branch is ever triggered.
                 ulong label_idx = k.label_idx();
-                if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
+                if (_rule_type == RULENORMAL || _rule_type == RULENONEMPTY || _rule_type == RULEADD || _rule_type == RULESEQ) {
                     Sequence RHS = _RHS_seq->Compile(context, k, multi_label_ket);
                     bSeq2 = std::make_shared<Sequence>(RHS);
                 }
 
                 switch (_rule_type) {
                 case RULENORMAL: { context.learn(_first_op_idx, label_idx, bSeq2); break; }
+                case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, label_idx, bSeq2); break; }
                 case RULEADD: { context.add_learn(_first_op_idx, label_idx, bSeq2); break; }
                 case RULESEQ: { context.seq_learn(_first_op_idx, label_idx, bSeq2); break; }
                 case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, bSeq2); break; }
@@ -173,13 +179,14 @@ Sequence LearnRule::Compile(ContextList& context, const Ket& label_ket1, const K
     // std::cout << "    indirect sp: " << indirect_sp.to_string() << std::endl;
     for (const auto k : indirect_sp) {
         ulong label_idx = k.label_idx();
-        if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
+        if (_rule_type == RULENORMAL || _rule_type == RULENONEMPTY || _rule_type == RULEADD || _rule_type == RULESEQ) {
             Sequence RHS = _RHS_seq->Compile(context, k, multi_label_ket);
             bSeq2 = std::make_shared<Sequence>(RHS);
         }
 
         switch (_rule_type) {
         case RULENORMAL: { context.learn(_first_op_idx, k, bSeq2); break; }
+        case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, k, bSeq2); break; }
         case RULEADD: { context.add_learn(_first_op_idx, k, bSeq2); break; }
         case RULESEQ: { context.seq_learn(_first_op_idx, k, bSeq2); break; }
         case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, bSeq2); break; }
@@ -206,13 +213,14 @@ Sequence LearnRule::Compile(ContextList& context, const Ket& label_ket1, const s
         if (_ket_like_seq->is_ket()) {  // Primary / most common branch
             Ket label_ket = _ket_like_seq->to_ket();
             ulong label_idx = label_ket.label_idx();    // Can we instead directly invoke .label_idx() ?
-            if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
+            if (_rule_type == RULENORMAL || _rule_type == RULENONEMPTY || _rule_type == RULEADD || _rule_type == RULESEQ) {
                 Sequence RHS = _RHS_seq->Compile(context, label_ket, args);
                 bSeq2 = std::make_shared<Sequence>(RHS);
             }
 
             switch (_rule_type) {
             case RULENORMAL: { context.learn(_first_op_idx, label_idx, bSeq2); break; }
+            case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, label_idx, bSeq2); break; }
             case RULEADD: { context.add_learn(_first_op_idx, label_idx, bSeq2); break; }
             case RULESEQ: { context.seq_learn(_first_op_idx, label_idx, bSeq2); break; }
             case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, bSeq2); break; }
@@ -224,13 +232,14 @@ Sequence LearnRule::Compile(ContextList& context, const Ket& label_ket1, const s
         else {
             for (const auto k : _ket_like_seq->to_sp()) {  // Not sure this branch is ever triggered.
                 ulong label_idx = k.label_idx();
-                if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
+                if (_rule_type == RULENORMAL || _rule_type == RULENONEMPTY || _rule_type == RULEADD || _rule_type == RULESEQ) {
                     Sequence RHS = _RHS_seq->Compile(context, k, args);
                     bSeq2 = std::make_shared<Sequence>(RHS);
                 }
 
                 switch (_rule_type) {
                 case RULENORMAL: { context.learn(_first_op_idx, label_idx, bSeq2); break; }
+                case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, label_idx, bSeq2); break; }
                 case RULEADD: { context.add_learn(_first_op_idx, label_idx, bSeq2); break; }
                 case RULESEQ: { context.seq_learn(_first_op_idx, label_idx, bSeq2); break; }
                 case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, bSeq2); break; }
@@ -247,13 +256,14 @@ Sequence LearnRule::Compile(ContextList& context, const Ket& label_ket1, const s
     // std::cout << "    indirect sp: " << indirect_sp.to_string() << std::endl;
     for (const auto k : indirect_sp) {
         ulong label_idx = k.label_idx();
-        if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
+        if (_rule_type == RULENORMAL || _rule_type == RULENONEMPTY || _rule_type == RULEADD || _rule_type == RULESEQ) {
             Sequence RHS = _RHS_seq->Compile(context, k, args);
             bSeq2 = std::make_shared<Sequence>(RHS);
         }
 
         switch (_rule_type) {
         case RULENORMAL: { context.learn(_first_op_idx, k, bSeq2); break; }
+        case RULENONEMPTY: { context.non_empty_learn(_first_op_idx, k, bSeq2); break; }
         case RULEADD: { context.add_learn(_first_op_idx, k, bSeq2); break; }
         case RULESEQ: { context.seq_learn(_first_op_idx, k, bSeq2); break; }
         case RULESTORED: { context.stored_learn(_first_op_idx, label_idx, bSeq2); break; }
@@ -263,3 +273,4 @@ Sequence LearnRule::Compile(ContextList& context, const Ket& label_ket1, const s
     }
     return bSeq2->to_seq();
 }
+

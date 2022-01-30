@@ -40,6 +40,7 @@ public:
     // methods needed to support BaseSequence:
     const int type() const { return MULTILEARNRULE; }
     const bool is_ket() const { return false; }
+    const bool is_empty_ket() const { return false; }
     const size_t size() const { return vec_rules.size(); }
     const std::string to_string() const;
     const std::string to_string(const std::string& prefix) const;

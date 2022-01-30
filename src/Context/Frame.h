@@ -19,6 +19,7 @@
 #define RULEMEMOIZE 23
 #define RULEADD 24
 #define RULESEQ 25
+#define RULENONEMPTY 26
 
 class Frame {
 private:

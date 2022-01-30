@@ -92,6 +92,9 @@ bool Superposition::operator==(const Superposition& other) const {
     return true;
 }
 
+const bool Superposition::is_empty_ket() const {
+    return sort_order.empty();
+}
 
 const size_t Superposition::size() const {
     return sort_order.size();

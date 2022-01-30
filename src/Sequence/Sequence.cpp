@@ -59,6 +59,14 @@ const bool Sequence::is_ket() const {
     return false;
 }
 
+const bool Sequence::is_empty_ket() const {
+    if (seq.empty()) { return true; }
+    if (seq.size() == 1) {
+        return seq[0].is_empty_ket();
+    }
+    return false;
+}
+
 const size_t Sequence::size() const {
     // if (seq.empty()) { return 0; }
     if (seq.size() == 1) {

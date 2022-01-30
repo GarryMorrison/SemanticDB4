@@ -24,4 +24,6 @@ bool string_starts_with_token(const std::string& str, const std::vector<std::str
 bool string_ends_with_token(const std::string& str, const std::vector<std::string>& tokens);
 std::string string_repeat(const std::string& input, unsigned num);
 bool is_number(const std::string& str);
+std::string strip_ket(const std::string& str);
+std::string strip_leading_spaces(const std::string& s, const unsigned int spaces_count);
 

@@ -24,6 +24,7 @@ public:
     SelfKet(const unsigned int idx2, const double d) { idx = idx2; value = d; }
     const int type() const { return SELFKET; }
     const bool is_ket() const { return true; }
+    const bool is_empty_ket() const { return false; }
     const std::string to_string() const;
     const std::string to_string(const std::string& prefix) const;
     // const ulong size() const { return 1; }

@@ -44,6 +44,7 @@ public:
 
     const int type() const { return SUPERPOSITION; };
     const bool is_ket() const { if (sort_order.size() <= 1) { return true; } return false; }
+    const bool is_empty_ket() const;
     // const ulong size() const;
     const size_t size() const;
     const std::string to_string() const;

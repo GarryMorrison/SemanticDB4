@@ -1,15 +1,16 @@
 //
 // Semantic DB 4
 // Created 2021/12/29
-// Updated 2021/12/29
+// Updated 2022/1/8
 // Author Garry Morrison
 // License GPL v3
 //
 
 #include "FilteredDumpFrame.h"
+extern SDB::Driver driver;
 
 FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, const std::vector<std::string>& op_list, const std::vector<std::string>& ket_list, const wxPoint position_delta, long style)
-    : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(700, 680), style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
+    : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(700, 800), style | wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER)
 {
     m_parent = parent;
     m_position_delta = position_delta;
@@ -23,23 +24,6 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         local_title += join(op_list, ", ") + ", " + join(ket_list, ", ");
     }
 
-    for (const auto& op : op_list)  // Later put this section in UpdateKnowledge() method?
-    {
-        if (!m_knowledge.empty())
-        {
-            m_knowledge += "\n\n";
-        }
-        m_knowledge += EXAMPLE_OP_KNOWLEDGE;  // dump[op] rel-kets[op]
-    }
-    for (const auto& ket : ket_list)
-    {
-        if (!m_knowledge.empty())
-        {
-            m_knowledge += "\n\n";
-        }
-        m_knowledge += EXAMPLE_KET_KNOWLEDGE;  // dump[*] |ket>
-    }
-
     wxPanel* panel = new wxPanel(this, wxID_ANY);
 
     SetTitle(local_title);  // Ignore passed in title for now.
@@ -47,21 +31,24 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
  
     // Add context selector:
     wxBoxSizer* hbox1 = new wxBoxSizer(wxHORIZONTAL);
-    wxArrayString context_list;  // Later wire in ContextList, for now just some dummy values.
-    context_list.Add("global");
-    context_list.Add("plurals");
-    context_list.Add("numbers to words");
-    context_list.Add("predicting integer sequences");
-    wxChoice* context_selector = new wxChoice(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, context_list);
-    context_selector->SetSelection(0);
+    wxArrayString context_list;
+    for (const auto& name : driver.context.get_context_names())
+    {
+        context_list.Add(name);
+    }
+    m_context_selector = new wxChoice(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, context_list);
+    m_context_selector->SetSelection(driver.context.get_context_index());
     hbox1->Add(new wxStaticText(panel, wxID_ANY, "Context", wxDefaultPosition, wxDefaultSize), wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
-    hbox1->Add(context_selector, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    hbox1->Add(m_context_selector, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
     wxCheckBox* use_active_text_checkbox = new wxCheckBox(panel, wxID_ANY, "Active text");
     use_active_text_checkbox->SetValue(m_use_active_text);
     hbox1->Add(use_active_text_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
     wxCheckBox* op_ket_and_checkbox = new wxCheckBox(panel, wxID_ANY, "And operators and kets");
     op_ket_and_checkbox->SetValue(m_use_op_ket_and);
     hbox1->Add(op_ket_and_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    wxCheckBox* general_operators_checkbox = new wxCheckBox(panel, wxID_ANY, "General operators");
+    general_operators_checkbox->SetValue(m_show_general_operators);
+    hbox1->Add(general_operators_checkbox, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
     topsizer->AddSpacer(10);
     topsizer->Add(hbox1);
 
@@ -123,6 +110,39 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
     // topsizer->Add(button_sizer, wxSizerFlags(0).Center());
     topsizer->Add(button_sizer, wxSizerFlags(0).Left());
 
+    
+    /*
+    wxArrayString grid_data;  // Later enter real data, ie: supported-ops |*>
+    grid_data.Add("zero");
+    grid_data.Add("one");
+    grid_data.Add("two");
+    grid_data.Add("three");
+    grid_data.Add("four");
+    grid_data.Add("five");
+    grid_data.Add("six");
+    grid_data.Add("seven");
+    grid_data.Add("eight");
+    grid_data.Add("nine");
+    grid_data.Add("ten");
+    */
+
+    // wxArrayString general_ops;
+    ulong star_idx = ket_map.get_idx("*");
+    list_idx = 0;
+    for (ulong op_idx : driver.context.supported_ops(star_idx))
+    {
+        m_general_ops.Add(ket_map.get_str(op_idx));
+        m_map_general_ops[list_idx] = op_idx;
+        list_idx++;
+    }
+
+    // m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", grid_data);
+    // m_general_operators_frame = new GeneralOperatorsFrame(this, "General operators", general_ops);
+    m_general_operators_frame = new GeneralOperatorsFrame(this);
+    m_general_operators_frame->Hide();
+
+    m_context_selector->Bind(wxEVT_CHOICE, &FilteredDumpFrame::OnContextSelect, this);
+
     close_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
         if (event.GetId() == wxID_OK)
         {
@@ -140,15 +160,46 @@ FilteredDumpFrame::FilteredDumpFrame(wxWindow* parent, const wxString& title, co
         UpdateKnowledge();
         });
 
+    general_operators_checkbox->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
+        if (!m_general_operators_frame)                                  // Maybe we should create it here, if it doesn't exist?
+        {
+            wxMessageBox("General operators window no longer exists!");  // Nope. It still crashes!
+        }
+        else
+        {
+            m_show_general_operators = general_operators_checkbox->GetValue();
+            if (m_show_general_operators)
+            {
+                m_general_operators_frame->Show();
+            }
+            else
+            {
+                m_general_operators_frame->Hide();
+            }
+        }
+        });
+
+
     m_literal_op_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckLiteralOpList, this);
     m_ket_list_box->Bind(wxEVT_CHECKLISTBOX, &FilteredDumpFrame::CheckKetList, this);
+    m_general_operators_frame->Bind(EVT_GRID_CLICK, &FilteredDumpFrame::CheckGeneralOpList, this);  // How prevent crash if our gen-ops-frame is closed on us?
+    
 
+    UpdateKnowledge();
     panel->SetSizerAndFit(topsizer);
+    Fit();
     CenterOnScreen();
     wxPoint dialog_position = GetScreenPosition();  // I think my position delta code is not working just yet ....
     dialog_position += m_position_delta;
     SetPosition(dialog_position);
     Show();
+}
+
+void FilteredDumpFrame::OnContextSelect(wxCommandEvent& event)
+{
+    unsigned int new_selection = m_context_selector->GetSelection();
+    driver.context.set(new_selection);
+    UpdateKnowledge();
 }
 
 void FilteredDumpFrame::CheckLiteralOpList(wxCommandEvent& event)
@@ -188,35 +239,99 @@ void FilteredDumpFrame::CheckKetList(wxCommandEvent& event)
     UpdateKnowledge();
 }
 
+void FilteredDumpFrame::CheckGeneralOpList(wxCommandEvent& event)
+{
+    // wxMessageBox(wxString::Format("Item clicked: %s, Item idx: %d", event.GetString(), event.GetInt()));
+    
+    wxString item_clicked = event.GetString();
+    /*
+    ulong item_idx = ket_map.get_idx(item_clicked.ToStdString());
+    unsigned int list_idx = event.GetInt();  // Bug to fix! If the general op frames context has changed, then the list_idx won't be correct!
+    if (m_map_general_ops.find(list_idx) == m_map_general_ops.end())  // Maybe handle this in a smarter way? Eg, so we can use an operator based on its label, not its idx.
+    {
+        wxMessageBox("General operator out of bounds.");
+        return;
+    }
+    if (m_map_general_ops[list_idx] != item_idx)  // Bounds check needed? Yup!
+    {
+        wxMessageBox("General operator doesn't match.");
+        return;
+    }
+    */
+    int list_idx = m_general_ops.Index(item_clicked);
+    if (list_idx == wxNOT_FOUND)
+    {
+        if (m_general_operators_frame->IsChecked(event.GetInt()))
+        {
+            wxMessageBox(wxString::Format("General operator \"%s\" not found", item_clicked));
+        }
+        return;
+    }
+    if (m_general_operators_frame->IsChecked(list_idx))
+    {
+        // wxMessageBox(item_clicked + " checked");
+        m_set_active_general_ops.insert(list_idx);
+    }
+    else
+    {
+        // wxMessageBox(item_clicked + " unchecked");
+        m_set_active_general_ops.erase(list_idx);
+    }
+    UpdateKnowledge();
+}
+
 void FilteredDumpFrame::UpdateKnowledge()
 {
     m_knowledge.Clear();
     if (!m_use_op_ket_and)
     {
+        std::vector<ulong> general_operators;
         for (unsigned int op_idx : m_set_active_literal_ops)  // Later: dump[op] rel-kets[op]
         {
-            wxString op = m_literal_ops[op_idx];
-            m_knowledge += "knowledge for literal operator: " + op + "\n";  // Maybe sort the knowledge according to some criteria? For now, set sorts by list_idx. Which is good!
+            // wxString op = m_literal_ops[op_idx];
+            // m_knowledge += "knowledge for literal operator: " + op + "\n";  // Maybe sort the knowledge according to some criteria? For now, set sorts by list_idx. Which is good!
+            std::string op = m_literal_ops[op_idx].ToStdString();
+            Superposition ket_sp(context.relevant_kets(op));
+            std::vector<ulong> operators;
+            operators.push_back(ket_map.get_idx(op));
+            m_knowledge += dump(ket_sp, context, operators, general_operators);
         }
         if (!m_knowledge.empty())
         {
             m_knowledge += "\n";
         }
+        for (unsigned int list_idx : m_set_active_general_ops)
+        {
+            ulong op_idx = m_map_general_ops[list_idx];
+            general_operators.push_back(op_idx);
+        }
         for (unsigned int ket_idx : m_set_active_kets)  // Later: dump[*] |ket>
         {
-            wxString k = m_kets[ket_idx];
-            m_knowledge += "knowledge for ket: " + k + "\n";  // Maybe sort the knowledge according to some criteria?
+            // wxString k = m_kets[ket_idx];
+            // m_knowledge += "knowledge for ket: " + k + "\n";  // Maybe sort the knowledge according to some criteria?
+            std::string ket_label = strip_ket(m_kets[ket_idx].ToStdString());  // wxString vs std::string again!
+            Ket k(ket_label);
+            std::vector<ulong> operators;
+            operators.push_back(ket_map.get_idx("*"));
+            m_knowledge += dump(k, context, operators, general_operators);
         }
     }
     else
     {
+        std::vector<ulong> general_operators;
         for (unsigned int op_idx : m_set_active_literal_ops)
         {
-            wxString op = m_literal_ops[op_idx];
+            // wxString op = m_literal_ops[op_idx];
             for (unsigned int ket_idx : m_set_active_kets)
             {
-                wxString k = m_kets[ket_idx];
-                m_knowledge += wxString::Format("knowledge for literal operator: %s and ket: %s\n", op, k);
+                // wxString k = m_kets[ket_idx];
+                // m_knowledge += wxString::Format("knowledge for literal operator: %s and ket: %s\n", op, k);
+                std::string ket_label = strip_ket(m_kets[ket_idx].ToStdString());  // wxString vs std::string again!
+                Ket k(ket_label);
+                std::string op = m_literal_ops[op_idx].ToStdString();
+                std::vector<ulong> operators;
+                operators.push_back(ket_map.get_idx(op));
+                m_knowledge += dump(k, context, operators, general_operators);
             }
         }
     }

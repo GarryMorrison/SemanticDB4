@@ -376,14 +376,21 @@ Ket op_minus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >&
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number - value, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number - value, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number - value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number - value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -391,14 +398,21 @@ Ket op_plus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >& 
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number + value, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number + value, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number + value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number + value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -406,14 +420,21 @@ Ket op_times_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant>
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number * value, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number * value, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number * value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number * value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -422,14 +443,21 @@ Ket op_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant
     long double value = parameters[0]->get_float();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number / value, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number / value, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -438,14 +466,21 @@ Ket op_int_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundCons
     long double value = parameters[0]->get_float();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int((long double)(number / value), default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int((long double)(number / value), default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -454,14 +489,21 @@ Ket op_round(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >&
     unsigned int value = parameters[0]->get_int();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    if (split_idx.empty()) {
-        return Ket(float_to_int(number, value), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        if (split_idx.empty()) {
+            return Ket(float_to_int(number, value), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int(number, value), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number, value), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -470,15 +512,22 @@ Ket op_modulus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
-    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
-    split_idx.pop_back();
-    long long result = static_cast<long long>(number) % static_cast<long long>(value);
-    if (split_idx.empty()) {
-        return Ket(float_to_int((long double)result, default_decimal_places), k.value());
+    try
+    {
+        long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+        split_idx.pop_back();
+        long long result = static_cast<long long>(number) % static_cast<long long>(value);
+        if (split_idx.empty()) {
+            return Ket(float_to_int((long double)result, default_decimal_places), k.value());
+        }
+        else {
+            std::string category = ket_map.get_str(split_idx) + ": ";
+            return Ket(category + float_to_int((long double)result, default_decimal_places), k.value());
+        }
     }
-    else {
-        std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int((long double)result, default_decimal_places), k.value());
+    catch (const std::invalid_argument& e) {
+        (void)e; // To silence C4101 warning.
+        return Ket();  // Return |> or k?
     }
 }
 
@@ -2186,4 +2235,182 @@ Ket op_save_as_dot(const Superposition& sp, ContextList& context, const std::vec
         return Ket("failed to save dot file");
     }
     return Ket("We shouldn't be here in save-as-dot.");
+}
+
+
+std::string dump(const Superposition& input_sp, ContextList& context, const std::vector<ulong>& operators, const std::vector<ulong>& general_operators)
+{
+    std::string s;
+    ulong star_idx = ket_map.get_idx("*");
+    for (const auto& k : input_sp)
+    {
+        bool has_line_added = false;
+        if (operators.size() == 1 && operators[0] == star_idx)
+        {
+            for (ulong op_idx : context.supported_ops(k.label_idx()))
+            {
+                std::string op_label = ket_map.get_str(op_idx);
+                unsigned int rhs_type = context.recall_type(op_idx, k.label_idx());
+                if (rhs_type == RULEUNDEFINED) {
+                    continue;
+                }
+                has_line_added = true;
+                std::string rhs = context.recall(op_idx, k.label_idx())->to_string();
+                std::string rule_type_str;
+                switch (rhs_type) {
+                case RULESTORED: {
+                    rule_type_str = "#";
+                    break;
+                }
+                case RULEMEMOIZE: {
+                    rule_type_str = "!";
+                    break;
+                }
+                }
+                s += op_label + ' ' + k.to_string() + ' ' + rule_type_str + "=> " + rhs;
+                s += "\n";
+            }
+            for (ulong op_idx : general_operators)
+            {
+                std::string op_label = ket_map.get_str(op_idx);
+                Sequence seq = context.active_recall(op_idx, k.label_idx());
+                s += op_label + ' ' + k.to_string() + " => " + seq.to_string() + "\n";
+                has_line_added = true;
+            }
+        }
+        else
+        {
+            for (ulong op_idx : operators)
+            {
+                std::string op_label = ket_map.get_str(op_idx);
+                unsigned int rhs_type = context.recall_type(op_idx, k.label_idx());
+                if (rhs_type == RULEUNDEFINED) {
+                    continue;
+                }
+                has_line_added = true;
+                std::string rhs = context.recall(op_idx, k.label_idx())->to_string();
+                std::string rule_type_str;
+                switch (rhs_type) {
+                case RULESTORED: {
+                    rule_type_str = "#";
+                    break;
+                }
+                case RULEMEMOIZE: {
+                    rule_type_str = "!";
+                    break;
+                }
+                }
+                s += op_label + ' ' + k.to_string() + ' ' + rule_type_str + "=> " + rhs;
+                s += "\n";
+            }
+            for (ulong op_idx : general_operators)
+            {
+                std::string op_label = ket_map.get_str(op_idx);
+                Sequence seq = context.active_recall(op_idx, k.label_idx());
+                s += op_label + ' ' + k.to_string() + " => " + seq.to_string() + "\n";
+                has_line_added = true;
+            }
+        }
+        if (has_line_added)
+        {
+            s += "\n";
+        }
+    }
+    return s;
+}
+
+
+Superposition op_transitive(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.empty()) { return Ket(); }
+    Superposition full_sp;
+    if (parameters.size() == 1)
+    {
+        if (parameters[0]->type() != COPERATOR) { return Ket(); }
+        SimpleOperator op = parameters[0]->get_operator();
+        Superposition working_sp = op.Compile(context, input_seq).to_sp();
+        if (working_sp.is_empty_ket()) { return working_sp; }
+        full_sp = working_sp;
+        Superposition previous_sp = full_sp;
+        size_t previous_len = 0;
+        size_t current_len = working_sp.size();
+        while (true)
+        {
+            working_sp = op.Compile(context, working_sp).to_sp();
+            if (working_sp.is_empty_ket()) { /* std::cout << "empty\n" */; return full_sp; }
+            full_sp.add(working_sp);
+            current_len = full_sp.size();
+            if (previous_len == current_len) { std::cout << "equal\n"; return previous_sp; }  // Prevent infinite loop if graph has a loop.
+            previous_sp = full_sp;
+            previous_len = current_len;
+        }
+    }
+    if (parameters.size() == 2)
+    {
+        if (parameters[0]->type() != COPERATOR || parameters[1]->type() != CINT) { return Ket(); }
+        SimpleOperator op = parameters[0]->get_operator();
+        int max_steps = parameters[1]->get_int();
+        if (max_steps < 1) { return Ket(); }
+        int steps = 0;
+        Superposition working_sp = op.Compile(context, input_seq).to_sp();
+        if (working_sp.is_empty_ket()) { return working_sp; }
+        full_sp = working_sp;
+        Superposition previous_sp = full_sp;
+        steps++;
+        if (steps >= max_steps) { return full_sp; }
+        size_t previous_len = 0;
+        size_t current_len = working_sp.size();
+        while (true)
+        {
+            working_sp = op.Compile(context, working_sp).to_sp();
+            if (working_sp.is_empty_ket()) { /* std::cout << "empty\n" */; return full_sp; }
+            full_sp.add(working_sp);
+            current_len = full_sp.size();
+            if (previous_len == current_len) { std::cout << "equal\n"; return previous_sp; }  // Prevent infinite loop if graph has a loop.
+            previous_sp = full_sp;
+            previous_len = current_len;
+            steps++;
+            if (steps >= max_steps) { return full_sp; }
+        }
+    }
+    return full_sp;
+}
+
+Sequence op_stransitive(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 2) { return Ket(); }
+    if (parameters[0]->type() != COPERATOR || parameters[1]->type() != CINT) { return Ket(); }
+    SimpleOperator op = parameters[0]->get_operator();
+    int max_steps = parameters[1]->get_int();
+    if (max_steps < 1) { return Ket(); }
+    int steps = 0;
+    Sequence working_seq = op.Compile(context, input_seq);
+    if (working_seq.is_empty_ket()) { return working_seq; }
+    Sequence full_seq = working_seq;
+    steps++;
+    while (steps < max_steps)  // Convert it into a for loop?
+    {
+        working_seq = op.Compile(context, working_seq);
+        if (working_seq.is_empty_ket()) { return full_seq; }
+        full_seq.append(working_seq);
+        steps++;
+    }
+    return full_seq;
+}
+
+Sequence op_borrow_from_context(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 2) { return Ket(); }
+    if (parameters[0]->type() != CSTRING || parameters[1]->type() != COPERATOR) { return Ket(); }
+    std::string context_name = parameters[0]->get_string();
+    SimpleOperator op = parameters[1]->get_operator();
+    Sequence seq;
+    std::string starting_context_name = context.get_context_name();
+    bool switch_success = context.switch_context(context_name);
+    if (switch_success)
+    {
+        seq = op.Compile(context, input_seq);
+        context.switch_context(starting_context_name);  // Only need to switch back to the original context if it successfully changed.
+    }
+    return seq;
 }

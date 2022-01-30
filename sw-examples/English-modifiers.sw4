@@ -1,0 +1,63 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
+-- some sample English modifiers:
+-- there is plenty of room for more, and improved implementations.
+
+not |yes> => |no>
+not |no> => |yes>
+
+not |*> #=>
+    if( has-prefix["not "] |__self> ):
+        remove-prefix["not "] |__self>
+    else:
+        |not> __  |__self>
+    end:
+
+somewhat |*> #=>
+    the |ket> => clean |__self>
+    the |coeff> => extract-value push-float |__self>
+    if( the|coeff> > |1>):
+        |__self>
+    else:
+        0.5 the |ket>
+    end:
+
+slightly |*> #=>
+    the |ket> => clean |__self>
+    the |coeff> => extract-value push-float |__self>
+    if( the|coeff> > |1>):
+        the |result> => |__self>
+    else:
+        if( the |coeff> == |1>):
+            the |result> => 0.3 the |ket>
+        else:
+            new |coeff> => the |coeff> -- divide-by[2] the |coeff>
+            the |result> => pop-float (the|ket> :_ new |coeff>)
+        end:
+    end:
+    the |result>
+
+very |*> #=>
+    the |ket> => clean |__self>
+    the |coeff> => extract-value push-float |__self>
+    if( the|coeff> > |1>):
+        the |result> => |__self>
+    else:
+        if( the |coeff> == |1>):
+            the |result> => 0.9 the |ket>
+        else:
+            new |coeff> => the |coeff> ++ divide-by[2] ( |1> -- the |coeff>)
+            the |result> => pop-float (the|ket> :_ new |coeff>)
+        end:
+    end:
+    the |result>
+
+completely |*> #=>
+    the |ket> => clean |__self>
+    the |coeff> => extract-value push-float |__self>
+    if( the|coeff> > |1>):
+        |__self>
+    else:
+        the |ket>
+    end:

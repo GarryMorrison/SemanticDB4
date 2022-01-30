@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/23
 // Author Garry Morrison
 // License GPL v3
 //
@@ -461,7 +461,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "\nplus:\n"
         "    description:\n"
         "        plus[n] ket\n"
-        "        add n to the value in the ket, leaving the coefficient unchanged\n\n"
+        "        add n to the value in the ket, leaving the coefficient unchanged\n"
+        "        if the ket is not a number, then return the empty ket |>\n\n"
         "    examples:\n"
         "        plus[5] |3.1415>\n"
         "            |8.1415>\n\n"
@@ -472,7 +473,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "\nminus:\n"
         "    description:\n"
         "        minus[n] ket\n"
-        "        subtract n from the value in the ket, leaving the coefficient unchanged\n\n"
+        "        subtract n from the value in the ket, leaving the coefficient unchanged\n"
+        "        if the ket is not a number, then return the empty ket |>\n\n"
         "    examples:\n"
         "        minus[2] |3.1415>\n"
         "            |1.1415>\n"
@@ -483,7 +485,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "\ntimes-by:\n"
         "    description:\n"
         "        times-by[n] ket\n"
-        "        times the value in the ket by n, leaving the coefficient unchanged\n\n"
+        "        times the value in the ket by n, leaving the coefficient unchanged\n"
+        "        if the ket is not a number, then return the empty ket |>\n\n"
         "    examples:\n"
         "        times-by[5] |6.1>\n"
         "            |30.5>\n\n"
@@ -495,7 +498,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "\ndivide-by:\n"
         "    description:\n"
         "        divide-by[n] ket\n"
-        "        divide the value in the ket by n, leaving the coefficient unchanged\n\n"
+        "        divide the value in the ket by n, leaving the coefficient unchanged\n"
+        "        if the ket is not a number, then return the empty ket |>\n\n"
         "    examples:\n"
         "        divide-by[5] |625.5>\n"
         "            |125.1>\n\n"
@@ -506,7 +510,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "\nint-divide-by:\n"
         "    description:\n"
         "        int-divide-by[n] ket\n"
-        "        integer divide the value in the ket by n, leaving the coefficient unchanged\n\n"
+        "        integer divide the value in the ket by n, leaving the coefficient unchanged\n"
+        "        if the ket is not a number, then return the empty ket |>\n\n"
         "    examples:\n"
         "        int-divide-by[1000] |123456>\n"
         "            |123>\n\n"
@@ -517,7 +522,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "\nmod:\n"
         "    description:\n"
         "        mod[n] ket\n"
-        "        apply mod n to the value in the ket by n, leaving the coefficient unchanged\n\n"
+        "        apply mod n to the value in the ket by n, leaving the coefficient unchanged\n"
+        "        if the ket is not a number, then return the empty ket |>\n\n"
         "    examples:\n"
         "        mod[1000] |1234567>\n"
         "            |567>\n\n"
@@ -530,7 +536,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "        round[n] ket\n"
         "        round the value in the ket to n places, leaving the coefficient unchanged\n"
         "        If you need more decimal places in your kets, use the --places command line option.\n"
-        "        The default is currently set to 5\n\n"
+        "        The default is currently set to 5\n"
+        "        if the ket is not a number, then return the empty ket |>\n\n"
         "    examples:\n"
         "        round[3] |3.14159>\n"
         "            |3.142>\n\n"
@@ -731,7 +738,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "            a, b, c\n"
         "            |a, b, c>\n\n"
         "    see also:\n"
-        "        to-upper, to-lower, smerge";
+        "        sprint, to-upper, to-lower, smerge";
 
     operator_usage_map.map["threshold-filter"] =
         "\nthreshold-filter:\n"
@@ -1919,7 +1926,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "\nsort-by:\n"
         "    description:\n"
         "        sort-by[op] input-seq\n"
-        "        sort the superpositions in input-seq with respect to op applied to the kets in those superpositions\n\n"
+        "        sort the superpositions in input-seq with respect to op applied to the kets in those superpositions\n"
+        "        if you wish to reverse sort, then use the reverse operator\n\n"
         "    examples:\n"
         "        -- learn some knowledge:\n"
         "        age |Fred> => |47>\n"
@@ -1929,8 +1937,11 @@ OperatorUsageMap::OperatorUsageMap() {
         "        -- now sort them:\n"
         "        sort-by[age] split[\" \"] |Rob Sam Emma Fred>\n"
         "            |Emma> + |Rob> + |Sam> + |Fred>\n\n"
+        "        -- reverse sort them:\n"
+        "        reverse sort-by[age] split[\" \"] |Rob Sam Emma Fred>\n"
+        "            |Fred> + |Sam> + |Rob> + |Emma>\n\n"
         "    see also:\n"
-        "        ket-sort, coeff-sort, natural-sort, ket-length\n";
+        "        reverse, ket-sort, coeff-sort, natural-sort, ket-length\n";
 
     operator_usage_map.map["ket-length"] =
         "\nket-length:\n"
@@ -2851,7 +2862,37 @@ OperatorUsageMap::OperatorUsageMap() {
         "            close |Sunday> => |4 pm>\n"
         "            ------------------------------------------\n\n"
         "    see also:\n"
-        "        learn, unlearn, +=> , .=> , #=> , !=> \n";
+        "        learn, unlearn, _=>, +=> , .=> , #=> , !=> \n";
+
+    operator_usage_map.map[" _=> "] =
+        "\n _=> :\n"
+        "    description:\n"
+        "        op |ket> _=> sequence\n"
+        "        non empty learn rule\n"
+        "        if the sequence on the RHS is non-empty, then this is identical to a standard learn rule\n"
+        "        however, if the RHS sequence is empty, then don't learn anything\n"
+        "        frequently useful when you don't want to learn an empty ket |>\n"
+        "        or, you don't want to over-write an existing learn rule if the sequence is empty.\n"
+        "        Without this learn rule, you would require an \"if do-you-know\" wrapper around the learn rule.\n\n"
+        "    examples:\n"
+        "        -- an example of standard learn rule vs the non-empty learn rule:\n"
+        "        -- first, the standard learn rule:\n"
+        "        age |Fred> => |39>\n"
+        "        age |Fred> => |>\n\n"
+        "        -- now, the non-empty learn rule:\n"
+        "        age |Sam> => |41>\n"
+        "        age |Sam> _=> |>\n\n"
+        "        -- now see what we know:\n"
+        "        dump\n"
+        "            age |Fred> => |>\n"
+        "            age |Sam> => |41>\n\n"
+        "        -- So we see, Fred's age has been over-written with the empty ket,\n"
+        "        -- but Sam's has not.\n\n"
+        "        -- But if we do want to update Sam's age,\n"
+        "        -- then we use a non-empty sequence:\n"
+        "        age |Sam> _=> |37>\n\n"
+        "    see also:\n"
+        "        learn, unlearn, =>, +=> , .=> , #=> , !=> \n";
 
     operator_usage_map.map[" +=> "] =
         "\n +=> :\n"
@@ -4209,10 +4250,163 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        ";
 
+    operator_usage_map.map["rel-kets"] =
+        "\nrel-kets:\n"
+        "    description:\n"
+        "        rel-kets[*]\n"
+        "        rel-kets[op1, op2, ..., opn]\n"
+        "        If the parameter is *, then return a superposition of all kets that are defined with respect to a literal operator\n"
+        "        Else, return a superposition of all kets that are defined with respect to the given literal operators\n"
+        "        Very useful for generating input lists of objects of interest.\n"
+        "        Note, kets that are only on the RHS of a learn rule are not included in the rel-kets superpositions\n"
+        "        If this is desired, then one approach is to invoke find-inverse[op] first,\n"
+        "        so that now they are on the LHS of a learn rule.\n\n"
+        "    examples:\n"
+        "        \n\n"
+        "    see also:\n"
+        "        find-inverse, such-that, sort-by";
+
+    operator_usage_map.map["table"] =
+        "\ntable:\n"
+        "    description:\n"
+        "        table[label, op1, ..., opn] input-sp\n"
+        "        Generate a pretty print table, where:\n"
+        "        The first column consists of the kets in the input superposition\n"
+        "        Subsequent columns are the result of the given operator applied to those input kets\n"
+        "        Often it is useful to define operator alias's so that a column has the desired label\n"
+        "        If the operator applied to a ket returns the empty ket |> then that table cell will be empty\n\n"
+        "    examples:\n"
+        "        \n\n"
+        "    see also:\n"
+        "        transpose-table";
+
+    operator_usage_map.map["transitive"] =
+        "\ntransitive:\n"
+        "    description:\n"
+        "        transitive[op] input-seq\n"
+        "        transitive[op, max-steps] input-seq\n"
+        "        Implements operators that are transitive.\n"
+        "        max-steps is the max number of steps until the transitiveness \"wears\" off.\n"
+        "        Most common example is the \"is-a\" operator\n"
+        "        Say A is-a B, B is-a C, C is-a D, then A is-a B, C and D\n"
+        "        Note that if the relation is \"fuzzy\" then transitive[] respects that too.\n"
+        "        In which case we can use drop-below[] to decide when the transitiveness has worn off.\n"
+        "        Note that an infinite loop is possible if the graph contains a loop,\n"
+        "        so we try to check for that case.\n"
+        "        Also, the result can potentially grow exponentially with each step,\n"
+        "        so if that is possible in your use case, set max-steps to something managable.\n"
+        "        For example, transitive[links-to] |starting web page>\n"
+        "        could grow large very rapidly.\n\n"
+        "    examples:\n"
+        "        -- first, the Socrates example:\n"
+        "        is-a |Socrates> => |human>\n"
+        "        is-a |human> => |mortal>\n\n"
+        "        -- so we can conclude:\n"
+        "        transitive[is-a] |Socrates>\n"
+        "            |human> + |mortal>\n\n"
+        "        -- second, a movie based example:\n"
+        "        is-a-kind-of |British comedy> => |comedy>\n"
+        "        is-a-kind-of |comedy> => |film>\n\n"
+        "        -- so we can conclude:\n"
+        "        transitive[is-a-kind-of] |British comedy>\n"
+        "            |comedy> + |film>\n\n"
+        "        -- next, a fuzzy transitive example:\n"
+        "        is-a |A> => 0.8 |B>\n"
+        "        is-a |B> => 0.5 |C>\n"
+        "        is-a |C> => 0.9 |D>\n"
+        "        is-a |D> => 0.2 |E>\n\n"
+        "        -- so we can conclude:\n"
+        "        transitive[is-a] |A>\n"
+        "            0.800000|B> + 0.400000|C> + 0.360000|D> + 0.072000|E>\n\n"
+        "        -- and we can combine this with a drop-below[threshold] operator:\n"
+        "        drop-below[0.3] transitive[is-a] |A>\n"
+        "            0.800000|B> + 0.400000|C> + 0.360000|D>\n\n"
+        "    see also:\n"
+        "        stransitive, drop-below\n"
+        "        transitive-operators.sw4\n";
+
+    operator_usage_map.map["stransitive"] =
+        "\nstransitive:\n"
+        "    description:\n"
+        "        stransitive[op, max-steps] input-seq\n"
+        "        Implements operators that are transitive, but uses sequences instead of superpositions\n"
+        "        max-steps is the max number of steps until the transitiveness \"wears\" off.\n"
+        "        Unlike transitive[op], max-steps is mandatory for stransitive[]\n"
+        "        as there is no clean way to determine if we are stuck in a loop\n"
+        "        Note that if the relation is \"fuzzy\" then stransitive[] respects that too.\n"
+        "        Also, the result can potentially grow exponentially with each step,\n"
+        "        so if that is possible in your use case, set max-steps to something managable.\n"
+        "        For example, stransitive[links-to, 4] |starting web page>\n"
+        "        could grow large very rapidly.\n\n"
+        "    examples:\n"
+        "        -- if we load the family-tree.sw3 and family-relations.sw3 data-sets:\n"
+        "        -- we can use stransitive[] to explore the matriarchal or patriarchal lines:\n"
+        "        stransitive[mother, 5] |sally>\n"
+        "            |trude> . |sara>\n\n"
+        "        stransitive[father, 5] |sally>\n"
+        "            |tom> . |mike> . |mark>\n\n"
+        "        -- then we could see their ages all at once:\n"
+        "        age stransitive[mother, 5] |sally>\n"
+        "            |38> . |56>\n\n"
+        "        age stransitive[father, 5] |sally>\n"
+        "            |40> . |60> . |78>\n\n"
+        "        -- Or, if we had the data, the changes in family name:\n"
+        "        last-name stransitive[mother, 5] |sally>\n"
+        "        last-name stransitive[father, 5] |sally>\n\n"
+        "        -- Or, we could explore parents, grand-parents, great-grand-parents and so on:\n"
+        "        stransitive[parent, 5] |sally>\n"
+        "            |trude> + |tom> . |sara> + |sam> + |ruth> + |mike> . |gina> + |mary> + |mark>\n\n"
+        "        age stransitive[parent, 5] |sally>\n"
+        "            |38> + |40> . 2|56> + |57> + |60> . 2|76> + |78>\n\n"
+        "        -- finally, a fuzzy transitive example:\n"
+        "        is-a |A> => 0.8 |B>\n"
+        "        is-a |B> => 0.5 |C>\n"
+        "        is-a |C> => 0.9 |D>\n"
+        "        is-a |D> => 0.2 |E>\n\n"
+        "        -- so we can conclude:\n"
+        "        stransitive[is-a, 10] |A>\n"
+        "            0.800000|B> . 0.400000|C> . 0.360000|D> . 0.072000|E>\n\n"
+        "    see also:\n"
+        "        transitive\n"
+        "        transitive-operators.sw4, family-tree.sw3, family-relations.sw3\n";
+
+    operator_usage_map.map["borrow-from-context"] =
+        "\nborrow-from-context:\n"
+        "    description:\n"
+        "        borrow-from-context[\"context name\", op] input-seq\n"
+        "        borrow an operator from the given context\n"
+        "        usually rules in different context are completely separate from each other\n"
+        "        borrow-from-context[] allows you to \"peek\" at an operator in a different context\n"
+        "        this allows you to keep your working context clean, while the back-end code is in another context\n"
+        "        if the given context doesn't exist, then it will return the empty sequence\n\n"
+        "    examples:\n"
+        "        -- just an abstract example:\n"
+        "        -- define an operator in some different contexts:\n"
+        "        |context> => |alpha>\n"
+        "        op |*> #=> |alpha> :_ |_self>\n"
+        "        |context> => |beta>\n"
+        "        op |*> #=> |beta> :_ |_self>\n"
+        "        |context> => |gamma>\n"
+        "        op |*> #=> |gamma> :_ |_self>\n\n"
+        "        -- now make use of the borrow-from-context[] operator:\n"
+        "        alpha-op |*> #=> borrow-from-context[\"alpha\", op] |_self>\n"
+        "        beta-op |*> #=> borrow-from-context[\"beta\", op] |_self>\n"
+        "        gamma-op |*> #=> borrow-from-context[\"gamma\", op] |_self>\n\n"
+        "        -- now invoke them:\n"
+        "        alpha-op |input ket>\n"
+        "            |alpha: input ket>\n\n"
+        "        beta-op |input ket>\n"
+        "            |beta: input ket>\n\n"
+        "        gamma-op |input ket>\n"
+        "            |gamma: input ket>\n\n"
+        "    see also:\n";
 
 
     // fill out statement_prototypes map:
-    operator_usage_map.statement_prototypes["if"] =
+    operator_usage_map.statement_prototypes["context"] =
+        "|context> => |$1>\n";
+
+    operator_usage_map.statement_prototypes["if"] =  // Does it need leading \n?
         "if( $1 ):\n"
         "    $2\n"
         "end:\n";
@@ -4258,7 +4452,7 @@ bool OperatorUsageMap::has_statement_prototype(const std::string& s) const {
     return it != statement_prototypes.end();
 }
 
-void OperatorUsageMap::PopulateUsageMap()
+void OperatorUsageMap::PopulateUsageMap()  // Is there a smarter and faster way to do this??
 {
     for (const auto& it : map)
     {
@@ -4278,10 +4472,10 @@ void OperatorUsageMap::PopulateUsageMap()
 
         OpUsageInfo* opUsageInfo = new OpUsageInfo;
         opUsageInfo->Name = Op;
-        opUsageInfo->Description = Description;
-        opUsageInfo->Examples = Examples;
+        opUsageInfo->Description = strip_leading_spaces(Description, 8);
+        opUsageInfo->Examples = strip_leading_spaces(Examples, 8);
         // opUsageInfo->SeeAlso = new std::string(linkify_text(SeeAlso));
-        opUsageInfo->SeeAlso = SeeAlso;
+        opUsageInfo->SeeAlso = strip_leading_spaces(SeeAlso, 8);
         m_usage_info_map[it.first] = opUsageInfo;
     }
 }

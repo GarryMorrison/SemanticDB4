@@ -1,0 +1,13 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
+-- Implement the Fibonacci sequence:
+
+
+Fib |0> => |0>
+Fib |1> => |1>
+Fib |*> !=> Fib minus[1] |_self> ++ Fib minus[2] |_self>
+
+
+-- now a quick demonstration:
+table[number, Fib] (|0> .. |15>)

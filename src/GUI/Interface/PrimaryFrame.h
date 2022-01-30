@@ -1,13 +1,14 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/30
 // Author Garry Morrison
 // License GPL v3
 //
 
 #pragma once
 #include "../../SDB.h"
+
 
 class PrimaryFrame : public wxFrame
 {
@@ -16,20 +17,35 @@ class PrimaryFrame : public wxFrame
     friend class KetMap;
     friend class KetMapDialog;
     friend class CommandPanel;
+    friend class EditPanel;
 
 public:
     PrimaryFrame();  // Do we need a destructor too?
     
+    void InsertText(const wxString& wxs);
+    void InsertStatement(const wxString& wxs);
+    void InsertLearnRule(const wxString& wxs);
+    void InsertInfixOperator(const wxString& wxs);
+    void InsertSimpleOperator(const wxString& wxs);
+    void InsertCompoundOperator(const wxString& wxs);
+    void InsertFunctionOperator(const wxString& wxs);
+    void InsertKet(const wxString& wxs);
+    void InsertComment();
+
+    ~PrimaryFrame();
 
 private:
     void OnExit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void ShowSimpleAboutDialog(wxCommandEvent& event);
     void ShowPrettyAboutDialog(wxCommandEvent& event);
+    void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void SelectKnownKet(wxCommandEvent& event);
+    void OnSelectKetDialogItem(wxCommandEvent& event);
     void SelectKnownOperator(wxCommandEvent& event);
+    void OnSelectLiteralOpDialogItem(wxCommandEvent& event);
     void SelectFromLearnRules(wxCommandEvent& event);
     void SelectFromInfix1(wxCommandEvent& event);
     void SelectFromInfix2(wxCommandEvent& event);
@@ -40,6 +56,10 @@ private:
     void UsageForOperator(wxCommandEvent& event);
     void ShowKetMap(wxCommandEvent& event);
     void SwitchWindow(wxCommandEvent& event);
+
+
+    void InvokeActiveTable(wxCommandEvent& event);
+    void OnIfThenInsert(wxCommandEvent& event);
 
     void OpenExampleWebpage(wxCommandEvent& event);
 
@@ -65,11 +85,8 @@ private:
     wxMenu* m_menuWindow;
 
     CommandPanel* m_frame_commandPanel;
+    EditPanel* m_frame_edit_panel;
 
-    std::set<std::string> m_known_kets = { "|Fred>", "|Sam>", "|37>", "|49>" };
-    std::set<std::string> m_known_operators = { "age", "friends", "mother", "father" };
-    std::vector<wxString> m_built_in_operators = { "coeff-sort", "do-you-know", "drop", "how-many", "ket-sort" };
-    std::vector<wxString> m_built_in_compound_operators = { "drop-above", "drop-below", "normalize", "pick" };
     // int m_starting_highest_menu_id = ID_Help_Website + 1;
     // int m_current_highest_menu_id = m_starting_highest_menu_id;
     int m_starting_highest_insert_menu_id;
@@ -83,6 +100,7 @@ private:
     std::map<wxString, wxMenu*> m_usage_label_menu_map;
 
     unsigned int m_insert_window_open_count = 0;
+
 };
 
 

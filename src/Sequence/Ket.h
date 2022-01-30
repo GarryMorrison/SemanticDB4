@@ -46,6 +46,7 @@ public:
     }
     const int type() const { return KET; };
     const bool is_ket() const { return true; }
+    const bool is_empty_ket() const;
     // const ulong size() const;
     const size_t size() const;
     const ulong label_idx() const;

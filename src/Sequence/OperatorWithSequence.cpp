@@ -22,7 +22,28 @@ void OperatorWithSequence::append(const unsigned int the_sign, const OperatorWit
 }
 
 const size_t OperatorWithSequence::size() const {
+    /*
+    if (sign_vec.size() == 1)
+    {
+        if (seq_vec[0]->size() == 0)  // We need this to fix non_empty_learn I think .... Nope. Breaks Bottle of beer song.
+        {
+            return 0;
+        }
+    }
+    */
     return sign_vec.size();
+}
+
+const bool OperatorWithSequence::is_empty_ket() const {
+    if (sign_vec.empty()) { return true; }
+    if (sign_vec.size() == 1)
+    {
+        if (seq_vec[0]->size() == 0)  // Later use: if (seq_vec[0]->is_empty_ket() once we have it in BaseSequence.
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 const std::string OperatorWithSequence::to_string() const {

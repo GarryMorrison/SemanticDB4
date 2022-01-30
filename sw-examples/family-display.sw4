@@ -1,0 +1,119 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
+-- display some information about family members:
+-- first load a family tree into memory, such as family-tree.sw3
+
+-- simple plural:
+plural |*> #=> |_self> _ |s>
+plural |child> => |children>
+
+-- first plural (apply plural to right most word):
+first-plural |*> #=> smerge[" "] ( sselect[1, -2] . plural sselect[-1,-1] ) ssplit[" "] |_self>
+
+
+-- simple possesive noun:
+possesive-noun |*> #=> |_self> _ |'s>
+
+-- convert a list into a comma-and list:
+and-list (*) #=> smerge[" and "] ( smerge[", "] sselect[1, -2] . sselect[-1,-1] ) sp2seq |__self>
+
+
+-- define some basic family relations:
+child |*> #=> (son + daughter) |_self>
+parent |*> #=> (mother + father) |_self>
+sibling |*> #=> drop (clean child parent + -1) |_self>
+brother |*> #=> drop (clean son parent + -1) |_self>
+sister |*> #=> drop (clean daughter parent + -1) |_self>
+brother-and-sister |*> #=> sibling |_self>
+
+grand-parent |*> #=> parent parent |_self>
+great-grand-parent |*> #=> parent^3 |_self>
+grand-child |*> #=> child^2 |_self>
+great-grand-child |*> #=> child^3 |_self>
+
+
+-- define parent-prefix, 
+-- potentially give it a better name, 
+-- and potentially auto calculate the number of "greats":
+parent-prefix |1> => |>
+parent-prefix |2> => |grand>
+parent-prefix |3> => |great grand>
+parent-prefix |4> => |great great grand>
+parent-prefix |5> => |great great great grand>
+
+
+-- replace dashes with spaces:
+dash-to-space |*> #=> string-replace(|->, | >) |_self>
+
+
+-- define a wrapper operator that converts a "dynamic" operator into a "constant" operator:
+op (*) #=> apply(the|op>, |__self>)
+
+
+-- our first major operator, display(person, operator):
+display { the |person>, the |op> } #=>
+    the |relation> => extract-value the |op>
+    the |relatives> => op the |person>
+    if( how-many the |relatives> == |number: 1>):
+        print (to-upper[1] possesive-noun the |person> __ dash-to-space the |relation> __ |is> __ to-upper[1] the |relatives> _ |.> )
+    else:
+        if( how-many the |relatives> > |number: 1>):
+            print (to-upper[1] possesive-noun the |person> __ first-plural dash-to-space the |relation> __ |are> __ and-list to-upper[1] the |relatives> _ |.> )
+        end:
+    end:
+
+-- now put it to use:
+display-sisters |*> #=> display(|_self>, |op: sister>)
+display-brothers |*> #=> display(|_self>, |op: brother>)
+display-parents |*> #=> display(|_self>, |op: parent>)
+display-grand-parents |*> #=> display(|_self>, |op: grand-parent>)
+display-great-grand-parents |*> #=> display(|_self>, |op: great-grand-parent>)
+display-grand-children |*> #=> display(|_self>, |op: grand-child>)
+display-great-grand-children |*> #=> display(|_self>, |op: great-grand-child>)
+
+
+display-sisters |sally>
+display-brothers |erica>
+display-parents |erica>
+display-grand-parents |sally>
+display-great-grand-parents |erica>
+display-grand-children |mary>
+display-great-grand-children |mark>
+print |---------------------------------------------------->
+
+
+-- our second major operator, display-line(person, operator):
+-- displays a family line
+display-line { the|person>, the |op> } #=>
+    the |relation> => extract-value the |op>
+    the |relatives> => op the |person>
+    the |idx> => |1>
+    while( do-you-know the |relatives> ):
+        if( how-many the |relatives> == |number: 1>):
+            print (to-upper[1] possesive-noun the |person> __ parent-prefix the |idx> __ the |relation> __ |is> __ to-upper[1] the |relatives> _ |.> )
+        else:
+            print (to-upper[1] possesive-noun the |person> __ parent-prefix the |idx> __ plural the |relation> __ |are> __ and-list to-upper[1] the |relatives> _ |.> )
+        end:
+        the |relatives> => op the |relatives>
+        the |idx> => plus[1] the |idx>
+    end:
+
+-- now put it to use:
+display-mother-line |*> #=> display-line(|_self>, |op: mother>)
+display-father-line |*> #=> display-line(|_self>, |op: father>)
+display-parent-line |*> #=> display-line(|_self>, |op: parent>)
+display-child-line |*> #=> display-line(|_self>, |op: child>)
+
+-- display the matriarchal line:
+display-mother-line |sally>
+
+-- display the patriarchal line:
+display-father-line |erica>
+
+-- display the parent line:
+display-parent-line |erica>
+
+-- display the child line:
+display-child-line |gina>
+

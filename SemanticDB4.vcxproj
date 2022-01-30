@@ -154,6 +154,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GUI\OperatorLibrary\IfThenOperatorDialog.h" />
+    <ClInclude Include="src\GUI\OperatorLibrary\IfThenMachineDialog.h" />
+    <ClInclude Include="src\GUI\OperatorLibrary\ActiveTableDialog.h" />
+    <ClInclude Include="src\GUI\Interface\CreateNewFileDialog.h" />
+    <ClInclude Include="src\GUI\Interface\OutputFrame.h" />
+    <ClInclude Include="src\GUI\Interface\EditPanel.h" />
+    <ClInclude Include="src\GUI\Interface\SelectFromLiteralOpDialog.h" />
+    <ClInclude Include="src\GUI\Interface\SelectFromKetDialog.h" />
+    <ClInclude Include="src\GUI\Interface\ResetContextDialog.h" />
+    <ClInclude Include="src\GUI\Interface\GeneralOperatorsFrame.h" />
     <ClInclude Include="src\Parser\Driver.h" />
     <ClInclude Include="src\OperatorLibrary\FunctionOperatorLibrary.h" />
     <ClInclude Include="src\OperatorLibrary\OperatorLibrary.h" />
@@ -210,8 +220,19 @@
     <ClInclude Include="src\Sequence\Superposition.h" />
     <ClInclude Include="src\Sequence\SuperpositionIter.h" />
     <ClInclude Include="src\Sequence\WhileStatement.h" />
+    <ClInclude Include="src\GUI\OperatorLibrary\TableDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\OperatorLibrary\IfThenOperatorDialog.cpp" />
+    <ClCompile Include="src\GUI\OperatorLibrary\IfThenMachineDialog.cpp" />
+    <ClCompile Include="src\GUI\OperatorLibrary\ActiveTableDialog.cpp" />
+    <ClCompile Include="src\GUI\Interface\CreateNewFileDialog.cpp" />
+    <ClCompile Include="src\GUI\Interface\OutputFrame.cpp" />
+    <ClCompile Include="src\GUI\Interface\EditPanel.cpp" />
+    <ClCompile Include="src\GUI\Interface\SelectFromLiteralOpDialog.cpp" />
+    <ClCompile Include="src\GUI\Interface\SelectFromKetDialog.cpp" />
+    <ClCompile Include="src\GUI\Interface\ResetContextDialog.cpp" />
+    <ClCompile Include="src\GUI\Interface\GeneralOperatorsFrame.cpp" />
     <ClCompile Include="src\Parser\Driver.cpp" />
     <ClCompile Include="src\OperatorLibrary\FunctionOperatorLibrary.cpp" />
     <ClCompile Include="src\OperatorLibrary\OperatorLibrary.cpp" />
@@ -264,6 +285,7 @@
     <ClCompile Include="src\Sequence\Superposition.cpp" />
     <ClCompile Include="src\Sequence\SuperpositionIter.cpp" />
     <ClCompile Include="src\Sequence\WhileStatement.cpp" />
+    <ClCompile Include="src\GUI\OperatorLibrary\TableDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="src\Parser\Parser.y">

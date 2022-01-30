@@ -34,6 +34,7 @@ private:
 public:
     virtual const int type() const = 0;
     virtual const bool is_ket() const = 0;
+    virtual const bool is_empty_ket() const = 0;
     // virtual const ulong size() const = 0;
     virtual const size_t size() const = 0;
     virtual const std::string to_string() const = 0;

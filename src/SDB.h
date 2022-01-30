@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2022/1/3
+// Updated 2022/1/30
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,17 +19,17 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/1/4"
-#define APP_VERSION "0.1.pre-alpha"
+#define APP_BUILD_DATE "2022/1/30"
+#define APP_VERSION "4.0.alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
 
 #define DEFAULT_STATUS_BAR_TEXT "Welcome to the Semantic DB GUI"
 
 #define AGENT_PROMPT "sa: "
-#define KET_MAP_DISPLAY_MAX_ROWS 200  // Max number of rows to display in the ket map window.
+#define KET_MAP_DISPLAY_MAX_ROWS 400  // Max number of rows to display in the ket map window.
 
-#define EXAMPLE_STARTING_TEXT "age |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\nage |Sam> => |41>\nfriends |Sam> => |Fred> + |Liz> + |Emma>\n\nspelling |*> !=> ssplit |_self>\ntable[name, age, friends, spelling] rel-kets[friends]\n"
+#define EXAMPLE_STARTING_TEXT "|context> => |Fred Sam sample>\nage |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\nage |Sam> => |41>\nfriends |Sam> => |Fred> + |Liz> + |Emma>\n\nspelling |*> #=> ssplit |_self>\nhow-many-friends |*> #=> how-many friends |_self>\ntable[name, age, friends, how-many-friends, spelling] rel-kets[friends]\n"
 #define EXAMPLE_KET_KNOWLEDGE "age |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\nspelling |Fred> => |F> . |r> . |e> . |d>"
 #define EXAMPLE_OP_KNOWLEDGE "age |Fred> => |37>\nage |Sam> => |41>"
 
@@ -56,6 +56,8 @@
 #include <wx/font.h>
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
+#include <wx/grid.h>
+#include <wx/spinctrl.h>
 #include <set>
 #include <map>
 #include <string>
@@ -83,6 +85,18 @@
 #include "GUI/Interface/ResultCanvas.h"
 #include "GUI/Interface/CommandPanel.h"
 #include "GUI/Interface/FilteredDumpFrame.h"
+#include "GUI/Interface/GeneralOperatorsFrame.h"
+#include "GUI/Interface/ResetContextDialog.h"
+#include "GUI/Interface/SelectFromKetDialog.h"
+#include "GUI/Interface/SelectFromLiteralOpDialog.h"
+#include "GUI/Interface/EditPanel.h"
+#include "GUI/Interface/OutputFrame.h"
+#include "GUI/Interface/CreateNewFileDialog.h"
+#include "GUI/OperatorLibrary/ActiveTableDialog.h"
+#include "GUI/OperatorLibrary/TableDialog.h"
+#include "GUI/OperatorLibrary/IfThenMachineDialog.h"
+#include "GUI/OperatorLibrary/IfThenOperatorDialog.h"
+
 
 // Back end includes:
 #include "KetMap/KetMap.h"
@@ -125,6 +139,12 @@
 extern ContextList context;
 // extern SDB::Driver driver;
 
+wxDECLARE_EVENT(EVT_GRID_CLICK, wxCommandEvent);
+wxDECLARE_EVENT(EVT_KET_WINDOW_CLICK, wxCommandEvent);  // Put a space between Ket and Window?
+wxDECLARE_EVENT(EVT_LITERALOP_WINDOW_CLICK, wxCommandEvent);
+wxDECLARE_EVENT(EVT_INSERT_IFTHEN_MACHINE, wxCommandEvent);
+wxDECLARE_EVENT(EVT_INSERT_IFTHEN_OPERATOR, wxCommandEvent);
+
 
 class SDBApp : public wxApp
 {
@@ -137,9 +157,13 @@ public:
 enum
 {
     ID_Hello = wxID_HIGHEST + 1,
+    ID_New,
     ID_Open,
     ID_Save,
     ID_Insert,
+
+    ID_YES,
+    ID_NO,
     // ID_Insert_Known_Kets,
     // ID_Insert_Known_Literal_Operators,
 
@@ -220,6 +244,14 @@ enum
     ID_Insert_Window_Compound,
     ID_Insert_Window_Function,
 
+    ID_Visualize_Active_Table,
+    ID_Table_Usage,
+    ID_Table_Generate,
+    ID_Table_Run,
+    ID_Active_Table_Usage_Suchthat,
+    ID_Active_Table_Usage_Filter,
+    ID_Active_Table_Usage_Sortby,
+
     ID_Example_Fibonacci,
     ID_Example_Temperature,
     ID_Example_Bottles,
@@ -243,12 +275,24 @@ enum
     ID_Command_Dump,
     ID_Command_Save_As,
     ID_Command_Graph,
-    ID_Command_Reset,
+    ID_Command_Reset_Context,
+    ID_Command_Reset_All,
     ID_Command_Clear_Results,
     ID_Command_Result_Insert_New_Line,
     ID_Command_Result_Insert_Line,
     ID_Command_Left_Click,
     ID_On_Paint,
+
+    ID_Edit_Run,
+    ID_Edit_Dump,
+    ID_Edit_Reset,
+
+    ID_Update_Button,
+
+    ID_Create_File,
+
+    ID_If_Then_Insert,
+    ID_If_Then_Insert_Operator,
 
     ID_Ket_Map_Display_Title_Click,
     ID_Command_Insert_Text

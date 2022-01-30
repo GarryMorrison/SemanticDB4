@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/30
 // Author Garry Morrison
 // License GPL v3
 //
@@ -14,7 +14,8 @@ PrimaryFrame::PrimaryFrame()
 {
     // Set up the menu:
     wxMenu* menuFile = new wxMenu;
-    menuFile->Append(ID_Open, "&Open", "Open a new file");
+    menuFile->Append(ID_New, "&New", "Create a new file");
+    menuFile->Append(ID_Open, "&Open", "Open a file");
     menuFile->Append(ID_Save, "&Save", "Save a file");
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
@@ -188,8 +189,10 @@ PrimaryFrame::PrimaryFrame()
     m_menuWindow->AppendSeparator();
     m_menuWindow->AppendRadioItem(ID_Window_Command, "Command", "Show the command window");
     m_menuWindow->AppendRadioItem(ID_Window_Edit, "Edit", "Show the edit window");
+    
 
     wxMenu* menuVisualize = new wxMenu;
+    menuVisualize->Append(ID_Visualize_Active_Table, "Active Table", "Generate active table");
 
     wxMenu* menuExamples = new wxMenu;
     menuExamples->Append(ID_Example_Fibonacci, "Fibonacci", "Open Fibonacci example");
@@ -234,10 +237,13 @@ PrimaryFrame::PrimaryFrame()
 
 
     m_frame_commandPanel = new CommandPanel(panel, wxID_ANY);
-    m_frame_commandPanel->InsertCommandText(EXAMPLE_STARTING_TEXT);
+    m_frame_commandPanel->InsertText(EXAMPLE_STARTING_TEXT);
     m_frame_commandPanel->Show();
+    // m_frame_commandPanel->Hide();
 
-
+    m_frame_edit_panel = new EditPanel(panel, wxID_ANY);
+    m_frame_edit_panel->Hide();
+    // m_frame_edit_panel->Show();
 
     // Add some sample pages:
     // Don't need sample pages for now:
@@ -270,6 +276,7 @@ PrimaryFrame::PrimaryFrame()
     // Bind(wxEVT_MENU, &PrimaryFrame::OnAbout, this, wxID_ABOUT);
     // Bind(wxEVT_MENU, &PrimaryFrame::ShowSimpleAboutDialog, this, wxID_ABOUT);
     Bind(wxEVT_MENU, &PrimaryFrame::ShowPrettyAboutDialog, this, wxID_ABOUT);
+    Bind(wxEVT_MENU, &PrimaryFrame::OnNew, this, ID_New);
     Bind(wxEVT_MENU, &PrimaryFrame::OnOpen, this, ID_Open);
     Bind(wxEVT_MENU, &PrimaryFrame::OnSave, this, ID_Save);
     Bind(wxEVT_MENU, &PrimaryFrame::SelectKnownKet, this, ID_Insert_Window_Known_Kets);
@@ -285,6 +292,7 @@ PrimaryFrame::PrimaryFrame()
     Bind(wxEVT_MENU, &PrimaryFrame::ShowKetMap, this, ID_Help_Ket_Map);  // This ID looks wrong! Fix.
     Bind(wxEVT_MENU, &PrimaryFrame::SwitchWindow, this, ID_Window_Command);
     Bind(wxEVT_MENU, &PrimaryFrame::SwitchWindow, this, ID_Window_Edit);
+    Bind(wxEVT_MENU, &PrimaryFrame::InvokeActiveTable, this, ID_Visualize_Active_Table);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenExampleWebpage, this, ID_Example_Fibonacci, ID_Example_More);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenWebUsage, this, ID_Help_Usage);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenWebsite, this, ID_Help_Website);
@@ -415,6 +423,38 @@ void PrimaryFrame::ShowPrettyAboutDialog(wxCommandEvent& event)
     AppAbout* dlg = new AppAbout(this);
 }
 
+void PrimaryFrame::OnNew(wxCommandEvent& event)
+{
+    CreateNewFileDialog* new_file_dialog = new CreateNewFileDialog(this);
+    
+    wxString file_name = new_file_dialog->GetFilename();
+    if (file_name.IsEmpty())
+    {
+        return;
+    }
+    wxString starting_code;
+    wxString context_name = new_file_dialog->GetContextname();
+    if (!context_name.IsEmpty())
+    {
+        starting_code += "|context> => |" + context_name + ">\n\n";
+    }
+    wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+
+    // wxString file_name = "empty.sw4";  // Do something better later? A dialog that prompts for filename and starting context perhaps?
+    // wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, "Enter your code here ... ", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
+    m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?? Handle in a smarter way later!
+
+    m_command_window_active = false;
+    m_edit_window_active = true;
+    m_panelSizer->Detach(0); // remove previous panel
+    m_frame_commandPanel->Hide();
+    m_panelSizer->Prepend(m_frame_edit_panel, 1, wxGROW);
+    m_frame_edit_panel->Show();
+    m_panelSizer->Layout();
+    m_menuWindow->Check(ID_Window_Edit, true);
+}
+
 void PrimaryFrame::OnOpen(wxCommandEvent& event)
 {
     bool content_has_been_saved = true;  // shift this to the PrimaryFrame class member variables!
@@ -423,7 +463,7 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
         if (wxMessageBox("Current content has not been saved! Proceed?", "Please confirm", wxICON_QUESTION | wxYES_NO, this) == wxNO)
             return;
     }
-    wxFileDialog openFileDialog(this, "Open sw file", "", "", "sw file (*.sw;*.sw3)|*.sw;*.sw3|Text file (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, "Open sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     if (openFileDialog.ShowModal() == wxID_CANCEL)
         return;
     wxFileInputStream input_stream(openFileDialog.GetPath());
@@ -442,207 +482,70 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
     }
     // wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_auiNotebook, wxID_ANY, file_content);
     wxString file_name = openFileDialog.GetFilename();  // Check here if we already know this file name, before creating a new wxTextCtrl.
-    wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_auiNotebook, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
-    m_auiNotebook->AddPage(textCtrlLocal, file_name, true);
-    // m_auiNotebook->SetSelection(0);
+    // wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_auiNotebook, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    // m_auiNotebook->AddPage(textCtrlLocal, file_name, true);
+    // // m_auiNotebook->SetSelection(0);
+    wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
     m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?
 
     m_command_window_active = false;
     m_edit_window_active = true;
     m_panelSizer->Detach(0); // remove previous panel
     m_frame_commandPanel->Hide();
-    m_panelSizer->Prepend(m_auiNotebook, 1, wxGROW);
-    m_auiNotebook->Show();
+    // m_panelSizer->Prepend(m_auiNotebook, 1, wxGROW);
+    // m_auiNotebook->Show();
+    m_panelSizer->Prepend(m_frame_edit_panel, 1, wxGROW);
+    m_frame_edit_panel->Show();
     m_panelSizer->Layout();
     m_menuWindow->Check(ID_Window_Edit, true);  // Maybe store the full menu, not just the menuWindow menu?
 }
 
 void PrimaryFrame::OnSave(wxCommandEvent& event)
 {
-    wxFileDialog saveFileDialog(this, "Save sw file", "", "", "sw file (*.sw;*.sw3)|*.sw;*.sw3|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    wxFileDialog saveFileDialog(this, "Save sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
-        return;
-    // save the current contents in the file;
-    // this can be done with e.g. wxWidgets output streams:
-    /*
-    wxFileOutputStream output_stream(saveFileDialog.GetPath());
-    if (!output_stream.IsOk())
     {
-        wxLogError("Cannot save current contents in file '%s'.", saveFileDialog.GetPath());
         return;
     }
-    wxTextOutputStream text(output_stream);
-    text.WriteString("testing ...");  // Need to get the text from m_auiNotebook somehow ....
-    // wxTextCtrl* textCtrlLocal;
-    // textCtrlLocal = m_auiNotebook->GetCurrentPage();
-    wxString file_name = m_auiNotebook->GetPageText(0);  // Nope! This is just the tab label. Choose correct page too!
-    // wxMessageBox("File name is " + file_name);
-    if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
+
+    if (m_command_window_active)
     {
-        wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-        return;
+        m_frame_commandPanel->SaveFile(saveFileDialog.GetPath());
     }
-    wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];
-    wxMessageBox(textCtrlLocal->Get);
-    */
-    // wxMessageBox("Notebook GetSelection: " + std::to_string(m_auiNotebook->GetSelection()));
-    int page_idx = m_auiNotebook->GetSelection();
-    wxString file_name = m_auiNotebook->GetPageText(page_idx);
-    if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
+    else if (m_edit_window_active)
     {
-        wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-        return;
+        m_frame_edit_panel->SaveFile(saveFileDialog.GetPath());
     }
-    wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];
-    textCtrlLocal->SaveFile(saveFileDialog.GetPath());
 }
 
 void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)
 {
-    wxArrayString list_options;
-    for (const auto& the_ket : m_known_kets)
-    {
-        list_options.Add(the_ket);
-    }
     unsigned int d = m_insert_window_open_count;
-    SelectFromListDialog* select_dlg = new SelectFromListDialog(this, "Select ket", list_options, wxPoint(d * 40, d * 40));
+    SelectFromKetDialog* select_ket_dialog = new SelectFromKetDialog(this, wxPoint(d * 40, d * 40));
     m_insert_window_open_count++;
 
-    /*select_dlg->Bind(wxEVT_CLOSE_WINDOW, [=](wxCloseEvent& event) {
-        wxMessageBox("Select Known Ket dialog closed");
-        select_dlg->Close();
-        });
-    */
-
-    /*
-    select_dlg->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
-        wxMessageBox("Select Known Ket dialog button clicked");
-        });
-    */
-
-    select_dlg->Bind(wxEVT_LISTBOX, [=](wxCommandEvent& event) {
-        int the_selection = event.GetSelection();
-        if (the_selection == wxNOT_FOUND)
-        {
-            return;
-        }
-        wxString the_ket = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_ket + " ");
-        }
-        select_dlg->DeselectAll();
-        }
-    );
-
-    select_dlg->Bind(wxEVT_LISTBOX_DCLICK, [=](wxCommandEvent& event) {
-        int the_selection = event.GetSelection();
-        if (the_selection == wxNOT_FOUND)
-        {
-            return;
-        }
-        wxString the_ket = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_ket + " ");
-        }
-        });
-
-    return;
-
-    if (!select_dlg->IsOK())
-    {
-        wxMessageBox("No item selected!");
-        return;
-    }
-    wxString the_ket = select_dlg->GetResult();
-    // wxMessageBox("Your selection: " + the_ket);
-
-    if (m_command_window_active)
-    {
-        // wxMessageBox("command window active");
-        m_frame_commandPanel->InsertCommandText(the_ket + " ");
-    }
-    else if (m_edit_window_active)
-    {
-        // wxMessageBox("Your selection: " + the_ket);
-
-        int page_idx = m_auiNotebook->GetSelection();  // Need to check we have an open tab first!
-        wxString file_name = m_auiNotebook->GetPageText(page_idx);
-        if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
-        {
-            wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-            return;
-        }
-        wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];
-        textCtrlLocal->WriteText(the_ket + " ");
-        // m_auiNotebook->Refresh();
-    }
+    select_ket_dialog->Bind(EVT_KET_WINDOW_CLICK, &PrimaryFrame::OnSelectKetDialogItem, this);
 }
+
+void PrimaryFrame::OnSelectKetDialogItem(wxCommandEvent& event)
+{
+    InsertKet(event.GetString());
+}
+
 
 void PrimaryFrame::SelectKnownOperator(wxCommandEvent& event)
 {
-    wxArrayString list_options;
-    for (const auto& the_op : m_known_operators)
-    {
-        list_options.Add(the_op);
-    }
     unsigned int d = m_insert_window_open_count;
-    SelectFromListDialog* select_dlg = new SelectFromListDialog(this, "Select operator", list_options, wxPoint(d * 40, d * 40));
+    SelectFromLiteralOpDialog* select_op_dialog = new SelectFromLiteralOpDialog(this, wxPoint(d * 40, d * 40));
     m_insert_window_open_count++;
 
-    select_dlg->Bind(wxEVT_LISTBOX, [=](wxCommandEvent& event) {
-        int the_selection = event.GetSelection();
-        if (the_selection == wxNOT_FOUND)
-        {
-            return;
-        }
-        wxString the_operator = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_operator + " ");
-        }
-        select_dlg->DeselectAll();
-        });
+    select_op_dialog->Bind(EVT_LITERALOP_WINDOW_CLICK, &PrimaryFrame::OnSelectLiteralOpDialogItem, this);
+}
 
-    select_dlg->Bind(wxEVT_LISTBOX_DCLICK, [=](wxCommandEvent& event) {
-        int the_selection = event.GetSelection();
-        if (the_selection == wxNOT_FOUND)
-        {
-            return;
-        }
-        wxString the_operator = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_operator + " ");
-        }
-        });
-
-    return;
-
-
-    if (!select_dlg->IsOK())
-    {
-        wxMessageBox("No item selected!");
-        return;
-    }
-    wxString the_op = select_dlg->GetResult();
-    // wxMessageBox("Your selection: " + select_dlg.GetResult());
-    if (m_command_window_active)
-    {
-        // wxMessageBox("command window active");
-        m_frame_commandPanel->InsertCommandText(the_op + " ");
-    }
-    else if (m_edit_window_active)
-    {
-        // wxMessageBox("Your selection: " + the_ket);
-
-        int page_idx = m_auiNotebook->GetSelection();  // Need to check we have an open tab first!
-        wxString file_name = m_auiNotebook->GetPageText(page_idx);
-        if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
-        {
-            wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-            return;
-        }
-        wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];  // Merge into one line?
-        textCtrlLocal->WriteText(the_op + " ");
-    }
+void PrimaryFrame::OnSelectLiteralOpDialogItem(wxCommandEvent& event)
+{
+    InsertSimpleOperator(event.GetString());
 }
 
 void PrimaryFrame::SelectFromLearnRules(wxCommandEvent& event)
@@ -663,9 +566,7 @@ void PrimaryFrame::SelectFromLearnRules(wxCommandEvent& event)
             return;
         }
         wxString the_learn_rule = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_learn_rule + " ");
-        }
+        InsertLearnRule(the_learn_rule);
         select_dlg->DeselectAll();
         });
 
@@ -676,9 +577,7 @@ void PrimaryFrame::SelectFromLearnRules(wxCommandEvent& event)
             return;
         }
         wxString the_learn_rule = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_learn_rule + " ");
-        }
+        InsertLearnRule(the_learn_rule);
         });
 }
 
@@ -700,9 +599,7 @@ void PrimaryFrame::SelectFromInfix1(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_op + " ");
-        }
+        InsertInfixOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -713,9 +610,7 @@ void PrimaryFrame::SelectFromInfix1(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCommandText(the_op + " ");
-        }
+        InsertInfixOperator(the_op);
         });
 }
 
@@ -737,9 +632,7 @@ void PrimaryFrame::SelectFromInfix2(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertInfixOperator(the_op);
-        }
+        InsertInfixOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -750,9 +643,7 @@ void PrimaryFrame::SelectFromInfix2(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertInfixOperator(the_op);
-        }
+        InsertInfixOperator(the_op);
         });
 }
 
@@ -775,9 +666,7 @@ void PrimaryFrame::SelectFromSimple(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertSimpleOperator(the_op);
-        }
+        InsertSimpleOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -788,9 +677,7 @@ void PrimaryFrame::SelectFromSimple(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertSimpleOperator(the_op);
-        }
+        InsertSimpleOperator(the_op);
         });
 }
 
@@ -813,9 +700,7 @@ void PrimaryFrame::SelectFromCompound(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCompoundOperator(the_op);
-        }
+        InsertCompoundOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -826,9 +711,7 @@ void PrimaryFrame::SelectFromCompound(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertCompoundOperator(the_op);
-        }
+        InsertCompoundOperator(the_op);
         });
 }
 
@@ -851,9 +734,7 @@ void PrimaryFrame::SelectFromFunction(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertFunctionOperator(the_op);
-        }
+        InsertFunctionOperator(the_op);
         select_dlg->DeselectAll();
         });
 
@@ -864,9 +745,7 @@ void PrimaryFrame::SelectFromFunction(wxCommandEvent& event)
             return;
         }
         wxString the_op = list_options[the_selection];  // Need to check bounds?
-        if (m_command_window_active) {
-            m_frame_commandPanel->InsertFunctionOperator(the_op);
-        }
+        InsertFunctionOperator(the_op);
         });
 }
 
@@ -877,64 +756,64 @@ void PrimaryFrame::InsertObject(wxCommandEvent& event)
     ulong idx = ket_map.get_idx(the_operator);
     if (fn_map.set_simple_operators.find(idx) != fn_map.set_simple_operators.end())  // Note the precedence. If an operator is simple, and compound, it will be considered simple.
     {
-        // wxMessageBox(wxString::Format("Insert simple operator %s", the_operator));
-        m_frame_commandPanel->InsertSimpleOperator(the_operator);
+        InsertSimpleOperator(the_operator);
     }
     else if (fn_map.set_compound_operators.find(idx) != fn_map.set_compound_operators.end())  // If an operator is compound and function, it will be considered compound. Maybe make smarter later.
     {
-        // wxMessageBox(wxString::Format("Insert compound operator %s", the_operator));
-        m_frame_commandPanel->InsertCompoundOperator(the_operator);
+        InsertCompoundOperator(the_operator);
     }
     else if (fn_map.set_function_operators.find(idx) != fn_map.set_function_operators.end())
     {
-        // wxMessageBox(wxString::Format("Insert function operator %s", the_operator));
-        m_frame_commandPanel->InsertFunctionOperator(the_operator);
+        InsertFunctionOperator(the_operator);
     }
     else if (std::find(fn_map.list_of_statements.begin(), fn_map.list_of_statements.end(), the_operator) != fn_map.list_of_statements.end())
     {
-        m_frame_commandPanel->InsertStatement(the_operator);
+        InsertStatement(the_operator);
     }
     else if (std::find(fn_map.list_of_learn_rules.begin(), fn_map.list_of_learn_rules.end(), the_operator) != fn_map.list_of_learn_rules.end())
     {
-        m_frame_commandPanel->InsertLearnRule(the_operator);
+        InsertLearnRule(the_operator);
     }
     else if (std::find(fn_map.list_of_infix_type1.begin(), fn_map.list_of_infix_type1.end(), the_operator) != fn_map.list_of_infix_type1.end())
     {
-        m_frame_commandPanel->InsertInfixOperator(the_operator);
+        InsertInfixOperator(the_operator);
     }
     else if (std::find(fn_map.list_of_infix_type2.begin(), fn_map.list_of_infix_type2.end(), the_operator) != fn_map.list_of_infix_type2.end())
     {
-        m_frame_commandPanel->InsertInfixOperator(the_operator);
+        InsertInfixOperator(the_operator);
     }
     else if (the_operator == "|>" || the_operator == "|*>" || the_operator == "|_self>")
     {
-        m_frame_commandPanel->InsertKet(the_operator);
+        InsertKet(the_operator);
     }
     else if (the_operator == "comment")
     {
-        m_frame_commandPanel->InsertComment();
+        InsertComment();
+    }
+    else if (the_operator == "|context>")
+    {
+        InsertStatement("context");
+    }
+    else if (the_operator == "if-then machine")
+    {
+        IfThenMachineDialog* if_then_dialog = new IfThenMachineDialog(this);
+        if_then_dialog->Bind(EVT_INSERT_IFTHEN_MACHINE, &PrimaryFrame::OnIfThenInsert, this);
+    }
+    else if (the_operator == "if-then operator")
+    {
+        IfThenOperatorDialog* if_then_op_dialog = new IfThenOperatorDialog(this);
+        if_then_op_dialog->Bind(EVT_INSERT_IFTHEN_OPERATOR, &PrimaryFrame::OnIfThenInsert, this);
     }
     else
     {
         wxMessageBox(wxString::Format("Special case %s, will handle later.", the_operator));
-        m_frame_commandPanel->InsertCommandText(the_operator);  // Later handle all the special cases.
+        InsertText(the_operator);  // Later handle all the special cases.
     }
+}
 
-    /*
-    wxString the_operator = m_insert_menu_map[event.GetId()];
-    // wxMessageBox("Your selected id: " + std::to_string(event.GetId()));
-    wxMessageBox("Your selected operator: " + the_operator);
-    int page_idx = m_auiNotebook->GetSelection();  // Need to check we have an open tab first!
-    wxString file_name = m_auiNotebook->GetPageText(page_idx);
-    if (m_open_file_text_ctrl.find(file_name) == m_open_file_text_ctrl.end())
-    {
-        wxMessageBox(wxString::Format("Tab %s not found.", file_name));
-        return;
-    }
-    wxTextCtrl* textCtrlLocal = m_open_file_text_ctrl[file_name];
-    // (*textCtrlLocal) << the_operator << " ";   // This appends. We want it to insert.
-    textCtrlLocal->WriteText(the_operator + " ");
-    */
+void PrimaryFrame::OnIfThenInsert(wxCommandEvent& event)
+{
+    InsertText(event.GetString());
 }
 
 void PrimaryFrame::UsageForOperator(wxCommandEvent& event)
@@ -970,8 +849,10 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
     {
         m_panelSizer->Detach(0); // remove previous panel
         m_auiNotebook->Hide();
+        m_frame_edit_panel->Hide();
         m_panelSizer->Prepend(m_frame_commandPanel, 1, wxGROW);
         m_frame_commandPanel->Show();
+        m_frame_commandPanel->UpdateContextSelector();
         m_command_window_active = true;
         m_edit_window_active = false;
     }
@@ -979,12 +860,19 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
     {
         m_panelSizer->Detach(0); // remove previous panel
         m_frame_commandPanel->Hide();
-        m_panelSizer->Prepend(m_auiNotebook, 1, wxGROW);
-        m_auiNotebook->Show();
+        // m_panelSizer->Prepend(m_auiNotebook, 1, wxGROW);
+        // m_auiNotebook->Show();
+        m_panelSizer->Prepend(m_frame_edit_panel, 1, wxGROW);
+        m_frame_edit_panel->Show();
         m_command_window_active = false;
         m_edit_window_active = true;
     }
     m_panelSizer->Layout();
+}
+
+void PrimaryFrame::InvokeActiveTable(wxCommandEvent& event)
+{
+    ActiveTableDialog* active_table = new ActiveTableDialog(this);
 }
 
 void PrimaryFrame::OpenExampleWebpage(wxCommandEvent& event)
@@ -1053,3 +941,113 @@ void PrimaryFrame::OpenWebsite(wxCommandEvent& event)
         wxLogError("Failed to open browser.");
 }
 
+void PrimaryFrame::InsertText(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertText(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertText(wxs);
+    }
+}
+
+void PrimaryFrame::InsertStatement(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertStatement(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertStatement(wxs);
+    }
+}
+
+void PrimaryFrame::InsertLearnRule(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertLearnRule(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertLearnRule(wxs);
+    }
+}
+
+void PrimaryFrame::InsertInfixOperator(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertInfixOperator(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertInfixOperator(wxs);
+    }
+}
+
+void PrimaryFrame::InsertSimpleOperator(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertSimpleOperator(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertSimpleOperator(wxs);
+    }
+}
+
+void PrimaryFrame::InsertCompoundOperator(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertCompoundOperator(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertCompoundOperator(wxs);
+    }
+}
+
+void PrimaryFrame::InsertFunctionOperator(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertFunctionOperator(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertFunctionOperator(wxs);
+    }
+}
+
+void PrimaryFrame::InsertKet(const wxString& wxs)
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertKet(wxs);
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertKet(wxs);
+    }
+}
+
+void PrimaryFrame::InsertComment()
+{
+    if (m_command_window_active)
+    {
+        m_frame_commandPanel->InsertComment();
+    }
+    else if (m_edit_window_active)
+    {
+        m_frame_edit_panel->InsertComment();
+    }
+}
+
+PrimaryFrame::~PrimaryFrame()
+{}

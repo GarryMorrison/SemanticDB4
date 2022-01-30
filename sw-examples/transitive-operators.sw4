@@ -1,0 +1,62 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
+-- some simple applications of the transitive[] and stranstive[] operators.
+
+
+|context> => |transitive operators example>
+
+-- first, the famous Socrates example:
+is-a |Socrates> => |human>
+is-a |human> => |mortal>
+sprint["Socrates is a: "] transitive[is-a] |Socrates>
+
+
+-- a transitive operator example with coeffs != 1:
+-- ie, demonstrating an example where the transitiveness gradually "wears off" the more steps you take.
+is-a |A> => 0.8|B>
+is-a |B> => 0.5|C>
+is-a |C> => 0.9|D>
+is-a |D> => 0.2|E>
+sprint["A is a: "] transitive[is-a] |A>
+sprint["A is a 1: "] transitive[is-a, 1] |A>
+sprint["A is a 2: "] transitive[is-a, 2] |A>
+sprint["A is a 3: "] transitive[is-a, 3] |A>
+sprint["A is a 4: "] transitive[is-a, 4] |A>
+sprint["A is a 5: "] transitive[is-a, 5] |A>
+sprint["A is a 6: "] transitive[is-a, 6] |A>
+
+-- sequence transitive operator:
+sprint["A is a seq 1: "] stransitive[is-a, 1] |A>
+sprint["A is a seq 2: "] stransitive[is-a, 2] |A>
+sprint["A is a seq 3: "] stransitive[is-a, 3] |A>
+sprint["A is a seq 4: "] stransitive[is-a, 4] |A>
+sprint["A is a seq 5: "] stransitive[is-a, 5] |A>
+sprint["A is a seq 6: "] stransitive[is-a, 6] |A>
+
+
+-- now a slightly less abstract example:
+-- first learn some sample knowledge (it extends in an obvious way to a larger example):
+is-a-kind-of |British comedy> => |comedy>
+is-a-kind-of |comedy> => |film>
+is-a |Clockwise> => |British comedy>
+stars-in |John Cleese> => |Clockwise>
+
+-- now an operator that stitches this all together:
+conclude-stars-in |*> #=> clean ( 1 + transitive[is-a] + transitive[is-a-kind-of] transitive[is-a] ) stars-in |_self>
+sprint["Conclude: "] conclude-stars-in |John Cleese>
+
+
+-- then some brief example applications of this knowledge:
+have-starred-in-Clockwise |*> #=> filter(|op: stars-in>, |Clockwise>) rel-kets[*]
+sprint["Have starred in Clockwise: "] have-starred-in-Clockwise
+
+have-starred-in-a-British-comedy |*> #=> filter(|op: conclude-stars-in>, |British comedy>) rel-kets[*]
+sprint["Have starred in a British comedy: "] have-starred-in-a-British-comedy
+
+have-starred-in-a-comedy |*> #=> filter(|op: conclude-stars-in>, |comedy>) rel-kets[*]
+sprint["Have starred in a comedy: "] have-starred-in-a-comedy
+
+have-starred-in-a-film |*> #=> filter(|op: conclude-stars-in>, |film>) rel-kets[*]
+sprint["Have starred in a film: "] have-starred-in-a-film
+

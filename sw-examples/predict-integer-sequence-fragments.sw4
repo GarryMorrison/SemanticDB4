@@ -1,0 +1,192 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
+-- use smap and if-then machines to predict next digits from an integer sequence fragment:
+
+|context> => |predict integer sequences>
+
+-- min and max ngram lenghts for the prediction if-then machines:
+min |ngram len> => |3>
+max |ngram len> => |9>
+
+-- Fibonacci:
+fib |0> => |0>
+fib |1> => |1>
+fib |*> !=> fib minus[1] |_self> ++ fib minus[2] |_self>
+
+-- factorial:
+fact |0> => |1>
+fact |*> !=> |_self> ** fact minus[1] |_self>
+
+-- now learn our four sequences, counting, Fibonacci, factorial, primes:
+print |Learning our integer sequences ... >
+
+int-seq |count> => srange(|1>, |100>) |>
+int-seq |fib> => fib srange(|1>, |30>) |>
+int-seq |fact> => fact srange(|1>, |15>) |>
+int-seq |primes> => such-that[is-prime] srange(|1>, |200>) |>
+
+-- learn what is a digit and an integer:
+list-of |digits> => |0> + |1> + |2> + |3> + |4> + |5> + |6> + |7> + |8> + |9>
+is-digit list-of |digits> => |yes>
+is-digit |*> => |no>
+is-integer |*> !=> clean is-digit split |_self> == |yes>
+
+-- define a digit encoder:
+digit-encoder |*> #=>
+    if( is-digit |__self> ):
+        Gaussian[0.6] |__self>
+    else:
+        |__self>
+    end:
+
+-- define an integer encoder:
+integer-encoder |*> #=>
+    if( is-integer |__self> ):
+        Gaussian[1] |__self>
+    else:
+        |__self>
+    end:
+
+-- quick test of our encoders:
+-- bar-chart[50] digit-encoder |5>
+-- bar-chart[50] integer-encoder |10>
+
+-- define the if-then machine create-rule for the predict-next and fuzzy-predict-next code:
+create-next-rules (*) #=>
+    node |label> => |node:> __ node |number> _ |:> __ node |idx>
+    pattern node |label> => sselect[1,-2] |__self>
+    fuzzy-pattern node |label> => integer-encoder sselect[1,-2] |__self>
+    next-1 node |label> => sselect[-1,-1] |__self>
+    node |idx> => plus[1] node |idx>
+    --
+    node |label> => |node:> __ node |number> _ |:> __ node |idx>
+    pattern node |label> => sselect[1,-3] |__self>
+    fuzzy-pattern node |label> => integer-encoder sselect[1,-3] |__self>
+    next-2 node |label> => sselect[-2,-1] |__self>
+    node |idx> => plus[1] node |idx>
+    --
+    node |label> => |node:> __ node |number> _ |:> __ node |idx>
+    pattern node |label> => sselect[1,-4] |__self>
+    fuzzy-pattern node |label> => integer-encoder sselect[1,-4] |__self>
+    next-3 node |label> => sselect[-3,-1] |__self>
+    node |idx> => plus[1] node |idx>
+    --
+    node |label> => |node:> __ node |number> _ |:> __ node |idx>
+    pattern node |label> => sselect[1,-5] |__self>
+    fuzzy-pattern node |label> => integer-encoder sselect[1,-5] |__self>
+    next-4 node |label> => sselect[-4,-1] |__self>
+    node |idx> => plus[1] node |idx>
+
+-- a helper operator:
+extract-node-number |*> #=> extract-value extract-category |_self>
+not |no> => |yes>
+not |yes> => |no>
+
+
+-- define our if-then machine creation operator:
+create-if-then-machine (*,*) #=>
+    node |number> => |1>
+    node |number> _=> plus[1] clean select[-1,-1] ket-sort extract-node-number rel-kets[then] |>
+    node |idx> => |1>
+    smap(min |ngram len>, max |ngram len>, |__self1>) |__self0>
+    node |label> => |node:> __ node |number> _ |: *>
+    then node |label> => |__self2>
+
+
+-- print out start learning message:
+print |Starting to learn our integer sequence if-then machines ... >
+
+-- now use it to create the next-k if-then machines:
+create-if-then-machine(|op: create-next-rules>, |integer sequence: counting>) int-seq |count>
+create-if-then-machine(|op: create-next-rules>, |integer sequence: fibonacci>) int-seq |fib>
+create-if-then-machine(|op: create-next-rules>, |integer sequence: factorial>) int-seq |fact>
+create-if-then-machine(|op: create-next-rules>, |integer sequence: primes>) int-seq |primes>
+
+-- print out finished learning message:
+print |Finished learning> __ extract-value to-comma-number how-many rel-kets[*] |> __ |rules.>
+
+
+-- define the predict-next operator:
+predict-nodes |*> #=> natural-sort drop-below[0.97] similar-input[pattern] ssplit[" "] |_self>
+do-you-know-prediction |*> #=> do-you-know predict-nodes |_self>
+
+predict-next |*> #=>
+    unlearn[the] |result>
+    the |result> => predict-nodes |__self>
+    if( do-you-know the |result> ):
+        print-next the |result>
+    else:
+        |Anomaly, no sequence detected ... >
+    end:
+
+
+-- define the print-next operators:
+print-next-1 |yes> #=> print (extract-value round[1] push-float 100 tmp |var> _ | %     > __ then tmp |var> __ |     pattern:     > _ smerge[" "] pattern tmp |var> _ |      next-1:     > _ smerge[" "] next-1 tmp |var>)
+print-next-2 |yes> #=> print (extract-value round[1] push-float 100 tmp |var> _ | %     > __ then tmp |var> __ |     pattern:     > _ smerge[" "] pattern tmp |var> _ |      next-2:     > _ smerge[" "] next-2 tmp |var>)
+print-next-3 |yes> #=> print (extract-value round[1] push-float 100 tmp |var> _ | %     > __ then tmp |var> __ |     pattern:     > _ smerge[" "] pattern tmp |var> _ |      next-3:     > _ smerge[" "] next-3 tmp |var>)
+print-next-4 |yes> #=> print (extract-value round[1] push-float 100 tmp |var> _ | %     > __ then tmp |var> __ |     pattern:     > _ smerge[" "] pattern tmp |var> _ |      next-4:     > _ smerge[" "] next-4 tmp |var>)
+
+
+print-next |*> #=>
+    tmp |var> => |__self>
+    print-next-1 do-you-know next-1 |__self>
+    print-next-2 do-you-know next-2 |__self>
+    print-next-3 do-you-know next-3 |__self>
+    print-next-4 do-you-know next-4 |__self>
+    |results>
+
+
+-- define the fuzzy-predict-next operator:
+-- fuzzy-predict version that matches sequences even if they are different lengths:
+-- fuzzy-predict-nodes |*> #=> drop-below[0.5] similar-input[fuzzy-pattern] integer-encoder ssplit[" "] |_self>
+
+-- fuzzy-predict version that only matches sequences of exactly the same length:
+fuzzy-predict-nodes |*> #=> drop-below[0.5] strict-similar-input[fuzzy-pattern] integer-encoder ssplit[" "] |_self>
+
+do-you-know-fuzzy-prediction |*> #=> do-you-know fuzzy-predict-nodes |_self>
+
+fuzzy-predict-next |*> #=>
+    unlearn[the] |result>
+    the |result> => fuzzy-predict-nodes |__self>
+    if( do-you-know the |result> ):
+        print-next the |result>
+    else:
+        |Anomaly, no sequence detected ... >
+    end:
+
+
+
+print-usage |*> #=>
+    print | >
+    print |Usage:>
+    print |    Given a sequence, return matching nodes:>
+    print |        predict-nodes ket(2 3 5 8)>
+    print | >
+    print |    Given a sequence, predict the next elements:>
+    print |        predict-next ket(1 2 3)>
+    print |        predict-next ket(1 2 3 4 5)>
+    print |        predict-next ket(2 3 5 8)>
+    print |        predict-next ket(2 6 24)>
+    print |        predict-next ket(2 3 5 7)>
+    print |        predict-next ket(9 9 9)>
+    print | >    
+    print |    Given a sequence, test if it is recognized:>
+    print |        do-you-know-prediction ket(2 6 24)>
+    print |        do-you-know-prediction ket(9 9 9)>
+    print | >
+    print | >
+    print |    Given a sequence, return fuzzy matching nodes:>
+    print |        fuzzy-predict-nodes ket(11 12 13 14)>
+    print | >
+    print |    Given a sequence, fuzzy-predict the next elements:>
+    print |        fuzzy-predict-next ket(2 3 5 7 11)>
+    print |        fuzzy-predict-next ket(9 9 9)>
+    print | >
+    print |    Given a sequence, test if it is fuzzy-recognized:>
+    print |        do-you-know-fuzzy-prediction ket(9 9 9)>
+    print | >
+
+
+print-usage
+

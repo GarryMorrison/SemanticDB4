@@ -1,0 +1,88 @@
+-- Author: Garry Morrison
+-- Updated: 2022/1/22
+--
+-- auto learn some knowledge given my name, your name, his name, her name or their name:
+-- this general idea of auto learning given a small seed of information generalizes easily.
+-- Eg, I-live-in-the-city-of |*>, we can then automatically conclude which country you live in,
+-- the population of your home city, which state you live in, and so on.
+
+I-am |*> #=>
+    of |me> => |__self>
+    unlearn[my] rel-kets[my]
+    my |name> _=> name of |me>
+    my |age> _=> age of |me>
+    my |first name> _=> first-name of |me>
+    my |last name> _=> last-name of |me>
+    my |mother> _=> mother of |me>
+    my |father> _=> father of |me>
+    my |sister> _=> sister of |me>
+    my |sisters> _=> sisters of |me>
+    my |brother> _=> brother of |me>
+    my |brothers> _=> brothers of |me>
+    my |friends> _=> friends of |me>
+    my |gender> _=> gender of |me>
+
+You-are |*> #=>
+    of |you> => |__self>
+    unlearn[your] rel-kets[your]
+    your |name> _=> name of |you>
+    your |age> _=> age of |you>
+    your |first name> _=> first-name of |you>
+    your |last name> _=> last-name of |you>
+    your |mother> _=> mother of |you>
+    your |father> _=> father of |you>
+    your |sister> _=> sister of |you>
+    your |sisters> _=> sisters of |you>
+    your |brother> _=> brother of |you>
+    your |brothers> _=> brothers of |you>
+    your |friends> _=> friends of |you>
+    your |gender> _=> gender of |you>
+
+She-is |*> #=>
+    of |her> => |__self>
+    unlearn[her] rel-kets[her]
+    her |name> _=> name of |her>
+    her |age> _=> age of |her>
+    her |first name> _=> first-name of |her>
+    her |last name> _=> last-name of |her>
+    her |mother> _=> mother of |her>
+    her |father> _=> father of |her>
+    her |sister> _=> sister of |her>
+    her |sisters> _=> sisters of |her>
+    her |brother> _=> brother of |her>
+    her |brothers> _=> brothers of |her>
+    her |friends> _=> friends of |her>
+    her |gender> _=> |female>
+
+He-is |*> #=>
+    of |him> => |__self>
+    unlearn[him] rel-kets[him]
+    his |name> _=> name of |him>
+    his |age> _=> age of |him>
+    his |first name> _=> first-name of |him>
+    his |last name> _=> last-name of |him>
+    his |mother> _=> mother of |him>
+    his |father> _=> father of |him>
+    his |sister> _=> sister of |him>
+    his |sisters> _=> sisters of |him>
+    his |brother> _=> brother of |him>
+    his |brothers> _=> brothers of |him>
+    his |friends> _=> friends of |him>
+    his |gender> _=> |male>
+
+They-are |*> #=>
+    of |them> => |__self>
+    unlearn[their] rel-kets[their]
+    their |name> _=> name of |them>
+    their |age> _=> age of |them>
+    their |first name> _=> first-name of |them>
+    their |last name> _=> last-name of |them>
+    their |mother> _=> mother of |them>
+    their |father> _=> father of |them>
+    their |sister> _=> sister of |them>
+    their |sisters> _=> sisters of |them>
+    their |brother> _=> brother of |them>
+    their |brothers> _=> brothers of |them>
+    their |friends> _=> friends of |them>
+    their |gender> _=> gender of |them>
+

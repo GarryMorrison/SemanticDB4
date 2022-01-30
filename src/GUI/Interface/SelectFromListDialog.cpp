@@ -37,12 +37,13 @@ SelectFromListDialog::SelectFromListDialog(wxWindow* parent, wxString dialog_tit
 
 
     wxBoxSizer* button_sizer = new wxBoxSizer(wxHORIZONTAL);
-    wxButton* clear_button = new wxButton(this, ID_Clear_Select_List, "Clear");
+    // wxButton* clear_button = new wxButton(this, ID_Clear_Select_List, "Clear");
     wxButton* close_button = new wxButton(this, wxID_CANCEL, "Close");
-    button_sizer->Add(clear_button, wxSizerFlags(0).Center().Border(wxALL, 10));
-    button_sizer->Add(close_button, wxSizerFlags(0).Center().Border(wxALL, 10));
+    // button_sizer->Add(clear_button, wxSizerFlags(0).Center().Border(wxALL, 10));
+    button_sizer->Add(close_button, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
 
-    topsizer->Add(button_sizer, wxSizerFlags(0).Center());
+    topsizer->Add(button_sizer, wxSizerFlags(0).Left());
+    topsizer->AddSpacer(10);
 
     SetSizerAndFit(topsizer);
     CenterOnScreen();
@@ -52,11 +53,13 @@ SelectFromListDialog::SelectFromListDialog(wxWindow* parent, wxString dialog_tit
     // ShowModal();
     Show();
 
+    /*
     clear_button->Bind(wxEVT_BUTTON, [=](wxCommandEvent& event) {
         if (event.GetId() == ID_Clear_Select_List) {
             m_result_list->DeselectAll();
         }
         });
+    */
 
     return;
 

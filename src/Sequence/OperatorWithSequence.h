@@ -83,6 +83,7 @@ public:
     // const ulong size() const { return sign_vec.size(); };
     // const size_t size() const { return sign_vec.size(); };  // Should this be in OperatorWithSequence.cpp?
     const size_t size() const;
+    const bool is_empty_ket() const;
     const std::string to_string() const;
     const std::string to_string(const std::string& prefix) const;
 

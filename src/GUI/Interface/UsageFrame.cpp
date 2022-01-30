@@ -68,12 +68,21 @@ UsageFrame::UsageFrame(wxWindow* parent, std::string op, wxPoint position_delta,
         UsageFrame* dlg = new UsageFrame(this, the_operator, position_delta + wxPoint(40, 40));
         });
 
+    examplesCtrl->Bind(wxEVT_MOTION, [=](wxMouseEvent& event) {
+        examplesCtrl->SetFocus();
+        examplesCtrl->GetCaret()->Hide();
+        });
+
     seeAlsoCtrl->Bind(wxEVT_TEXT_URL, [=](wxTextUrlEvent& event) {
         wxString link = event.GetString();
         std::string the_operator = seeAlsoCtrl->GetRange(event.GetURLStart(), event.GetURLEnd() + 1).ToStdString();  // Extract this to a function later?
         UsageFrame* dlg = new UsageFrame(this, the_operator, position_delta + wxPoint(40, 40));
         });
 
+    seeAlsoCtrl->Bind(wxEVT_MOTION, [=](wxMouseEvent& event) {
+        seeAlsoCtrl->SetFocus();
+        seeAlsoCtrl->GetCaret()->Hide();
+        });
 
     wxButton* OK_Button = new wxButton(panel, wxID_OK, "OK");
     topsizer->Add(OK_Button, wxSizerFlags(0).Border(wxALL, 10));

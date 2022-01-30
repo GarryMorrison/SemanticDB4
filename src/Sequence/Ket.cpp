@@ -20,6 +20,12 @@ const double Ket::value() const {
     return ket_value;
 }
 
+const bool Ket::is_empty_ket() const
+{
+    if (ket_map.get_idx("") == ket_label_idx) { return true; }  // Hard wire in 0 for get_idx("")?
+    return false;
+}
+
 const size_t Ket::size() const {
     size_t result;
     if (ket_map.get_idx("") == ket_label_idx) {  // Hard wire in 0 for get_idx("").
@@ -30,6 +36,7 @@ const size_t Ket::size() const {
     }
     return result;
 }
+
 
 const std::string Ket::to_string() const {
     std::string s;

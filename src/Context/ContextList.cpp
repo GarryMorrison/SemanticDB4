@@ -1,5 +1,6 @@
 //
 // Created by Garry Morrison on 13/09/2020.
+// Updated 2022/1/23
 //
 
 #include <iostream>
@@ -13,9 +14,11 @@ ContextList::ContextList(const std::string& s) {
     max_index = 1;
     NewContext tmp(name);
     data.push_back(tmp);
+    m_name_idx_map[name] = index;
 }
 
 void ContextList::set(const std::string& s) {
+    /*
     bool match = false;
     for (ulong k = 0; k < max_index; k++) {
         if (data[k].get_name() == s) {
@@ -30,6 +33,19 @@ void ContextList::set(const std::string& s) {
         NewContext tmp(s);
         data.push_back(tmp);
     }
+    */
+    if (m_name_idx_map.find(s) != m_name_idx_map.end())
+    {
+        index = m_name_idx_map[s];
+    }
+    else
+    {
+        index = max_index;
+        max_index++;
+        NewContext tmp(s);
+        data.push_back(tmp);
+        m_name_idx_map[s] = index;
+    }
 }
 
 void ContextList::set(const ulong idx) {
@@ -39,12 +55,44 @@ void ContextList::set(const ulong idx) {
     index = idx;
 }
 
+bool ContextList::switch_context(const std::string& s)
+{
+    if (m_name_idx_map.find(s) != m_name_idx_map.end())
+    {
+        index = m_name_idx_map[s];
+        return true;
+    }
+    return false;
+}
+
 void ContextList::reset() {
     index = 0;
     max_index = 1;
     NewContext tmp(name);
     data.clear();
     data.push_back(tmp);
+    m_name_idx_map.clear();
+    m_name_idx_map[name] = index;
+}
+
+void ContextList::reset_current_context()
+{
+    data[index].reset();
+}
+
+std::string ContextList::get_context_name() const
+{
+    return data[index].get_name();
+}
+
+std::vector<std::string> ContextList::get_context_names() const
+{
+    std::vector<std::string> names;
+    for (ulong k = 0; k < max_index; k++)
+    {
+        names.push_back(data[k].get_name());
+    }
+    return names;
 }
 
 void ContextList::show_context_list() {
@@ -152,6 +200,38 @@ void ContextList::learn(const std::string& op, const std::string& label, std::sh
 
 void ContextList::learn(const std::string& op, const std::string& label, const std::string& srule) {
     data[index].learn(op, label, srule);
+}
+
+
+void ContextList::non_empty_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq)
+{
+    // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
+    // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
+    if (bSeq->is_empty_ket()) { return; }
+    learn(op_idx, label_idx, bSeq);
+}
+
+void ContextList::non_empty_learn(const ulong op_idx, const Ket& label_ket, std::shared_ptr<BaseSequence> bSeq)
+{
+    // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
+    // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
+    if (bSeq->is_empty_ket()) { return; }
+    learn(op_idx, label_ket, bSeq);
+}
+
+void ContextList::non_empty_learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq)
+{
+    // std::cout << "Inside non_empty_learn, bSeq size: " << std::to_string(bSeq->size()) << "\n";
+    // std::cout << "    bSeq type: " << std::to_string(bSeq->type()) << "\n";
+    if (bSeq->is_empty_ket()) { return; }
+    learn(op, label, bSeq);
+}
+
+void ContextList::non_empty_learn(const std::string& op, const std::string& label, const std::string& srule)
+{
+    // std::cout << "Inside non_empty_learn, srule size: " << std::to_string(srule.size()) << "\n";
+    if (srule.empty()) { return; }
+    learn(op, label, srule);
 }
 
 

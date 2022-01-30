@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/1/22
 // Author Garry Morrison
 // License GPL v3
 //
@@ -17,7 +17,7 @@ class CommandPanel : public wxPanel
 public:
     CommandPanel(wxPanel* parent, wxWindowID id);
 
-    void InsertCommandText(const wxString& wxs);
+    void InsertText(const wxString& wxs);
     void InsertStatement(const wxString& wxs);
     void InsertLearnRule(const wxString& wxs);
     void InsertInfixOperator(const wxString& wxs);
@@ -35,6 +35,8 @@ public:
     void OnDumpButtonDown(wxCommandEvent& event);
     void OnSaveAsButtonDown(wxCommandEvent& event);
     void OnGraphButtonDown(wxCommandEvent& event);
+    void OnResetContextButtonDown(wxCommandEvent& event);
+    void OnResetAllButtonDown(wxCommandEvent& event);
     void OnUseMonospaceCheckBox(wxCommandEvent& event);
     void OnUseLineNumbersCheckBox(wxCommandEvent& event);
 
@@ -48,6 +50,11 @@ public:
 
     void SetRunTime(long long time);
 
+    void OnContextSelect(wxCommandEvent& event);
+    void UpdateContextSelector();
+
+    void SaveFile(const wxString& filename);
+
     ~CommandPanel();
 
 private:
@@ -58,6 +65,7 @@ private:
     wxTextAttr* m_default_attr;
     wxRichTextCtrl* m_command_results;
     ResultCanvas* m_command_result_canvas;
+    wxChoice* m_context_selector;
     wxCheckBox* m_command_monospace_checkbox;
     wxCheckBox* m_command_line_numbers_checkbox;
     int m_current_line = 1;  // Maybe it starts from 1??

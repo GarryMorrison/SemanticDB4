@@ -17,6 +17,14 @@ NewContext::NewContext(const std::string& s) {
     name = s;
 }
 
+void NewContext::reset()
+{
+    rules_dict.clear();
+    sort_order.clear();
+    fn_rules_dict.clear();
+    bound_fn_rules_dict.clear();
+}
+
 /*
 void NewContext::learn(const ulong op_idx, const ulong label_idx, BaseSequence* bSeq) {
     if (op_idx == ket_map.get_idx("supported-ops")) { return; }  // maybe hard wire in "supported-ops" as ket_map idx = 1?
@@ -191,6 +199,24 @@ void NewContext::learn(const std::string& op, const std::string& label, const st
         rules_dict[label_idx] = frame;
     }
     rules_dict[label_idx].learn(op_idx, bSeq);
+}
+
+void NewContext::non_empty_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq)
+{
+    if (bSeq->is_empty_ket()) { return; }
+    learn(op_idx, label_idx, bSeq);
+}
+
+void NewContext::non_empty_learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq)
+{
+    if (bSeq->is_empty_ket()) { return; }
+    learn(op, label, bSeq);
+}
+
+void NewContext::non_empty_learn(const std::string& op, const std::string& label, const std::string& srule)
+{
+    if (srule.empty()) { return; }
+    learn(op, label, srule);
 }
 
 void NewContext::add_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {

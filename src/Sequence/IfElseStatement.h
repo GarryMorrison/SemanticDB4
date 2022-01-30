@@ -30,6 +30,7 @@ public:
     // methods needed to support BaseSequence:
     const int type() const { return IFELSESTATEMENT; }
     const bool is_ket() const { return false; }
+    const bool is_empty_ket() const { return false; }
     const size_t size() const;
     const std::string to_string() const;
     const std::string to_string(const std::string& prefix) const;

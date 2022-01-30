@@ -2,11 +2,13 @@
 
 //
 // Created by Garry Morrison on 13/09/2020.
+// Updated 2022/1/23
 //
 
 
 #include <string>
 #include <vector>
+#include <map>
 #include "NewContext.h"
 
 
@@ -16,12 +18,18 @@ private:
     ulong index;
     ulong max_index;
     std::vector<NewContext> data;
+    std::map<std::string, ulong> m_name_idx_map;
 
 public:
     ContextList(const std::string& s);
     void set(const std::string& s);
     void set(const ulong idx);
+    bool switch_context(const std::string& s);
     void reset();
+    void reset_current_context();
+    std::string get_context_name() const;
+    std::vector<std::string> get_context_names() const;
+    unsigned int get_context_index() const { return index; }
     void show_context_list();
 
     /*
@@ -42,6 +50,11 @@ public:
     void learn(const ulong op_idx, const Ket& label_ket, std::shared_ptr<BaseSequence> bSeq);
     void learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq);
     void learn(const std::string& op, const std::string& label, const std::string& srule);
+
+    void non_empty_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq);
+    void non_empty_learn(const ulong op_idx, const Ket& label_ket, std::shared_ptr<BaseSequence> bSeq);
+    void non_empty_learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq);
+    void non_empty_learn(const std::string& op, const std::string& label, const std::string& srule);
 
     void add_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq);
     void add_learn(const ulong op_idx, const Ket& label_ket, std::shared_ptr<BaseSequence> bSeq);
