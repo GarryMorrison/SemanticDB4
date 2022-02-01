@@ -29,7 +29,14 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
 
     // Add a close button:
     wxButton* close_button = new wxButton(panel, wxID_OK, "OK");
-    topsizer->Add(close_button, wxSizerFlags(0).Left().Border(wxALL, 10));
+
+    // Add a copy-all button:
+    wxButton* copy_all_button = new wxButton(panel, ID_Copy_All, "Copy All");
+    wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
+
+    hbox->Add(close_button, wxSizerFlags(0).Left().Border(wxALL, 10));
+    hbox->Add(copy_all_button, wxSizerFlags(0).Left().Border(wxALL, 10));
+    topsizer->Add(hbox);
 
     // Add a timer string:
     wxString timer_string = "Timer: " + display_time(m_run_time_ms);
@@ -43,6 +50,8 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
         }
         });
 
+    copy_all_button->Bind(wxEVT_BUTTON, &OutputFrame::OnCopyAll, this);
+
     panel->SetSizerAndFit(topsizer);
     CenterOnScreen();
     wxPoint dialog_position = GetScreenPosition();
@@ -50,6 +59,11 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
     SetPosition(dialog_position);
     Fit();
     Show();
+}
+
+void OutputFrame::OnCopyAll(wxCommandEvent& event)
+{
+    wxMessageBox("Copy All button pressed.");
 }
 
 void OutputFrame::SetRunTime(long long time)
