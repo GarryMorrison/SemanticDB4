@@ -2417,15 +2417,17 @@ Sequence op_borrow_from_context(const Sequence& input_seq, ContextList& context,
 
 Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
 {
-    if (parameters.size() != 2) { return Ket(); }
-    if (parameters[0]->type() != CINT || parameters[1]->type() != CINT) { return Ket(); }
+    if (parameters.size() != 1) { return Ket(); }
+    if (parameters[0]->type() != CINT) { return Ket(); }
+    int seq_len = (int)(input_seq.size());
     int width = parameters[0]->get_int();
-    int height = parameters[1]->get_int();
+    int height = seq_len / width;
+    if (seq_len % width != 0) { height++; }
     if (width < 0 || height < 0) { return Ket(); }
     std::cout << "width:  " << width << "\n";
     std::cout << "height: " << height << "\n";
     std::vector<std::string> grid_elements;
-    size_t max_element_size = 2;  // Set min element size to 3.
+    size_t max_element_size = 2;  // Set min element length to 2.
     for (const auto& sp : input_seq)
     {
         std::string element = sp.to_ket().label();
@@ -2436,7 +2438,8 @@ Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_pt
     unsigned int k = 0;
     for (const auto& element : grid_elements)
     {
-        std::cout << std::right << std::setw(max_element_size) << element;
+        // std::cout << std::right << std::setw(max_element_size) << element; // Do we want left or right justified?
+        std::cout << std::left << std::setw(max_element_size) << element; // Do we want left or right justified? I think left.
         k++;
         if (k % width == 0)
         {

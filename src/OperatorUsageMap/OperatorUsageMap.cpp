@@ -4417,24 +4417,26 @@ OperatorUsageMap::OperatorUsageMap() {
     operator_usage_map.map["display-patch"] =
         "\ndisplay-patch:\n"
         "    description:\n"
-        "        display-patch[width, height] input-seq\n"
-        "        convert an input sequence of kets into a rectangular grid\n"
-        "        if the sequence is of superpositions instead, then behaviour is currently undefined.\n\n"
+        "        display-patch[width] input-seq\n"
+        "        convert an input sequence of kets into a rectangular grid with the given width\n"
+        "        if the sequence is of superpositions instead of kets, then behaviour is currently undefined.\n"
+        "        the grid elements are left justified, and take into account the max grid element length\n\n"
         "    examples:\n"
         "        -- just an abstract example:\n"
-        "        display-patch[3, 2] ssplit |ABCDEF>\n"
+        "        display-patch[3] ssplit |ABCDEF>\n"
         "            width:  3\n"
         "            height: 2\n"
-        "              A  B  C\n"
-        "              D  E  F\n\n"
+        "            A  B  C\n"
+        "            D  E  F\n\n"
         "        -- and another:\n"
-        "        display-patch[3, 2] ssplit[\" \"] |one two three four five six>\n"
+        "        display-patch[3] ssplit[\" \"] |one two three four five six>\n"
         "            width:  3\n"
         "            height: 2\n"
-        "               one   two three\n"
-        "              four  five   six\n\n"
+        "            one   two   three\n"
+        "            four  five  six\n\n"
         "    see also:\n"
-        "        display-grid, grid-map\n";
+        "        display-grid, grid-map, table\n";
+
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =
