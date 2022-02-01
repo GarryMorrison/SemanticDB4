@@ -480,6 +480,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("borrow-from-context");
     fn_map.compound_context_seq_fn.emplace(idx, &op_borrow_from_context);
+
+    idx = ket_map.get_idx("parallel-sum-sequences");
+    fn_map.whitelist_1.emplace(idx, &op_parallel_sum);
 }
 
 

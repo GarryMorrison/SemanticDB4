@@ -4401,6 +4401,18 @@ OperatorUsageMap::OperatorUsageMap() {
         "            |gamma: input ket>\n\n"
         "    see also:\n";
 
+    operator_usage_map.map["parallel-sum-sequences"] =
+        "\nparallel-sum-sequences:\n"
+        "    description:\n"
+        "        parallel-sum-sequences(seq) input-seq\n"
+        "        line up seq and input-seq in parallel,\n"
+        "        and then sum their superpositions.\n\n"
+        "    examples:\n"
+        "        -- just an abstract example:\n"
+        "        parallel-sum-sequences(ssplit |xyz>) ssplit |abcdef>\n"
+        "            |a> + |x> . |b> + |y> . |c> + |z> . |d> . |e> . |f>\n\n"
+        "    see also:\n"
+        "        op-sum, op-union";
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =

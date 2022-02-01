@@ -1568,3 +1568,17 @@ Superposition op_transform(const Sequence& input_seq, const Sequence& one, const
     return input_sp;
 }
 
+Sequence op_parallel_sum(const Sequence& input_seq, const Sequence& one)
+{
+    size_t max_size = std::max(input_seq.size(), one.size());
+    if (max_size == 0) { return Sequence(); }
+    Sequence seq;
+    for (size_t i = 0; i < max_size; i++)
+    {
+        Superposition sp = input_seq.get(i);
+        sp.add(one.get(i));
+        seq.append(sp);
+    }
+    return seq;
+}
+
