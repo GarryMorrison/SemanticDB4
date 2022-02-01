@@ -199,6 +199,16 @@ void ResultCanvas::AppendLine()
     Refresh();
 }
 
+const wxString ResultCanvas::GetText() const
+{
+    wxString the_text;
+    for (const auto& object : m_canvas_objects)
+    {
+        the_text += object->GetText();  // We may need to apply new-lines somehow ...
+    }
+    return the_text;
+}
+
 void ResultCanvas::OnKeyDown(wxKeyEvent& event)  // KeyDown and KeyUp don't seem to work .... Fix.
 {
     m_is_shift_down = event.ShiftDown();

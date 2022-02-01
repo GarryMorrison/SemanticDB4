@@ -68,7 +68,7 @@ public:
     const void Draw(wxAutoBufferedPaintDC& pdc) const;
     const void OnMouseLeftClick() const { return; };
     const bool IsActivated() const { return false;  }
-    const wxString GetText() const { return wxEmptyString; }
+    const wxString GetText() const { return wxEmptyString; }  // Maybe it should be "\n"?
     const int GetObjectType() const { return RC_OBJECT_NONE; }
     
 private:
@@ -99,6 +99,8 @@ public:
     void AppendNewLine();
     void AppendLine();
     void AppendActiveText(const wxString& wxs, const wxString& prefix = wxEmptyString, const bool is_mono = false);
+
+    const wxString GetText() const;
 
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
