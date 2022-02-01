@@ -99,3 +99,5 @@ Superposition op_transitive(const Sequence& input_seq, ContextList& context, con
 Sequence op_stransitive(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 
 Sequence op_borrow_from_context(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+
+Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);

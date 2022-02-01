@@ -2414,3 +2414,34 @@ Sequence op_borrow_from_context(const Sequence& input_seq, ContextList& context,
     }
     return seq;
 }
+
+Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 2) { return Ket(); }
+    if (parameters[0]->type() != CINT || parameters[1]->type() != CINT) { return Ket(); }
+    int width = parameters[0]->get_int();
+    int height = parameters[1]->get_int();
+    if (width < 0 || height < 0) { return Ket(); }
+    std::cout << "width:  " << width << "\n";
+    std::cout << "height: " << height << "\n";
+    std::vector<std::string> grid_elements;
+    size_t max_element_size = 2;  // Set min element size to 3.
+    for (const auto& sp : input_seq)
+    {
+        std::string element = sp.to_ket().label();
+        max_element_size = std::max(max_element_size, element.size());
+        grid_elements.push_back(element);
+    }
+    max_element_size++; // Increment max_element_size by 1, so that there is at least one space char between elements.
+    unsigned int k = 0;
+    for (const auto& element : grid_elements)
+    {
+        std::cout << std::right << std::setw(max_element_size) << element;
+        k++;
+        if (k % width == 0)
+        {
+            std::cout << "\n";
+        }
+    }
+    return Ket("patch");
+}
