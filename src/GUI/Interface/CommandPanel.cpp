@@ -255,7 +255,10 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             m_command_text->GotoLine(m_current_line);
         }
         */
-        event.Skip();
+        if (!event.ShiftDown())
+        {
+            event.Skip();
+        }
         break;
     }
     case '\\': {
@@ -808,7 +811,7 @@ void CommandPanel::OnSaveAsButtonDown(wxCommandEvent& event)
 
 void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
 {
-    wxMessageBox("Graph button pressed. Later we will insert a graph!");
+    wxMessageBox("Graph button pressed.\nLater we will insert a graph!\nFor now see save-as-dot[].");
 }
 
 void CommandPanel::OnResetContextButtonDown(wxCommandEvent& event)
