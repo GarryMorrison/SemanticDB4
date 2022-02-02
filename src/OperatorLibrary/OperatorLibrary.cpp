@@ -2435,6 +2435,7 @@ Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_pt
         grid_elements.push_back(element);
     }
     max_element_size++; // Increment max_element_size by 1, so that there is at least one space char between elements.
+    std::cout << std::setfill(' ');
     unsigned int k = 0;
     for (const auto& element : grid_elements)
     {
