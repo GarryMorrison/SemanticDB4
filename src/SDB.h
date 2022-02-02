@@ -58,6 +58,7 @@
 #include <wx/gdicmn.h>
 #include <wx/grid.h>
 #include <wx/spinctrl.h>
+#include <wx/clipbrd.h>
 #include <set>
 #include <map>
 #include <string>

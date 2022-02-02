@@ -64,7 +64,20 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
 void OutputFrame::OnCopyAll(wxCommandEvent& event)
 {
     wxString the_text = m_result_canvas->GetText();
-    wxMessageBox("Copy All button pressed:\n" + the_text);
+    wxClipboardLocker clipLock;
+    if (!clipLock)
+    {
+        return;  // Failed to lock clipboard.
+    }
+    if (!wxTheClipboard->AddData(new wxTextDataObject(the_text)))
+    {
+        return;  // Failed to put text on clipboard.
+    }
+    if (!wxTheClipboard->Flush())
+    {
+        return;  // Failed to flush clipboard.
+    }
+    wxMessageBox("Frame copied.");  // Do we need this?
 }
 
 void OutputFrame::SetRunTime(long long time)
