@@ -101,11 +101,11 @@ void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix,
             {
                 if (inside_object)
                 {
-                    AppendText(wxString(token), true, RC_OBJECT_SIMPLE_OP, is_mono);
+                    AppendText(token, true, RC_OBJECT_SIMPLE_OP, is_mono);
                 }
                 else
                 {
-                    AppendText(wxString(token), false, RC_OBJECT_NONE, is_mono);
+                    AppendText(token, false, RC_OBJECT_NONE, is_mono);
                 }
                 inside_object = false;
                 inside_ket = true;
@@ -120,7 +120,7 @@ void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix,
             else if (!inside_ket && !inside_object && ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')))  // Use c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' instead?
             {
                 inside_object = true;
-                AppendText(wxString(token), false, RC_OBJECT_NONE, is_mono);
+                AppendText(token, false, RC_OBJECT_NONE, is_mono);
                 token = c;
             }
             else if (!inside_ket && inside_object && (c == ' ' || c == ',' || c == ']' || c == ')' || c == '[' || c == '(')) // [ -> compound op, ( -> function op, ] or ) -> simple op.
@@ -139,7 +139,7 @@ void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix,
                     the_object_type = RC_OBJECT_FUNCTION_OP;
                 }
                 inside_object = false;
-                AppendText(wxString(token), true, the_object_type, is_mono);
+                AppendText(token, true, the_object_type, is_mono);
                 token = c;
             }
             else
@@ -163,15 +163,15 @@ void ResultCanvas::AppendActiveText(const wxString& wxs, const wxString& prefix,
             {
                 the_object_type = RC_OBJECT_FUNCTION_OP;
             }
-            AppendText(wxString(token), true, the_object_type, is_mono);
+            AppendText(token, true, the_object_type, is_mono);
         }
         else if (inside_object)
         {
-            AppendText(wxString(token), true, RC_OBJECT_SIMPLE_OP, is_mono);  // I think this must be a simple operator?
+            AppendText(token, true, RC_OBJECT_SIMPLE_OP, is_mono);  // I think this must be a simple operator?
         }
         else
         {
-            AppendText(wxString(token), false, RC_OBJECT_NONE, is_mono);
+            AppendText(token, false, RC_OBJECT_NONE, is_mono);
         }
         AppendNewLine();
     }
