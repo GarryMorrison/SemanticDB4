@@ -63,7 +63,8 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
 
 void OutputFrame::OnCopyAll(wxCommandEvent& event)
 {
-    wxMessageBox("Copy All button pressed.");
+    wxString the_text = m_result_canvas->GetText();
+    wxMessageBox("Copy All button pressed:\n" + the_text);
 }
 
 void OutputFrame::SetRunTime(long long time)

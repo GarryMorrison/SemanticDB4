@@ -12,9 +12,10 @@
 
 
 #define RC_STRING_CLASS 1
-#define RC_LINE_CLASS 2
-#define RC_COUT 3  // Implement later
-#define RC_IMAGE 4 // Implement later
+#define RC_NEW_LINE_CLASS 2
+#define RC_LINE_CLASS 3
+#define RC_COUT 4  // Implement later
+#define RC_IMAGE 5 // Implement later
 
 #define RC_OBJECT_NONE 0
 #define RC_OBJECT_KET 1
@@ -58,6 +59,23 @@ private:
     wxRect m_rect;
 };
 
+class ResultCanvasNewLine : public ResultCanvasObject
+{
+public:
+    ResultCanvasNewLine();
+    ~ResultCanvasNewLine();
+
+    const int Type() const { return RC_NEW_LINE_CLASS; }
+    const void Draw(wxAutoBufferedPaintDC& pdc) const { return; }
+    const void OnMouseLeftClick() const { return; };
+    const bool IsActivated() const { return false; }
+    const wxString GetText() const { return "\n"; }
+    const int GetObjectType() const { return RC_OBJECT_NONE; }
+
+private:
+};
+
+
 class ResultCanvasLine : public ResultCanvasObject
 {
 public:
@@ -68,7 +86,7 @@ public:
     const void Draw(wxAutoBufferedPaintDC& pdc) const;
     const void OnMouseLeftClick() const { return; };
     const bool IsActivated() const { return false;  }
-    const wxString GetText() const { return wxEmptyString; }  // Maybe it should be "\n"?
+    const wxString GetText() const { return wxEmptyString; }  // Maybe it should be "\n" instead of wxEmptyString?
     const int GetObjectType() const { return RC_OBJECT_NONE; }
     
 private:

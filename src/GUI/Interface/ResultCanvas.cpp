@@ -65,6 +65,7 @@ void ResultCanvas::AppendMultiLineText(const wxString& wxs, bool isactive, int o
     {
         AppendText(line, isactive, object_type, ismonospace);
         // AppendNewLine();
+        m_canvas_objects.push_back(std::make_shared<ResultCanvasNewLine>());
         m_x = 10;
         m_y = m_last_y;
         m_last_y = m_y;
@@ -182,6 +183,7 @@ void ResultCanvas::AppendNewLine()
 {
     m_x = 10;
     m_y = m_last_y + 5;  // Maybe something bigger than 5? 10?
+    m_canvas_objects.push_back(std::make_shared<ResultCanvasNewLine>());  // Do we still need this here?
     m_last_y = m_y;
     SetVirtualSize(m_max_x, m_y);
     Refresh();
@@ -523,6 +525,12 @@ const int ResultCanvasString::GetObjectType() const
 ResultCanvasString::~ResultCanvasString()
 {}
 
+
+ResultCanvasNewLine::ResultCanvasNewLine()
+{}
+
+ResultCanvasNewLine::~ResultCanvasNewLine()
+{}
 
 
 // Start of ResultCanvasLine code:
