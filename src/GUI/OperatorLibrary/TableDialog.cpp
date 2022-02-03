@@ -10,7 +10,7 @@
 #include "TableDialog.h"
 extern SDB::Driver driver;
 
-TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, const std::string& input_sp_str, long style)
+TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, const std::string& input_sp_str, bool is_tidy, long style)
 	: wxDialog(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER), m_operators(operators)
 {
 	SetTitle("Table");
@@ -39,9 +39,18 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 		list_idx++;
 	}
 	list_idx = 0;
-	for (const auto k : input_sp)
+	std::string k_label;
+	for (const auto k : input_sp)  // Tidy this section!
 	{
-		m_grid_table->SetCellValue(list_idx, 0, k.label());
+		if (!is_tidy)
+		{
+			k_label = k.label();
+		}
+		else
+		{
+			k_label = ket_map.get_str(ket_map.get_headless_idx(k.label_idx()));
+		}
+		m_grid_table->SetCellValue(list_idx, 0, k_label);
 		list_idx++;
 	}
 	unsigned int column_idx = 1;
@@ -56,11 +65,18 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 			if (first_column)
 			{
 				first_column = false;
-				row_data.push_back(k.label());
+				if (!is_tidy)
+				{
+					row_data.push_back(k.label());
+				}
+				else
+				{
+					row_data.push_back(ket_map.get_str(ket_map.get_headless_idx(k.label_idx())));
+				}
 				continue;
 			}
 			ulong op_idx = ket_map.get_idx(op);
-			std::string cell_value = driver.context.active_recall(op_idx, k.label_idx()).readable_display();
+			std::string cell_value = driver.context.active_recall(op_idx, k.label_idx()).readable_display(is_tidy);
 			m_grid_table->SetCellValue(row_idx, column_idx, cell_value);
 			row_data.push_back(cell_value);
 			column_idx++;

@@ -12,7 +12,8 @@
 class TableDialog : public wxDialog {
 
 public:
-	TableDialog(wxWindow* parent, std::vector<std::string>& operators, const std::string& input_sp_str, long style = 0);
+	TableDialog(wxWindow* parent, std::vector<std::string>& operators, const std::string& input_sp_str, bool is_tidy = false, long style = 0);
+
 	void OnTableColumnClick(wxGridEvent& event);
 
 	~TableDialog();

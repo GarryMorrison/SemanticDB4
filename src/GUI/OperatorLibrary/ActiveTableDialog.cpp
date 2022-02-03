@@ -267,7 +267,7 @@ void ActiveTableDialog::GenerateCommand()
 void ActiveTableDialog::OnRunButton(wxCommandEvent& event)
 {
 	// wxMessageBox("Run button pressed.");
-	TableDialog* table_dialog = new TableDialog(this, m_checked_items, m_input_sp_str);
+	TableDialog* table_dialog = new TableDialog(this, m_checked_items, m_input_sp_str, m_tidy_table_checkbox->IsChecked());
 }
 
 ActiveTableDialog::~ActiveTableDialog()
