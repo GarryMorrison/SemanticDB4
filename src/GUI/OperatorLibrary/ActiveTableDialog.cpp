@@ -131,9 +131,13 @@ ActiveTableDialog::ActiveTableDialog(wxWindow* parent, long style)
 	command_text_header->SetFont(wxFontInfo(12));
 	m_command_text_ctrl = new wxTextCtrl(this, wxID_ANY, "table[ket] rel-kets[*]", wxDefaultPosition, wxSize(250, -1));
 	wxButton* generate_button = new wxButton(this, ID_Table_Generate, "Generate");
+	m_tidy_table_checkbox = new wxCheckBox(this, wxID_ANY, "tidy table");
 	hbox6->Add(command_text_header);
 	hbox6->AddSpacer(20);
 	hbox6->Add(generate_button);
+	hbox6->AddSpacer(20);
+	hbox6->Add(m_tidy_table_checkbox);
+
 
 	wxButton* run_button = new wxButton(this, ID_Table_Run, "Run");
 
@@ -236,6 +240,11 @@ void ActiveTableDialog::GenerateCommand()
 	{
 		reverse_sort = "reverse ";
 	}
+	wxString tidy_table;
+	if (m_tidy_table_checkbox->IsChecked())
+	{
+		tidy_table = "tidy-";
+	}
 	wxArrayInt checked_items_idx;
 	m_checked_items.clear();
 	m_checked_items.push_back(m_input_label_ctrl->GetValue().ToStdString());
@@ -251,7 +260,7 @@ void ActiveTableDialog::GenerateCommand()
 	}
 	std::string operators = join(m_checked_items, ", ");
 	m_input_sp_str = reverse_sort + sort_by + filter_sp + such_that + m_input_superposition_ctrl->GetValue();
-	wxString s = "table[" + operators + "] " + m_input_sp_str;
+	wxString s = tidy_table + "table[" + operators + "] " + m_input_sp_str;
 	m_command_text_ctrl->SetValue(s);
 }
 

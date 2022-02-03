@@ -31,6 +31,7 @@ private:
     wxTextCtrl* m_rhs_ctrl;
     wxTextCtrl* m_sort_by_ctrl;
     wxCheckBox* m_sort_reverse_checkbox;
+    wxCheckBox* m_tidy_table_checkbox;
     wxTextCtrl* m_command_text_ctrl;
 
     std::vector<wxArrayString> m_our_arrays;
