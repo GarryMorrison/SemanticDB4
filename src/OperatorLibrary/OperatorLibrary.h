@@ -49,7 +49,9 @@ Ket op_toupper(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
 Ket op_tolower(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 Ket toupperket(const Ket k); // rename these two ...
 Ket tolowerket(const Ket k);
+Ket table_back_end(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters, bool is_tidy=false);
 Ket op_table(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+Ket op_tidy_table(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 Ket op_transpose_table(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 Ket op_smerge(const Sequence& seq);
 Ket op_smerge1(const Sequence& seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);

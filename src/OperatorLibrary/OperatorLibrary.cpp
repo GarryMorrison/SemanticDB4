@@ -578,7 +578,7 @@ Ket tolowerket(const Ket k) {
 }
 
 
-Ket op_table(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters) {
+Ket table_back_end(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters, bool is_tidy) {
     if (parameters.empty()) { return Ket(""); }
 
     std::vector<SimpleOperator> operators;
@@ -669,6 +669,16 @@ Ket op_table(const Superposition& sp, ContextList& context, const std::vector<st
     }
     std::cout << "+" << std::endl;
     return Ket("table");
+}
+
+Ket op_table(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    return table_back_end(sp, context, parameters, false);
+}
+
+Ket op_tidy_table(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    return table_back_end(sp, context, parameters, true);
 }
 
 Ket op_transpose_table(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters) {
