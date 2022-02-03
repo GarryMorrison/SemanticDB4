@@ -22,6 +22,7 @@ Ket extract_head(const Ket k);
 Ket extract_tail(const Ket k);
 Ket extract_category(const Ket k);
 Ket extract_value(const Ket k);
+Ket extract_headless(const Ket k);
 Ket op_floor(const Ket& k);
 Ket op_ceiling(const Ket& k);
 Ket op_log(const Ket& k);

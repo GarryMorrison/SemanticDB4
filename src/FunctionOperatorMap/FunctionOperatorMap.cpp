@@ -104,6 +104,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("extract-value");
     fn_map.ket_fn.emplace(idx, &extract_value);
 
+    idx = ket_map.get_idx("extract-headless");
+    fn_map.ket_fn.emplace(idx, &extract_headless);
+
     idx = ket_map.get_idx("floor");
     fn_map.ket_fn.emplace(idx, &op_floor);
 

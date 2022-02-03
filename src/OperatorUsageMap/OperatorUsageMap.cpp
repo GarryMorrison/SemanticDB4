@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/23
+// Updated 2022/2/3
 // Author Garry Morrison
 // License GPL v3
 //
@@ -648,7 +648,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        extract-category |a: b: c: d: e: f>\n"
         "            |a: b: c: d: e>\n\n"
         "    see also:\n"
-        "        extract-value, extract-head, extract-tail";
+        "        extract-value, extract-head, extract-tail, extract-headless";
 
     operator_usage_map.map["extract-value"] =
         "\nextract-value:\n"
@@ -672,7 +672,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        extract-value |a: b: c: d: e: f>\n"
         "            |f>\n\n"
         "    see also:\n"
-        "        extract-category, extract-head, extract-tail";
+        "        extract-category, extract-head, extract-tail, extract-headless";
 
     operator_usage_map.map["extract-head"] =
         "\nextract-head:\n"
@@ -694,7 +694,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        extract-head |a: b: c: d: e: f>\n"
         "            |a>\n\n"
         "    see also:\n"
-        "        extract-category, extract-value, extract-tail";
+        "        extract-category, extract-value, extract-tail, extract-headless";
 
     operator_usage_map.map["extract-tail"] =
         "\nextract-tail:\n"
@@ -717,7 +717,31 @@ OperatorUsageMap::OperatorUsageMap() {
         "        extract-tail |a: b: c: d: e: f>\n"
         "            |b: c: d: e: f>\n\n"
         "    see also:\n"
-        "        extract-category, extract-value, extract-head";
+        "        extract-category, extract-value, extract-head, extract-headless";
+
+    operator_usage_map.map["extract-headless"] =
+        "\nextract-headless:\n"
+        "    description:\n"
+        "        extract-headless ket\n"
+        "        categories are separated by \": \"\n"
+        "        with the most general category on the left, and the most specific on the right\n"
+        "        for example |animal: mammal: dog>\n"
+        "        has the most general category \"animal\", then the category \"mammal\" and then finally the \"value\" dog\n"
+        "        This list of categories and the value can be considered a type of list\n"
+        "        extract-headless removes the head of the list, if it has one.\n"
+        "        If the ket has no category, then return the ket unchanged.\n\n"
+        "    examples:\n"
+        "        -- if there is no category, then return the original ket:\n"
+        "        extract-headless |dog>\n"
+        "            |dog>\n\n"
+        "        extract-headless |animal: mammal: dog>\n"
+        "            |mammal: dog>\n\n"
+        "        -- an abstract example:\n"
+        "        extract-headless |a: b: c: d: e: f>\n"
+        "            |b: c: d: e: f>\n\n"
+        "    see also:\n"
+        "        extract-category, extract-value, extract-head, extract-tail";
+
 
     operator_usage_map.map["print"] =
         "\nprint:\n"

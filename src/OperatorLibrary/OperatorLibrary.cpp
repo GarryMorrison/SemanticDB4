@@ -131,6 +131,11 @@ Ket extract_value(const Ket k) {
     return Ket(value_idx, k.value());
 }
 
+Ket extract_headless(const Ket k) {
+    ulong headless_idx = ket_map.get_headless_idx(k.label_idx());
+    return Ket(headless_idx, k.value());
+}
+
 Ket op_floor(const Ket& k) {
     auto idx_vec = k.label_split_idx();
     if (idx_vec.empty()) { return Ket(); }
