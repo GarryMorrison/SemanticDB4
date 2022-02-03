@@ -627,11 +627,18 @@ Ket table_back_end(const Superposition& sp, ContextList& context, const std::vec
         for (const auto& op : operators) {
             std::string str;
             if (idx == 0) {
-                str = k.label();
+                if (!is_tidy)
+                {
+                    str = k.label();
+                }
+                else
+                {
+                    str = ket_map.get_str(ket_map.get_tail_idx(k.label_idx())); // Heh! Is there a cleaner way to do this? Does it matter?
+                }
             }
             else {
                 // str = op.Compile(context, seq).to_string();  // Swap in something better to display in a table than Sequence::to_string().
-                str = op.Compile(context, seq).readable_display();
+                str = op.Compile(context, seq).readable_display(is_tidy);
             }
             table_body.push_back(str);
             column_widths[idx] = std::max(column_widths[idx], (unsigned int)str.size());
@@ -668,6 +675,7 @@ Ket table_back_end(const Superposition& sp, ContextList& context, const std::vec
         std::cout << "+" << std::left << std::setfill('-') << std::setw(column_width + 2) << "-";
     }
     std::cout << "+" << std::endl;
+    if (is_tidy) { return Ket("tidy table"); }
     return Ket("table");
 }
 

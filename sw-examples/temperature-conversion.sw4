@@ -37,4 +37,6 @@ is-Fahrenheit |F: *> => |yes>
 is-Fahrenheit |*> => |no>
 
 
-table[Celsius, to-Kelvin, to-Fahrenheit] range(|C: 0>, |C: 100>, |5>)
+-- table[Celsius, to-Kelvin, to-Fahrenheit] range(|C: 0>, |C: 100>, |5>)
+tidy-table[Celsius, to-Kelvin, to-Fahrenheit] range(|C: 0>, |C: 100>, |5>)
+
