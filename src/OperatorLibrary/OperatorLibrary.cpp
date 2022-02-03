@@ -633,7 +633,7 @@ Ket table_back_end(const Superposition& sp, ContextList& context, const std::vec
                 }
                 else
                 {
-                    str = ket_map.get_str(ket_map.get_tail_idx(k.label_idx())); // Heh! Is there a cleaner way to do this? Does it matter?
+                    str = ket_map.get_str(ket_map.get_headless_idx(k.label_idx())); // Heh! Is there a cleaner way to do this? Does it matter?
                 }
             }
             else {

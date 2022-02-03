@@ -147,6 +147,14 @@ ulong KetMap::get_value_idx(const ulong idx) {
     return uvect.back();
 }
 
+ulong KetMap::get_headless_idx(const ulong idx) {
+    std::vector<ulong> uvec = get_split_idx(idx);
+    if (uvec.empty()) { return 0; };
+    if (uvec.size() == 1) { return idx; }
+    uvec.erase(uvec.begin());
+    return get_idx(uvec);
+}
+
 std::vector<std::string> KetMap::get_map()
 {
     return our_inverse_map;

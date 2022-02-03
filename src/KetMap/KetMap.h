@@ -42,6 +42,7 @@ public:
     ulong get_tail_idx(const ulong idx);
     ulong get_category_idx(const ulong idx);
     ulong get_value_idx(const ulong idx);
+    ulong get_headless_idx(const ulong idx);
 
     std::vector<std::string> get_map();
 

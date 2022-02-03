@@ -160,7 +160,7 @@ const std::string Superposition::readable_display(bool is_tidy) const {
         }
         else
         {
-            label = ket_map.get_str(ket_map.get_tail_idx(idx));
+            label = ket_map.get_str(ket_map.get_headless_idx(idx));
         }
         auto value = sp.at(idx);
         sign = " + ";
