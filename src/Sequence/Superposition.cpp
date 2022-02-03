@@ -145,7 +145,7 @@ const std::string Superposition::to_string(const std::string& prefix) const {
     return prefix + this->to_string();
 }
 
-const std::string Superposition::readable_display() const {
+const std::string Superposition::readable_display(bool is_tidy) const {
     if (sp.empty()) { return ""; }
 
     std::string s;
@@ -154,7 +154,14 @@ const std::string Superposition::readable_display() const {
     std::string sign;
     bool first_pass = true;
     for (const auto idx : sort_order) {
-        auto label = ket_map.get_str(idx);
+        if (!is_tidy)
+        {
+            label = ket_map.get_str(idx);
+        }
+        else
+        {
+            label = ket_map.get_str(ket_map.get_tail_idx(idx));
+        }
         auto value = sp.at(idx);
         sign = " + ";
         if (double_eq(fabs(value), 1.0)) {

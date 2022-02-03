@@ -49,7 +49,7 @@ public:
     const size_t size() const;
     const std::string to_string() const;
     const std::string to_string(const std::string& prefix) const;
-    const std::string readable_display() const;
+    const std::string readable_display(bool is_tidy=false) const;
 
     Ket to_ket() const;
     Superposition to_sp() const;

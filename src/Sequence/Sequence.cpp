@@ -102,17 +102,17 @@ const std::string Sequence::to_string(const std::string& prefix) const {
     return prefix + this->to_string();
 }
 
-const std::string Sequence::readable_display() const {
+const std::string Sequence::readable_display(bool is_tidy) const {
     if (seq.empty()) { return ""; }
     std::string s;
     bool first_pass = true;
     for (const auto& sp : seq) {
         if (first_pass) {
-            s += sp.readable_display();
+            s += sp.readable_display(is_tidy);
             first_pass = false;
         }
         else {
-            s += " . " + sp.readable_display();
+            s += " . " + sp.readable_display(is_tidy);
         }
     }
     return s;
