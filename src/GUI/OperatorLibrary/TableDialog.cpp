@@ -44,11 +44,11 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 	{
 		if (!is_tidy)
 		{
-			k_label = k.label();
+			k_label = " " + k.label();
 		}
 		else
 		{
-			k_label = ket_map.get_str(ket_map.get_headless_idx(k.label_idx()));
+			k_label = " " + ket_map.get_str(ket_map.get_headless_idx(k.label_idx()));
 		}
 		m_grid_table->SetCellValue(list_idx, 0, k_label);
 		list_idx++;
@@ -67,16 +67,16 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 				first_column = false;
 				if (!is_tidy)
 				{
-					row_data.push_back(k.label());
+					row_data.push_back(" " + k.label());
 				}
 				else
 				{
-					row_data.push_back(ket_map.get_str(ket_map.get_headless_idx(k.label_idx())));
+					row_data.push_back(" " + ket_map.get_str(ket_map.get_headless_idx(k.label_idx())));
 				}
 				continue;
 			}
 			ulong op_idx = ket_map.get_idx(op);
-			std::string cell_value = driver.context.active_recall(op_idx, k.label_idx()).readable_display(is_tidy);
+			std::string cell_value = " " + driver.context.active_recall(op_idx, k.label_idx()).readable_display(is_tidy);
 			m_grid_table->SetCellValue(row_idx, column_idx, cell_value);
 			row_data.push_back(cell_value);
 			column_idx++;
