@@ -1,0 +1,20 @@
+-- Author: Garry Morrison
+-- Updated: 2022/2/4
+--
+-- Implement the fizz buzz toy programming exercise.
+
+|context> => |Fizz Buzz>
+
+is-fizz |0> => |Fizz>
+is-buzz |0> => |Buzz>
+
+fizz |*> #=> is-fizz mod[3] |_self>
+buzz |*> #=> is-buzz mod[5] |_self>
+
+fizz-buzz |*> #=>
+    the |result> => |__self>
+    the |result> _=> (fizz __ buzz) |__self>
+    the |result>
+
+-- now invoke it:
+fizz-buzz srange(|1>, |20>)
