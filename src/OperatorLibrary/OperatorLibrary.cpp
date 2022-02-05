@@ -2447,8 +2447,8 @@ Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_pt
     int height = seq_len / width;
     if (seq_len % width != 0) { height++; }
     if (width < 0 || height < 0) { return Ket(); }
-    std::cout << "width:  " << width << "\n";
-    std::cout << "height: " << height << "\n";
+    // std::cout << "width:  " << width << "\n";
+    // std::cout << "height: " << height << "\n";
     std::vector<std::string> grid_elements;
     size_t max_element_size = 2;  // Set min element length to 2.
     for (const auto& sp : input_seq)
