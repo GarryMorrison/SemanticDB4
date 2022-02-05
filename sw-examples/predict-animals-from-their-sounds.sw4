@@ -1,0 +1,49 @@
+-- Author: Garry Morrison
+-- Updated: 2022/2/5
+--
+-- Implement a toy if-then machine example:
+-- that maps sounds to animals.
+
+|context> => |predict animals from their sounds>
+
+words-to-list |*> #=> seq2sp ssplit[", "] ssplit[" and "] |_self>
+
+-- if then machines:
+sound |node: 1: 1> => |purring>
+sound |node: 1: 2> => |miaowing>
+sound |node: 1: 3> => |scratching at the door>
+animal |node: 1: *> => |cat>
+
+sound |node: 2: 1> => |panting>
+sound |node: 2: 2> => |sniffing>
+sound |node: 2: 3> => |scratching at the door>
+animal |node: 2: *> => |dog>
+
+sound |node: 3: 1> => |tweeting>
+sound |node: 3: 2> => |singing>
+animal |node: 3: *> => |bird>
+
+sound |node: 4: 1> => |croaking>
+animal |node: 4: *> => |frog>
+
+sound |node: 5: 1> => |howling>
+sound |node: 5: 2> => |growling>
+animal |node: 5: *> => |wolf>
+
+sound |node: 6: 1> => |roaring>
+animal |node: 6: *> => |lion>
+
+-- if then operator:
+predict-animal-from |*> #=> animal drop-below[0.5] similar-input[sound] words-to-list |_self>
+
+
+-- put it to use:
+print |Predicting animals from their sounds:>
+sprint["    purring: "] predict-animal-from |purring>
+sprint["    panting: "] predict-animal-from |panting>
+sprint["    scratching at the door: "] predict-animal-from |scratching at the door>
+sprint["    tweeting: "] predict-animal-from |tweeting>
+sprint["    croaking: "] predict-animal-from |croaking>
+sprint["    howling: "] predict-animal-from |howling>
+sprint["    roaring: "] predict-animal-from |roaring>
+
