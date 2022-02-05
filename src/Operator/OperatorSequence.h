@@ -10,6 +10,7 @@
 #define SSEQ 2
 #define SMERGE 3
 #define SMERGE2 4
+#define SCOLONMERGE 5
 
 #include <memory>
 #include "BaseOperator.h"

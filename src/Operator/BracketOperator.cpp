@@ -82,6 +82,9 @@ Sequence BracketOperator::Compile(ContextList& context, const Sequence& seq) con
         case SMERGE2:
             seq2.merge(compiled_seq, " ");
             break;
+        case SCOLONMERGE:
+            seq2.merge(compiled_seq, ": ");
+            break;
         }
     }
     return seq2;
@@ -110,6 +113,9 @@ Sequence BracketOperator::Compile(ContextList& context, const Sequence& seq, con
             break;
         case SMERGE2:
             seq2.merge(compiled_seq, " ");
+            break;
+        case SCOLONMERGE:
+            seq2.merge(compiled_seq, ": ");
             break;
         }
     }
@@ -140,6 +146,9 @@ Sequence BracketOperator::Compile(ContextList& context, const Sequence& seq, con
         case SMERGE2:
             seq2.merge(compiled_seq, " ");
             break;
+        case SCOLONMERGE:
+            seq2.merge(compiled_seq, ": ");
+            break;
         }
     }
     return seq2;
@@ -169,6 +178,9 @@ Sequence BracketOperator::Compile(ContextList& context, const Sequence& seq, con
         case SMERGE2:
             seq2.merge(compiled_seq, " ");
             break;
+        case SCOLONMERGE:
+            seq2.merge(compiled_seq, ": ");
+            break;
         }
     }
     return seq2;
@@ -196,6 +208,9 @@ const std::string BracketOperator::to_string() const {
             break;
         case SMERGE2:
             s += " __ ";
+            break;
+        case SCOLONMERGE:
+            s += " :_ ";
             break;
         }
         s += op_seq_vec_iter->to_string();

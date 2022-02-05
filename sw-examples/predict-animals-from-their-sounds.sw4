@@ -6,7 +6,7 @@
 
 |context> => |predict animals from their sounds>
 
-words-to-list |*> #=> seq2sp ssplit[", "] ssplit[" and "] |_self>
+words-to-list |*> #=> split[", "] split[" and "] |_self>
 
 -- if then machines:
 sound |node: 1: 1> => |purring>
@@ -42,6 +42,8 @@ print |Predicting animals from their sounds:>
 sprint["    purring: "] predict-animal-from |purring>
 sprint["    panting: "] predict-animal-from |panting>
 sprint["    scratching at the door: "] predict-animal-from |scratching at the door>
+sprint["    purring and scratching at the door: "] predict-animal-from |purring and scratching at the door>
+sprint["    panting and scratching at the door: "] predict-animal-from |panting and scratching at the door>
 sprint["    tweeting: "] predict-animal-from |tweeting>
 sprint["    croaking: "] predict-animal-from |croaking>
 sprint["    howling: "] predict-animal-from |howling>
