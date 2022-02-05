@@ -4459,7 +4459,42 @@ OperatorUsageMap::OperatorUsageMap() {
         "            one   two   three\n"
         "            four  five  six\n\n"
         "    see also:\n"
-        "        display-grid, grid-map, table\n";
+        "        display-grid, patch-map, table\n";
+
+    operator_usage_map.map["patch-map"] =
+        "\npatch-map:\n"
+        "    description:\n"
+        "        patch-map[input-width, output-width, output-height, op] input-seq\n"
+        "        convert an input sequence into a rectangular grid with the given input-width\n"
+        "        then sub-divide that grid into \"patches\" of size output-width * output-height\n"
+        "        then feed those patches to the passed in operator: op\n"
+        "        the hope is that patch-map[] will be useful for MNIST\n\n"
+        "    examples:\n"
+        "        -- first, define a sequence:\n"
+        "        the |seq> => ssplit[\" \"] |0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15>\n\n"
+        "        -- now visualize this as a patch:\n"
+        "        display-patch[4] the |seq>\n"
+        "            width:  4\n"
+        "            height: 4\n"
+        "            0  1  2  3\n"
+        "            4  5  6  7\n"
+        "            8  9  10 11\n"
+        "            12 13 14 15\n\n"
+        "        -- now apply patch-map[], and use sprint as the operator:\n"
+        "        patch-map[4, 2, 2, sprint] the |seq>\n"
+        "            |0> . |1> . |4> . |5>\n"
+        "            |1> . |2> . |5> . |6>\n"
+        "            |2> . |3> . |6> . |7>\n"
+        "            |4> . |5> . |8> . |9>\n"
+        "            |5> . |6> . |9> . |10>\n"
+        "            |6> . |7> . |10> . |11>\n"
+        "            |8> . |9> . |12> . |13>\n"
+        "            |9> . |10> . |13> . |14>\n"
+        "            |10> . |11> . |14> . |15>\n"
+        "            9|patches>\n\n"
+        "    see also:\n"
+        "        display-patch, sprint\n";
+
 
 
     // fill out statement_prototypes map:
