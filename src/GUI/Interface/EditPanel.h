@@ -21,6 +21,7 @@ public:
 	void OnResetButtonDown(wxCommandEvent& event);
 	void OnPageChange(wxCommandEvent& event);
 	void AddPage(wxWindow* page, const wxString& caption, bool select = false);
+	wxString GetTabLabel();
 	void SaveFile(const wxString& filename);
 	void WriteText(const wxString& text);
 

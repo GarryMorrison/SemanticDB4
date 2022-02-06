@@ -104,6 +104,11 @@ void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)
 	m_aui_notebook->AddPage(page, caption, select);
 }
 
+wxString EditPanel::GetTabLabel()
+{
+	return m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
+}
+
 void EditPanel::SaveFile(const wxString& filename)
 {
 	// wxMessageBox("Edit panel SaveFile: " + filename);

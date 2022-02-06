@@ -503,7 +503,12 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
 
 void PrimaryFrame::OnSave(wxCommandEvent& event)
 {
-    wxFileDialog saveFileDialog(this, "Save sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    wxString default_filename = ".sw4";
+    if (m_edit_window_active)
+    {
+        default_filename = m_frame_edit_panel->GetTabLabel();
+    }
+    wxFileDialog saveFileDialog(this, "Save sw file", "", default_filename, "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
     {
         return;
