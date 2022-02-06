@@ -34,7 +34,7 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	
 	// Sample content:
 	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "Enter your code here ... \n");
-	m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "|context> => |Hello world>\n\nprint |Hello world!>\n", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+	m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, EDIT_STARTING_TEXT, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "|context> => |Hello world>\n\nprint |Hello world!>\n");
 	m_aui_notebook->AddPage(m_text_ctrl, "hello-world.sw4", true);
 
@@ -46,6 +46,7 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	run_button->Bind(wxEVT_BUTTON, &EditPanel::OnRunButtonDown, this);
 	dump_button->Bind(wxEVT_BUTTON, &EditPanel::OnDumpButtonDown, this);
 	reset_button->Bind(wxEVT_BUTTON, &EditPanel::OnResetButtonDown, this);
+	m_aui_notebook->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &EditPanel::OnPageChange, this);
 }
 
 void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
@@ -91,6 +92,11 @@ void EditPanel::OnResetButtonDown(wxCommandEvent& event)
 	{
 		driver.context.reset_current_context();
 	}
+}
+
+void EditPanel::OnPageChange(wxCommandEvent& event)
+{
+	m_text_ctrl = (wxTextCtrl*)(m_aui_notebook->GetCurrentPage());
 }
 
 void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)
