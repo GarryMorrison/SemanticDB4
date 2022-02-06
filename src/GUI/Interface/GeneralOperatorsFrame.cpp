@@ -110,6 +110,7 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxPoint pos
     m_topsizer->AddSpacer(10);
     m_topsizer->Add(hbox1);
 
+
     ulong star_idx = ket_map.get_idx("*");  
     for (ulong op_idx : driver.context.supported_ops(star_idx))
     {
@@ -118,21 +119,6 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxPoint pos
     unsigned int content_size = m_general_ops.size();
     m_dim = (unsigned int)(std::ceil(sqrt(double(content_size))));  // Given a size, find the smallest square with dimensions dim * dim.
     m_dim *= 2;  // Compensate for checkbox lists being not square.
-    // wxMessageBox(wxString::Format("dim = %d", m_dim));
-
-    /*/
-    wxString message;
-    if (content_size == 0)
-    {
-        message = wxString::Format("There are no general operators in the current context \"%s\".", driver.context.get_context_name());
-    }
-    else
-    {
-        message = wxString::Format("General operators in context \"%s\"", driver.context.get_context_name());
-    }
-    wxStaticText* static_message = new wxStaticText(m_panel, wxID_ANY, message);
-    m_topsizer->Add(static_message, wxSizerFlags(0).Center().Border(wxALL, 10));
-    */
 
     if (content_size == 0)
     {
@@ -173,6 +159,14 @@ GeneralOperatorsFrame::GeneralOperatorsFrame(wxWindow* parent, const wxPoint pos
     }
     hbox2->AddSpacer(10);
     m_topsizer->Add(hbox2, wxSizerFlags(0).Center().Border(wxTOP | wxBOTTOM, 0));
+
+    wxString operator_count = std::to_string(content_size) + " operator";
+    if (content_size != 1)
+    {
+        operator_count += "s";
+    }
+    m_topsizer->Add(new wxStaticText(m_panel, wxID_ANY, operator_count, wxDefaultPosition, wxDefaultSize), wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
+    m_topsizer->AddSpacer(10);
 
     /*
     m_update_button = new wxButton(m_panel, wxID_ANY, "Update");
