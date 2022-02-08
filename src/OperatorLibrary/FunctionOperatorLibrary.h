@@ -15,10 +15,13 @@ Superposition op_range3(const Sequence& input_seq, const Sequence& start, const 
 Sequence op_arithmetic3(const Sequence& input_seq, const Sequence& one, const Sequence& symbol_ket, const Sequence& two);
 double simm(const Superposition& sp1, const Superposition& sp2);
 double scaled_simm(const Superposition& sp1, const Superposition& sp2);
+double natural_simm(const Superposition& sp1, const Superposition& sp2);
 double simm(const Sequence& seq1, const Sequence& seq2);
 double strict_simm(const Sequence& seq1, const Sequence& seq2);
+double natural_simm(const Sequence& seq1, const Sequence& seq2);
 Sequence op_simm2(const Sequence& input_seq, const Sequence& seq1, const Sequence& seq2);
 Sequence op_strict_simm2(const Sequence& input_seq, const Sequence& seq1, const Sequence& seq2);
+Sequence op_natural_simm2(const Sequence& input_seq, const Sequence& seq1, const Sequence& seq2);
 Superposition sp_intersection(const Superposition& sp1, const Superposition& sp2);
 Sequence op_intersection2(const Sequence& input_seq, const Sequence& one, const Sequence& two);
 Superposition sp_union(const Superposition& sp1, const Superposition& sp2);

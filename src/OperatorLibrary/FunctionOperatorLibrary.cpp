@@ -339,6 +339,30 @@ double scaled_simm(const Superposition& sp1, const Superposition& sp2) {
     return merged_sum;
 }
 
+double natural_simm(const Superposition& sp1, const Superposition& sp2) {
+    if (sp1.size() == 0 || sp2.size() == 0) { return 0; }
+
+    std::set<ulong> merged;
+    double one_sum(0), two_sum(0), merged_sum(0);
+    for (const auto k : sp1) {
+        merged.insert(k.label_idx());
+        one_sum += k.value();
+    }
+    for (const auto k : sp2) {
+        merged.insert(k.label_idx());
+        two_sum += k.value();
+    }
+
+    if (double_eq(one_sum, 0) || double_eq(two_sum, 0)) { return 0; } // prevent div by zero
+
+    for (const auto idx : merged) {
+        double v1 = sp1.find_value(idx) / one_sum;
+        double v2 = sp2.find_value(idx) / two_sum;
+        merged_sum += std::min(v1, v2);
+    }
+    return merged_sum;
+}
+
 double simm(const Sequence& seq1, const Sequence& seq2) {
     size_t size = std::max(seq1.size(), seq2.size());
     // if (seq1 == seq2) { return 1; }
@@ -374,6 +398,26 @@ double strict_simm(const Sequence& seq1, const Sequence& seq2) {
     return r / size;
 }
 
+double natural_simm(const Sequence& seq1, const Sequence& seq2) {
+    size_t size = std::max(seq1.size(), seq2.size());
+    // if (seq1 == seq2) { return 1; }
+    if (size == 0) { return 1; }  // Do we want 0 or 1 to be returned when input both empty kets?
+    double r = 0;
+    auto seq1_iter = seq1.cbegin();
+    auto seq2_iter = seq2.cbegin();
+    for (; seq1_iter != seq1.end() and seq2_iter != seq2.end(); ++seq1_iter, ++seq2_iter) {
+        // r += simm(*seq1_iter, *seq2_iter);  // probably want scaled_simm() here instead.
+        // r += scaled_simm(*seq1_iter, *seq2_iter);
+        if ((*seq1_iter).size() == 0 && (*seq2_iter).size() == 0) {  // Maybe we don't want this either?
+      // if ((*seq1_iter) == (*seq2_iter)) {  // I now suspect this makes things worse, not better!
+            r += 1;
+        }
+        else {
+            r += natural_simm(*seq1_iter, *seq2_iter);
+        }
+    }
+    return r / size;
+}
 
 Sequence op_simm2(const Sequence& input_seq, const Sequence& seq1, const Sequence& seq2) {
     double result = simm(seq1, seq2);
@@ -398,6 +442,19 @@ Sequence op_strict_simm2(const Sequence& input_seq, const Sequence& seq1, const 
     }
     return sp;  // Let C++ convert sp to a sequence for us. Maybe change later.
 }
+
+Sequence op_natural_simm2(const Sequence& input_seq, const Sequence& seq1, const Sequence& seq2) {
+    double result = natural_simm(seq1, seq2);
+    if (input_seq.size() == 0) { return Ket("natural simm", result); }
+    if (input_seq.is_empty_ket()) { return Ket("natural simm", result); }
+    if (input_seq.is_ket()) { Ket k = input_seq.to_ket(); return Ket(k.label_idx(), k.value() * result); }
+    Superposition sp;
+    for (const auto k : input_seq.to_sp()) { // For now, let's just cast input_seq to a superposition.
+        sp.add(k.label_idx(), k.value() * result);
+    }
+    return sp;  // Let C++ convert sp to a sequence for us. Maybe change later.
+}
+
 
 
 Superposition sp_intersection(const Superposition& sp1, const Superposition& sp2) {
