@@ -2499,7 +2499,6 @@ Ket op_patch_map(const Sequence& input_seq, ContextList& context, const std::vec
     int output_width = 0;
     int output_height = 0;
     int skip_size = 1;
-    SimpleOperator op = parameters[parameters.size() - 1]->get_operator();
     if (parameters.size() == 4)
     {
         if (parameters[0]->type() != CINT || parameters[1]->type() != CINT || parameters[2]->type() != CINT || parameters[3]->type() != COPERATOR) { return Ket(); }
@@ -2519,6 +2518,7 @@ Ket op_patch_map(const Sequence& input_seq, ContextList& context, const std::vec
     {
         return Ket();
     }
+    SimpleOperator op = parameters[parameters.size() - 1]->get_operator();
     int patch_count = 0;
     int seq_len = (int)(input_seq.size());
     int input_height = seq_len / input_width;
