@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/2/11
 // Author Garry Morrison
 // License GPL v3
 //
@@ -81,6 +81,28 @@ bool string_ends_with_token(const std::string& str, const std::vector<std::strin
         if (std::equal(token.rbegin(), token.rend(), str.rbegin())) {
             return true;
         }
+    }
+    return false;
+}
+
+bool string_starts_with(const std::string& str, const std::string& token)
+{
+    if (str.size() < token.size()) {
+        return false;
+    }
+    if (str.substr(0, token.size()) == token) {  // Should we convert to std::equal() instead?
+        return true;
+    }
+    return false;
+}
+
+bool string_ends_with(const std::string& str, const std::string& token)
+{
+    if (str.size() < token.size()) {
+        return false;
+    }
+    if (std::equal(token.rbegin(), token.rend(), str.rbegin())) {
+        return true;
     }
     return false;
 }
