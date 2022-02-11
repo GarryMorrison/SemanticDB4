@@ -257,12 +257,33 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 					file_content.Append("\n");  // There must be a better way to keep newlines in the text!
 				}
 				wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
-				AddPage(textCtrlLocal, tail, true);
+				AddPage(textCtrlLocal, tail, false);
 				m_aui_notebook->SetSelection(current_page_idx);
 			}
 			else if (head == "webload")  // Load a remote file
 			{
-				wxMessageBox("Webload url: " + tail);
+				// wxMessageBox("Webload url: " + tail);
+				wxURL url(tail);
+				if (url.GetError() == wxURL_NOERR)
+				{
+					wxString htmldata;
+					wxInputStream* in = url.GetInputStream();
+
+					if (in && in->IsOk())
+					{
+						wxStringOutputStream html_stream(&htmldata);
+						in->Read(html_stream);
+						// wxLogMessage(htmldata);
+						wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, htmldata, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+						std::string cleaned_filename = std::filesystem::path(tail).filename().string();
+						AddPage(textCtrlLocal, cleaned_filename, false);
+					}
+					else
+					{
+						wxMessageBox("Failed to web load: " + tail);
+					}
+					delete in;
+				}
 			}
 			else if (head == "run")  // Run the given file
 			{

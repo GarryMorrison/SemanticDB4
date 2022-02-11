@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2022/2/11
+// Updated 2022/2/12
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/2/11"
+#define APP_BUILD_DATE "2022/2/12"
 #define APP_VERSION "4.0.alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -62,6 +62,8 @@
 #include <wx/grid.h>
 #include <wx/spinctrl.h>
 #include <wx/clipbrd.h>
+#include <wx/url.h>
+#include <wx/sstream.h>
 #include <set>
 #include <map>
 #include <string>
@@ -70,6 +72,7 @@
 #include <iostream>
 #include <streambuf>
 #include <sstream>
+#include <filesystem>
 
 #include "Function/SplitJoin.h"
 #include "KetMap/KetMap.h"
