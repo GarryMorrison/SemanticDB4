@@ -322,6 +322,8 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 				context.print_universe(true, buffer);
 				std::string current_text = buffer.str();
 				text.WriteString(current_text);
+				wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, current_text, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+				AddPage(textCtrlLocal, tail, false);
 			}
 			else if (head == "save-as-dot")  // Save current context as a dot file for use with graphviz.
 			{
