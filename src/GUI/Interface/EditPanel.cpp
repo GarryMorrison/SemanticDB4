@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/1/30
+// Updated 2022/2/11
 // Author Garry Morrison
 // License GPL v3
 //
@@ -54,6 +54,12 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 	wxWindow* current_page = m_aui_notebook->GetCurrentPage();
 	wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
 	std::string current_text = current_text_ctrl->GetValue().ToStdString();
+	std::string current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection()).ToStdString();
+	if (string_ends_with(current_tab, SW_EXPERIMENT_EXTENSION))  // If the current file has experiment extension, then parse the experiment.
+	{
+		ParseExperiment(current_text);
+		return;
+	}
 	// wxMessageBox("Current text:\n" + current_text);
 	Timer_ms the_timer;
 	std::stringstream buffer;
@@ -70,7 +76,7 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 	}
 	std::string result_string = driver.result.to_string();
 	OutputFrame* output_frame = new OutputFrame(this, "Output Window", captured_text, result_string);
-	the_timer.Stop();
+	the_timer.Stop();  // Maybe shift this before non-parse related work.
 	long long run_time = the_timer.GetTime();
 	output_frame->SetRunTime(run_time);
 }
@@ -180,6 +186,72 @@ void EditPanel::InsertComment()
 {
 	m_text_ctrl->WriteText("\n--  ");
 }
+
+void EditPanel::ParseExperiment(const std::string& commands)
+{
+	for (const auto& line : split(commands, "\n"))
+	{
+		if (line == "" || string_starts_with(line, "--"))  // Comment line
+		{
+			continue;
+		}
+		else if (line == "exit")   // Exit experiment
+		{
+			return;
+		}
+		else if (line == "dump")   // Dump current context
+		{
+			wxMessageBox("dump current context");
+		}
+		else if (line == "reset")  // reset current context
+		{
+			wxMessageBox("reset current context");
+		}
+		else if (line == "reset all")  // reset all knowledge
+		{
+			wxMessageBox("reset all!");
+		}
+		else if (line == "line")   // Insert a horizontal line
+		{
+			wxMessageBox("Insert a horizontal line");
+		}
+		else
+		{
+			std::vector<std::string> split_command = split_on_first(line, " ");
+			if (split_command.size() != 2)  // If split_command is not length 2, then continue to next command.
+			{
+				continue;
+			}
+			std::string head = split_command[0];
+			std::string tail = split_command[1];
+			if (head == "context")  // Switch to context "tail".
+			{
+				wxMessageBox("Switch to context: " + tail);
+			}
+			else if (head == "load")  // Load a file
+			{
+				wxMessageBox("Load file: " + tail);
+			}
+			else if (head == "webload")  // Load a remote file
+			{
+				wxMessageBox("Webload url: " + tail);
+			}
+			else if (head == "run")  // Run the given file
+			{
+				wxMessageBox("Run file: " + tail);
+			}
+			else if (head == "save-as-dot")  // Save current context as a dot file for use with graphviz.
+			{
+				wxMessageBox("Save as dot, file: " + tail);
+			}
+			else  // Not a valid command, so continue to the next command.
+			{
+				continue;
+			}
+		}
+	}
+}
+
 
 EditPanel::~EditPanel()
 {}

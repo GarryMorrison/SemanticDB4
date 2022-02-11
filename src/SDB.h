@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2022/2/10
+// Updated 2022/2/11
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/2/10"
+#define APP_BUILD_DATE "2022/2/11"
 #define APP_VERSION "4.0.alpha"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -33,6 +33,8 @@
 #define EXAMPLE_KET_KNOWLEDGE "age |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\nspelling |Fred> => |F> . |r> . |e> . |d>"
 #define EXAMPLE_OP_KNOWLEDGE "age |Fred> => |37>\nage |Sam> => |41>"
 #define EDIT_STARTING_TEXT "|context> => |Hello world>\n\nprint |Hello world!>\n"
+
+#define SW_EXPERIMENT_EXTENSION ".swe"
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include <wx/wxprec.h>

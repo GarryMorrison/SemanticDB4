@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/1/30
+// Updated 2022/2/11
 // Author Garry Morrison
 // License GPL v3
 //
@@ -34,6 +34,8 @@ public:
 	void InsertFunctionOperator(const wxString& wxs);
 	void InsertKet(const wxString& wxs);
 	void InsertComment();
+
+	void ParseExperiment(const std::string& commands);
 
 	~EditPanel();
 private:
