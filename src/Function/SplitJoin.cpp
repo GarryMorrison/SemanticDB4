@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2022/2/11
 // Author Garry Morrison
 // License GPL v3
 //
@@ -58,4 +58,20 @@ std::string join(const std::vector<std::string>& v, const std::string& delimiter
         }
     }
     return s;
+}
+
+std::vector<std::string> split_on_first(const std::string& s, const std::string& delimiter)  // Need to test it!
+{
+    std::vector<std::string> result;
+    size_t split_pos = s.find(delimiter, 0);
+    if (split_pos != std::string::npos)
+    {
+        result.push_back(s.substr(0, split_pos));
+        result.push_back(s.substr(split_pos));
+    }
+    else
+    {
+        result.push_back(s);
+    }
+    return result;
 }
