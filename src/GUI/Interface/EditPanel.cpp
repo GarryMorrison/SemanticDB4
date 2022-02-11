@@ -187,7 +187,7 @@ void EditPanel::InsertComment()
 	m_text_ctrl->WriteText("\n--  ");
 }
 
-void EditPanel::ParseExperiment(const std::string& commands)
+void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel the best location for this code??
 {
 	for (const auto& line : split(commands, "\n"))
 	{
@@ -201,19 +201,26 @@ void EditPanel::ParseExperiment(const std::string& commands)
 		}
 		else if (line == "dump")   // Dump current context
 		{
-			wxMessageBox("dump current context");
+			// wxMessageBox("dump current context");
+			std::stringstream buffer;
+			context.print_universe(true, buffer);
+			std::string captured_text = buffer.str();
+			wxString title = wxString::Format("Dump of the current context \"%s\"", driver.context.get_context_name());
+			DumpFrame* dump_frame = new DumpFrame(this, title, captured_text);
 		}
 		else if (line == "reset")  // reset current context
 		{
-			wxMessageBox("reset current context");
+			// wxMessageBox("reset current context");
+			driver.context.reset_current_context();
 		}
 		else if (line == "reset all")  // reset all knowledge
 		{
-			wxMessageBox("reset all!");
+			// wxMessageBox("reset all!");
+			driver.context.reset();
 		}
 		else if (line == "line")   // Insert a horizontal line
 		{
-			wxMessageBox("Insert a horizontal line");
+			wxMessageBox("Insert a horizontal line");  // I don't think we want this feature!
 		}
 		else
 		{
@@ -226,11 +233,32 @@ void EditPanel::ParseExperiment(const std::string& commands)
 			std::string tail = split_command[1];
 			if (head == "context")  // Switch to context "tail".
 			{
-				wxMessageBox("Switch to context: " + tail);
+				// wxMessageBox("Switch to context: " + tail);
+				driver.context.set(tail);
 			}
-			else if (head == "load")  // Load a file
+			else if (head == "load")  // Load a file. Also, check if file is already in the tabs.
 			{
-				wxMessageBox("Load file: " + tail);
+				// wxMessageBox("Load file: " + tail);
+				int current_page_idx = m_aui_notebook->GetSelection();
+				wxFileDialog openFileDialog(this, "Open sw file", "", tail, "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+				if (openFileDialog.ShowModal() == wxID_CANCEL)
+					return;
+				wxFileInputStream input_stream(openFileDialog.GetPath());
+				if (!input_stream.IsOk())
+				{
+					wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
+					return;    // Maybe prompt for continue vs exit?
+				}
+				wxString file_content;
+				wxTextInputStream text(input_stream, wxT("\x09"), wxConvUTF8);  // Check these settings are correct later.
+				while (input_stream.IsOk() && !input_stream.Eof())
+				{
+					file_content.Append(text.ReadLine());
+					file_content.Append("\n");  // There must be a better way to keep newlines in the text!
+				}
+				wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+				AddPage(textCtrlLocal, tail, true);
+				m_aui_notebook->SetSelection(current_page_idx);
 			}
 			else if (head == "webload")  // Load a remote file
 			{
@@ -238,13 +266,68 @@ void EditPanel::ParseExperiment(const std::string& commands)
 			}
 			else if (head == "run")  // Run the given file
 			{
-				wxMessageBox("Run file: " + tail);
+				// wxMessageBox("Run file: " + tail);
+				size_t notebook_page_count = m_aui_notebook->GetPageCount();
+				int matching_page_idx = -1;
+				for (size_t i = 0; i < notebook_page_count; i++)
+				{
+					if (m_aui_notebook->GetPageText(i) == tail)  // If more than one tab has the same name, then stop on first match.
+					{
+						matching_page_idx = i;
+						break;
+					}
+				}
+				if (matching_page_idx == -1)
+				{
+					wxLogError("File not open '%s'.", tail);
+					return;
+				}
+				wxWindow* run_page = m_aui_notebook->GetPage(matching_page_idx);
+				wxTextCtrl* current_text_ctrl = (wxTextCtrl*)run_page;
+				std::string current_text = current_text_ctrl->GetValue().ToStdString();
+				Timer_ms the_timer;
+				std::stringstream buffer;
+				std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
+				driver.result.clear();
+				bool parse_success = driver.parse_string(current_text + "\n");
+				std::string captured_text = buffer.str();
+				std::cout.rdbuf(old_buffer);
+				if (!parse_success)
+				{
+					wxMessageBox("Parse failed!");
+					return;
+				}
+				std::string result_string = driver.result.to_string();
+				OutputFrame* output_frame = new OutputFrame(this, "Output Window", captured_text, result_string);
+				the_timer.Stop();  // Maybe shift this before non-parse related work.
+				long long run_time = the_timer.GetTime();
+				output_frame->SetRunTime(run_time);
+			}
+			else if (head == "save")
+			{
+				// wxMessageBox("Save current context to file: " + tail);
+				wxFileDialog saveFileDialog(this, "Save sw file", "", tail, "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+				if (saveFileDialog.ShowModal() == wxID_CANCEL)
+				{
+					return;
+				}
+				wxFileOutputStream output_stream(saveFileDialog.GetPath());
+				if (!output_stream.IsOk())
+				{
+					wxLogError("Cannot save to file '%s'.", saveFileDialog.GetPath());
+					return;
+				}
+				wxTextOutputStream text(output_stream);
+				std::stringstream buffer;
+				context.print_universe(true, buffer);
+				std::string current_text = buffer.str();
+				text.WriteString(current_text);
 			}
 			else if (head == "save-as-dot")  // Save current context as a dot file for use with graphviz.
 			{
 				wxMessageBox("Save as dot, file: " + tail);
 			}
-			else  // Not a valid command, so continue to the next command.
+			else  // Not a valid command, so continue to the next command. Should we put up a dialog?
 			{
 				continue;
 			}

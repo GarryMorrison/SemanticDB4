@@ -67,7 +67,7 @@ std::vector<std::string> split_on_first(const std::string& s, const std::string&
     if (split_pos != std::string::npos)
     {
         result.push_back(s.substr(0, split_pos));
-        result.push_back(s.substr(split_pos));
+        result.push_back(s.substr(split_pos + delimiter.length()));
     }
     else
     {
