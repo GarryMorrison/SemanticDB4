@@ -1,3 +1,8 @@
+-- Author: Garry Morrison
+-- Updated: 2022/2/12
+--
+-- Toy example where we randomly greet people:
+
 |context> => |greetings>
 
 -- a collection of greeting methods:
@@ -10,13 +15,13 @@ good-morning |*> #=> |Good morning> __ |_self> _ |.>
 gday |*> #=> |G'day> __ |_self> _ |.>
 
 
--- just randomly pick a greeting method:
+-- randomly pick a greeting method:
 greet |*> #=> apply(pick-elt list-of |greetings>, |_self>)
 
 -- convert a list into a comma-and string:
 list-to-words (*) #=> smerge[" and "] ( smerge[", "] sselect[1, -2] . sselect[-1, -1] ) sp2seq |__self>
 
--- just a wrapper operator:
+-- a wrapper operator:
 the-friends-of |*> #=> list-to-words friends |_self>
 
 -- define the list of greetings to randomly pick from:
