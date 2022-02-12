@@ -1,0 +1,34 @@
+|context> => |greetings>
+
+-- a collection of greeting methods:
+hello |*> #=> |Hello,> __ |_self> _ |!>
+hey |*> #=> |Hey Ho!> __ |_self> _ |.>
+wat-up |*> #=> |Wat up my homie!> __ |_self> __ |right?>
+greetings |*> #=> |Greetings fine Sir. I belive they call you> __ |_self> _ |.>
+howdy |*> #=> |Howdy partner!>
+good-morning |*> #=> |Good morning> __ |_self> _ |.>
+gday |*> #=> |G'day> __ |_self> _ |.>
+
+
+-- just randomly pick a greeting method:
+greet |*> #=> apply(pick-elt list-of |greetings>, |_self>)
+
+-- convert a list into a comma-and string:
+list-to-words (*) #=> smerge[" and "] ( smerge[", "] sselect[1, -2] . sselect[-1, -1] ) sp2seq |__self>
+
+-- just a wrapper operator:
+the-friends-of |*> #=> list-to-words friends |_self>
+
+-- define the list of greetings to randomly pick from:
+list-of |greetings> => |op: hello> + |op: hey> + |op: wat-up> + |op: greetings> + |op: howdy> + |op: good-morning> + |op: gday>
+
+
+-- now define some friends to greet:
+friends |Sam> => |Charlie> + |George> + |Emma> + |Jack> + |Robert> + |Frank> + |Julie>
+friends |Emma> => |Liz> + |Bob>
+
+
+-- now some example usage:
+print greet |Fred>
+print greet the-friends-of |Sam>
+print greet the-friends-of |Emma>
