@@ -22,7 +22,9 @@ public:
 	void OnPageChange(wxCommandEvent& event);
 	void OnPageEdit(wxCommandEvent& event);
 	void AddPage(wxWindow* page, const wxString& caption, bool select = false);
+	void ModifyPage(wxWindow* page, const wxString& caption, bool select = false);
 	wxString GetTabLabel();
+	bool TabLabelExists(const wxString& tab_label);
 	void SaveFile(const wxString& filename);
 	void WriteText(const wxString& text);
 

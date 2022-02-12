@@ -480,14 +480,24 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
         file_content.Append(text.ReadLine());
         file_content.Append("\n");  // There must be a better way to keep newlines in the text!
     }
-    // wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_auiNotebook, wxID_ANY, file_content);
+    
     wxString file_name = openFileDialog.GetFilename();  // Check here if we already know this file name, before creating a new wxTextCtrl.
-    // wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_auiNotebook, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
-    // m_auiNotebook->AddPage(textCtrlLocal, file_name, true);
-    // // m_auiNotebook->SetSelection(0);
-    wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
-    m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
-    m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?
+    wxTextCtrl* textCtrlLocal; 
+    if (m_frame_edit_panel->TabLabelExists(file_name))
+    {
+        if (wxMessageBox(file_name + " has not been saved! Proceed?", "Please confirm", wxICON_QUESTION | wxYES_NO, this) == wxNO)
+        {
+            return;
+        }
+        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        m_frame_edit_panel->ModifyPage(textCtrlLocal, file_name, true);
+    }
+    else
+    {
+        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
+        m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?
+    }
 
     m_command_window_active = false;
     m_edit_window_active = true;

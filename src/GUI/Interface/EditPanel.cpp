@@ -119,13 +119,11 @@ void EditPanel::OnPageEdit(wxCommandEvent& event)
 	{
 		if (m_unsaved_tabs[m_current_tab])
 		{
-			// wxMessageBox("Page known to be edited.");
 			event.Skip();
 			return;  // Page known to be edited, so do nothing.
 		}
 	}
-	// wxMessageBox("Page newly edited.");
-	m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
+	m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());  // Page newly edited, so let's update some things.
 	m_unsaved_tabs[m_current_tab] = true;
 	wxString star_tab = "*" + m_current_tab;
 	m_aui_notebook->SetPageText(m_aui_notebook->GetSelection(), star_tab);
@@ -137,6 +135,22 @@ void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)
 	m_aui_notebook->AddPage(page, caption, select);
 }
 
+
+void EditPanel::ModifyPage(wxWindow* page, const wxString& caption, bool select)
+{
+	size_t page_count = m_aui_notebook->GetPageCount();
+	wxString star_tab_label = "*" + caption;
+	for (size_t i = 0; i < page_count; i++)
+	{
+		if (m_aui_notebook->GetPageText(i) == caption || m_aui_notebook->GetPageText(i) == star_tab_label)  // Page tab exists.
+		{
+			m_aui_notebook->DeletePage(i);
+			m_aui_notebook->InsertPage(i, page, caption, select);
+			return;
+		}
+	}
+}
+
 wxString EditPanel::GetTabLabel()
 {
 	wxString tab_label = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
@@ -145,6 +159,20 @@ wxString EditPanel::GetTabLabel()
 		return tab_label.AfterFirst('*');
 	}
 	return tab_label;
+}
+
+bool EditPanel::TabLabelExists(const wxString& tab_label)
+{
+	size_t page_count = m_aui_notebook->GetPageCount();
+	wxString star_tab_label = "*" + tab_label;
+	for (size_t i = 0; i < page_count; i++)
+	{
+		if (m_aui_notebook->GetPageText(i) == tab_label || m_aui_notebook->GetPageText(i) == star_tab_label)
+		{
+			return true;  // Page tab exists.
+		}
+	}
+	return false;  // Page tab is new.
 }
 
 void EditPanel::SaveFile(const wxString& filename)
