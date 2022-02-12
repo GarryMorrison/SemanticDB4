@@ -20,6 +20,7 @@ public:
 	void OnDumpButtonDown(wxCommandEvent& event);
 	void OnResetButtonDown(wxCommandEvent& event);
 	void OnPageChange(wxCommandEvent& event);
+	void OnPageEdit(wxCommandEvent& event);
 	void AddPage(wxWindow* page, const wxString& caption, bool select = false);
 	wxString GetTabLabel();
 	void SaveFile(const wxString& filename);
@@ -41,4 +42,6 @@ public:
 private:
 	wxAuiNotebook* m_aui_notebook;
 	wxTextCtrl* m_text_ctrl;
+	wxString m_current_tab;
+	std::map<wxString, bool> m_unsaved_tabs;
 };

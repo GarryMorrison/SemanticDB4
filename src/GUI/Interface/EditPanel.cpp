@@ -34,7 +34,7 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	
 	// Sample content:
 	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "Enter your code here ... \n");
-	m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, EDIT_STARTING_TEXT, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+	m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, EDIT_STARTING_TEXT, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
 	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "|context> => |Hello world>\n\nprint |Hello world!>\n");
 	m_aui_notebook->AddPage(m_text_ctrl, "hello-world.sw4", true);
 
@@ -47,6 +47,8 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	dump_button->Bind(wxEVT_BUTTON, &EditPanel::OnDumpButtonDown, this);
 	reset_button->Bind(wxEVT_BUTTON, &EditPanel::OnResetButtonDown, this);
 	m_aui_notebook->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &EditPanel::OnPageChange, this);
+	// m_text_ctrl->Bind(wxEVT_TEXT, &EditPanel::OnPageEdit, this); // Seems slow!
+	m_text_ctrl->Bind(wxEVT_TEXT_ENTER, &EditPanel::OnPageEdit, this);  // Hopefully faster.
 }
 
 void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
@@ -103,6 +105,31 @@ void EditPanel::OnResetButtonDown(wxCommandEvent& event)
 void EditPanel::OnPageChange(wxCommandEvent& event)
 {
 	m_text_ctrl = (wxTextCtrl*)(m_aui_notebook->GetCurrentPage());
+	m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
+	if (m_unsaved_tabs.find(m_current_tab) == m_unsaved_tabs.end())  // This tab is new to us, so add it to the unsaved_tabs map.
+	{
+		m_unsaved_tabs[m_current_tab] = false;
+		m_text_ctrl->Bind(wxEVT_TEXT_ENTER, &EditPanel::OnPageEdit, this);  // Does this bug out anywhere?? Probably!
+	}
+}
+
+void EditPanel::OnPageEdit(wxCommandEvent& event)
+{
+	if (m_unsaved_tabs.find(m_current_tab) != m_unsaved_tabs.end())
+	{
+		if (m_unsaved_tabs[m_current_tab])
+		{
+			// wxMessageBox("Page known to be edited.");
+			event.Skip();
+			return;  // Page known to be edited, so do nothing.
+		}
+	}
+	// wxMessageBox("Page newly edited.");
+	m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
+	m_unsaved_tabs[m_current_tab] = true;
+	wxString star_tab = "*" + m_current_tab;
+	m_aui_notebook->SetPageText(m_aui_notebook->GetSelection(), star_tab);
+	event.Skip();
 }
 
 void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)
@@ -112,7 +139,12 @@ void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)
 
 wxString EditPanel::GetTabLabel()
 {
-	return m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
+	wxString tab_label = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
+	if (tab_label.StartsWith("*"))
+	{
+		return tab_label.AfterFirst('*');
+	}
+	return tab_label;
 }
 
 void EditPanel::SaveFile(const wxString& filename)
@@ -129,6 +161,16 @@ void EditPanel::SaveFile(const wxString& filename)
 	}
 	wxTextOutputStream text(output_stream);
 	text.WriteString(current_text);
+	m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
+	if (m_current_tab.StartsWith("*"))
+	{
+		m_current_tab = m_current_tab.AfterFirst('*');
+		if (m_unsaved_tabs.find(m_current_tab) != m_unsaved_tabs.end())
+		{
+			m_aui_notebook->SetPageText(m_aui_notebook->GetSelection(), m_current_tab);
+			m_unsaved_tabs[m_current_tab] = false;
+		}
+	}
 }
 
 void EditPanel::WriteText(const wxString& text)
