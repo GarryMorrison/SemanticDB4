@@ -438,12 +438,23 @@ void PrimaryFrame::OnNew(wxCommandEvent& event)
     {
         starting_code += "|context> => |" + context_name + ">\n\n";
     }
-    wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
 
-    // wxString file_name = "empty.sw4";  // Do something better later? A dialog that prompts for filename and starting context perhaps?
-    // wxTextCtrl* textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, "Enter your code here ... ", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
-    m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
-    m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?? Handle in a smarter way later!
+    wxTextCtrl* textCtrlLocal;
+    if (m_frame_edit_panel->TabLabelExists(file_name))
+    {
+        if (wxMessageBox(file_name + " has not been saved! Proceed?", "Please confirm", wxICON_QUESTION | wxYES_NO, this) == wxNO)
+        {
+            return;
+        }
+        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        m_frame_edit_panel->ModifyPage(textCtrlLocal, file_name, true);
+    }
+    else
+    {
+        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
+        m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?
+    }
 
     m_command_window_active = false;
     m_edit_window_active = true;
