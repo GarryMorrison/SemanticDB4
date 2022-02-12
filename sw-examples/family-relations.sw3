@@ -133,4 +133,4 @@ have-4-children |*> #=> is-equal[4] how-many-children |_self>
 
 
 end |rule count> => how-many supported-ops |*>
-print ( |Learned> __ extract-value (end -- start) |rule count> __ |new rules.> )
+print ( |Learned> __ extract-value (end |rule count> -- start |rule count>) __ |new rules.> )
