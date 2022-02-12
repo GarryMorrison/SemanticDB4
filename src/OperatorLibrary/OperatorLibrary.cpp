@@ -2280,6 +2280,72 @@ Ket op_save_as_dot(const Superposition& sp, ContextList& context, const std::vec
     return Ket("We shouldn't be here in save-as-dot.");
 }
 
+std::string context_to_dot(ContextList& context)  // Need to test it is correct!
+{
+    std::set<ulong> operators;
+    ulong star_idx = ket_map.get_idx("*");
+    std::vector<ulong> known_kets = context.relevant_kets(star_idx);
+    for (ulong idx : known_kets)
+    {
+        std::vector<ulong> supported_ops = context.supported_ops(idx);
+        operators.insert(std::begin(supported_ops), std::end(supported_ops));
+    }
+    std::string dot_file = "digraph G {\n  node [ shape=Mrecord ]\n";
+    unsigned int cluster_idx = 0;
+    unsigned int node_idx = 0;
+    std::map<std::string, unsigned int> node_label_idx_map;
+    for (ulong op_idx : operators) {
+        std::string op_str = ket_map.get_str(op_idx);
+        for (ulong ket_idx : known_kets) {
+            std::string k_label = ket_map.get_str(ket_idx);
+            if (node_label_idx_map.find(k_label) == node_label_idx_map.end()) {
+                node_idx++;
+                node_label_idx_map[k_label] = node_idx;
+                dot_file += "  " + std::to_string(node_idx) + " [ label=\"" + k_label + "\" ]\n";
+            }
+            Sequence RHS = context.recall(op_idx, ket_idx)->to_seq();
+            if (RHS.size() <= 1) {
+                for (const auto& k2 : RHS.to_sp()) {
+                    if (node_label_idx_map.find(k2.label()) == node_label_idx_map.end()) {
+                        node_idx++;
+                        node_label_idx_map[k2.label()] = node_idx;
+                        dot_file += "  " + std::to_string(node_idx) + " [ label=\"" + k2.label() + "\" ]\n";
+                    }
+                    dot_file += "  " + std::to_string(node_label_idx_map[k_label]) + " -> " + std::to_string(node_label_idx_map[k2.label()]) + " [ label=\"" + op_str + "\" ]\n";
+                }
+            }
+            else {
+                dot_file += "\n  subgraph cluster_" + std::to_string(cluster_idx) + " {\n  rankdir=\"LR\"\n  ranksep=\"0.05\"\n";
+                cluster_idx++;
+                std::string first_element;
+                unsigned int current_node_idx = node_idx;
+                for (const auto& sp2 : RHS) {
+                    std::string current_element = sp2.readable_display();
+                    node_idx++;
+                    dot_file += "  " + std::to_string(node_idx) + " [ label=\"" + current_element + "\" ]\n";
+                }
+                node_idx = current_node_idx;
+                unsigned int first_element_idx = current_node_idx;
+                bool first_pass = true;
+                for (const auto& sp2 : RHS) {
+                    node_idx++;
+                    if (first_pass) {
+                        first_pass = false;
+                        first_element_idx = node_idx;
+                        dot_file += "  " + std::to_string(first_element_idx);
+                    }
+                    else {
+                        dot_file += " -> " + std::to_string(node_idx);
+                    }
+                }
+                dot_file += " [ arrowhead=dot ]\n  }\n  " + std::to_string(node_label_idx_map[k_label]) + " -> " + std::to_string(first_element_idx) +
+                    "  [ label=\"" + op_str + "\" ] \n";
+            }
+        }
+    }
+    dot_file += "}\n";
+    return dot_file;
+}
 
 std::string dump(const Superposition& input_sp, ContextList& context, const std::vector<ulong>& operators, const std::vector<ulong>& general_operators)
 {

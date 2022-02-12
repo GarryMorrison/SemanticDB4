@@ -96,6 +96,7 @@ Sequence op_spike_merge(const Sequence& seq, const std::vector<std::shared_ptr<C
 Sequence op_random(const Sequence& seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 Sequence op_sleep_ms(const Sequence& seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 Ket op_save_as_dot(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+std::string context_to_dot(ContextList& context);
 
 std::string dump(const Superposition& input_sp, ContextList& context, const std::vector<ulong>& operators, const std::vector<ulong>& general_operators);
 

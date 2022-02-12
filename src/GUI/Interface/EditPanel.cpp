@@ -348,7 +348,26 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 			}
 			else if (head == "save-as-dot")  // Save current context as a dot file for use with graphviz.
 			{
-				wxMessageBox("Save as dot, file: " + tail);
+				// wxMessageBox("Save as dot, file: " + tail);
+				if (!string_ends_with(tail, ".dot"))
+				{
+					wxMessageBox("Dot file has incorrect extension: " + tail);
+					return;
+				}
+				std::string dot_file = context_to_dot(driver.context);
+				wxFileDialog saveFileDialog(this, "Save dot file", "", tail, "dot file (*.dot)|*.dot", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+				if (saveFileDialog.ShowModal() == wxID_CANCEL)
+				{
+					return;
+				}
+				wxFileOutputStream output_stream(saveFileDialog.GetPath());
+				if (!output_stream.IsOk())
+				{
+					wxLogError("Cannot save to file '%s'.", saveFileDialog.GetPath());
+					return;
+				}
+				wxTextOutputStream text(output_stream);
+				text.WriteString(dot_file);
 			}
 			else  // Not a valid command, so continue to the next command. Should we put up a dialog?
 			{
