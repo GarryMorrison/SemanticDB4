@@ -49,6 +49,7 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	m_aui_notebook->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &EditPanel::OnPageChange, this);
 	// m_text_ctrl->Bind(wxEVT_TEXT, &EditPanel::OnPageEdit, this); // Seems slow!
 	m_text_ctrl->Bind(wxEVT_TEXT_ENTER, &EditPanel::OnPageEdit, this);  // Hopefully faster.
+	m_aui_notebook->Bind(wxEVT_AUINOTEBOOK_PAGE_CLOSE, &EditPanel::OnPageClose, this);
 }
 
 void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
@@ -128,6 +129,33 @@ void EditPanel::OnPageEdit(wxCommandEvent& event)
 	wxString star_tab = "*" + m_current_tab;
 	m_aui_notebook->SetPageText(m_aui_notebook->GetSelection(), star_tab);
 	event.Skip();
+}
+
+void EditPanel::OnPageClose(wxCommandEvent& event)
+{
+	wxString current_tab = GetTabLabel();
+	if (m_unsaved_tabs.find(current_tab) != m_unsaved_tabs.end())
+	{
+		if (m_unsaved_tabs[current_tab])
+		{
+			m_unsaved_tabs.erase(current_tab);
+			if (wxMessageBox(current_tab + " has not been saved! Save?", "Save?", wxICON_QUESTION | wxYES_NO, this) == wxNO)
+			{
+				return;
+			}
+			else
+			{
+				wxFileDialog saveFileDialog(this, "Save sw file", "", current_tab, "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+				if (saveFileDialog.ShowModal() == wxID_CANCEL)
+				{
+					return;
+				}
+				SaveFile(saveFileDialog.GetPath());
+			}
+			return;
+		}
+		m_unsaved_tabs.erase(current_tab);
+	}
 }
 
 void EditPanel::AddPage(wxWindow* page, const wxString& caption, bool select)
