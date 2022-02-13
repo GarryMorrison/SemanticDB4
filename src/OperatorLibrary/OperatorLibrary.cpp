@@ -2606,7 +2606,7 @@ Ket op_patch_map(const Sequence& input_seq, ContextList& context, const std::vec
         {
             // std::cout << "x: " << x << " y: " << y << "\n";
             // if (skip_index % skip_size == 0)  // Skip based on total number of patches.
-            if (x % skip_size == 0)              // Skip based on x position. Not yet sure which we want.
+            if (x % skip_size == 0 && y % skip_size == 0)              // Skip based on x and y position. Not yet sure which we want.
             {
                 Sequence patch;
                 for (int y2 = 0; y2 < output_height; y2++)

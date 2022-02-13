@@ -4501,11 +4501,9 @@ OperatorUsageMap::OperatorUsageMap() {
         "        patch-map[4, 2, 2, 2, sprint] the |seq>\n"
         "            |0> . |1> . |4> . |5>\n"
         "            |2> . |3> . |6> . |7>\n"
-        "            |4> . |5> . |8> . |9>\n"
-        "            |6> . |7> . |10> . |11>\n"
         "            |8> . |9> . |12> . |13>\n"
         "            |10> . |11> . |14> . |15>\n"
-        "            6|patches>\n\n"
+        "            4|patches>\n\n"
         "    see also:\n"
         "        display-patch, sprint\n";
 

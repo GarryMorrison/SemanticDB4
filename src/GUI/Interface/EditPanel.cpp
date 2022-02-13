@@ -148,7 +148,7 @@ void EditPanel::OnPageClose(wxCommandEvent& event)
 				wxFileDialog saveFileDialog(this, "Save sw file", "", current_tab, "sw file (*.sw;*.swc;*.sw3;*.sw4;*.swe)|*.sw;*.swc;*.sw3;*.sw4;*.swe|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 				if (saveFileDialog.ShowModal() == wxID_CANCEL)
 				{
-					return;
+					return;  // Maybe we want it to keep the tab open in this branch??
 				}
 				SaveFile(saveFileDialog.GetPath());
 			}
