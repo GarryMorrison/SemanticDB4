@@ -469,13 +469,7 @@ void PrimaryFrame::OnNew(wxCommandEvent& event)
 
 void PrimaryFrame::OnOpen(wxCommandEvent& event)
 {
-    bool content_has_been_saved = true;  // shift this to the PrimaryFrame class member variables!
-    if (!content_has_been_saved)
-    {
-        if (wxMessageBox("Current content has not been saved! Proceed?", "Please confirm", wxICON_QUESTION | wxYES_NO, this) == wxNO)
-            return;
-    }
-    wxFileDialog openFileDialog(this, "Open sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, "Open sw file", "", "", "sw file (*.sw;*.swc;*.sw3;*.sw4;*.swe)|*.sw;*.swc;*.sw3;*.sw4;*.swe|Text file (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     if (openFileDialog.ShowModal() == wxID_CANCEL)
         return;
     wxFileInputStream input_stream(openFileDialog.GetPath());
@@ -530,7 +524,7 @@ void PrimaryFrame::OnSave(wxCommandEvent& event)
     {
         default_filename = m_frame_edit_panel->GetTabLabel();
     }
-    wxFileDialog saveFileDialog(this, "Save sw file", "", default_filename, "sw file (*.sw;*.swc;*.sw3;*.sw4)|*.sw;*.swc;*.sw3;*.sw4|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    wxFileDialog saveFileDialog(this, "Save sw file", "", default_filename, "sw file (*.sw;*.swc;*.sw3;*.sw4;*.swe)|*.sw;*.swc;*.sw3;*.sw4;*.swe|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
     {
         return;
