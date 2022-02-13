@@ -27,6 +27,8 @@ public:
 	wxString GetTabLabel();
 	bool TabLabelExists(const wxString& tab_label);
 	void SaveFile(const wxString& filename);
+	void DeleteAllPages();
+
 	void WriteText(const wxString& text);
 
 	void InsertText(const wxString& wxs);

@@ -397,6 +397,7 @@ int PrimaryFrame::PopulateSubMenu(wxMenu* parent_menu, int starting_id, std::vec
 
 void PrimaryFrame::OnExit(wxCommandEvent& event)
 {
+    m_frame_edit_panel->DeleteAllPages();
     Close(true);
 }
 void PrimaryFrame::OnAbout(wxCommandEvent& event)

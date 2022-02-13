@@ -229,6 +229,17 @@ void EditPanel::SaveFile(const wxString& filename)
 	}
 }
 
+void EditPanel::DeleteAllPages()
+{
+	wxCommandEvent event;
+	while (m_aui_notebook->GetPageCount() > 0)
+	{
+		m_aui_notebook->SetSelection(0);
+		OnPageClose(event);
+		m_aui_notebook->DeletePage(0);
+	}
+}
+
 void EditPanel::WriteText(const wxString& text)
 {
 	m_text_ctrl->WriteText(text);
