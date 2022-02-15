@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2022/2/13
+// Updated 2022/2/15
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,8 +19,8 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2022/2/13"
-#define APP_VERSION "4.0.alpha"
+#define APP_BUILD_DATE "2022/2/15"
+#define APP_VERSION "4.0.alpha2"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
 

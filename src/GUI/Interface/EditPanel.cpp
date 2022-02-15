@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/2/11
+// Updated 2022/2/15
 // Author Garry Morrison
 // License GPL v3
 //
@@ -372,6 +372,16 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 			else if (head == "webload")  // Load a remote file
 			{
 				// wxMessageBox("Webload url: " + tail);
+				std::string cleaned_filename = std::filesystem::path(tail).filename().string();
+				bool tab_already_exists = false;
+				if (TabLabelExists(cleaned_filename))
+				{
+					if (wxMessageBox(cleaned_filename + " has not been saved! Proceed?", "Please confirm", wxICON_QUESTION | wxYES_NO, this) == wxNO)
+					{
+						return;
+					}
+					tab_already_exists = true;
+				}
 				wxURL url(tail);
 				if (url.GetError() == wxURL_NOERR)
 				{
@@ -383,15 +393,27 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 						wxStringOutputStream html_stream(&htmldata);
 						in->Read(html_stream);
 						// wxLogMessage(htmldata);
-						wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, htmldata, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
-						std::string cleaned_filename = std::filesystem::path(tail).filename().string();
-						AddPage(textCtrlLocal, cleaned_filename, false);
+						wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, htmldata, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+						std::string star_cleaned_filename = '*' + cleaned_filename;
+						if (tab_already_exists)
+						{
+							ModifyPage(textCtrlLocal, star_cleaned_filename, false);
+						}
+						else
+						{
+							AddPage(textCtrlLocal, star_cleaned_filename, false);
+						}
+						m_unsaved_tabs[cleaned_filename] = true;
 					}
 					else
 					{
 						wxMessageBox("Failed to web load: " + tail);
 					}
 					delete in;
+				}
+				else
+				{
+					wxMessageBox("Failed to web load: " + tail);
 				}
 			}
 			else if (head == "run")  // Run the given file
