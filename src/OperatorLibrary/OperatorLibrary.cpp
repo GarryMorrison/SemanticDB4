@@ -2524,7 +2524,7 @@ Sequence op_borrow_from_context(const Sequence& input_seq, ContextList& context,
     return seq;
 }
 
-Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+Ket op_sdisplay_patch(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
 {
     if (parameters.size() != 1) { return Ket(); }
     if (parameters[0]->type() != CINT) { return Ket(); }
@@ -2559,7 +2559,7 @@ Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_pt
     return Ket("patch");
 }
 
-Ket op_patch_map(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+Ket op_spatch_map(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
 {
     int input_width = 0;
     int output_width = 0;

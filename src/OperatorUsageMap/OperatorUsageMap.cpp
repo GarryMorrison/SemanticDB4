@@ -4438,38 +4438,38 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        op-sum, op-union\n";
 
-    operator_usage_map.map["display-patch"] =
-        "\ndisplay-patch:\n"
+    operator_usage_map.map["sdisplay-patch"] =
+        "\nsdisplay-patch:\n"
         "    description:\n"
-        "        display-patch[width] input-seq\n"
+        "        sdisplay-patch[width] input-seq\n"
         "        convert an input sequence of kets into a rectangular grid with the given width\n"
         "        if the sequence is of superpositions instead of kets, then behaviour is currently undefined.\n"
         "        the grid elements are left justified, and take into account the max grid element length\n\n"
         "    examples:\n"
         "        -- just an abstract example:\n"
-        "        display-patch[3] ssplit |ABCDEF>\n"
+        "        sdisplay-patch[3] ssplit |ABCDEF>\n"
         "            width:  3\n"
         "            height: 2\n"
         "            A  B  C\n"
         "            D  E  F\n\n"
         "        -- and another:\n"
-        "        display-patch[3] ssplit[\" \"] |one two three four five six>\n"
+        "        sdisplay-patch[3] ssplit[\" \"] |one two three four five six>\n"
         "            width:  3\n"
         "            height: 2\n"
         "            one   two   three\n"
         "            four  five  six\n\n"
         "    see also:\n"
-        "        display-grid, patch-map, table\n";
+        "        display-grid, spatch-map, table\n";
 
-    operator_usage_map.map["patch-map"] =
-        "\npatch-map:\n"
+    operator_usage_map.map["spatch-map"] =
+        "\nspatch-map:\n"
         "    description:\n"
-        "        patch-map[input-width, output-width, output-height, op] input-seq\n"
-        "        patch-map[input-width, skip-size, output-width, output-height, op] input-seq\n"
+        "        spatch-map[input-width, output-width, output-height, op] input-seq\n"
+        "        spatch-map[input-width, skip-size, output-width, output-height, op] input-seq\n"
         "        convert an input sequence into a rectangular grid with the given input-width\n"
         "        then sub-divide that grid into \"patches\" of size output-width * output-height\n"
         "        then feed those patches to the passed in operator: op\n"
-        "        the hope is that patch-map[] will be useful for MNIST\n"
+        "        the hope is that spatch-map[] will be useful for MNIST\n"
         "        if skip-size is defined, then skip patches\n"
         "        eg, if skip-size == 1, then don't skip any patches\n"
         "        if skip-size == 2, then skip every second patch\n"
@@ -4478,15 +4478,15 @@ OperatorUsageMap::OperatorUsageMap() {
         "        -- first, define a sequence:\n"
         "        the |seq> => ssplit[\" \"] |0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15>\n\n"
         "        -- now visualize this as a patch:\n"
-        "        display-patch[4] the |seq>\n"
+        "        sdisplay-patch[4] the |seq>\n"
         "            width:  4\n"
         "            height: 4\n"
         "            0  1  2  3\n"
         "            4  5  6  7\n"
         "            8  9  10 11\n"
         "            12 13 14 15\n\n"
-        "        -- now apply patch-map[], and use sprint as the operator:\n"
-        "        patch-map[4, 2, 2, sprint] the |seq>\n"
+        "        -- now apply spatch-map[], and use sprint as the operator:\n"
+        "        spatch-map[4, 2, 2, sprint] the |seq>\n"
         "            |0> . |1> . |4> . |5>\n"
         "            |1> . |2> . |5> . |6>\n"
         "            |2> . |3> . |6> . |7>\n"
@@ -4498,14 +4498,14 @@ OperatorUsageMap::OperatorUsageMap() {
         "            |10> . |11> . |14> . |15>\n"
         "            9|patches>\n\n"
         "        -- now the skip-size version, here, use skip-size == 2:\n"
-        "        patch-map[4, 2, 2, 2, sprint] the |seq>\n"
+        "        spatch-map[4, 2, 2, 2, sprint] the |seq>\n"
         "            |0> . |1> . |4> . |5>\n"
         "            |2> . |3> . |6> . |7>\n"
         "            |8> . |9> . |12> . |13>\n"
         "            |10> . |11> . |14> . |15>\n"
         "            4|patches>\n\n"
         "    see also:\n"
-        "        display-patch, sprint\n";
+        "        sdisplay-patch, sprint\n";
 
 
 

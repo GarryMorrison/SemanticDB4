@@ -496,11 +496,11 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("parallel-sum-sequences");
     fn_map.whitelist_1.emplace(idx, &op_parallel_sum);
 
-    idx = ket_map.get_idx("display-patch");
-    fn_map.compound_seq_fn.emplace(idx, &op_display_patch);
+    idx = ket_map.get_idx("sdisplay-patch");
+    fn_map.compound_seq_fn.emplace(idx, &op_sdisplay_patch);
 
-    idx = ket_map.get_idx("patch-map");
-    fn_map.compound_context_seq_fn.emplace(idx, &op_patch_map);
+    idx = ket_map.get_idx("spatch-map");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_spatch_map);
 
 }
 
