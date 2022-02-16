@@ -2662,3 +2662,64 @@ Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_pt
     }
     return Ket("patch");
 }
+
+Ket op_patch_map(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    int input_width = 0;
+    int input_height = 0;
+    int output_width = 0;
+    int output_height = 0;
+    int skip_size = 1;
+    if (parameters.size() == 5)
+    {
+        if (parameters[0]->type() != CINT || parameters[1]->type() != CINT || parameters[2]->type() != CINT || parameters[3]->type() != CINT || parameters[4]->type() != COPERATOR) { return Ket(); }
+        input_width = parameters[0]->get_int();
+        input_height = parameters[1]->get_int();
+        output_width = parameters[2]->get_int();
+        output_height = parameters[3]->get_int();
+    }
+    else if (parameters.size() == 6)
+    {
+        if (parameters[0]->type() != CINT || parameters[1]->type() != CINT || parameters[2]->type() != CINT || parameters[3]->type() != CINT || parameters[4]->type() != CINT || parameters[5]->type() != COPERATOR) { return Ket(); }
+        input_width = parameters[0]->get_int();
+        input_height = parameters[1]->get_int();
+        skip_size = parameters[2]->get_int();
+        output_width = parameters[3]->get_int();
+        output_height = parameters[4]->get_int();
+    }
+    else
+    {
+        return Ket();
+    }
+    SimpleOperator op = parameters[parameters.size() - 1]->get_operator();
+    Superposition input_sp = input_seq.to_sp();
+    int patch_count = 0;
+    if (input_width <= 0 || input_height <= 0 || output_width <= 0 || output_height <= 0 || skip_size < 1) { return Ket(); }
+    if (output_width > input_width || output_height > input_height) { return Ket(); }
+
+    for (int y = 0; y <= (input_height - output_height); y++)
+    {
+        for (int x = 0; x <= (input_width - output_width); x++)
+        {
+            // std::cout << "x: " << x << " y: " << y << "\n";
+            if (x % skip_size == 0 && y % skip_size == 0)              // Skip based on x and y position.
+            {
+                Superposition patch;
+                for (int y2 = 0; y2 < output_height; y2++)
+                {
+                    for (int x2 = 0; x2 < output_width; x2++)
+                    {
+                        // int pos = (y + y2) * input_width + (x + x2);
+                        ulong pos_idx = ket_map.get_idx(std::to_string(y + y2) + ": " + std::to_string(x + x2));
+                        double pos_value = input_sp.find_value(pos_idx);
+                        Ket patch_ket(std::to_string(y2) + ": " + std::to_string(x2), pos_value);
+                        patch.add(patch_ket);
+                    }
+                }
+                op.Compile(context, patch);
+                patch_count++;
+            }
+        }
+    }
+    return Ket("patches", patch_count);
+}
