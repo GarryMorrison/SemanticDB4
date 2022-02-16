@@ -559,6 +559,11 @@ Superposition Superposition::shuffle() const {
     return result;
 }
 
+double Superposition::find_value(ulong idx) const {
+    if (sp.find(idx) == sp.end()) { return 0; }
+    return sp.at(idx);  // swap to sp[idx]? Nope. Doesn't seem to work.
+}
+
 double Superposition::find_value(const Ket& k) const {
     ulong idx = k.label_idx();
     if (sp.find(idx) == sp.end()) { return 0; }

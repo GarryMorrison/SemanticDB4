@@ -502,6 +502,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("spatch-map");
     fn_map.compound_context_seq_fn.emplace(idx, &op_spatch_map);
 
+    idx = ket_map.get_idx("display-patch");
+    fn_map.compound_seq_fn.emplace(idx, &op_display_patch);
 }
 
 

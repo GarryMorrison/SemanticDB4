@@ -4507,6 +4507,25 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        sdisplay-patch, sprint\n";
 
+    operator_usage_map.map["display-patch"] =
+        "\ndisplay-patch:\n"
+        "    description:\n"
+        "        display-patch[width, height] input-sp\n"
+        "        convert an input superposition into a rectangular grid, with the given width and height\n"
+        "        the grid values are the coefficients of the kets with labels |y: x>\n"
+        "        if a particular cell doesn't exist in the input sp, then the grid value is 0\n"
+        "        the grid elements are left justified, and take into account the max grid element length\n\n"
+        "    examples:\n"
+        "        -- just an abstract example:\n"
+        "        display-patch[4, 4] rank (|0: 0> .. |3: 3>)\n"
+        "            1  2  3  4\n"
+        "            5  6  7  8\n"
+        "            9  10 11 12\n"
+        "            13 14 15 16\n"
+        "            |patch>\n\n"
+        "    see also:\n"
+        "        rank, display-grid, patch-map, sdisplay-patch, spatch-map, table\n";
+
 
 
     // fill out statement_prototypes map:

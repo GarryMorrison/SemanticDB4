@@ -2625,3 +2625,40 @@ Ket op_spatch_map(const Sequence& input_seq, ContextList& context, const std::ve
     }
     return Ket("patches", patch_count);
 }
+
+Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 2) { return Ket(); }
+    if (parameters[0]->type() != CINT || parameters[1]->type() != CINT) { return Ket(); }
+    int width = parameters[0]->get_int();
+    int height = parameters[0]->get_int();
+    if (width <= 0 || height <= 0) { return Ket(); }
+    Superposition input_sp = input_seq.to_sp();
+    if (input_sp.size() == 0) { return Ket(); }
+    std::vector<std::string> grid_elements;
+    size_t max_element_size = 2;  // Set min element length to 2.
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            ulong pos_idx = ket_map.get_idx(std::to_string(y) + ": " + std::to_string(x));
+            double pos_value = input_sp.find_value(pos_idx);
+            std::string grid_element = float_to_int(pos_value, default_decimal_places);
+            max_element_size = std::max(max_element_size, grid_element.size());
+            grid_elements.push_back(grid_element);
+        }
+    }
+    max_element_size++; // Increment max_element_size by 1, so that there is at least one space char between elements.
+    std::cout << std::setfill(' ');
+    unsigned int k = 0;
+    for (const auto& element : grid_elements)
+    {
+        std::cout << std::left << std::setw(max_element_size) << element;
+        k++;
+        if (k % width == 0)
+        {
+            std::cout << "\n";
+        }
+    }
+    return Ket("patch");
+}

@@ -118,6 +118,7 @@ public:
 
     // A collection of built in operators:
     Superposition shuffle() const;
+    double find_value(ulong idx) const;
     double find_value(const Ket& k) const;
     Ket do_you_know() const;
     Ket how_many() const;
