@@ -253,10 +253,9 @@ Superposition seq2sp(const Sequence& seq) {
 Ket bar_chart(const Superposition& sp, const unsigned int width) {
     if (sp.size() == 0 || width <= 0) { return Ket(); }
 
-    ulong max_len = 0;  // Change max_len to size_t??
+    size_t max_len = 0;
     for (const auto k : sp) {
-        // max_len = std::max(k.label().size(), max_len);  // Is there a smarter way to do this?
-        max_len = std::max((ulong)(k.label().size()), max_len);
+        max_len = std::max(k.label().size(), max_len);
     }
     // Superposition one = sp.rescale(width); // do we need .drop() too? Probably.
     Superposition one = sp.drop().rescale(width);
