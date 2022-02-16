@@ -264,22 +264,69 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
     case '\\': {
         if (event.ShiftDown())
         {
-            m_command_text->WriteText("|> ");  // Need to check for || case though ...
-            int current_pos = m_command_text->GetCurrentPos();
-            m_command_text->GotoPos(current_pos - 2);
-            m_inside_ket = true;  // Need to change the value of this bool in a bunch of other places too! Eg, insert known ket menu ...
+            if (m_command_text->GetCurrentPos() > 0)
+            {
+                char local_char = m_command_text->GetCharAt(m_command_text->GetCurrentPos() - 1);
+                // wxMessageBox("local char: " + wxString(local_char));
+                if (local_char == '|')
+                {
+                    m_command_text->DeleteRange(m_command_text->GetCurrentPos(), 2);
+                    m_command_text->WriteText("| ");
+                }
+                else
+                {
+                    m_command_text->WriteText("|");
+                }
+            }
+            else
+            {
+                m_command_text->WriteText("|> ");  // Need to check for || case though ... Check previous char was also '|', then clean up the '> ' text.
+                int current_pos = m_command_text->GetCurrentPos();
+                m_command_text->GotoPos(current_pos - 2);
+                m_inside_ket = true;  // Need to change the value of this bool in a bunch of other places too! Eg, insert known ket menu ...
+            }
+        }
+        else
+        {
+            m_command_text->WriteText("\\");
         }
         break;
     }
     case '[': {
-        if (m_inside_ket)
+        if (event.ShiftDown())
         {
-            m_command_text->WriteText("[");
+            if (m_inside_ket)
+            {
+                m_command_text->WriteText("{");
+            }
+            else
+            {
+                m_command_text->WriteText("{} ");
+                m_command_text->GotoPos(m_command_text->GetCurrentPos() - 2);
+            }
         }
         else
         {
-            m_command_text->WriteText("[] ");
-            m_command_text->GotoPos(m_command_text->GetCurrentPos() - 2);
+            if (m_inside_ket)
+            {
+                m_command_text->WriteText("[");
+            }
+            else
+            {
+                m_command_text->WriteText("[] ");
+                m_command_text->GotoPos(m_command_text->GetCurrentPos() - 2);
+            }
+        }
+        break;
+    }
+    case ']': {
+        if (event.ShiftDown())
+        {
+            m_command_text->WriteText("}");
+        }
+        else
+        {
+            m_command_text->WriteText("]");
         }
         break;
     }
