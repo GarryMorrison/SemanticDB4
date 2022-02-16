@@ -23,4 +23,6 @@ double op_sigmoid_random(const double x, const std::vector<std::shared_ptr<Compo
 double op_min(const double x, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 double op_max(const double x, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 
+double sigmoid_inc(const double x);
+double sigmoid_dec(const double x);
 

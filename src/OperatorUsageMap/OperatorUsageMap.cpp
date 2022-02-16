@@ -59,6 +59,29 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        clean, ReLU\n";
 
+    operator_usage_map.map["sigmoid-inc"] =
+        "\nsigmoid-inc:\n"
+        "    description:\n"
+        "        sigmoid-inc ket\n"
+        "        increment by 1 the coefficients of the given superposition\n\n"
+        "    examples:\n"
+        "        -- increment a superposition:\n"
+        "        sigmoid-inc (3|a> + 2.2|b> - 3 |c> + |d>)\n"
+        "            4|a> + 3.2|b> - 2|c> + 2|d>\n\n"
+        "    see also:\n"
+        "        sigmoid-dec, clean, ReLU\n";
+
+    operator_usage_map.map["sigmoid-dec"] =
+        "\nsigmoid-dec:\n"
+        "    description:\n"
+        "        sigmoid-dec ket\n"
+        "        decrement by 1 the coefficients of the given superposition\n\n"
+        "    examples:\n"
+        "        -- decrement a superposition:\n"
+        "        sigmoid-dec (3|a> + 2.2|b> - 3 |c> + |d>)\n"
+        "            2|a> + 1.2|b> - 4|c> + 0|d>\n\n"
+        "    see also:\n"
+        "        sigmoid-inc, clean, ReLU\n";
 
     operator_usage_map.map["drop"] =
         "\ndrop:\n"

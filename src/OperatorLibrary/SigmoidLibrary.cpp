@@ -89,3 +89,12 @@ double op_max(const double x, const std::vector<std::shared_ptr<CompoundConstant
     return std::max(x, value);
 }
 
+double sigmoid_inc(const double x)
+{
+    return x + 1;
+}
+
+double sigmoid_dec(const double x)
+{
+    return x - 1;
+}
