@@ -2643,7 +2643,15 @@ Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_pt
         {
             ulong pos_idx = ket_map.get_idx(std::to_string(y) + ": " + std::to_string(x));
             double pos_value = input_sp.find_value(pos_idx);
-            std::string grid_element = float_to_int(pos_value, default_decimal_places);
+            std::string grid_element;
+            if (double_eq(pos_value, 0))  // Do we always want 0 as space char??
+            {
+                grid_element = " ";
+            }
+            else
+            {
+                grid_element = float_to_int(pos_value, default_decimal_places);
+            }
             max_element_size = std::max(max_element_size, grid_element.size());
             grid_elements.push_back(grid_element);
         }
