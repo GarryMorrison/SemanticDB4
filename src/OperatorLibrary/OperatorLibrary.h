@@ -34,6 +34,7 @@ Sequence sp2seq(const Superposition& sp);
 Superposition seq2sp(const Sequence& seq);
 Ket bar_chart(const Superposition& sp, const unsigned int width);
 Ket op_bar_chart(const Superposition& sp, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+Ket op_raw_bar_chart(const Superposition& sp);
 Ket print_ket(const Ket k);
 Superposition op_relevant_kets(const Sequence& seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 Superposition op_similar_input(const Sequence& seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);

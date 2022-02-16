@@ -95,6 +95,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("bar-chart");
     fn_map.compound_sp_fn.emplace(idx, &op_bar_chart);
 
+    idx = ket_map.get_idx("raw-bar-chart");
+    fn_map.sp_fn.emplace(idx, &op_raw_bar_chart);
+
     idx = ket_map.get_idx("print");
     fn_map.ket_fn.emplace(idx, &print_ket);
 

@@ -253,7 +253,7 @@ Superposition seq2sp(const Sequence& seq) {
 Ket bar_chart(const Superposition& sp, const unsigned int width) {
     if (sp.size() == 0 || width <= 0) { return Ket(); }
 
-    ulong max_len = 0;
+    ulong max_len = 0;  // Change max_len to size_t??
     for (const auto k : sp) {
         // max_len = std::max(k.label().size(), max_len);  // Is there a smarter way to do this?
         max_len = std::max((ulong)(k.label().size()), max_len);
@@ -280,6 +280,22 @@ Ket op_bar_chart(const Superposition& sp, const std::vector<std::shared_ptr<Comp
     return bar_chart(sp, width);
 }
 
+Ket op_raw_bar_chart(const Superposition& sp)
+{
+    if (sp.is_empty_ket()) { return Ket(); }
+    size_t max_len = 0;
+    for (const auto k : sp)
+    {
+        max_len = std::max(k.label().size(), max_len);
+    }
+    std::cout << "----------" << std::endl;
+    for (const auto k : sp) {
+        std::cout << std::left << std::setfill(' ') << std::setw(max_len) << k.label() << " : ";
+        std::cout << std::setfill('|') << std::setw((ulong)k.value()) << "|" << std::endl;
+    }
+    std::cout << "----------" << std::endl;
+    return Ket("raw bar chart");
+}
 
 Ket print_ket(const Ket k) {
     // std::cout << k.label() << std::endl;

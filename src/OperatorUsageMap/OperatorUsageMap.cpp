@@ -4200,7 +4200,34 @@ OperatorUsageMap::OperatorUsageMap() {
         "            x: 14 : |\n"
         "            ----------\n\n"
         "    see also:\n"
-        "        Gaussian\n";
+        "        raw-bar-chart, Gaussian\n";
+
+    operator_usage_map.map["raw-bar-chart"] =
+        "\nraw-bar-chart:\n"
+        "    description:\n"
+        "        raw-bar-chart sp\n"
+        "        draw a basic bar-chart of the coefficients in the input superposition.\n"
+        "        a nice quick visualization of ket coefficients\n"
+        "        often combined with a sort operator of some sort\n"
+        "        unlike bar-chart[] this operator does not drop empty kets, or rescale the width\n\n"
+        "    examples:\n"
+        "        -- simplest example is a bar-chart of a Gaussian:\n"
+        "        raw-bar-chart Gaussian[0.7] 50 |x: 10>\n"
+        "            ----------\n"
+        "            x : 6  : |\n"
+        "            x : 7  : ||\n"
+        "            x : 8  : ||||||\n"
+        "            x : 9  : ||||||||||||||||||\n"
+        "            x : 10 : ||||||||||||||||||||||||||||||||||||||||||||||||||\n"
+        "            x : 11 : ||||||||||||||||||\n"
+        "            x : 12 : ||||||\n"
+        "            x : 13 : ||\n"
+        "            x : 14 : |\n"
+        "            ----------\n"
+        "            |raw bar chart>\n\n"
+        "    see also:\n"
+        "        bar-chart, Gaussian\n";
+
 
     operator_usage_map.map["pick-elt"] =
         "\npick-elt:\n"
