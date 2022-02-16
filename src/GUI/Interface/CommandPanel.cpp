@@ -266,11 +266,15 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         {
             if (m_command_text->GetCurrentPos() > 0)
             {
-                char local_char = m_command_text->GetCharAt(m_command_text->GetCurrentPos() - 1);
-                // wxMessageBox("local char: " + wxString(local_char));
-                if (local_char == '|')
+                char local_char1 = m_command_text->GetCharAt(m_command_text->GetCurrentPos() - 1);
+                char local_char2 = m_command_text->GetCharAt(m_command_text->GetCurrentPos());
+                if (m_inside_ket && local_char1 == '|' && local_char2 == '>')
                 {
-                    m_command_text->DeleteRange(m_command_text->GetCurrentPos(), 2);
+                    m_command_text->DeleteRange(m_command_text->GetCurrentPos(), 1);
+                    m_command_text->WriteText("| ");
+                }
+                else if (local_char1 == '|')
+                {
                     m_command_text->WriteText("| ");
                 }
                 else
