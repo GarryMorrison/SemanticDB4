@@ -260,6 +260,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("natural-similar-input");
     fn_map.compound_context_seq_fn.emplace(idx, &op_natural_similar_input);
 
+    idx = ket_map.get_idx("unscaled-similar-input");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_unscaled_similar_input);
+
     idx = ket_map.get_idx("equal-input");
     fn_map.compound_context_seq_fn.emplace(idx, &op_equal_input);
 
