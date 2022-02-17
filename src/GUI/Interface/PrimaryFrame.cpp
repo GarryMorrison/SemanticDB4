@@ -495,12 +495,12 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
         {
             return;
         }
-        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH);
         m_frame_edit_panel->ModifyPage(textCtrlLocal, file_name, true);
     }
     else
     {
-        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH);
         m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
         m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?
     }
