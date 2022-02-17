@@ -224,6 +224,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("natural-simm");
     fn_map.whitelist_2.emplace(idx, &op_natural_simm2);
 
+    idx = ket_map.get_idx("unscaled-simm");
+    fn_map.whitelist_2.emplace(idx, &op_unscaled_simm2);
+
     idx = ket_map.get_idx("grid-simm");
     fn_map.context_whitelist_2.emplace(idx, &op_grid_simm2);
 
