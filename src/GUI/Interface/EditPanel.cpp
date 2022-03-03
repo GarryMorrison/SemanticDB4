@@ -365,7 +365,7 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 					file_content.Append(text.ReadLine());
 					file_content.Append("\n");  // There must be a better way to keep newlines in the text!
 				}
-				wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH);
+				wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2);
 				AddPage(textCtrlLocal, tail, false);
 				m_aui_notebook->SetSelection(current_page_idx);
 			}
@@ -393,7 +393,7 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 						wxStringOutputStream html_stream(&htmldata);
 						in->Read(html_stream);
 						// wxLogMessage(htmldata);
-						wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, htmldata, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH);
+						wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, htmldata, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2);
 						std::string star_cleaned_filename = '*' + cleaned_filename;
 						if (tab_already_exists)
 						{
@@ -474,7 +474,7 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 				context.print_universe(true, buffer);
 				std::string current_text = buffer.str();
 				text.WriteString(current_text);
-				wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, current_text, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH);
+				wxTextCtrl* textCtrlLocal = new wxTextCtrl(this, wxID_ANY, current_text, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2);
 				AddPage(textCtrlLocal, tail, false);
 			}
 			else if (head == "save-as-dot")  // Save current context as a dot file for use with graphviz.
