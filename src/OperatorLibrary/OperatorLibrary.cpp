@@ -2767,3 +2767,86 @@ Ket op_patch_map(const Sequence& input_seq, ContextList& context, const std::vec
     }
     return Ket("patches", patch_count);
 }
+
+Sequence op_sequence_arc_encoder(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (input_seq.size() != 4 || parameters.size() != 5) { return input_seq; }
+    if (parameters[0]->type() != CFLOAT || parameters[1]->type() != CFLOAT || parameters[2]->type() != CFLOAT || parameters[3]->type() != CFLOAT || parameters[4]->type() != CINT )
+    {
+        return Ket();
+    }
+    double s1 = parameters[0]->get_float();
+    double s2 = parameters[1]->get_float();
+    double s3 = parameters[2]->get_float();
+    double s4 = parameters[3]->get_float();
+    int width = parameters[4]->get_int();
+    if (s1 < 0 || s2 < 0 || s3 < 0 || s4 < 0 || width <= 0) { return Ket(); }
+    
+    // std::cout << "s1: " << std::to_string(s1) << "\n";
+    // std::cout << "s2: " << std::to_string(s2) << "\n";
+    // std::cout << "s3: " << std::to_string(s3) << "\n";
+    // std::cout << "s4: " << std::to_string(s4) << "\n";
+    // std::cout << "width: " << std::to_string(width) << "\n";
+
+    Sequence result;
+    Superposition tmp;
+    for (const Ket k : input_seq.get(0))
+    {
+        int value = (int)(s1 * std::stod(k.label()));
+        for (int i = value - width; i <= value + width; i++)
+        {
+            tmp.add(std::to_string(i));
+        }
+    }
+    result.append(tmp);
+    tmp.clear();
+
+    for (const Ket k : input_seq.get(1))
+    {
+        int value = (int)(s2 * std::stod(k.label()));
+        for (int i = value - width; i <= value + width; i++)
+        {
+            tmp.add(std::to_string(i));
+        }
+    }
+    result.append(tmp);
+    tmp.clear();
+
+    for (const Ket k : input_seq.get(2))
+    {
+        int value = (int)(s3 * std::stod(k.label()));
+        for (int i = value - width; i <= value + width; i++)
+        {
+            tmp.add(std::to_string(i));
+        }
+    }
+    result.append(tmp);
+    tmp.clear();
+
+    for (const Ket k : input_seq.get(3))
+    {
+        int value = (int)(s4 * std::stod(k.label()));
+        for (int i = value - width; i <= value + width; i++)
+        {
+            tmp.add(std::to_string(i));
+        }
+    }
+    Superposition tmp2;
+    for (const Ket k : tmp)
+    {
+        double value = std::stod(k.label()) / s4;
+        if (value > 180)
+        {
+            value -= 360;
+        }
+        else if (value < -179)
+        {
+            value += 360;
+        }
+        int new_value = (int)(s4 * value);
+        tmp2.add(std::to_string(new_value));
+    }
+    result.append(tmp2);
+
+    return result;
+}

@@ -113,3 +113,4 @@ Ket op_spatch_map(const Sequence& input_seq, ContextList& context, const std::ve
 Ket op_display_patch(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 Ket op_patch_map(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 
+Sequence op_sequence_arc_encoder(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);

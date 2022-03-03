@@ -52,6 +52,12 @@ Superposition::Superposition(Ket k) {
     sort_order.push_back(idx);
 }
 
+void Superposition::clear()
+{
+    sp.clear();
+    sort_order.clear();
+}
+
 /*
 Superposition::Superposition(const Superposition &sp1) {
     for (const auto idx : sp1.sort_order) {

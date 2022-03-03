@@ -522,6 +522,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("patch-map");
     fn_map.compound_context_seq_fn.emplace(idx, &op_patch_map);
+
+    idx = ket_map.get_idx("seq-arc-encoder");
+    fn_map.compound_seq_fn.emplace(idx, &op_sequence_arc_encoder);
+
 }
 
 
