@@ -2828,25 +2828,20 @@ Sequence op_sequence_arc_encoder(const Sequence& input_seq, const std::vector<st
         int value = (int)(s4 * std::stod(k.label()));
         for (int i = value - width; i <= value + width; i++)
         {
-            tmp.add(std::to_string(i));
+            double new_value = (float)(i) / s4;
+            if (new_value > 180)
+            {
+                new_value -= 360;
+            }
+            else if (new_value < -179)
+            {
+                new_value += 360;
+            }
+            int int_new_value = (int)(s4 * new_value);
+            tmp.add(std::to_string(int_new_value));
         }
     }
-    Superposition tmp2;
-    for (const Ket k : tmp)
-    {
-        double value = std::stod(k.label()) / s4;
-        if (value > 180)
-        {
-            value -= 360;
-        }
-        else if (value < -179)
-        {
-            value += 360;
-        }
-        int new_value = (int)(s4 * value);
-        tmp2.add(std::to_string(new_value));
-    }
-    result.append(tmp2);
+    result.append(tmp);
 
     return result;
 }
