@@ -2845,3 +2845,31 @@ Sequence op_sequence_arc_encoder(const Sequence& input_seq, const std::vector<st
 
     return result;
 }
+
+Ket op_copy(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 2) { return Ket(); }
+    if (parameters[0]->type() != COPERATOR || parameters[1]->type() != COPERATOR) { return Ket(); }
+    ulong op1_idx = parameters[0]->get_operator().get_head_op_idx();
+    ulong op2_idx = parameters[1]->get_operator().get_head_op_idx();
+    for (const Ket k : input_seq.to_sp())
+    {
+        ulong ket_idx = k.label_idx();
+        unsigned int rule_type = context.recall_type(op1_idx, ket_idx);
+        std::shared_ptr<BaseSequence> bSeq = context.recall(op1_idx, ket_idx);
+        if (rule_type == RULENORMAL)
+        {
+            context.learn(op2_idx, ket_idx, bSeq);
+        }
+        else if (rule_type == RULESTORED)
+        {
+            context.stored_learn(op2_idx, ket_idx, bSeq);
+        }
+        else if (rule_type == RULEMEMOIZE)
+        {
+            context.memoize_learn(op2_idx, ket_idx, bSeq);
+        }
+    }
+    size_t rule_count = input_seq.to_sp().size();
+    return Ket("Copied " + std::to_string(rule_count) + " rules.");
+}

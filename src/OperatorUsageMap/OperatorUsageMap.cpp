@@ -4642,6 +4642,31 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        display-patch, sdisplay-patch, spatch-map, rank, sprint\n";
 
+    operator_usage_map.map["copy"] =
+        "\ncopy:\n"
+        "    description:\n"
+        "        copy[op1, op2] input-seq\n"
+        "        for each ket in the input-sequence, copy op1 ket to op2 ket\n\n"
+        "    examples:\n"
+        "        -- an abstract example:\n"
+        "        -- define a normal, stored and memoized rule:\n"
+        "        op1 |a> => |x>\n"
+        "        op1 |b> #=> |y>\n"
+        "        op1 |c> !=> |z>\n\n"
+        "        -- then copy them:\n"
+        "        copy[op1, op2] rel-kets[op1]\n\n"
+        "        -- now see what we have, using dump:\n"
+        "        dump\n\n"
+        "            op1 |a> => |x>\n"
+        "            op2 |a> => |x>\n\n"
+        "            op1 |b> #=> |y>\n"
+        "            op2 |b> #=> |y>\n\n"
+        "            op1 |c> !=> |z>\n"
+        "            op2 |c> !=> |z>\n\n"
+        "    see also:\n"
+        "         rel-kets\n";
+
+
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =
