@@ -393,6 +393,16 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
             m_command_text->WriteText(";");
         }
     }
+    case '/': {
+        if (event.ShiftDown())
+        {
+            m_command_text->WriteText("?");
+        }
+        else
+        {
+            m_command_text->WriteText("/");
+        }
+    }
     case 306: {  // Ignore shift key press.
         break;
     }
