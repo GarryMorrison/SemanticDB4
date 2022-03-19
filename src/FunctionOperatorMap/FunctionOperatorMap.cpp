@@ -529,6 +529,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("copy");
     fn_map.compound_context_seq_fn.emplace(idx, &op_copy);
 
+    idx = ket_map.get_idx("random-int");
+    fn_map.compound_ket_fn.emplace(idx, &op_random_integer);
 }
 
 

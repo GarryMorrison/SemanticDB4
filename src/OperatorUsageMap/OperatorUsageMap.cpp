@@ -4666,6 +4666,19 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "         rel-kets\n";
 
+    operator_usage_map.map["random-int"] =
+        "\nrandom-int:\n"
+        "    description:\n"
+        "        random-int[max-digits]\n"
+        "        generates a random number between 1 and 10^max-digits\n"
+        "        if given more than 1 parameter, or max-digits is not an integer, return the empty ket\n\n"
+        "    examples:\n"
+        "        random-int[6]\n"
+        "            |62882>\n\n"
+        "        random-int[6]\n"
+        "            |540549>\n\n"
+        "    see also:\n";
+
 
 
     // fill out statement_prototypes map:

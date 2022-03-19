@@ -116,3 +116,5 @@ Ket op_patch_map(const Sequence& input_seq, ContextList& context, const std::vec
 Sequence op_sequence_arc_encoder(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 
 Ket op_copy(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+
+Ket op_random_integer(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);

@@ -2873,3 +2873,18 @@ Ket op_copy(const Sequence& input_seq, ContextList& context, const std::vector<s
     size_t rule_count = input_seq.to_sp().size();
     return Ket("Copied " + std::to_string(rule_count) + " rules.");
 }
+
+Ket op_random_integer(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 1) { return Ket(); }
+    if (parameters[0]->type() != CINT) { return Ket(); }
+    int digits = parameters[0]->get_int();
+    int max_int = ipower(10, digits);
+
+    std::random_device rd;     // only used once to initialise (seed) engine
+    std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+    std::uniform_int_distribution<int> uni(1, max_int); // guaranteed unbiased
+
+    int random_integer = uni(rng);
+    return Ket(std::to_string(random_integer));
+}
