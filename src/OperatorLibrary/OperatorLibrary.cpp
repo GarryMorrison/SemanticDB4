@@ -432,6 +432,46 @@ Superposition op_equal_input(const Sequence& seq, ContextList& context, const st
     return result;
 }
 
+Superposition op_star_equal_input(const Sequence& seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters) {
+    if (parameters.empty()) { return Superposition(); }  // Alternatively, return seq.
+    ulong op_idx = parameters[0]->get_operator().get_idx();
+    std::vector<ulong> ket_vec = context.relevant_kets(op_idx);
+    ulong star_idx = ket_map.get_idx("*");
+    Superposition result;
+    for (const ulong label_idx : ket_vec) {
+        Sequence pattern = context.recall(op_idx, label_idx)->to_seq();  // active recall? Would that stomp on memoize rules too?
+        if (seq == pattern) {
+            result.add(label_idx);
+        }
+        else if (seq.size() != pattern.size())
+        {
+            continue;
+        }
+        else
+        {
+            bool match = true;
+            for (size_t i = 0; i < seq.size(); i++)
+            {
+                if (seq.get(i).to_ket().label_idx() == star_idx)
+                {
+                    continue;
+                }
+                if (!(seq.get(i) == pattern.get(i)))
+                {
+                    match = false;
+                    break;
+                }
+            }
+            if (match)
+            {
+                result.add(label_idx);
+            }
+        }
+    }
+    return result;
+}
+
+
 // Wow! A lot of work just to subtract a number!!
 Ket op_minus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >& parameters) {
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.

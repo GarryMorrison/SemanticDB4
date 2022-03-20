@@ -266,6 +266,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("equal-input");
     fn_map.compound_context_seq_fn.emplace(idx, &op_equal_input);
 
+    idx = ket_map.get_idx("star-equal-input");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_star_equal_input);
+
     idx = ket_map.get_idx("minus");
     fn_map.compound_ket_fn.emplace(idx, &op_minus);
 
