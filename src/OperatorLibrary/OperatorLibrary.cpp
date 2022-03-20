@@ -452,7 +452,7 @@ Superposition op_star_equal_input(const Sequence& seq, ContextList& context, con
             bool match = true;
             for (size_t i = 0; i < seq.size(); i++)
             {
-                if (seq.get(i).to_ket().label_idx() == star_idx)
+                if (pattern.get(i).to_ket().label_idx() == star_idx)
                 {
                     continue;
                 }
