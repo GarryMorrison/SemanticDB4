@@ -537,7 +537,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("random-int");
     fn_map.compound_ket_fn.emplace(idx, &op_random_integer);
 
-
+    idx = ket_map.get_idx("dump");
+    fn_map.context_whitelist_1.emplace(idx, &op_dump_fn1);
 }
 
 
