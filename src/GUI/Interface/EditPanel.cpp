@@ -18,12 +18,16 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	wxButton* run_button = new wxButton(this, ID_Edit_Run, "Run");
 	wxButton* dump_button = new wxButton(this, ID_Edit_Dump, "Dump");
 	wxButton* reset_button = new wxButton(this, ID_Edit_Reset, "Reset");
+	wxCheckBox* m_auto_save = new wxCheckBox(this, wxID_ANY, "Auto Save");
+	m_auto_save->SetValue(m_use_auto_save);
 	hbox->AddSpacer(10);
 	hbox->Add(run_button);
 	hbox->AddSpacer(10);
 	hbox->Add(dump_button);
 	hbox->AddSpacer(10);
 	hbox->Add(reset_button);
+	hbox->AddSpacer(10);
+	hbox->Add(m_auto_save);
 
 	vbox->AddSpacer(5);
 	// vbox->Add(run_button, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
@@ -46,6 +50,10 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	run_button->Bind(wxEVT_BUTTON, &EditPanel::OnRunButtonDown, this);
 	dump_button->Bind(wxEVT_BUTTON, &EditPanel::OnDumpButtonDown, this);
 	reset_button->Bind(wxEVT_BUTTON, &EditPanel::OnResetButtonDown, this);
+	// m_auto_save->Bind(wxEVT_CHECKBOX, &EditPanel::OnAutoSaveCheck, this);
+	m_auto_save->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
+		m_use_auto_save = m_auto_save->GetValue();
+		});
 	m_aui_notebook->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &EditPanel::OnPageChange, this);
 	// m_text_ctrl->Bind(wxEVT_TEXT, &EditPanel::OnPageEdit, this); // Seems slow!
 	m_text_ctrl->Bind(wxEVT_TEXT_ENTER, &EditPanel::OnPageEdit, this);  // Hopefully faster.
@@ -103,6 +111,7 @@ void EditPanel::OnResetButtonDown(wxCommandEvent& event)
 	}
 }
 
+
 void EditPanel::OnPageChange(wxCommandEvent& event)
 {
 	m_text_ctrl = (wxTextCtrl*)(m_aui_notebook->GetCurrentPage());
@@ -116,6 +125,26 @@ void EditPanel::OnPageChange(wxCommandEvent& event)
 
 void EditPanel::OnPageEdit(wxCommandEvent& event)
 {
+	if (m_use_auto_save)
+	{
+		if (m_tab_filename_map.find(m_current_tab) != m_tab_filename_map.end())
+		{
+			wxString file_path = m_tab_filename_map[m_current_tab];  // Auto save file with known name
+			SaveFile(file_path);
+		}
+		else
+		{
+			m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());  // Auto save file with unknown name
+			wxFileDialog saveFileDialog(this, "Save sw file", "", m_current_tab, "sw file (*.sw;*.swc;*.sw3;*.sw4;*.swe)|*.sw;*.swc;*.sw3;*.sw4;*.swe|Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+			if (saveFileDialog.ShowModal() == wxID_CANCEL)
+			{
+				return;  // Maybe we want it to keep the tab open in this branch??
+			}
+			SaveFile(saveFileDialog.GetPath());
+		}
+		event.Skip();
+		return;
+	}
 	if (m_unsaved_tabs.find(m_current_tab) != m_unsaved_tabs.end())
 	{
 		if (m_unsaved_tabs[m_current_tab])
@@ -206,6 +235,10 @@ bool EditPanel::TabLabelExists(const wxString& tab_label)
 void EditPanel::SaveFile(const wxString& filename)
 {
 	// wxMessageBox("Edit panel SaveFile: " + filename);
+	wxFileName fname(filename);
+	wxString just_file_name = fname.GetFullName();
+	// wxMessageBox("Edit panel file name: " + just_file_name);
+	// return;
 	wxWindow* current_page = m_aui_notebook->GetCurrentPage();
 	wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
 	wxString current_text = current_text_ctrl->GetValue();
@@ -217,6 +250,13 @@ void EditPanel::SaveFile(const wxString& filename)
 	}
 	wxTextOutputStream text(output_stream);
 	text.WriteString(current_text);
+
+	m_current_tab = just_file_name;
+	m_aui_notebook->SetPageText(m_aui_notebook->GetSelection(), m_current_tab);
+	m_unsaved_tabs[m_current_tab] = false;
+	m_tab_filename_map[m_current_tab] = filename;
+
+	/*
 	m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
 	if (m_current_tab.StartsWith("*"))
 	{
@@ -227,6 +267,9 @@ void EditPanel::SaveFile(const wxString& filename)
 			m_unsaved_tabs[m_current_tab] = false;
 		}
 	}
+	// Store tab-filename map:
+	m_tab_filename_map[GetTabLabel()] = filename;
+	*/
 }
 
 void EditPanel::DeleteAllPages()

@@ -49,4 +49,7 @@ private:
 	wxTextCtrl* m_text_ctrl;
 	wxString m_current_tab;
 	std::map<wxString, bool> m_unsaved_tabs;
+	bool m_use_auto_save = false;
+	wxCheckBox* m_auto_save;
+	std::map<wxString, wxString> m_tab_filename_map;
 };
