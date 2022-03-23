@@ -392,6 +392,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         {
             m_command_text->WriteText(";");
         }
+        break;
     }
     case '/': {
         if (event.ShiftDown())
@@ -402,6 +403,7 @@ void CommandPanel::OnKeyDown(wxKeyEvent& event)
         {
             m_command_text->WriteText("/");
         }
+        break;
     }
     case 306: {  // Ignore shift key press.
         break;
