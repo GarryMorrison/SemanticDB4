@@ -234,11 +234,9 @@ bool EditPanel::TabLabelExists(const wxString& tab_label)
 
 void EditPanel::SaveFile(const wxString& filename)
 {
-	// wxMessageBox("Edit panel SaveFile: " + filename);
 	wxFileName fname(filename);
 	wxString just_file_name = fname.GetFullName();
-	// wxMessageBox("Edit panel file name: " + just_file_name);
-	// return;
+
 	wxWindow* current_page = m_aui_notebook->GetCurrentPage();
 	wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
 	wxString current_text = current_text_ctrl->GetValue();
@@ -255,21 +253,6 @@ void EditPanel::SaveFile(const wxString& filename)
 	m_aui_notebook->SetPageText(m_aui_notebook->GetSelection(), m_current_tab);
 	m_unsaved_tabs[m_current_tab] = false;
 	m_tab_filename_map[m_current_tab] = filename;
-
-	/*
-	m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
-	if (m_current_tab.StartsWith("*"))
-	{
-		m_current_tab = m_current_tab.AfterFirst('*');
-		if (m_unsaved_tabs.find(m_current_tab) != m_unsaved_tabs.end())
-		{
-			m_aui_notebook->SetPageText(m_aui_notebook->GetSelection(), m_current_tab);
-			m_unsaved_tabs[m_current_tab] = false;
-		}
-	}
-	// Store tab-filename map:
-	m_tab_filename_map[GetTabLabel()] = filename;
-	*/
 }
 
 void EditPanel::DeleteAllPages()
