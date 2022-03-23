@@ -1761,6 +1761,24 @@ Ket op_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence&
                     break;
                 }
             }
+            if (op_vec[0] == ket_ops_idx)
+            {
+                std::vector<SimpleOperator> operators;
+                auto string_ops = split(ket_map.get_str(op_vec[1]), " ");
+                for (const auto& s : string_ops) {
+                    SimpleOperator op(s);
+                    operators.push_back(op);
+                }
+                Sequence seq = object.to_seq();
+                for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                    seq = (*it).Compile(context, seq);
+                }
+                if (!seq.is_empty_ket())
+                {
+                    std::cout << ket_map.get_str(op_vec[1]) << object.to_string() << " => " << seq.to_string() << "\n";
+                    found_rule = true;
+                }
+            }
         }
         if (found_rule)
         {

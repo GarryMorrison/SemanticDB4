@@ -3465,8 +3465,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        dump, apply\n";
 
-    operator_usage_map.map["dump"] =
-        "\ndump:\n"
+    operator_usage_map.map["shell-dump"] =
+        "\nshell-dump:\n"
         "    description:\n"
         "        dump\n"
         "        dump multi\n"
@@ -4683,6 +4683,49 @@ OperatorUsageMap::OperatorUsageMap() {
         "            |540549>\n\n"
         "    see also:\n";
 
+    operator_usage_map.map["dump"] =
+        "\ndump:\n"
+        "    description:\n"
+        "        dump(|*>) input-sp\n"
+        "        dump(|op: op1> + |op: op2> + ... + |op: opn>) input-sp\n"
+        "        dump(|ops: op3 op2 op1>) input-sp\n"
+        "        when given the |*> ket, dump prints out the knowledge for all supported operators for the given kets\n"
+        "        when given kets with prefix \"op: \" then only print out knowledge for those operators for the given kets\n"
+        "        when given kets with prefix \"ops: \" then print out the knowledge for the operator sequence applied to the given kets\n"
+        "        NB: empty rules are ignored and not printed out\n"
+        "        NB: simple operators are supported in the operator sequence case\n\n"
+        "    examples:\n"
+        "        -- first learn some toy knowledge:\n"
+        "        age |Fred> => |37>\n"
+        "        friends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\n"
+        "        age |Sam> => |41>\n"
+        "        friends |Sam> => |Fred> + |Liz> + |Emma>\n\n"
+        "        -- now see all known knowledge:\n"
+        "        dump(|*>) rel-kets[*]\n"
+        "            age|Fred> => |37>\n"
+        "            friends|Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\n"
+        "            age|Sam> => |41>\n"
+        "            friends|Sam> => |Fred> + |Liz> + |Emma>\n\n"
+        "        -- now see just the ages:\n"
+        "        dump(|op: age>) rel-kets[*]\n"
+        "            age|Fred> => |37>\n\n"
+        "            age|Sam> => |41>\n\n"
+        "        -- now see ages of friends using an operator sequence:\n"
+        "        dump(|ops: age friends>) rel-kets[*]\n"
+        "            age friends|Fred> => |41>\n\n"
+        "            age friends|Sam> => |37>\n\n"
+        "        -- now see friends of friends using an operator sequence:\n"
+        "        dump(|ops: friends friends>) rel-kets[*]\n"
+        "            friends friends|Fred> => |Fred> + |Liz> + |Emma>\n\n"
+        "            friends friends|Sam> => |Rob> + |Mary> + |Matt> + |Sam>\n\n"
+        "        -- simple operators are also supported:\n"
+        "        -- eg, how many friends:\n"
+        "        dump(|ops: how-many friends>) rel-kets[*]\n"
+        "            how-many friends|Fred> => |number: 4>\n\n"
+        "            how-many friends|Sam> => |number: 3>\n\n"
+        "            how-many friends|*> => |number: 0>\n\n"
+        "    see also:\n"
+        "        shell-dump, filter";
 
 
     // fill out statement_prototypes map:
