@@ -68,3 +68,5 @@ Sequence op_grid_simm2(ContextList& context, const Sequence& input_seq, const Se
 Superposition op_similar_grid(ContextList& context, const Sequence& input_seq, const Sequence& one);
 Superposition op_transform(const Sequence& input_seq, const Sequence& one, const Sequence& two);
 Sequence op_parallel_sum(const Sequence& input_seq, const Sequence& one);
+Sequence op_sprint_fn1(const Sequence& input_seq, const Sequence& one);
+Sequence op_sprint_fn2(const Sequence& input_seq, const Sequence& one, const Sequence& two);

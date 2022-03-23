@@ -464,6 +464,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("sprint");
     fn_map.seq_fn.emplace(idx, &op_sprint);
     fn_map.compound_seq_fn.emplace(idx, &op_sprint1);
+    fn_map.whitelist_1.emplace(idx, &op_sprint_fn1);
+    fn_map.whitelist_2.emplace(idx, &op_sprint_fn2);
 
     idx = ket_map.get_idx("ket-length");
     fn_map.ket_fn.emplace(idx, &ket_length);
@@ -534,6 +536,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("random-int");
     fn_map.compound_ket_fn.emplace(idx, &op_random_integer);
+
+
 }
 
 

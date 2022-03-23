@@ -1673,3 +1673,17 @@ Sequence op_parallel_sum(const Sequence& input_seq, const Sequence& one)
     return seq;
 }
 
+Sequence op_sprint_fn1(const Sequence& input_seq, const Sequence& one)
+{
+    std::string pre = one.to_ket().label();
+    std::cout << pre << input_seq.to_string() << "\n";
+    return input_seq;
+}
+
+Sequence op_sprint_fn2(const Sequence& input_seq, const Sequence& one, const Sequence& two)
+{
+    std::string pre = one.to_ket().label();
+    std::string post = two.to_ket().label();
+    std::cout << pre << input_seq.to_string() << post << "\n";
+    return input_seq;
+}
