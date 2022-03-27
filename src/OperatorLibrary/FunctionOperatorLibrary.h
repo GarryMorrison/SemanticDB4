@@ -71,3 +71,4 @@ Sequence op_parallel_sum(const Sequence& input_seq, const Sequence& one);
 Sequence op_sprint_fn1(const Sequence& input_seq, const Sequence& one);
 Sequence op_sprint_fn2(const Sequence& input_seq, const Sequence& one, const Sequence& two);
 Ket op_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);
+Ket op_recursive_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);

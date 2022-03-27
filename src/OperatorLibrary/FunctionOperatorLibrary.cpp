@@ -1788,3 +1788,53 @@ Ket op_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence&
     }
     return Ket("dump");
 }
+
+Ket op_recursive_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one)
+{
+    Superposition input_sp = input_seq.to_sp();
+    Superposition operators_sp = one.to_sp();
+    ulong ket_op_idx = ket_map.get_idx("op");
+    for (const Ket object : input_sp)
+    {
+        ulong object_idx = object.label_idx();
+        for (const Ket op : operators_sp)
+        {
+            std::vector<ulong> op_vec = op.label_split_idx();
+            if (op_vec.size() != 2)
+            {
+                continue;
+            }
+            if (op_vec[0] != ket_op_idx)
+            {
+                continue;
+            }
+            int rule_type = context.recall_type(op_vec[1], object_idx);
+            if (rule_type == RULENORMAL)
+            {
+                Sequence rule_value = context.recall(op_vec[1], object_idx)->to_seq();
+                std::cout << ket_map.get_str(op_vec[1]) << object.to_string() << " => " << rule_value.to_string() << "\n";
+
+                Superposition rule_objects;
+                rule_objects.add(object);
+                rule_objects.add(rule_value.to_sp());
+                for (const Ket rule_object : rule_objects)
+                {
+                    ulong rule_object_idx = rule_object.label_idx();
+                    std::vector<ulong> operators = context.supported_ops(rule_object_idx);
+                    for (ulong op_idx : operators)
+                    {
+                        if (object_idx == rule_object_idx && op_idx == op_vec[1])
+                        {
+                            continue;
+                        }
+                        Sequence rule_value = context.recall(op_idx, rule_object_idx)->to_seq();
+                        std::cout << "    " << ket_map.get_str(op_idx) << rule_object.to_string() << " => " << rule_value.to_string() << "\n";
+                    }
+
+                }
+                std::cout << " \n";
+            }
+        }
+    }
+    return Ket("recursive dump");
+}

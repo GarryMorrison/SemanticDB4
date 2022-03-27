@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/2/3
+// Updated 2022/3/27
 // Author Garry Morrison
 // License GPL v3
 //
@@ -4725,7 +4725,30 @@ OperatorUsageMap::OperatorUsageMap() {
         "            how-many friends|Sam> => |number: 3>\n\n"
         "            how-many friends|*> => |number: 0>\n\n"
         "    see also:\n"
-        "        shell-dump, filter";
+        "        recursive-dump, shell-dump, filter";
+
+    operator_usage_map.map["recursive-dump"] =
+        "\nrecursive-dump:\n"
+        "    description:\n"
+        "        recursive-dump(|op: op1> + |op: op2> ... + |op: opn>) input-sp\n"
+        "        print out the given operators applied to the kets in the input superposition\n"
+        "        and then print out known knowledge for all the \"daughter\" kets\n"
+        "        for now, we only do one layer of recursion, we may change this in the future\n\n"
+        "    examples:\n"
+        "        -- load some sample knowledge:\n"
+        "        age |Fred> => |37>\n"
+        "        friends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\n"
+        "        age |Sam> => |41>\n"
+        "        friends |Sam> => |Fred> + |Liz> + |Emma>\n\n"
+        "        -- now recursive-dump the friends of Fred:\n"
+        "        recursive-dump(|op: friends>) |Fred>\n"
+        "            friends|Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n"
+        "                age|Fred> => |37>\n"
+        "                age|Sam> => |41>\n"
+        "                friends|Sam> => |Fred> + |Liz> + |Emma>\n\n"
+        "    see also:\n"
+        "        dump\n";
+
 
 
     // fill out statement_prototypes map:
