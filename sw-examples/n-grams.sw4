@@ -1,0 +1,198 @@
+-- in this code we implement n-gram, skip-gram and related operators
+--
+-- Author: Garry Morrison
+-- Created: 2023-3-13
+-- Updated: 2023-3-14
+
+
+|context> => |n-grams>
+
+-- example sequence, but the code should work with any sequence:
+-- the |seq> => ssplit[" "] |A B C D E>
+the |seq> => ssplit[" "] |A B C D E F G H>
+
+sprint["The sequence: "] the |seq>
+sprint["The length: "] extract-value show-many the |seq>
+print | >
+
+
+-- extract n grams from the given sequence:
+extract-n-grams {our|seq>, our|n>} #=>
+    our |len> => extract-value show-many our |seq> -- minus[1] our |n>
+    start |idx> => |1>
+    end |idx> => our|n>
+    unlearn[our] |result>
+    while( our|len> > |0> ):
+        our |range> => sp2seq (start |idx> .. end |idx>)
+        our |result> +=> smerge[" . "] sread(our |range>) our |seq>
+        start |idx> => plus[1] start |idx>
+        end |idx> => plus[1] end |idx>
+        our |len> => minus[1] our |len>
+    end:
+    our |result>
+
+-- testing them:
+sprint["2 grams: "] extract-n-grams(the |seq>, |2>)
+sprint["3 grams: "] extract-n-grams(the |seq>, |3>)
+sprint["4 grams: "] extract-n-grams(the |seq>, |4>)
+sprint["5 grams: "] extract-n-grams(the |seq>, |5>)
+print | >
+
+
+-- extract skip grams from the given sequence:
+extract-skip-n {our|seq>, our|n>} #=>
+    our |len> => extract-value show-many our |seq> -- plus[1] our |n>
+    start |idx> => |1>
+    end |idx> => plus[2] our|n>
+    unlearn[our] |spacer>
+    for( our|idx> in |1> .. our |n>):
+        our |spacer> .=> |?>
+    end:
+    unlearn[our] |result>
+    while( our|len> > |0>):
+        start |elt> => sread(start|idx>) our |seq>
+        end |elt> => sread(end|idx>) our |seq>
+        our |result> +=> smerge[" . "] (start |elt> . our |spacer> . end |elt>)
+        start |idx> => plus[1] start |idx>
+        end |idx> => plus[1] end |idx>
+        our |len> => minus[1] our |len>
+    end:
+    our |result>
+
+-- testing them:
+sprint["skip 1: "] extract-skip-n(the |seq>, |1>)
+sprint["skip 2: "] extract-skip-n(the |seq>, |2>)
+sprint["skip 3: "] extract-skip-n(the |seq>, |3>)
+print | >
+
+
+extract-skip-n-m {our|seq>, our|n>, our|m>} #=>
+    our |len> => extract-value show-many our |seq> -- minus[1] times-by[2] our |n> -- our|m>
+    start |idx 1> => |1>
+    end |idx 1> => our|n>
+    spacer |idx> => plus[1] end |idx 1>
+    start |idx 2> => spacer|idx> ++ our|m>
+    end |idx 2> => start |idx 2> ++ minus[1] our|n>
+    unlearn[our] |spacer>
+    for( our|idx> in |1> .. our |m>):
+        our |spacer> .=> |?>
+    end:
+    unlearn[our] |result>
+    while( our|len> > |0>):
+        pre |range> => sp2seq (start |idx 1> .. end |idx 1>)
+        post |range> => sp2seq (start |idx 2> .. end |idx 2>)
+        pre |seq> => sread(pre |range>) our |seq>
+        post |seq> => sread(post|range>) our |seq>
+        our |result> +=> smerge[" . "] (pre |seq> . our |spacer> . post |seq>)
+        start |idx 1> => plus[1] start |idx 1>
+        end |idx 1> => plus[1] end |idx 1>
+        start |idx 2> => plus[1] start |idx 2>
+        end |idx 2> => plus[1] end |idx 2>
+        our |len> => minus[1] our |len>
+    end:
+    our |result>
+
+
+-- testing them:
+sprint["skip 2 1: "] extract-skip-n-m(the |seq>, |2>, |1>)
+sprint["skip 3 1: "] extract-skip-n-m(the |seq>, |3>, |1>)
+sprint["skip 2 2: "] extract-skip-n-m(the |seq>, |2>, |2>)
+sprint["skip 3 2: "] extract-skip-n-m(the |seq>, |3>, |2>)
+print | >
+
+
+
+extract-pre-n {our|seq>, our|n>} #=>
+    our |len> => extract-value show-many our |seq> -- our |n>
+    start |idx> => |1>
+    unlearn[our] |spacer>
+    for( our|idx> in |1> .. our |n>):
+        our |spacer> .=> |?>
+    end:
+    unlearn[our] |result>
+    while( our|len> > |0>):
+        start |elt> => sread(start|idx>) our |seq>
+        our |result> +=> smerge[" . "] (start |elt> . our |spacer>)
+        start |idx> => plus[1] start |idx>
+        our |len> => minus[1] our |len>        
+    end:
+    our |result>
+
+sprint["pre 1: "] extract-pre-n(the|seq>, |1>)
+sprint["pre 2: "] extract-pre-n(the|seq>, |2>)
+sprint["pre 3: "] extract-pre-n(the|seq>, |3>)
+print | >
+
+
+extract-post-n {our|seq>, our|n>} #=>
+    our |len> => extract-value show-many our |seq> -- our |n>
+    end |idx> => plus[1] our|n>
+    unlearn[our] |spacer>
+    for( our|idx> in |1> .. our |n>):
+        our |spacer> .=> |?>
+    end:
+    unlearn[our] |result>
+    while( our|len> > |0>):
+        end |elt> => sread(end|idx>) our |seq>
+        our |result> +=> smerge[" . "] (our |spacer>. end |elt>)
+        end |idx> => plus[1] end |idx>
+        our |len> => minus[1] our |len>        
+    end:
+    our |result>
+
+sprint["post 1: "] extract-post-n(the|seq>, |1>)
+sprint["post 2: "] extract-post-n(the|seq>, |2>)
+sprint["post 3: "] extract-post-n(the|seq>, |3>)
+print | >
+
+
+extract-pre-n-m {our|seq>, our|n>, our|m>} #=>
+    our |len> => extract-value show-many our |seq> -- minus[1] our |n> -- our |m>
+    start |idx> => |1>
+    end |idx> => our |n>
+    unlearn[our] |spacer>
+    for( our|idx> in |1> .. our |m>):
+        our |spacer> .=> |?>
+    end:
+    unlearn[our] |result>
+    while( our |len> > |0>):
+        our |range> => sp2seq (start |idx> .. end |idx>)
+        our |pre> => sread(our |range>) our |seq>
+        our |result> +=> smerge[" . "] (our |pre> . our |spacer>)
+        start |idx> => plus[1] start |idx>
+        end |idx> => plus[1] end |idx>
+        our |len> => minus[1] our |len>
+    end:
+    our |result>
+
+sprint["pre 2 1: "] extract-pre-n-m(the|seq>, |2>, |1>)
+sprint["pre 3 1: "] extract-pre-n-m(the|seq>, |3>, |1>)
+sprint["pre 2 2: "] extract-pre-n-m(the|seq>, |2>, |2>)
+sprint["pre 3 2: "] extract-pre-n-m(the|seq>, |3>, |2>)
+print | >
+
+
+extract-post-n-m {our|seq>, our|n>, our|m>} #=>
+    our |len> => extract-value show-many our |seq> -- minus[1] our |n> -- our |m>
+    start |idx> => |1> ++ our |n>
+    end |idx> => our |m> ++ our|n>
+    unlearn[our] |spacer>
+    for( our|idx> in |1> .. our |n>):
+        our |spacer> .=> |?>
+    end:
+    unlearn[our] |result>
+    while( our |len> > |0>):
+        our |range> => sp2seq (start |idx> .. end |idx>)
+        our |post> => sread(our |range>) our |seq>
+        our |result> +=> smerge[" . "] (our |spacer> . our |post>)
+        start |idx> => plus[1] start |idx>
+        end |idx> => plus[1] end |idx>
+        our |len> => minus[1] our |len>
+    end:
+    our |result>
+
+sprint["post 1 2: "] extract-post-n-m(the|seq>, |1>, |2>)
+sprint["post 1 3: "] extract-post-n-m(the|seq>, |1>, |3>)
+sprint["post 2 2: "] extract-post-n-m(the|seq>, |2>, |2>)
+sprint["post 2 3: "] extract-post-n-m(the|seq>, |2>, |3>)
+print | >
