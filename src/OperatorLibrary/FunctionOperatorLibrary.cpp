@@ -1838,3 +1838,28 @@ Ket op_recursive_dump_fn1(ContextList& context, const Sequence& input_seq, const
     }
     return Ket("recursive dump");
 }
+
+Sequence op_substring_index(const Sequence& input_seq, const Sequence& one)
+{
+    Sequence result_seq;
+    std::string sub_string = one.to_ket().label();
+    for (const Superposition& sp : input_seq)
+    {
+        Superposition loop_sp;
+        for (const Ket& k : sp)
+        {
+            std::string source_string = k.label();
+            std::size_t idx = source_string.find(sub_string);
+            if (idx == std::string::npos)
+            {
+                loop_sp.add("number: -1");
+            }
+            else 
+            {
+                loop_sp.add("number: " + std::to_string(idx));
+            }
+        }
+        result_seq.append(loop_sp);
+    }
+    return result_seq;
+}

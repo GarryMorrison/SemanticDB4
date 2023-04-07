@@ -542,6 +542,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("recursive-dump");
     fn_map.context_whitelist_1.emplace(idx, &op_recursive_dump_fn1);
+
+    idx = ket_map.get_idx("substring-index");
+    fn_map.whitelist_1.emplace(idx, &op_substring_index);
 }
 
 

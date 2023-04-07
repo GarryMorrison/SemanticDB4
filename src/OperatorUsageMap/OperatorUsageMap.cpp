@@ -4749,7 +4749,22 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        dump\n";
 
-
+    operator_usage_map.map["substring-index"] =
+        "\nrecursive-dump:\n"
+        "    description:\n"
+        "        substring-index(|substring>) input-seq\n"
+        "        return the substring index of \"substring\" for all the kets in the input sequence\n"
+        "        if the substring is not in a ket, then we return |number: -1>\n"
+        "        index starts at 0, not 1\n\n"
+        "    examples:\n"
+        "        substring-index(|beta>) |alpha beta gamma>\n"
+        "            |number: 6>\n\n"
+        "        substring-index(|beta>) ssplit[\" \"] |alpha beta gamma>\n"
+        "            |number: -1> . |number: 0> . |number: -1>\n\n"
+        "        substring-index(|a>) ssplit[\" \"] |alpha beta gamma>\n"
+        "            |number: 0> . |number: 3> . |number: 1>\n\n"
+        "    see also:\n"
+        "        \n";
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =
