@@ -29,6 +29,9 @@ public:
 	void SaveFile(const wxString& filename);
 	void DeleteAllPages();
 
+	void OnContextSelect(wxCommandEvent& event);
+	void UpdateContextSelector();
+
 	void WriteText(const wxString& text);
 
 	void InsertText(const wxString& wxs);
@@ -51,5 +54,6 @@ private:
 	std::map<wxString, bool> m_unsaved_tabs;
 	bool m_use_auto_save = false;
 	wxCheckBox* m_auto_save;
+	wxChoice* m_context_selector;
 	std::map<wxString, wxString> m_tab_filename_map;
 };
