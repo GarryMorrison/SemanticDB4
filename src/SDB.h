@@ -105,6 +105,7 @@
 #include "GUI/OperatorLibrary/IfThenMachineDialog.h"
 #include "GUI/OperatorLibrary/IfThenOperatorDialog.h"
 #include "GUI/OperatorLibrary/SearchForOperatorDialog.h"
+#include "GUI/OperatorLibrary/SearchResultsDialog.h"
 
 
 // Back end includes:
@@ -275,6 +276,7 @@ enum
 
     ID_Usage_Search_Operator,
     ID_Search_Operators_Button,
+    ID_Launch_Usage_Button,
 
     ID_Help_Ket_Map,
     ID_Help_Usage,

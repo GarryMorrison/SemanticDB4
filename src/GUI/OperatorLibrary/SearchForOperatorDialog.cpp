@@ -80,34 +80,14 @@ SearchForOperatorDialog::SearchForOperatorDialog(wxWindow* parent, long style)
 
 void SearchForOperatorDialog::OnSearchButton(wxCommandEvent& event)
 {
-	wxString operator_types;
-	if (m_simple_operator_checkbox->GetValue())
-	{
-		operator_types += "simple ";
-	}
-	if (m_compound_operator_checkbox->GetValue())
-	{
-		operator_types += "compound ";
-	}
-	if (m_function_operator_checkbox->GetValue())
-	{
-		operator_types += "function";
-	}
-	wxString usage_section;
-	if (m_name_checkbox->GetValue())
-	{
-		usage_section += "name ";
-	}
-	if (m_description_checkbox->GetValue())
-	{
-		usage_section += "description ";
-	}
-	if (m_examples_checkbox->GetValue())
-	{
-		usage_section += "examples";
-	}
-	wxString search_term = m_search_term_ctrl->GetValue();
-	wxMessageBox("Search button pressed\noperator types: " + operator_types + "\nusage section: " + usage_section + "\nsearch term: " + search_term);
+	SearchResultsDialog* results_dialog = new SearchResultsDialog(this,
+		m_simple_operator_checkbox->GetValue(),
+		m_compound_operator_checkbox->GetValue(),
+		m_function_operator_checkbox->GetValue(),
+		m_name_checkbox->GetValue(),
+		m_description_checkbox->GetValue(),
+		m_examples_checkbox->GetValue(),
+		m_search_term_ctrl->GetValue());
 }
 
 SearchForOperatorDialog::~SearchForOperatorDialog()
