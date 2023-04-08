@@ -61,6 +61,8 @@ private:
     void InvokeActiveTable(wxCommandEvent& event);
     void OnIfThenInsert(wxCommandEvent& event);
 
+    void SearchForOperator(wxCommandEvent& event);
+
     void OpenExampleWebpage(wxCommandEvent& event);
 
     void OpenWebsite(wxCommandEvent& event);

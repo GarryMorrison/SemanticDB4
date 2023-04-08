@@ -170,6 +170,9 @@ PrimaryFrame::PrimaryFrame()
     m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_compound_operators, m_usage_menu_map, m_usage_label_menu_map, "General operator", "Compound", "Usage for %s operator");
     m_current_highest_usage_menu_id = PopulateSubMenu(menuUsage, m_current_highest_usage_menu_id, fn_map.set_function_operators, m_usage_menu_map, m_usage_label_menu_map, "General operator", "Function", "Usage for %s operator");
 
+    menuUsage->AppendSeparator();
+    menuUsage->Append(ID_Usage_Search_Operator, "Search Operators ... ", "Search for an operator");
+
     wxMenu* menuInsertWindow = new wxMenu;
     menuInsertWindow->Append(ID_Insert_Window_Learn_Rules, "Learn Rules", "Insert a learn rule");
     menuInsertWindow->Append(ID_Insert_Window_Type1, "Infix type 1", "Insert an infix operator");
@@ -293,6 +296,7 @@ PrimaryFrame::PrimaryFrame()
     Bind(wxEVT_MENU, &PrimaryFrame::SwitchWindow, this, ID_Window_Command);
     Bind(wxEVT_MENU, &PrimaryFrame::SwitchWindow, this, ID_Window_Edit);
     Bind(wxEVT_MENU, &PrimaryFrame::InvokeActiveTable, this, ID_Visualize_Active_Table);
+    Bind(wxEVT_MENU, &PrimaryFrame::SearchForOperator, this, ID_Usage_Search_Operator);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenExampleWebpage, this, ID_Example_Fibonacci, ID_Example_More);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenWebUsage, this, ID_Help_Usage);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenWebsite, this, ID_Help_Website);
@@ -885,6 +889,7 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
         // m_auiNotebook->Show();
         m_panelSizer->Prepend(m_frame_edit_panel, 1, wxGROW);
         m_frame_edit_panel->Show();
+        m_frame_edit_panel->UpdateContextSelector();
         m_command_window_active = false;
         m_edit_window_active = true;
     }
@@ -894,6 +899,12 @@ void PrimaryFrame::SwitchWindow(wxCommandEvent& event)
 void PrimaryFrame::InvokeActiveTable(wxCommandEvent& event)
 {
     ActiveTableDialog* active_table = new ActiveTableDialog(this);
+}
+
+void PrimaryFrame::SearchForOperator(wxCommandEvent& event)
+{
+    // wxMessageBox("Place holder for Search for an Operator");
+    SearchForOperatorDialog* search_for_operator = new SearchForOperatorDialog(this);
 }
 
 void PrimaryFrame::OpenExampleWebpage(wxCommandEvent& event)

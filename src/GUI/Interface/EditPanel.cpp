@@ -547,10 +547,8 @@ void EditPanel::ParseExperiment(const std::string& commands)  // Is EditPanel th
 
 void EditPanel::OnContextSelect(wxCommandEvent& event)
 {
-	// UpdateContextSelector(); // Not sure if we want this here or not, yet. Doesn't seem to work here. Not sure why.
 	unsigned int new_selection = m_context_selector->GetSelection();
 	driver.context.set(new_selection);
-	// UpdateContextSelector(); // Not sure if we want this here or not, yet.
 }
 
 void EditPanel::UpdateContextSelector()

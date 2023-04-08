@@ -216,6 +216,9 @@
     <ClInclude Include="src\GUI\OperatorLibrary\IfThenOperatorDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI\OperatorLibrary\SearchForOperatorDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -405,6 +408,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\OperatorLibrary\IfThenOperatorDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\OperatorLibrary\SearchForOperatorDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
