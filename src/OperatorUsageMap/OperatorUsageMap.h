@@ -12,6 +12,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <set>
 #include "../Function/SplitJoin.h"
 #include "../Function/misc.h"
 
@@ -40,6 +41,8 @@ public:
 
     std::map<std::string, std::string> statement_prototypes;
     bool has_statement_prototype(const std::string& s) const;
+
+    std::set<std::string> search_usage_map(const std::string search_term, bool name, bool description, bool examples);
 };
 
 extern OperatorUsageMap operator_usage_map;

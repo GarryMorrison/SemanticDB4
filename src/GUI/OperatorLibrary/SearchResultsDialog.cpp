@@ -20,10 +20,29 @@ SearchResultsDialog::SearchResultsDialog(wxWindow* parent, bool simple, bool com
 
 	// wxStaticText* tmp_text = new wxStaticText(this, wxID_ANY, search_term);
 
-	// Dummy values until we implement the search feature:
-	m_operator_list.Add("mbr");
-	m_operator_list.Add("is-mbr");
-	m_operator_list.Add("intersection");
+	std::set<std::string> operator_search_results = operator_usage_map.search_usage_map(search_term.ToStdString(), name, description, examples);
+	std::set<std::string> operator_search_results_filtered;
+	for (const auto& s : operator_search_results)
+	{
+		ulong s_idx = ket_map.get_idx(s);
+		if (simple && fn_map.set_simple_operators.find(s_idx) != fn_map.set_simple_operators.end())
+		{
+			operator_search_results_filtered.insert(s);
+		}
+		if (compound && fn_map.set_compound_operators.find(s_idx) != fn_map.set_compound_operators.end())
+		{
+			operator_search_results_filtered.insert(s);
+		}
+		if (function && fn_map.set_function_operators.find(s_idx) != fn_map.set_function_operators.end())
+		{
+			operator_search_results_filtered.insert(s);
+		}
+	}
+	for (const auto& s : operator_search_results_filtered)
+	{
+		m_operator_list.Add(s);
+	}
+
 	m_matching_operators = new wxCheckListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_operator_list);
 
 	wxButton* launch_usage_button = new wxButton(this, ID_Launch_Usage_Button, "Launch Usage");

@@ -4910,3 +4910,55 @@ std::string OperatorUsageMap::linkify_text(std::string text)  // NB: rather slow
     }
     return result;
 }
+
+std::set<std::string> OperatorUsageMap::search_usage_map(const std::string search_term, bool name, bool description, bool examples)
+{
+    std::map<std::string, std::string> matching_operators_first_pass;
+    for (const auto& it : map)
+    {
+        std::string op = it.first;
+        std::string usage = it.second;
+        if (usage.find(search_term) != std::string::npos)
+        {
+            matching_operators_first_pass[op] = usage;
+        }
+    }
+    std::set<std::string> matching_operators;
+    for (const auto& it : matching_operators_first_pass)
+    {
+        std::string usage = it.second;
+        std::vector<std::string> working;
+        working = split(usage, ":\n");
+        std::string Op = working.at(0);  // Check working vector is not empty first!
+
+        working = split(usage, "    description:\n");
+        std::string rest = working.at(1);
+        working = split(rest, "    examples:\n");
+        std::string Description = working.at(0);
+        rest = working.at(1);
+        working = split(rest, "    see also:\n");
+        std::string Examples = working.at(0);
+        std::string SeeAlso = working.at(1);
+
+        // tidy:
+        // std::string op_name = Op;
+        std::string op_name = it.first;
+        std::string op_description = strip_leading_spaces(Description, 8);
+        std::string op_examples = strip_leading_spaces(Examples, 8);
+        std::string op_see_also = strip_leading_spaces(SeeAlso, 8);
+
+        if (name && op_name.find(search_term) != std::string::npos)
+        {
+            matching_operators.insert(op_name);
+        }
+        if (description && op_description.find(search_term) != std::string::npos)
+        {
+            matching_operators.insert(op_name);
+        }
+        if (examples && op_examples.find(search_term) != std::string::npos)
+        {
+            matching_operators.insert(op_name);
+        }
+    }
+    return matching_operators;
+}
