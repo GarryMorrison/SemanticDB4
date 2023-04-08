@@ -4911,7 +4911,7 @@ std::string OperatorUsageMap::linkify_text(std::string text)  // NB: rather slow
     return result;
 }
 
-std::set<std::string> OperatorUsageMap::search_usage_map(const std::string search_term, bool name, bool description, bool examples)
+std::set<std::string> OperatorUsageMap::search_usage_map(const std::string search_term, bool name, bool description, bool examples, bool seealso)
 {
     std::map<std::string, std::string> matching_operators_first_pass;
     for (const auto& it : map)
@@ -4956,6 +4956,10 @@ std::set<std::string> OperatorUsageMap::search_usage_map(const std::string searc
             matching_operators.insert(op_name);
         }
         if (examples && op_examples.find(search_term) != std::string::npos)
+        {
+            matching_operators.insert(op_name);
+        }
+        if (seealso && op_see_also.find(search_term) != std::string::npos)
         {
             matching_operators.insert(op_name);
         }

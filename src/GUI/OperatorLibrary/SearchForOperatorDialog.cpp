@@ -35,10 +35,12 @@ SearchForOperatorDialog::SearchForOperatorDialog(wxWindow* parent, long style)
 	m_name_checkbox = new wxCheckBox(this, wxID_ANY, "name");
 	m_description_checkbox = new wxCheckBox(this, wxID_ANY, "description");
 	m_examples_checkbox = new wxCheckBox(this, wxID_ANY, "examples");
+	m_seealso_checkbox = new wxCheckBox(this, wxID_ANY, "see also");
 	
 	m_name_checkbox->SetValue(true);
 	m_description_checkbox->SetValue(true);
 	m_examples_checkbox->SetValue(true);
+	m_seealso_checkbox->SetValue(true);
 
 	wxStaticText* search_header = new wxStaticText(this, wxID_ANY, "Search Term");
 	search_header->SetFont(wxFontInfo(12));
@@ -63,6 +65,7 @@ SearchForOperatorDialog::SearchForOperatorDialog(wxWindow* parent, long style)
 	topsizer->Add(m_name_checkbox, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 20));
 	topsizer->Add(m_description_checkbox, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 20));
 	topsizer->Add(m_examples_checkbox, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 20));
+	topsizer->Add(m_seealso_checkbox, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 20));
 	topsizer->AddSpacer(10);
 
 	topsizer->Add(search_header, wxSizerFlags(0).Border(wxLEFT, 10));
@@ -87,6 +90,7 @@ void SearchForOperatorDialog::OnSearchButton(wxCommandEvent& event)
 		m_name_checkbox->GetValue(),
 		m_description_checkbox->GetValue(),
 		m_examples_checkbox->GetValue(),
+		m_seealso_checkbox->GetValue(),
 		m_search_term_ctrl->GetValue());
 }
 

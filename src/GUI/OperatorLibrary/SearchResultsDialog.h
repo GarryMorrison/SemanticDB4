@@ -14,7 +14,7 @@ class SearchResultsDialog : public wxDialog
 {
 public:
     // Constructor:
-    SearchResultsDialog(wxWindow* parent, bool simple, bool compound, bool function, bool name, bool description, bool examples, wxString search_term, long style = 0);
+    SearchResultsDialog(wxWindow* parent, bool simple, bool compound, bool function, bool name, bool description, bool examples, bool seealso, wxString search_term, long style = 0);
 
     void OnLaunchUsageButton(wxCommandEvent& event);
 

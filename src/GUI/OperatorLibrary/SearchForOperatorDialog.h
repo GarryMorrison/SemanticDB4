@@ -29,6 +29,7 @@ private:
     wxCheckBox* m_name_checkbox;
     wxCheckBox* m_description_checkbox;
     wxCheckBox* m_examples_checkbox;
+    wxCheckBox* m_seealso_checkbox;
 
     wxTextCtrl* m_search_term_ctrl;
 };

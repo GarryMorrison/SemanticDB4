@@ -9,7 +9,7 @@
 
 #include "SearchResultsDialog.h"
 
-SearchResultsDialog::SearchResultsDialog(wxWindow* parent, bool simple, bool compound, bool function, bool name, bool description, bool examples, wxString search_term, long style)
+SearchResultsDialog::SearchResultsDialog(wxWindow* parent, bool simple, bool compound, bool function, bool name, bool description, bool examples, bool seealso, wxString search_term, long style)
 	: wxDialog(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
 	SetTitle("Search Results");
@@ -20,7 +20,7 @@ SearchResultsDialog::SearchResultsDialog(wxWindow* parent, bool simple, bool com
 
 	// wxStaticText* tmp_text = new wxStaticText(this, wxID_ANY, search_term);
 
-	std::set<std::string> operator_search_results = operator_usage_map.search_usage_map(search_term.ToStdString(), name, description, examples);
+	std::set<std::string> operator_search_results = operator_usage_map.search_usage_map(search_term.ToStdString(), name, description, examples, seealso);
 	std::set<std::string> operator_search_results_filtered;
 	for (const auto& s : operator_search_results)
 	{
