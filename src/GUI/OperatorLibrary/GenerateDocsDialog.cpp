@@ -1,0 +1,114 @@
+//
+// Semantic DB 4
+// Created 2023/4/9
+// Updated 2023/4/9
+// Author Garry Morrison
+// License GPL v3
+//
+
+#include "GenerateDocsDialog.h"
+
+
+
+GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
+	: wxDialog(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+{
+	SetTitle("Generate Docs");
+	wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
+
+	wxStaticText* header = new wxStaticText(this, wxID_ANY, "Generate Docs");
+	header->SetFont(wxFontInfo(12));
+
+	wxStaticText* docs_type = new wxStaticText(this, wxID_ANY, "Type");
+	docs_type->SetFont(wxFontInfo(12));
+
+	m_text_radio = new wxRadioButton(this, wxID_ANY, "text");
+	m_html_radio = new wxRadioButton(this, wxID_ANY, "html");
+	m_html_radio->SetValue(true);
+
+	m_linkify_checkbox = new wxCheckBox(this, wxID_ANY, "Linkify", wxDefaultPosition, wxDefaultSize, wxCHK_3STATE);
+	// linkify_checkbox->Set3StateValue(wxCHK_UNDETERMINED);  // I don't think this is what we want.
+	m_linkify_checkbox->Set3StateValue(wxCHK_CHECKED);
+
+	wxBoxSizer* hbox1 = new wxBoxSizer(wxHORIZONTAL);
+	hbox1->Add(m_html_radio, wxSizerFlags(0).Border(wxRIGHT, 5));
+	hbox1->Add(m_linkify_checkbox, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 5));
+
+	wxStaticText* docs_destination = new wxStaticText(this, wxID_ANY, "Destination");
+	docs_destination->SetFont(wxFontInfo(12));
+
+	m_dir_picker = new wxDirPickerCtrl(this, wxID_ANY, "", wxDirSelectorPromptStr, wxDefaultPosition, wxSize(250, -1));
+
+	wxButton* generate_button = new wxButton(this, ID_Search_Operators_Button, "Generate");
+	wxButton* cancel_button = new wxButton(this, wxID_CANCEL, "Cancel");
+
+	wxBoxSizer* hbox2 = new wxBoxSizer(wxHORIZONTAL);
+	hbox2->Add(generate_button, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 5));
+	hbox2->Add(cancel_button, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 5));
+
+	topsizer->Add(header, wxSizerFlags(0).Center().Border(wxALL, 10));
+	topsizer->Add(docs_type, wxSizerFlags(0).Border(wxLEFT, 10));
+	topsizer->AddSpacer(5);
+	topsizer->Add(m_text_radio, wxSizerFlags(0).Border(wxLEFT, 20));
+	topsizer->Add(hbox1, wxSizerFlags(0).Border(wxLEFT, 20));
+	topsizer->AddSpacer(10);
+	topsizer->Add(docs_destination, wxSizerFlags(0).Border(wxLEFT, 10));
+	topsizer->AddSpacer(5);
+	topsizer->Add(m_dir_picker, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 10));
+	topsizer->Add(hbox2, wxSizerFlags(0).Center().Border(wxALL, 10));
+
+	
+	m_text_radio->Bind(wxEVT_RADIOBUTTON, &GenerateDocsDialog::OnTextRadioButton, this);
+	m_html_radio->Bind(wxEVT_RADIOBUTTON, &GenerateDocsDialog::OnHtmlRadioButton, this);
+
+	// run_button->Bind(wxEVT_BUTTON, &CommandPanel::OnRunButtonDown, this);
+	generate_button->Bind(wxEVT_BUTTON, &GenerateDocsDialog::OnGenerateButtonDown, this);
+
+	SetSizerAndFit(topsizer);
+	CenterOnScreen();
+	// ShowModal();
+	Show();
+}
+
+void GenerateDocsDialog::OnTextRadioButton(wxCommandEvent& event)
+{
+	// wxMessageBox("Text radio button pressed");
+	m_linkify_checkbox->SetValue(false);
+}
+
+void GenerateDocsDialog::OnHtmlRadioButton(wxCommandEvent& event)
+{
+	// wxMessageBox("Html radio button pressed");
+	m_linkify_checkbox->SetValue(true);
+}
+
+void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
+{
+	wxString new_docs_path = m_dir_picker->GetPath();
+	if (new_docs_path.IsEmpty())
+	{
+		wxMessageBox("Please provide a path.");
+	}
+	else
+	{
+		wxString docs_type_option;
+		if (m_text_radio->GetValue())
+		{
+			docs_type_option += "text";
+		}
+		else if (m_html_radio->GetValue())
+		{
+			docs_type_option += "html";
+			if (m_linkify_checkbox->GetValue())
+			{
+				docs_type_option += ", linkify";
+			}
+		}
+		wxMessageBox("Generate button pressed\nDocs path: " + new_docs_path + "\noption: " + docs_type_option);
+	}
+}
+
+GenerateDocsDialog::~GenerateDocsDialog()
+{
+}
+

@@ -172,6 +172,8 @@ PrimaryFrame::PrimaryFrame()
 
     menuUsage->AppendSeparator();
     menuUsage->Append(ID_Usage_Search_Operator, "Search Operators ... ", "Search for an operator");
+    menuUsage->AppendSeparator();
+    menuUsage->Append(ID_Usage_Generate_Docs, "Generate docs ... ", "Generate usage documentation");
 
     wxMenu* menuInsertWindow = new wxMenu;
     menuInsertWindow->Append(ID_Insert_Window_Learn_Rules, "Learn Rules", "Insert a learn rule");
@@ -297,6 +299,7 @@ PrimaryFrame::PrimaryFrame()
     Bind(wxEVT_MENU, &PrimaryFrame::SwitchWindow, this, ID_Window_Edit);
     Bind(wxEVT_MENU, &PrimaryFrame::InvokeActiveTable, this, ID_Visualize_Active_Table);
     Bind(wxEVT_MENU, &PrimaryFrame::SearchForOperator, this, ID_Usage_Search_Operator);
+    Bind(wxEVT_MENU, &PrimaryFrame::GenerateDocs, this, ID_Usage_Generate_Docs);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenExampleWebpage, this, ID_Example_Fibonacci, ID_Example_More);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenWebUsage, this, ID_Help_Usage);
     Bind(wxEVT_MENU, &PrimaryFrame::OpenWebsite, this, ID_Help_Website);
@@ -903,8 +906,13 @@ void PrimaryFrame::InvokeActiveTable(wxCommandEvent& event)
 
 void PrimaryFrame::SearchForOperator(wxCommandEvent& event)
 {
-    // wxMessageBox("Place holder for Search for an Operator");
     SearchForOperatorDialog* search_for_operator = new SearchForOperatorDialog(this);
+}
+
+void PrimaryFrame::GenerateDocs(wxCommandEvent& event)
+{
+    // wxMessageBox("Place holder for Generate Docs");
+    GenerateDocsDialog* generate_usage_docs = new GenerateDocsDialog(this);
 }
 
 void PrimaryFrame::OpenExampleWebpage(wxCommandEvent& event)

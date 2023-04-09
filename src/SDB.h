@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2023/4/8
+// Updated 2023/4/9
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2023/4/8"
+#define APP_BUILD_DATE "2023/4/9"
 #define APP_VERSION "4.0.alpha4"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -106,6 +106,7 @@
 #include "GUI/OperatorLibrary/IfThenOperatorDialog.h"
 #include "GUI/OperatorLibrary/SearchForOperatorDialog.h"
 #include "GUI/OperatorLibrary/SearchResultsDialog.h"
+#include "GUI/OperatorLibrary/GenerateDocsDialog.h"
 
 
 // Back end includes:
@@ -277,6 +278,7 @@ enum
     ID_Usage_Search_Operator,
     ID_Search_Operators_Button,
     ID_Launch_Usage_Button,
+    ID_Usage_Generate_Docs,
 
     ID_Help_Ket_Map,
     ID_Help_Usage,

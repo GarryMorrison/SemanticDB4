@@ -63,6 +63,8 @@ private:
 
     void SearchForOperator(wxCommandEvent& event);
 
+    void GenerateDocs(wxCommandEvent& event);
+
     void OpenExampleWebpage(wxCommandEvent& event);
 
     void OpenWebsite(wxCommandEvent& event);
