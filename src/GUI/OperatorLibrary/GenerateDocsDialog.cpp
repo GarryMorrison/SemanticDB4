@@ -39,6 +39,13 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 
 	m_dir_picker = new wxDirPickerCtrl(this, wxID_ANY, "", wxDirSelectorPromptStr, wxDefaultPosition, wxSize(250, -1));
 
+	wxStaticText* overwrite_files = new wxStaticText(this, wxID_ANY, "Overwrite files");
+	overwrite_files->SetFont(wxFontInfo(12));
+
+	m_yes_to_all_radio = new wxRadioButton(this, wxID_ANY, "yes to all", wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+	m_warn_radio = new wxRadioButton(this, wxID_ANY, "warn");
+	m_no_radio = new wxRadioButton(this, wxID_ANY, "no");
+
 	wxButton* generate_button = new wxButton(this, ID_Search_Operators_Button, "Generate");
 	wxButton* cancel_button = new wxButton(this, wxID_CANCEL, "Cancel");
 
@@ -51,6 +58,12 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	topsizer->AddSpacer(5);
 	topsizer->Add(m_text_radio, wxSizerFlags(0).Border(wxLEFT, 20));
 	topsizer->Add(hbox1, wxSizerFlags(0).Border(wxLEFT, 20));
+	topsizer->AddSpacer(10);
+	topsizer->Add(overwrite_files, wxSizerFlags(0).Border(wxLEFT, 10));
+	topsizer->AddSpacer(5);
+	topsizer->Add(m_yes_to_all_radio, wxSizerFlags(0).Border(wxLEFT, 20));
+	topsizer->Add(m_warn_radio, wxSizerFlags(0).Border(wxLEFT, 20));
+	topsizer->Add(m_no_radio, wxSizerFlags(0).Border(wxLEFT, 20));
 	topsizer->AddSpacer(10);
 	topsizer->Add(docs_destination, wxSizerFlags(0).Border(wxLEFT, 10));
 	topsizer->AddSpacer(5);
@@ -104,7 +117,20 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 				docs_type_option += ", linkify";
 			}
 		}
-		wxMessageBox("Generate button pressed\nDocs path: " + new_docs_path + "\noption: " + docs_type_option);
+		wxString overwrite_files_style;
+		if (m_yes_to_all_radio->GetValue())
+		{
+			overwrite_files_style = "yes to all";
+		}
+		else if (m_warn_radio->GetValue())
+		{
+			overwrite_files_style = "warn";
+		}
+		else if (m_no_radio->GetValue())
+		{
+			overwrite_files_style = "no";
+		}
+		wxMessageBox("Generate button pressed\nDocs path: " + new_docs_path + "\noption: " + docs_type_option + "\noverwrite files: " + overwrite_files_style);
 	}
 }
 

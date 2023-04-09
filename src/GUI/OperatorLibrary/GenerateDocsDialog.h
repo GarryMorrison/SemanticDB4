@@ -29,6 +29,9 @@ private:
     wxCheckBox* m_linkify_checkbox;
     wxRadioButton* m_text_radio;
     wxRadioButton* m_html_radio;
+    wxRadioButton* m_yes_to_all_radio;
+    wxRadioButton* m_warn_radio;
+    wxRadioButton* m_no_radio;
     wxDirPickerCtrl* m_dir_picker;
 };
 
