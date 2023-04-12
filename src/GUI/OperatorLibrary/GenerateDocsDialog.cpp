@@ -26,7 +26,7 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	m_html_radio = new wxRadioButton(this, wxID_ANY, "html");
 	m_html_radio->SetValue(true);
 
-	m_linkify_checkbox = new wxCheckBox(this, wxID_ANY, "Linkify", wxDefaultPosition, wxDefaultSize, wxCHK_3STATE);
+	m_linkify_checkbox = new wxCheckBox(this, wxID_ANY, "linkify", wxDefaultPosition, wxDefaultSize, wxCHK_3STATE);
 	// linkify_checkbox->Set3StateValue(wxCHK_UNDETERMINED);  // I don't think this is what we want.
 	m_linkify_checkbox->Set3StateValue(wxCHK_CHECKED);
 
@@ -34,10 +34,17 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	hbox1->Add(m_html_radio, wxSizerFlags(0).Border(wxRIGHT, 5));
 	hbox1->Add(m_linkify_checkbox, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 5));
 
+	wxStaticText* docs_templates = new wxStaticText(this, wxID_ANY, "Templates");
+	docs_templates->SetFont(wxFontInfo(12));
+	m_template_dir_picker = new wxDirPickerCtrl(this, wxID_ANY, "", wxDirSelectorPromptStr, wxDefaultPosition, wxSize(350, -1));
+
+	wxStaticText* docs_examples = new wxStaticText(this, wxID_ANY, "sw examples (empty for none)");
+	docs_examples->SetFont(wxFontInfo(12));
+	m_example_dir_picker = new wxDirPickerCtrl(this, wxID_ANY, "", wxDirSelectorPromptStr, wxDefaultPosition, wxSize(350, -1));
+
 	wxStaticText* docs_destination = new wxStaticText(this, wxID_ANY, "Destination");
 	docs_destination->SetFont(wxFontInfo(12));
-
-	m_dir_picker = new wxDirPickerCtrl(this, wxID_ANY, "", wxDirSelectorPromptStr, wxDefaultPosition, wxSize(250, -1));
+	m_dir_picker = new wxDirPickerCtrl(this, wxID_ANY, "", wxDirSelectorPromptStr, wxDefaultPosition, wxSize(350, -1));
 
 	wxStaticText* overwrite_files = new wxStaticText(this, wxID_ANY, "Overwrite files");
 	overwrite_files->SetFont(wxFontInfo(12));
@@ -64,6 +71,17 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	topsizer->Add(m_yes_to_all_radio, wxSizerFlags(0).Border(wxLEFT, 20));
 	topsizer->Add(m_warn_radio, wxSizerFlags(0).Border(wxLEFT, 20));
 	topsizer->Add(m_no_radio, wxSizerFlags(0).Border(wxLEFT, 20));
+
+	topsizer->AddSpacer(10);
+	topsizer->Add(docs_templates, wxSizerFlags(0).Border(wxLEFT, 10));
+	topsizer->AddSpacer(5);
+	topsizer->Add(m_template_dir_picker, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 10));
+
+	topsizer->AddSpacer(10);
+	topsizer->Add(docs_examples, wxSizerFlags(0).Border(wxLEFT, 10));
+	topsizer->AddSpacer(5);
+	topsizer->Add(m_example_dir_picker, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 10));
+
 	topsizer->AddSpacer(10);
 	topsizer->Add(docs_destination, wxSizerFlags(0).Border(wxLEFT, 10));
 	topsizer->AddSpacer(5);
@@ -97,10 +115,12 @@ void GenerateDocsDialog::OnHtmlRadioButton(wxCommandEvent& event)
 
 void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 {
+	wxString template_path = m_template_dir_picker->GetPath();
+	wxString examples_path = m_example_dir_picker->GetPath();
 	wxString new_docs_path = m_dir_picker->GetPath();
-	if (new_docs_path.IsEmpty())
+	if (template_path.IsEmpty() || new_docs_path.IsEmpty())
 	{
-		wxMessageBox("Please provide a path.");
+		wxMessageBox("Please provide a template and destination path.");
 	}
 	else
 	{
@@ -130,7 +150,7 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 		{
 			overwrite_files_style = "no";
 		}
-		wxMessageBox("Generate button pressed\nDocs path: " + new_docs_path + "\noption: " + docs_type_option + "\noverwrite files: " + overwrite_files_style);
+		wxMessageBox("Generate button pressed\nTemplate path: " + template_path + "\nExamples path: " + examples_path + "\nDocs path : " + new_docs_path + "\noption : " + docs_type_option + "\noverwrite files : " + overwrite_files_style);
 	}
 }
 

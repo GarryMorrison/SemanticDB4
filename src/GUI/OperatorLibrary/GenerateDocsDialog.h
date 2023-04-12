@@ -32,6 +32,8 @@ private:
     wxRadioButton* m_yes_to_all_radio;
     wxRadioButton* m_warn_radio;
     wxRadioButton* m_no_radio;
+    wxDirPickerCtrl* m_template_dir_picker;
+    wxDirPickerCtrl* m_example_dir_picker;
     wxDirPickerCtrl* m_dir_picker;
 };
 
