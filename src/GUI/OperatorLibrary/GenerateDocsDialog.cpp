@@ -151,6 +151,15 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 			overwrite_files_style = "no";
 		}
 		wxMessageBox("Generate button pressed\nTemplate path: " + template_path + "\nExamples path: " + examples_path + "\nDocs path : " + new_docs_path + "\noption : " + docs_type_option + "\noverwrite files : " + overwrite_files_style);
+		GenerateDocs docgen = GenerateDocs(m_text_radio->GetValue(), 
+			m_html_radio->GetValue(), 
+			m_linkify_checkbox->GetValue(), 
+			m_yes_to_all_radio->GetValue(),
+			m_warn_radio->GetValue(),
+			m_no_radio->GetValue(),
+			template_path, 
+			examples_path, 
+			new_docs_path);
 	}
 }
 

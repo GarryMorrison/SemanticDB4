@@ -107,6 +107,7 @@
 #include "GUI/OperatorLibrary/SearchForOperatorDialog.h"
 #include "GUI/OperatorLibrary/SearchResultsDialog.h"
 #include "GUI/OperatorLibrary/GenerateDocsDialog.h"
+#include "GUI/OperatorLibrary/GenerateDocs.h"
 
 
 // Back end includes:
