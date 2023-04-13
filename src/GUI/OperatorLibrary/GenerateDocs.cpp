@@ -37,13 +37,17 @@ GenerateDocs::GenerateDocs(bool text, bool html, bool linkify, bool yes_to_all, 
 	string_replace_all(file_contents, "$creation-date$", current_date_str);
 	
 	// Populate Language Elements menu:
-	populate_list(file_contents, "$language-elements-statements-list$", fn_map.list_of_statements, paths_map, list_element_template_str);
-	populate_list(file_contents, "$language-elements-learn-rules-list$", fn_map.list_of_learn_rules_spaces, paths_map, list_element_template_str);
-	populate_list(file_contents, "$language-elements-infix-type-1-list$", fn_map.list_of_infix_type1_spaces, paths_map, list_element_template_str);
-	populate_list(file_contents, "$language-elements-infix-type-2-list$", fn_map.list_of_infix_type2_spaces, paths_map, list_element_template_str);
-	populate_list(file_contents, "$language-elements-miscellaneous-elements-list$", fn_map.list_of_misc_elements, paths_map, list_element_template_str);
-	populate_list(file_contents, "$language-elements-object-types-list$", fn_map.list_of_object_types, paths_map, list_element_template_str);
-	populate_list(file_contents, "$language-elements-operator-types-list$", fn_map.list_of_operator_types, paths_map, list_element_template_str);
+	populate_list(file_contents, "$language-elements-statements-list$", fn_map.list_of_statements, paths_map, list_element_template_str, ".html");
+	populate_list(file_contents, "$language-elements-learn-rules-list$", fn_map.list_of_learn_rules_spaces, paths_map, list_element_template_str, ".html");
+	populate_list(file_contents, "$language-elements-infix-type-1-list$", fn_map.list_of_infix_type1_spaces, paths_map, list_element_template_str, ".html");
+	populate_list(file_contents, "$language-elements-infix-type-2-list$", fn_map.list_of_infix_type2_spaces, paths_map, list_element_template_str, ".html");
+	populate_list(file_contents, "$language-elements-miscellaneous-elements-list$", fn_map.list_of_misc_elements, paths_map, list_element_template_str, ".html");
+	populate_list(file_contents, "$language-elements-object-types-list$", fn_map.list_of_object_types, paths_map, list_element_template_str, ".html");
+	populate_list(file_contents, "$language-elements-operator-types-list$", fn_map.list_of_operator_types, paths_map, list_element_template_str, ".html");
+
+	// Populate examples menu:
+	std::vector<std::string> list_of_sw_examples = scan_directory(examples_path);
+	populate_list(file_contents, "$examples-list$", list_of_sw_examples, paths_map, list_element_template_str, "");
 
 	wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\nfile contents:\n" + file_contents);
 	// wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\npopulated list:\n" + populated_list);
@@ -161,19 +165,42 @@ std::string GenerateDocs::generate_list(const std::vector<std::string>& list_of_
 	return result;
 }
 
-void GenerateDocs::populate_list(std::string& file_contents, const std::string list_element, const std::vector<std::string>& list_of_elements, const std::map<std::string, std::string>& paths_map, const std::string list_element_template_str)
+void GenerateDocs::populate_list(std::string& file_contents, const std::string list_element, const std::vector<std::string>& list_of_elements, const std::map<std::string, std::string>& paths_map, const std::string list_element_template_str, const std::string extension )
 {
-	std::string list_element_path = paths_map.at(list_element);
+	std::string list_element_path = "";
+	if (paths_map.find(list_element) != paths_map.end())
+	{
+		list_element_path = paths_map.at(list_element);
+	}
 	std::string generated_list;
 	for (const auto& s : list_of_elements)
 	{
 		std::string tmp_str = list_element_template_str;
-		string_replace_all(tmp_str, "$list-element-path$", list_element_path + escape_infix_operators(s));
+		string_replace_all(tmp_str, "$list-element-path$", list_element_path + escape_infix_operators(s) + extension);
 		string_replace_all(tmp_str, "$list-element-label$", escape_html_chars(s));
 		generated_list += "\n" + tmp_str;
 	}
 	wxMessageBox(list_element + "\n" + generated_list);
 	string_replace_all(file_contents, list_element, generated_list);
+}
+
+std::vector<std::string> GenerateDocs::scan_directory(const wxString directory_name)
+{
+	std::vector<std::string> directory_list;
+	wxDir our_sw_dir(directory_name);
+	if (!our_sw_dir.IsOpened())
+	{
+		wxMessageBox("Directory:\n" + directory_name + "\ndoes not exist!");
+		return directory_list;
+	}
+	wxString filename;
+	bool have_file = our_sw_dir.GetFirst(&filename);
+	while (have_file)
+	{
+		directory_list.push_back(filename.ToStdString());
+		have_file = our_sw_dir.GetNext(&filename);
+	}
+	return directory_list;
 }
 
 GenerateDocs::~GenerateDocs()
