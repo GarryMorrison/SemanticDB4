@@ -87,6 +87,10 @@ public:
     std::vector<std::string> list_of_infix_type1;
     std::vector<std::string> list_of_infix_type2;
 
+    std::vector<std::string> list_of_learn_rules_spaces;  // Not sure if wrapping these operators in space will break anything.
+    std::vector<std::string> list_of_infix_type1_spaces;  // So we define new sets just in case. Maybe deprecate these later.
+    std::vector<std::string> list_of_infix_type2_spaces;
+
     std::vector<std::string> list_of_misc_elements;
     std::vector<std::string> list_of_filtered_misc_elements;
     std::vector<std::string> list_of_object_types;
