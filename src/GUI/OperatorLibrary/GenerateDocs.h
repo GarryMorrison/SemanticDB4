@@ -28,7 +28,8 @@ private:
     std::string escape_infix_operators(const std::string& raw_string);
     std::string escape_html_chars(const std::string& source);
     std::string generate_list(const std::vector<std::string>& list_of_elements, const std::string& list_element_template);
-    void populate_list(std::string& file_contents, const std::string list_element, const std::vector<std::string>& list_of_elements, const std::map<std::string, std::string>& paths_map, const std::string list_element_template_str, const std::string extension);
+    void populate_list(std::string& file_contents, const std::string list_element, const std::vector<std::string>& list_of_elements, const std::map<std::string, std::string>& paths_map, const std::string list_element_template_str, const std::string extension, bool strip_extension_bool = false);
     std::vector<std::string> scan_directory(const wxString directory_name);
+    wxString strip_extension(const wxString our_filename);
 };
 

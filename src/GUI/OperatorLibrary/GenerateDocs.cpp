@@ -47,7 +47,7 @@ GenerateDocs::GenerateDocs(bool text, bool html, bool linkify, bool yes_to_all, 
 
 	// Populate examples menu:
 	std::vector<std::string> list_of_sw_examples = scan_directory(examples_path);
-	populate_list(file_contents, "$examples-list$", list_of_sw_examples, paths_map, list_element_template_str, "");
+	populate_list(file_contents, "$examples-list$", list_of_sw_examples, paths_map, list_element_template_str, ".html", true);
 
 	wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\nfile contents:\n" + file_contents);
 	// wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\npopulated list:\n" + populated_list);
@@ -165,7 +165,7 @@ std::string GenerateDocs::generate_list(const std::vector<std::string>& list_of_
 	return result;
 }
 
-void GenerateDocs::populate_list(std::string& file_contents, const std::string list_element, const std::vector<std::string>& list_of_elements, const std::map<std::string, std::string>& paths_map, const std::string list_element_template_str, const std::string extension )
+void GenerateDocs::populate_list(std::string& file_contents, const std::string list_element, const std::vector<std::string>& list_of_elements, const std::map<std::string, std::string>& paths_map, const std::string list_element_template_str, const std::string extension, bool strip_extension_bool )
 {
 	std::string list_element_path = "";
 	if (paths_map.find(list_element) != paths_map.end())
@@ -176,8 +176,16 @@ void GenerateDocs::populate_list(std::string& file_contents, const std::string l
 	for (const auto& s : list_of_elements)
 	{
 		std::string tmp_str = list_element_template_str;
-		string_replace_all(tmp_str, "$list-element-path$", list_element_path + escape_infix_operators(s) + extension);
-		string_replace_all(tmp_str, "$list-element-label$", escape_html_chars(s));
+		if (strip_extension_bool)
+		{
+			string_replace_all(tmp_str, "$list-element-path$", list_element_path + strip_extension(escape_infix_operators(s)).ToStdString() + extension);
+			string_replace_all(tmp_str, "$list-element-label$", strip_extension(escape_html_chars(s)).ToStdString());
+		}
+		else
+		{
+			string_replace_all(tmp_str, "$list-element-path$", list_element_path + escape_infix_operators(s) + extension);
+			string_replace_all(tmp_str, "$list-element-label$", escape_html_chars(s));
+		}
 		generated_list += "\n" + tmp_str;
 	}
 	wxMessageBox(list_element + "\n" + generated_list);
@@ -201,6 +209,11 @@ std::vector<std::string> GenerateDocs::scan_directory(const wxString directory_n
 		have_file = our_sw_dir.GetNext(&filename);
 	}
 	return directory_list;
+}
+
+wxString GenerateDocs::strip_extension(const wxString our_filename)
+{
+	return our_filename.BeforeLast('.');
 }
 
 GenerateDocs::~GenerateDocs()
