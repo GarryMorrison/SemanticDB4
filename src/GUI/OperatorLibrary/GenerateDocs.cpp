@@ -37,11 +37,11 @@ GenerateDocs::GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString 
 	const std::string destination_image_path = settings_map["destination-image-path"];
 
 	// Copy css files:
-	copy_files(template_path.ToStdString(), source_css_path, destination_path.ToStdString(), destination_css_path, yes_to_all, warn, dont_warn);
+	copy_binary_files(template_path.ToStdString(), source_css_path, destination_path.ToStdString(), destination_css_path, yes_to_all, warn, dont_warn);
 
 	// Copy image files:
-	copy_files(template_path.ToStdString(), source_image_path, destination_path.ToStdString(), destination_image_path, yes_to_all, warn, dont_warn);
-	return;
+	copy_binary_files(template_path.ToStdString(), source_image_path, destination_path.ToStdString(), destination_image_path, yes_to_all, warn, dont_warn);
+	// return;
 
 	// Load the list element template string:
 	wxFileName working_file;
@@ -125,6 +125,7 @@ void GenerateDocs::write_file(const wxString file_path, const wxString file_name
 		if (tfile.Exists())
 		{
 			tfile.Open();
+			tfile.Clear();
 		}
 		else
 		{
@@ -367,6 +368,55 @@ void GenerateDocs::copy_files(const std::string source_path, const std::string s
 		wxMessageBox(f);
 		wxString css_body = read_file(full_source_path_str, f);
 		write_file(full_destination_path_str, f, css_body, overwrite_yes_to_all, overwrite_warn, overwrite_no);
+	}
+}
+
+void GenerateDocs::copy_binary_files(const std::string source_path, const std::string source_sub_path, const std::string destination_path, const std::string destination_sub_path, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no)
+{
+	std::filesystem::path full_source_path(source_path);
+	full_source_path.append(source_sub_path);
+	std::string full_source_path_str = full_source_path.string();
+
+	// Check if source directory exists:
+	if (!std::filesystem::exists(full_source_path))
+	{
+		wxMessageBox("Copy files failed to open source dir: " + full_source_path_str);
+		return;
+	}
+
+	std::filesystem::path full_destination_path(destination_path);
+	full_destination_path.append(destination_sub_path);
+	std::string full_destination_path_str = full_destination_path.string();
+
+	// First check if directory exists:
+	if (!std::filesystem::exists(full_destination_path))
+	{
+		// If not, create it:
+		if (std::filesystem::create_directory(full_destination_path))
+		{
+			wxMessageBox("Copy files created destination dir: " + full_destination_path_str);
+		}
+		else
+		{
+			wxMessageBox("Copy files failed to create destination dir: " + full_destination_path_str);
+			return;
+		}
+	}
+
+	wxMessageBox(full_source_path_str + "\n" + full_destination_path_str);
+
+	std::vector<std::string> source_files = scan_directory(full_source_path_str);
+	for (const auto& f : source_files)
+	{
+		wxMessageBox(f);
+		std::filesystem::path source_file(full_source_path);
+		source_file.append(f);
+
+		std::filesystem::path destination_file(full_destination_path);  // Implement overwrite options!
+		destination_file.append(f);
+
+		std::error_code ec;
+		std::filesystem::copy_file(source_file, destination_file, std::filesystem::copy_options::overwrite_existing, ec);
 	}
 }
 
