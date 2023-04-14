@@ -20,6 +20,7 @@ GenerateDocs::GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString 
 		return;
 	}
 
+	
 	// Define our template files:
 	const std::string index_template = settings_map["index-template"];
 	const std::string operator_template = settings_map["operator-template"];
@@ -30,8 +31,17 @@ GenerateDocs::GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString 
 	// Load some settings:
 	const std::string destination_file_extension = settings_map["destination-file-extension"];
 	const std::string use_linkify = settings_map["use-linkify"];
-	const std::string css_path = settings_map["css-path"];
-	const std::string image_path = settings_map["image-path"];
+	const std::string source_css_path = settings_map["source-css-path"];
+	const std::string source_image_path = settings_map["source-image-path"];
+	const std::string destination_css_path = settings_map["destination-css-path"];
+	const std::string destination_image_path = settings_map["destination-image-path"];
+
+	// Copy css files:
+	copy_files(template_path.ToStdString(), source_css_path, destination_path.ToStdString(), destination_css_path, yes_to_all, warn, dont_warn);
+
+	// Copy image files:
+	copy_files(template_path.ToStdString(), source_image_path, destination_path.ToStdString(), destination_image_path, yes_to_all, warn, dont_warn);
+	return;
 
 	// Load the list element template string:
 	wxFileName working_file;
@@ -67,6 +77,12 @@ GenerateDocs::GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString 
 
 	wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\nfile contents:\n" + file_contents);
 	// wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\npopulated list:\n" + populated_list);
+}
+
+std::string GenerateDocs::normalize_path_separator(const std::string source_path)
+{
+	std::filesystem::path windows_path(source_path);
+	return windows_path.make_preferred().string();
 }
 
 void GenerateDocs::write_file(const wxString file_path, const wxString file_name, const wxString file_body, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no)
@@ -145,6 +161,28 @@ wxString GenerateDocs::read_file(const wxString our_filename)
 	return file_text;
 }
 
+wxString GenerateDocs::read_file(const wxString file_path, const wxString file_name)
+{
+	wxString file_text;
+	wxFileName working_file(file_path, file_name);
+	wxString working_file_str = working_file.GetFullPath();
+	wxTextFile tfile(working_file_str);
+	if (!tfile.Exists())
+	{
+		wxMessageBox("File:\n" + file_name + "\ndoes not exist!");
+	}
+	else
+	{
+		tfile.Open();
+		file_text = tfile.GetFirstLine();
+		while (!tfile.Eof())
+		{
+			file_text += "\n" + tfile.GetNextLine();
+		}
+	}
+	return file_text;
+}
+
 std::map<std::string, std::string> GenerateDocs::populate_settings_map(wxString template_path, wxString settings_file)
 {
 	std::map<std::string, std::string> our_map;
@@ -162,7 +200,7 @@ std::map<std::string, std::string> GenerateDocs::populate_settings_map(wxString 
 		{
 			std::string element = element_paths_vec[0];
 			std::string path = element_paths_vec[1];
-			our_map[element] = path;
+			our_map[element] = normalize_path_separator(path);
 		}
 		while (!tfile.Eof())
 		{
@@ -171,7 +209,7 @@ std::map<std::string, std::string> GenerateDocs::populate_settings_map(wxString 
 			{
 				std::string element = element_paths_vec[0];
 				std::string path = element_paths_vec[1];
-				our_map[element] = path;
+				our_map[element] = normalize_path_separator(path);
 			}
 		}
 	}
@@ -264,6 +302,7 @@ void GenerateDocs::populate_list(std::string& file_contents, const std::string l
 	string_replace_all(file_contents, list_element, generated_list);
 }
 
+// std::vector<std::string> GenerateDocs::scan_directory(const wxString file_path, const wxString directory_name)
 std::vector<std::string> GenerateDocs::scan_directory(const wxString directory_name)
 {
 	std::vector<std::string> directory_list;
@@ -286,6 +325,49 @@ std::vector<std::string> GenerateDocs::scan_directory(const wxString directory_n
 wxString GenerateDocs::strip_extension(const wxString our_filename)
 {
 	return our_filename.BeforeLast('.');
+}
+
+void GenerateDocs::copy_files(const std::string source_path, const std::string source_sub_path, const std::string destination_path, const std::string destination_sub_path, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no)
+{
+	std::filesystem::path full_source_path(source_path);
+	full_source_path.append(source_sub_path);
+	std::string full_source_path_str = full_source_path.string();
+
+	// Check if source directory exists:
+	if (!std::filesystem::exists(full_source_path))
+	{
+		wxMessageBox("Copy files failed to open source dir: " + full_source_path_str);
+		return;
+	}
+
+	std::filesystem::path full_destination_path(destination_path);
+	full_destination_path.append(destination_sub_path);
+	std::string full_destination_path_str = full_destination_path.string();
+
+	// First check if directory exists:
+	if (!std::filesystem::exists(full_destination_path))
+	{
+		// If not, create it:
+		if (std::filesystem::create_directory(full_destination_path))
+		{
+			wxMessageBox("Copy files created destination dir: " + full_destination_path_str);
+		}
+		else
+		{
+			wxMessageBox("Copy files failed to create destination dir: " + full_destination_path_str);
+			return;
+		}
+	}
+
+	wxMessageBox(full_source_path_str + "\n" + full_destination_path_str);
+
+	std::vector<std::string> source_css_files = scan_directory(full_source_path_str);
+	for (const auto& f : source_css_files)
+	{
+		wxMessageBox(f);
+		wxString css_body = read_file(full_source_path_str, f);
+		write_file(full_destination_path_str, f, css_body, overwrite_yes_to_all, overwrite_warn, overwrite_no);
+	}
 }
 
 GenerateDocs::~GenerateDocs()
