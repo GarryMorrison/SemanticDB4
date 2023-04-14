@@ -1,25 +1,38 @@
 //
 // Semantic DB 4
 // Created 2023/4/12
-// Updated 2023/4/13
+// Updated 2023/4/14
 // Author Garry Morrison
 // License GPL v3
 //
 
 #include "GenerateDocs.h"
 
-GenerateDocs::GenerateDocs(bool text, bool html, bool linkify, bool yes_to_all, bool warn, bool dont_warn, wxString template_path, wxString examples_path, wxString destination_path)
+// GenerateDocs::GenerateDocs(bool text, bool html, bool linkify, bool yes_to_all, bool warn, bool dont_warn, wxString template_path, wxString examples_path, wxString destination_path)
+GenerateDocs::GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString template_path, wxString examples_path, wxString destination_path)
 {
 	// Load our substitution element paths:
-	wxString element_paths = "list-element.paths";
-	std::map<std::string, std::string> paths_map = populate_paths_map(template_path, element_paths);
+	wxString settings_file = "template-settings.txt";
+	std::map<std::string, std::string> settings_map = populate_settings_map(template_path, settings_file);
+	if (settings_map.empty())
+	{
+		wxMessageBox("Settings file is empty!");
+		return;
+	}
 
 	// Define our template files:
-	const wxString list_element_template = "list-element-template.html";
-	const wxString index_template = "index-template.html";
-	const wxString operator_template = "operator-template.html";
-	const wxString example_template = "example-template.html";
-	
+	const std::string index_template = settings_map["index-template"];
+	const std::string operator_template = settings_map["operator-template"];
+	const std::string example_template = settings_map["example-template"];
+	const std::string list_element_template = settings_map["list-element-template"];
+	const std::string linkify_template = settings_map["linkify-template"];
+
+	// Load some settings:
+	const std::string destination_file_extension = settings_map["destination-file-extension"];
+	const std::string use_linkify = settings_map["use-linkify"];
+	const std::string css_path = settings_map["css-path"];
+	const std::string image_path = settings_map["image-path"];
+
 	// Load the list element template string:
 	wxFileName working_file;
 	working_file = wxFileName(template_path, list_element_template);
@@ -37,17 +50,17 @@ GenerateDocs::GenerateDocs(bool text, bool html, bool linkify, bool yes_to_all, 
 	string_replace_all(file_contents, "$creation-date$", current_date_str);
 	
 	// Populate Language Elements menu:
-	populate_list(file_contents, "$language-elements-statements-list$", fn_map.list_of_statements, paths_map, list_element_template_str, ".html");
-	populate_list(file_contents, "$language-elements-learn-rules-list$", fn_map.list_of_learn_rules_spaces, paths_map, list_element_template_str, ".html");
-	populate_list(file_contents, "$language-elements-infix-type-1-list$", fn_map.list_of_infix_type1_spaces, paths_map, list_element_template_str, ".html");
-	populate_list(file_contents, "$language-elements-infix-type-2-list$", fn_map.list_of_infix_type2_spaces, paths_map, list_element_template_str, ".html");
-	populate_list(file_contents, "$language-elements-miscellaneous-elements-list$", fn_map.list_of_misc_elements, paths_map, list_element_template_str, ".html");
-	populate_list(file_contents, "$language-elements-object-types-list$", fn_map.list_of_object_types, paths_map, list_element_template_str, ".html");
-	populate_list(file_contents, "$language-elements-operator-types-list$", fn_map.list_of_operator_types, paths_map, list_element_template_str, ".html");
+	populate_list(file_contents, "$language-elements-statements-list$", fn_map.list_of_statements, settings_map, list_element_template_str, destination_file_extension);
+	populate_list(file_contents, "$language-elements-learn-rules-list$", fn_map.list_of_learn_rules_spaces, settings_map, list_element_template_str, destination_file_extension);
+	populate_list(file_contents, "$language-elements-infix-type-1-list$", fn_map.list_of_infix_type1_spaces, settings_map, list_element_template_str, destination_file_extension);
+	populate_list(file_contents, "$language-elements-infix-type-2-list$", fn_map.list_of_infix_type2_spaces, settings_map, list_element_template_str, destination_file_extension);
+	populate_list(file_contents, "$language-elements-miscellaneous-elements-list$", fn_map.list_of_misc_elements, settings_map, list_element_template_str, destination_file_extension);
+	populate_list(file_contents, "$language-elements-object-types-list$", fn_map.list_of_object_types, settings_map, list_element_template_str, destination_file_extension);
+	populate_list(file_contents, "$language-elements-operator-types-list$", fn_map.list_of_operator_types, settings_map, list_element_template_str, destination_file_extension);
 
 	// Populate examples menu:
 	std::vector<std::string> list_of_sw_examples = scan_directory(examples_path);
-	populate_list(file_contents, "$examples-list$", list_of_sw_examples, paths_map, list_element_template_str, ".html", true);
+	populate_list(file_contents, "$examples-list$", list_of_sw_examples, settings_map, list_element_template_str, destination_file_extension, true);
 
 	wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\nfile contents:\n" + file_contents);
 	// wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\npopulated list:\n" + populated_list);
@@ -73,10 +86,10 @@ wxString GenerateDocs::read_file(const wxString our_filename)
 	return file_text;
 }
 
-std::map<std::string, std::string> GenerateDocs::populate_paths_map(wxString template_path, wxString element_paths)
+std::map<std::string, std::string> GenerateDocs::populate_settings_map(wxString template_path, wxString settings_file)
 {
 	std::map<std::string, std::string> our_map;
-	wxFileName tmp_file(template_path, element_paths);
+	wxFileName tmp_file(template_path, settings_file);
 	wxTextFile tfile(tmp_file.GetFullPath());
 	if (!tfile.Exists())
 	{
@@ -85,7 +98,7 @@ std::map<std::string, std::string> GenerateDocs::populate_paths_map(wxString tem
 	else
 	{
 		tfile.Open();
-		std::vector<std::string> element_paths_vec = split_on_first(tfile.GetFirstLine().ToStdString(), ": ");
+		std::vector<std::string> element_paths_vec = split_on_first(tfile.GetFirstLine().ToStdString(), " ");
 		if (element_paths_vec.size() == 2)
 		{
 			std::string element = element_paths_vec[0];
@@ -94,7 +107,7 @@ std::map<std::string, std::string> GenerateDocs::populate_paths_map(wxString tem
 		}
 		while (!tfile.Eof())
 		{
-			element_paths_vec = split_on_first(tfile.GetNextLine().ToStdString(), ": ");
+			element_paths_vec = split_on_first(tfile.GetNextLine().ToStdString(), " ");
 			if (element_paths_vec.size() == 2)
 			{
 				std::string element = element_paths_vec[0];
@@ -188,7 +201,7 @@ void GenerateDocs::populate_list(std::string& file_contents, const std::string l
 		}
 		generated_list += "\n" + tmp_str;
 	}
-	wxMessageBox(list_element + "\n" + generated_list);
+	// wxMessageBox(list_element + "\n" + generated_list);
 	string_replace_all(file_contents, list_element, generated_list);
 }
 

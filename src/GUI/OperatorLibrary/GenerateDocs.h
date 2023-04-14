@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/4/12
-// Updated 2023/4/13
+// Updated 2023/4/14
 // Author Garry Morrison
 // License GPL v3
 //
@@ -17,12 +17,13 @@ class GenerateDocs
 {
 public:
     // Constructor:
-    GenerateDocs(bool text, bool html, bool linkify, bool yes_to_all, bool warn, bool dont_warn, wxString template_path, wxString examples_path, wxString destination_path);
+    // GenerateDocs(bool text, bool html, bool linkify, bool yes_to_all, bool warn, bool dont_warn, wxString template_path, wxString examples_path, wxString destination_path);
+    GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString template_path, wxString examples_path, wxString destination_path);
 
     // Destructor:
     ~GenerateDocs();
 private:
-    std::map<std::string, std::string> populate_paths_map(wxString template_path, wxString elements_paths);
+    std::map<std::string, std::string> populate_settings_map(wxString template_path, wxString settings_file);
 
     wxString read_file(const wxString our_filename);
     std::string escape_infix_operators(const std::string& raw_string);

@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/4/9
-// Updated 2023/4/9
+// Updated 2023/4/14
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,6 +19,7 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	wxStaticText* header = new wxStaticText(this, wxID_ANY, "Generate Docs");
 	header->SetFont(wxFontInfo(12));
 
+	/*
 	wxStaticText* docs_type = new wxStaticText(this, wxID_ANY, "Type");
 	docs_type->SetFont(wxFontInfo(12));
 
@@ -33,6 +34,7 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	wxBoxSizer* hbox1 = new wxBoxSizer(wxHORIZONTAL);
 	hbox1->Add(m_html_radio, wxSizerFlags(0).Border(wxRIGHT, 5));
 	hbox1->Add(m_linkify_checkbox, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 5));
+	*/
 
 	wxStaticText* docs_templates = new wxStaticText(this, wxID_ANY, "Templates");
 	docs_templates->SetFont(wxFontInfo(12));
@@ -61,11 +63,13 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	hbox2->Add(cancel_button, wxSizerFlags(0).Border(wxLEFT | wxRIGHT, 5));
 
 	topsizer->Add(header, wxSizerFlags(0).Center().Border(wxALL, 10));
+	/*
 	topsizer->Add(docs_type, wxSizerFlags(0).Border(wxLEFT, 10));
 	topsizer->AddSpacer(5);
 	topsizer->Add(m_text_radio, wxSizerFlags(0).Border(wxLEFT, 20));
 	topsizer->Add(hbox1, wxSizerFlags(0).Border(wxLEFT, 20));
 	topsizer->AddSpacer(10);
+	*/
 	topsizer->Add(overwrite_files, wxSizerFlags(0).Border(wxLEFT, 10));
 	topsizer->AddSpacer(5);
 	topsizer->Add(m_yes_to_all_radio, wxSizerFlags(0).Border(wxLEFT, 20));
@@ -89,8 +93,8 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	topsizer->Add(hbox2, wxSizerFlags(0).Center().Border(wxALL, 10));
 
 	
-	m_text_radio->Bind(wxEVT_RADIOBUTTON, &GenerateDocsDialog::OnTextRadioButton, this);
-	m_html_radio->Bind(wxEVT_RADIOBUTTON, &GenerateDocsDialog::OnHtmlRadioButton, this);
+	// m_text_radio->Bind(wxEVT_RADIOBUTTON, &GenerateDocsDialog::OnTextRadioButton, this);
+	// m_html_radio->Bind(wxEVT_RADIOBUTTON, &GenerateDocsDialog::OnHtmlRadioButton, this);
 
 	// run_button->Bind(wxEVT_BUTTON, &CommandPanel::OnRunButtonDown, this);
 	generate_button->Bind(wxEVT_BUTTON, &GenerateDocsDialog::OnGenerateButtonDown, this);
@@ -101,6 +105,7 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	Show();
 }
 
+/*
 void GenerateDocsDialog::OnTextRadioButton(wxCommandEvent& event)
 {
 	// wxMessageBox("Text radio button pressed");
@@ -112,6 +117,7 @@ void GenerateDocsDialog::OnHtmlRadioButton(wxCommandEvent& event)
 	// wxMessageBox("Html radio button pressed");
 	m_linkify_checkbox->SetValue(true);
 }
+*/
 
 void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 {
@@ -124,6 +130,7 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 	}
 	else
 	{
+		/*
 		wxString docs_type_option;
 		if (m_text_radio->GetValue())
 		{
@@ -137,6 +144,7 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 				docs_type_option += ", linkify";
 			}
 		}
+		*/
 		wxString overwrite_files_style;
 		if (m_yes_to_all_radio->GetValue())
 		{
@@ -150,6 +158,7 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 		{
 			overwrite_files_style = "no";
 		}
+		/*
 		wxMessageBox("Generate button pressed\nTemplate path: " + template_path + "\nExamples path: " + examples_path + "\nDocs path : " + new_docs_path + "\noption : " + docs_type_option + "\noverwrite files : " + overwrite_files_style);
 		GenerateDocs docgen = GenerateDocs(m_text_radio->GetValue(), 
 			m_html_radio->GetValue(), 
@@ -159,6 +168,15 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 			m_no_radio->GetValue(),
 			template_path, 
 			examples_path, 
+			new_docs_path);
+		*/
+		wxMessageBox("Generate button pressed\nTemplate path: " + template_path + "\nExamples path: " + examples_path + "\nDocs path : " + new_docs_path + "\noverwrite files : " + overwrite_files_style);
+		GenerateDocs docgen = GenerateDocs(
+			m_yes_to_all_radio->GetValue(),
+			m_warn_radio->GetValue(),
+			m_no_radio->GetValue(),
+			template_path,
+			examples_path,
 			new_docs_path);
 	}
 }
