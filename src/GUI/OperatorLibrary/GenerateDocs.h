@@ -12,6 +12,8 @@
 #include <wx/textfile.h>
 #include <wx/dir.h>
 #include <map>
+#include <wx/msgdlg.h>
+#include <wx/tokenzr.h>
 
 class GenerateDocs
 {
@@ -26,6 +28,7 @@ private:
     std::map<std::string, std::string> populate_settings_map(wxString template_path, wxString settings_file);
 
     wxString read_file(const wxString our_filename);
+    void write_file(const wxString file_path, const wxString file_name, const wxString file_body, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no);
     std::string escape_infix_operators(const std::string& raw_string);
     std::string escape_html_chars(const std::string& source);
     std::string generate_list(const std::vector<std::string>& list_of_elements, const std::string& list_element_template);

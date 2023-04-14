@@ -62,8 +62,67 @@ GenerateDocs::GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString 
 	std::vector<std::string> list_of_sw_examples = scan_directory(examples_path);
 	populate_list(file_contents, "$examples-list$", list_of_sw_examples, settings_map, list_element_template_str, destination_file_extension, true);
 
+	// Now write it to disk:
+	write_file(destination_path, index_template, file_contents, yes_to_all, warn, dont_warn);
+
 	wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\nfile contents:\n" + file_contents);
 	// wxMessageBox("Generate Docs invoked\nDate: " + current_date_str + "\ntemplate file: " + tmp_file.GetFullPath() + "\npopulated list:\n" + populated_list);
+}
+
+void GenerateDocs::write_file(const wxString file_path, const wxString file_name, const wxString file_body, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no)
+{
+	wxFileName working_file(file_path, file_name);
+	wxString working_file_str = working_file.GetFullPath();
+	wxTextFile tfile(working_file_str);
+	bool will_write_file = false;
+	if (!tfile.Exists())
+	{
+		will_write_file = true;
+	}
+	if (overwrite_yes_to_all)
+	{
+		wxMessageBox("Will overwrite file");
+		will_write_file = true;
+	}
+	if (overwrite_warn && tfile.Exists())
+	{
+		
+		wxMessageDialog* dlg = new wxMessageDialog(NULL, "Do you want to overwrite file: " + file_name + "?", "Overwrite File", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+		if (dlg->ShowModal() == wxID_YES)
+		{
+			wxMessageBox("File overwritten");
+			will_write_file = true;
+		}
+		else
+		{
+			wxMessageBox("File skipped");
+			will_write_file = false;
+		}
+	}
+	if (overwrite_no)
+	{
+		wxMessageBox("Will not overwrite file");
+		will_write_file = false;
+	}
+	if (will_write_file)
+	{
+		if (tfile.Exists())
+		{
+			tfile.Open();
+		}
+		else
+		{
+			tfile.Create();
+		}
+		wxStringTokenizer tokenizer(file_body, "\n"); // Is there a better way to extract lines from a string?
+		while (tokenizer.HasMoreTokens())
+		{
+			wxString line = tokenizer.GetNextToken();
+			tfile.AddLine(line);
+		}
+		tfile.Write();
+		tfile.Close();
+	}
 }
 
 wxString GenerateDocs::read_file(const wxString our_filename)
