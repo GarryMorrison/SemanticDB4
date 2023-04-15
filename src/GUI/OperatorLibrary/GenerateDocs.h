@@ -20,7 +20,6 @@ class GenerateDocs
 {
 public:
     // Constructor:
-    // GenerateDocs(bool text, bool html, bool linkify, bool yes_to_all, bool warn, bool dont_warn, wxString template_path, wxString examples_path, wxString destination_path);
     GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString template_path, wxString examples_path, wxString destination_path);
 
     // Destructor:
