@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/4/12
-// Updated 2023/4/15
+// Updated 2023/4/16
 // Author Garry Morrison
 // License GPL v3
 //
@@ -114,6 +114,21 @@ std::string GenerateDocs::normalize_path_separator(const std::string source_path
 {
 	std::filesystem::path windows_path(source_path);
 	return windows_path.make_preferred().string();
+}
+
+std::string GenerateDocs::get_inverse_path(const std::string source_path)
+{
+	if (source_path.empty())
+	{
+		return source_path;
+	}
+	std::filesystem::path sub_path(source_path);
+	std::filesystem::path inverse_sub_path;
+	for (const auto& p : sub_path)
+	{
+		inverse_sub_path.append("..");
+	}
+	return inverse_sub_path.string() + normalize_path_separator("/");
 }
 
 void GenerateDocs::write_file(const wxString file_path, const wxString file_name, const wxString file_body, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no)
@@ -372,15 +387,9 @@ void GenerateDocs::populate_and_write_operator_template(std::string& template_st
 	string_replace_all(template_str, "$operator-examples$", escape_html_chars(usageInfo->Examples, escape_html));
 	string_replace_all(template_str, "$operator-see-also$", usageInfo->SeeAlso);
 
-	std::filesystem::path sub_path(destination_sub_path);
-	std::filesystem::path inverse_sub_path;
-	for (const auto& p: sub_path)
-	{
-		inverse_sub_path.append("..");
-	}
-	// wxMessageBox("inverse sub path: " + inverse_sub_path.string() + normalize_path_separator("/"));
-	string_replace_all(template_str, "$operator-home-path-prefix$", inverse_sub_path.string() + normalize_path_separator("/"));
-	string_replace_all(template_str, "$operator-css-path-prefix$", inverse_sub_path.string() + normalize_path_separator("/"));
+	std::string inverse_sub_path = get_inverse_path(destination_sub_path);
+	string_replace_all(template_str, "$operator-home-path-prefix$", inverse_sub_path);
+	string_replace_all(template_str, "$operator-css-path-prefix$", inverse_sub_path);
 
 	std::filesystem::path full_destination_path(destination_path);
 	full_destination_path.append(destination_sub_path);

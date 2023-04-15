@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/4/12
-// Updated 2023/4/15
+// Updated 2023/4/16
 // Author Garry Morrison
 // License GPL v3
 //
@@ -27,6 +27,7 @@ public:
     ~GenerateDocs();
 private:
     std::string normalize_path_separator(const std::string source_path);
+    std::string get_inverse_path(const std::string source_path);
     std::map<std::string, std::string> populate_settings_map(wxString template_path, wxString settings_file);
 
     wxString read_file(const wxString our_filename);
