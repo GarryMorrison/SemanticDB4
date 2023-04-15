@@ -54,6 +54,7 @@ GenerateDocsDialog::GenerateDocsDialog(wxWindow* parent, long style)
 	m_yes_to_all_radio = new wxRadioButton(this, wxID_ANY, "yes to all", wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
 	m_warn_radio = new wxRadioButton(this, wxID_ANY, "warn");
 	m_no_radio = new wxRadioButton(this, wxID_ANY, "no");
+	m_warn_radio->SetValue(true);
 
 	wxButton* generate_button = new wxButton(this, ID_Search_Operators_Button, "Generate");
 	wxButton* cancel_button = new wxButton(this, wxID_CANCEL, "Cancel");
