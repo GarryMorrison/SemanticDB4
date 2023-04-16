@@ -73,6 +73,7 @@ GenerateDocs::GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString 
 	populate_and_write_operator_template(operator_template_str, "is-mbr", destination_path.ToStdString(), normalize_path_separator("testing/foo/bah"), destination_file_extension, yes_to_all, warn, dont_warn, escape_html);
 	populate_and_write_operator_template(operator_template_str, "if-else", destination_path.ToStdString(), normalize_path_separator("testing/foo/bah"), destination_file_extension, yes_to_all, warn, dont_warn, escape_html);
 	populate_and_write_operator_template(operator_template_str, " => ", destination_path.ToStdString(), normalize_path_separator("testing/foo/bah"), destination_file_extension, yes_to_all, warn, dont_warn, escape_html);
+	populate_and_write_operator_template(operator_template_str, " +=> ", destination_path.ToStdString(), normalize_path_separator("testing/foo/bah"), destination_file_extension, yes_to_all, warn, dont_warn, escape_html);
 
 	// Load the example template string:
 	working_file = wxFileName(template_path, example_template);
@@ -371,11 +372,11 @@ std::string GenerateDocs::wrap_lines_in_html_p(const std::string& source_str)
 	return result;
 }
 
-// void GenerateDocs::populate_and_write_operator_template(std::string& template_str, const std::string name, const std::string destination_path, const std::string destination_sub_path, const std::string extension, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no, bool escape_html)
+
 void GenerateDocs::populate_and_write_operator_template(const std::string template_str, const std::string name, const std::string destination_path, const std::string destination_sub_path, const std::string extension, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no, bool escape_html)
 {
 	std::string local_template_str = template_str;
-	string_replace_all(local_template_str, "$operator-name$", name);
+	string_replace_all(local_template_str, "$operator-name$", escape_html_chars(name, escape_html));
 	if (!operator_usage_map.usage_is_defined(name))
 	{
 		wxMessageBox("No usage info available for operator: " + name);
@@ -389,7 +390,7 @@ void GenerateDocs::populate_and_write_operator_template(const std::string templa
 	}
 	string_replace_all(local_template_str, "$operator-description$", escape_html_chars(usageInfo->Description, escape_html));
 	string_replace_all(local_template_str, "$operator-examples$", escape_html_chars(usageInfo->Examples, escape_html));
-	string_replace_all(local_template_str, "$operator-see-also$", usageInfo->SeeAlso);
+	string_replace_all(local_template_str, "$operator-see-also$", escape_html_chars(usageInfo->SeeAlso, escape_html));
 
 	std::vector<std::string> operator_types = fn_map.get_operator_types(name);
 	std::string operator_types_str = join(operator_types, ", ");
