@@ -9,6 +9,7 @@
 #pragma once
 
 #include <set>
+#include <algorithm>
 #include "../KetMap/KetMap.h"
 #include "../Sequence/Sequence.h"
 
@@ -98,6 +99,8 @@ public:
 
     std::set<std::string> list_of_operator_names;  // I think I use set to auto sort.
     std::set<std::string> list_of_operator_and_statement_names;
+
+    std::vector<std::string> get_operator_types(const std::string operator_name);
 };
 
 extern FunctionOperatorMap fn_map;

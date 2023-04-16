@@ -40,7 +40,8 @@ private:
     void populate_list(std::string& file_contents, const std::string list_element, const std::vector<std::string>& list_of_elements, const std::map<std::string, std::string>& paths_map, const std::string list_element_template_str, const std::string extension, bool strip_extension_bool, const std::string destination_path, const std::string template_str, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no);
 
     std::string wrap_lines_in_html_p(const std::string& source_str);
-    void populate_and_write_operator_template(std::string& template_str, const std::string name, const std::string destination_path, const std::string destination_sub_path, const std::string extension, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no, bool escape_html);
+    // void populate_and_write_operator_template(std::string& template_str, const std::string name, const std::string destination_path, const std::string destination_sub_path, const std::string extension, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no, bool escape_html);
+    void populate_and_write_operator_template(const std::string template_str, const std::string name, const std::string destination_path, const std::string destination_sub_path, const std::string extension, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no, bool escape_html);
     void populate_and_write_example_template(std::string& template_str, const std::string name, const std::string source_path, const std::string destination_path, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no);
 
     std::vector<std::string> scan_directory(const wxString directory_name);

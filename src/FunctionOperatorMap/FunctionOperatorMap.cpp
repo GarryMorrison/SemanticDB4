@@ -646,3 +646,151 @@ void FunctionOperatorMap::PopulateOperatorSets() {
         list_of_operator_and_statement_names.insert(statement);
     }
 }
+
+std::vector<std::string> FunctionOperatorMap::get_operator_types(const std::string operator_name)
+{
+    std::vector<std::string> result;
+
+    std::vector<std::string> v;
+    v = list_of_statements;
+    if (std::find(v.begin(), v.end(), operator_name) != v.end())
+    {
+        result.push_back("statement");
+    }
+
+    v = list_of_learn_rules_spaces;
+    if (std::find(v.begin(), v.end(), operator_name) != v.end())
+    {
+        result.push_back("learn rule");
+    }
+    v = list_of_infix_type1_spaces;
+    if (std::find(v.begin(), v.end(), operator_name) != v.end())
+    {
+        result.push_back("infix type 1");
+    }
+    v = list_of_infix_type2_spaces;
+    if (std::find(v.begin(), v.end(), operator_name) != v.end())
+    {
+        result.push_back("infix type 2");
+    }
+
+    v = list_of_misc_elements;
+    if (std::find(v.begin(), v.end(), operator_name) != v.end())
+    {
+        result.push_back("miscellaneous element");
+    }
+    v = list_of_object_types;
+    if (std::find(v.begin(), v.end(), operator_name) != v.end())
+    {
+        result.push_back("object type");
+    }
+    v = list_of_operator_types;
+    if (std::find(v.begin(), v.end(), operator_name) != v.end())
+    {
+        result.push_back("operator type");
+    }
+
+
+    ulong op_idx = ket_map.get_idx(operator_name);
+    if (set_built_in.find(op_idx) != set_built_in.end())
+    {
+        result.push_back("core normal");
+    }
+    if (set_compound_built_in.find(op_idx) != set_compound_built_in.end())
+    {
+        result.push_back("core compound");
+    }
+    if (set_compound_context_built_in.find(op_idx) != set_compound_context_built_in.end())
+    {
+        result.push_back("core compound context");
+    }
+
+    if (set_sigmoids.find(op_idx) != set_sigmoids.end())
+    {
+        result.push_back("sigmoid normal");
+    }
+    if (set_compound_sigmoids.find(op_idx) != set_compound_sigmoids.end())
+    {
+        result.push_back("sigmoid compound");
+    }
+
+    if (set_ket_fn.find(op_idx) != set_ket_fn.end())
+    {
+        result.push_back("ket normal");
+    }
+    if (set_compound_ket_fn.find(op_idx) != set_compound_ket_fn.end())
+    {
+        result.push_back("ket compound");
+    }
+    if (set_context_ket_fn.find(op_idx) != set_context_ket_fn.end())
+    {
+        result.push_back("ket context");
+    }
+
+    if (set_sp_fn.find(op_idx) != set_sp_fn.end())
+    {
+        result.push_back("superposition normal");
+    }
+    if (set_compound_sp_fn.find(op_idx) != set_compound_sp_fn.end())
+    {
+        result.push_back("superposition compound");
+    }
+    if (set_compound_context_sp_fn.find(op_idx) != set_compound_context_sp_fn.end())
+    {
+        result.push_back("superposition compound context");
+    }
+
+    if (set_seq_fn.find(op_idx) != set_seq_fn.end())
+    {
+        result.push_back("sequence normal");
+    }
+    if (set_context_seq_fn.find(op_idx) != set_context_seq_fn.end())
+    {
+        result.push_back("sequence context");
+    }
+    if (set_compound_seq_fn.find(op_idx) != set_compound_seq_fn.end())
+    {
+        result.push_back("sequence compound");
+    }
+    if (set_compound_context_seq_fn.find(op_idx) != set_compound_context_seq_fn.end())
+    {
+        result.push_back("sequence compound context");
+    }
+
+
+    if (set_whitelist_1.find(op_idx) != set_whitelist_1.end())
+    {
+        result.push_back("function 1");
+    }
+    if (set_whitelist_2.find(op_idx) != set_whitelist_2.end())
+    {
+        result.push_back("function 2");
+    }
+    if (set_whitelist_3.find(op_idx) != set_whitelist_3.end())
+    {
+        result.push_back("function 3");
+    }
+    if (set_whitelist_4.find(op_idx) != set_whitelist_4.end())
+    {
+        result.push_back("function 4");
+    }
+
+    if (set_context_whitelist_1.find(op_idx) != set_context_whitelist_1.end())
+    {
+        result.push_back("context function 1");
+    }
+    if (set_context_whitelist_2.find(op_idx) != set_context_whitelist_2.end())
+    {
+        result.push_back("context function 2");
+    }
+    if (set_context_whitelist_3.find(op_idx) != set_context_whitelist_3.end())
+    {
+        result.push_back("context function 3");
+    }
+    if (set_context_whitelist_4.find(op_idx) != set_context_whitelist_4.end())
+    {
+        result.push_back("context function 4");
+    }
+
+    return result;
+}

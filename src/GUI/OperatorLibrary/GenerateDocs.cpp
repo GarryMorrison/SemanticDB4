@@ -71,7 +71,9 @@ GenerateDocs::GenerateDocs(bool yes_to_all, bool warn, bool dont_warn, wxString 
 	}
 	// Testing the code before scaling up:
 	populate_and_write_operator_template(operator_template_str, "is-mbr", destination_path.ToStdString(), normalize_path_separator("testing/foo/bah"), destination_file_extension, yes_to_all, warn, dont_warn, escape_html);
-	
+	populate_and_write_operator_template(operator_template_str, "if-else", destination_path.ToStdString(), normalize_path_separator("testing/foo/bah"), destination_file_extension, yes_to_all, warn, dont_warn, escape_html);
+	populate_and_write_operator_template(operator_template_str, " => ", destination_path.ToStdString(), normalize_path_separator("testing/foo/bah"), destination_file_extension, yes_to_all, warn, dont_warn, escape_html);
+
 	// Load the example template string:
 	working_file = wxFileName(template_path, example_template);
 	std::string example_template_str = read_file(working_file.GetFullPath()).ToStdString();
@@ -369,9 +371,11 @@ std::string GenerateDocs::wrap_lines_in_html_p(const std::string& source_str)
 	return result;
 }
 
-void GenerateDocs::populate_and_write_operator_template(std::string& template_str, const std::string name, const std::string destination_path, const std::string destination_sub_path, const std::string extension, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no, bool escape_html)
+// void GenerateDocs::populate_and_write_operator_template(std::string& template_str, const std::string name, const std::string destination_path, const std::string destination_sub_path, const std::string extension, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no, bool escape_html)
+void GenerateDocs::populate_and_write_operator_template(const std::string template_str, const std::string name, const std::string destination_path, const std::string destination_sub_path, const std::string extension, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no, bool escape_html)
 {
-	string_replace_all(template_str, "$operator-name$", name);
+	std::string local_template_str = template_str;
+	string_replace_all(local_template_str, "$operator-name$", name);
 	if (!operator_usage_map.usage_is_defined(name))
 	{
 		wxMessageBox("No usage info available for operator: " + name);
@@ -383,20 +387,25 @@ void GenerateDocs::populate_and_write_operator_template(std::string& template_st
 		wxMessageBox("No usage info found.");
 		return;
 	}
-	string_replace_all(template_str, "$operator-description$", escape_html_chars(usageInfo->Description, escape_html));
-	string_replace_all(template_str, "$operator-examples$", escape_html_chars(usageInfo->Examples, escape_html));
-	string_replace_all(template_str, "$operator-see-also$", usageInfo->SeeAlso);
+	string_replace_all(local_template_str, "$operator-description$", escape_html_chars(usageInfo->Description, escape_html));
+	string_replace_all(local_template_str, "$operator-examples$", escape_html_chars(usageInfo->Examples, escape_html));
+	string_replace_all(local_template_str, "$operator-see-also$", usageInfo->SeeAlso);
+
+	std::vector<std::string> operator_types = fn_map.get_operator_types(name);
+	std::string operator_types_str = join(operator_types, ", ");
+	wxMessageBox("operator types: " + operator_types_str);
+	string_replace_all(local_template_str, "$operator-type$", operator_types_str);
 
 	std::string inverse_sub_path = get_inverse_path(destination_sub_path);
-	string_replace_all(template_str, "$operator-home-path-prefix$", inverse_sub_path);
-	string_replace_all(template_str, "$operator-css-path-prefix$", inverse_sub_path);
+	string_replace_all(local_template_str, "$operator-home-path-prefix$", inverse_sub_path);
+	string_replace_all(local_template_str, "$operator-css-path-prefix$", inverse_sub_path);
 
 	std::filesystem::path full_destination_path(destination_path);
 	full_destination_path.append(destination_sub_path);
 	std::string full_destination_path_str = full_destination_path.string();
 	// wxMessageBox("full_destination_path_str: " + full_destination_path_str);
-	wxMessageBox(template_str);
-	write_file(full_destination_path_str, name + extension, template_str, overwrite_yes_to_all, overwrite_warn, overwrite_no);
+	wxMessageBox(local_template_str);
+	write_file(full_destination_path_str, escape_infix_operators(name) + extension, local_template_str, overwrite_yes_to_all, overwrite_warn, overwrite_no);
 }
 
 void GenerateDocs::populate_and_write_example_template(std::string& template_str, const std::string name, const std::string source_path, const std::string destination_path, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no)
