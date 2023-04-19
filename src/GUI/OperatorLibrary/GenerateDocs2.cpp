@@ -17,15 +17,16 @@ GenerateDocs2::GenerateDocs2(bool overwrite_yes_to_all, bool overwrite_warn, boo
 	// Seed our settings map with starting variables:
 	settings["$settings-file$"] = "template-settings.txt";
 	settings["$overwrite-yes-to-all$"] = bool_to_string(overwrite_yes_to_all);
-	settings["$overwrite-warn"] = bool_to_string(overwrite_warn);
+	settings["$overwrite-warn$"] = bool_to_string(overwrite_warn);
 	settings["$overwrite-dont-warn$"] = bool_to_string(overwrite_dont_warn);
 	settings["$template-path$"] = template_path;
 	settings["$examples-path$"] = examples_path;
 	settings["$destination-path$"] = destination_path;
 
+	
 	// Get and store the current date:
 	wxDateTime current_date = current_date.UNow();
-	settings["$current-date$"] = current_date.FormatISODate().ToStdString();
+	settings["$creation-date$"] = current_date.FormatISODate().ToStdString();
 
 	// Now load settings from file (we make use of $settings-file$ in this function):
 	populate_settings(settings);
@@ -86,7 +87,26 @@ void GenerateDocs2::populate_menu(std::map<std::string, std::string>& settings, 
 
 void GenerateDocs2::populate_and_write_index(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location)
 {
+	// Load our variables:
+	std::string template_path = settings["$template-path$"];
+	std::string destination_path = settings["$destination-path$"];
+	std::string destination_css_path = settings["$destination-css-path$"];
+	std::string destination_image_path = settings["$destination-image-path$"];
+	bool overwrite_yes_to_all = string_to_bool(settings["$overwrite-yes-to-all$"]);
+	bool overwrite_warn = string_to_bool(settings["$overwrite-warn$"]);
+	bool overwrite_dont_warn = string_to_bool(settings["$overwrite-dont-warn$"]);
 
+	std::string index_template = settings["$index-template$"];
+	std::string destination_index_file_name = settings["$destination-index-file-name$"];
+	std::string index_str = read_text_file(template_path, index_template);
+
+	// Now write them into our index file:
+	string_replace_all(index_str, "$menu-structure$", settings["$menu-structure$"]);
+	string_replace_all(index_str, "$destination-css-path$", settings["$destination-css-path$"]);
+	string_replace_all(index_str, "$destination-image-path$", settings["$destination-image-path$"]);
+	string_replace_all(index_str, "$creation-date$", settings["$creation-date$"]);
+	wxMessageBox(index_str);
+	write_text_file(destination_path, destination_index_file_name, index_str, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
 }
 
 void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location)
@@ -184,6 +204,90 @@ std::vector<std::string> GenerateDocs2::scan_directory(const std::string directo
 	return directory_list;
 }
 
+void GenerateDocs2::write_text_file(const std::string& file_path, const std::string& file_name, const std::string& file_body, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no)
+{
+	if (!wxFileName::Mkdir(file_path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL))
+	{
+		wxMessageBox("Failed to create directory: " + file_path);
+		return;
+	}
+	wxFileName working_file(file_path, file_name);
+	wxString working_file_str = working_file.GetFullPath();
+	wxTextFile tfile(working_file_str);
+	bool will_write_file = false;
+	if (!tfile.Exists())
+	{
+		will_write_file = true;
+	}
+	if (overwrite_yes_to_all)
+	{
+		wxMessageBox("Will overwrite file");
+		will_write_file = true;
+	}
+	if (overwrite_warn && tfile.Exists())
+	{
+
+		wxMessageDialog* dlg = new wxMessageDialog(NULL, "Do you want to overwrite file: " + file_name + "?", "Overwrite File", wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+		if (dlg->ShowModal() == wxID_YES)
+		{
+			wxMessageBox("File overwritten");
+			will_write_file = true;
+		}
+		else
+		{
+			wxMessageBox("File skipped");
+			will_write_file = false;
+		}
+	}
+	if (overwrite_no)
+	{
+		wxMessageBox("Will not overwrite file");
+		will_write_file = false;
+	}
+	if (will_write_file)
+	{
+		if (tfile.Exists())
+		{
+			tfile.Open();
+			tfile.Clear();
+		}
+		else
+		{
+			tfile.Create();
+		}
+		wxStringTokenizer tokenizer(file_body, "\n"); // Is there a better way to extract lines from a string?
+		while (tokenizer.HasMoreTokens())
+		{
+			wxString line = tokenizer.GetNextToken();
+			tfile.AddLine(line);
+		}
+		tfile.Write();
+		tfile.Close();
+	}
+}
+
+std::string GenerateDocs2::read_text_file(const std::string& file_path, const std::string& file_name)
+{
+	wxFileName working_file(file_path, file_name);
+	wxTextFile tfile(working_file.GetFullPath());
+
+	wxString file_text;
+	if (!tfile.Exists())
+	{
+		wxMessageBox("Read text file error, file:\n" + file_name + "\ndoes not exist!");
+	}
+	else
+	{
+		tfile.Open();
+		file_text = tfile.GetFirstLine();
+		while (!tfile.Eof())
+		{
+			file_text += "\n" + tfile.GetNextLine();
+		}
+	}
+	return file_text.ToStdString();
+}
+
 void GenerateDocs2::copy_binary_files(const std::string source_path, const std::string source_sub_path, const std::string destination_path, const std::string destination_sub_path, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no)
 {
 	std::filesystem::path full_source_path(source_path);
@@ -260,6 +364,7 @@ void GenerateDocs2::copy_binary_files(const std::string source_path, const std::
 		}
 	}
 }
+
 
 
 // Destructor:

@@ -11,6 +11,9 @@
 #include <map>
 #include <filesystem>
 #include <wx/datetime.h>
+#include <wx/dir.h>
+#include <wx/msgdlg.h>
+#include <wx/tokenzr.h>
 
 
 class GenerateDocs2
@@ -37,6 +40,8 @@ private:
     std::string strip_extension(const std::string our_filename);
 
     std::vector<std::string> scan_directory(const std::string directory_name);
+    void write_text_file(const std::string& file_path, const std::string& file_name, const std::string& file_body, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no);
+    std::string read_text_file(const std::string& file_path, const std::string& file_name);
     void copy_binary_files(const std::string source_path, const std::string source_sub_path, const std::string destination_path, const std::string destination_sub_path, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no);
 };
 
