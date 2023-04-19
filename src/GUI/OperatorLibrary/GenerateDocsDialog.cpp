@@ -172,6 +172,7 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 			new_docs_path);
 		*/
 		wxMessageBox("Generate button pressed\nTemplate path: " + template_path + "\nExamples path: " + examples_path + "\nDocs path : " + new_docs_path + "\noverwrite files : " + overwrite_files_style);
+		/*
 		GenerateDocs docgen = GenerateDocs(
 			m_yes_to_all_radio->GetValue(),
 			m_warn_radio->GetValue(),
@@ -179,6 +180,15 @@ void GenerateDocsDialog::OnGenerateButtonDown(wxCommandEvent& event)
 			template_path,
 			examples_path,
 			new_docs_path);
+		*/
+		GenerateDocs2 docgen = GenerateDocs2(
+			m_yes_to_all_radio->GetValue(),
+			m_warn_radio->GetValue(),
+			m_no_radio->GetValue(),
+			template_path.ToStdString(),
+			examples_path.ToStdString(),
+			new_docs_path.ToStdString());
+
 	}
 }
 

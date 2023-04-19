@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2023/4/16
+// Updated 2023/4/19
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2023/4/16"
+#define APP_BUILD_DATE "2023/4/19"
 #define APP_VERSION "4.0.alpha4"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -108,6 +108,7 @@
 #include "GUI/OperatorLibrary/SearchResultsDialog.h"
 #include "GUI/OperatorLibrary/GenerateDocsDialog.h"
 #include "GUI/OperatorLibrary/GenerateDocs.h"
+#include "GUI/OperatorLibrary/GenerateDocs2.h"
 
 
 // Back end includes:
