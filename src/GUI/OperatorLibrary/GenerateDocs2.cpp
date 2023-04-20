@@ -242,7 +242,7 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 	string_replace_all(example_str, "$creation-date$", settings["$creation-date$"]);
 
 	int loop_count = 0;
-	int max_count = 3;
+	int max_count = 5;
 	for (const auto& name : sw_files)
 	{
 		std::string local_example_str = example_str;
@@ -431,7 +431,7 @@ void GenerateDocs2::write_text_file(const std::string& file_path, const std::str
 {
 	if (!wxFileName::Mkdir(file_path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL))
 	{
-		wxMessageBox("Failed to create directory: " + file_path);
+		wxMessageBox("Write text file failed to create directory: " + file_path);
 		return;
 	}
 	wxFileName working_file(file_path, file_name);
@@ -478,10 +478,9 @@ void GenerateDocs2::write_text_file(const std::string& file_path, const std::str
 		{
 			tfile.Create();
 		}
-		wxStringTokenizer tokenizer(file_body, "\n"); // Is there a better way to extract lines from a string?
-		while (tokenizer.HasMoreTokens())
+		std::vector<std::string> lines = split(file_body, "\n");
+		for (const auto& line : lines)
 		{
-			wxString line = tokenizer.GetNextToken();
 			tfile.AddLine(line);
 		}
 		tfile.Write();
