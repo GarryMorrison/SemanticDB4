@@ -140,7 +140,79 @@ void GenerateDocs2::populate_and_write_index(std::map<std::string, std::string>&
 
 void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location)
 {
+	// Load our variables:
+	std::string template_path = settings["$template-path$"];
+	std::string destination_path = settings["$destination-path$"];
+	std::string destination_css_path = settings["$destination-css-path$"];
+	std::string destination_image_path = settings["$destination-image-path$"];
+	std::string destination_file_extension = settings["$destination-file-extension$"];
+	bool overwrite_yes_to_all = string_to_bool(settings["$overwrite-yes-to-all$"]);
+	bool overwrite_warn = string_to_bool(settings["$overwrite-warn$"]);
+	bool overwrite_dont_warn = string_to_bool(settings["$overwrite-dont-warn$"]);
+	bool escape_html = string_to_bool(settings["$html-escape-operator-fields$"]);
 
+	std::string operator_template = settings["$operator-template$"];
+	std::string operator_str = read_text_file(template_path, operator_template);
+
+	// Now write into our template string the variables that are universal to all operators:
+	string_replace_all(operator_str, "$menu-structure$", ""); // Empty for now.
+	string_replace_all(operator_str, "$destination-index-file-name$", settings["$destination-index-file-name$"]);
+	string_replace_all(operator_str, "$destination-css-path$", settings["$destination-css-path$"]);
+	string_replace_all(operator_str, "$destination-image-path$", settings["$destination-image-path$"]);
+	string_replace_all(operator_str, "$creation-date$", settings["$creation-date$"]);
+
+	int loop_count = 0;
+	int max_count = 5;
+	for (const auto& it : name_vs_location)
+	{
+		std::string name = it.first;
+		std::string location = it.second;
+		std::string inverse_path = get_inverse_path(location);
+		std::string local_operator_str = operator_str;
+
+		if (name.empty())
+		{
+			continue;
+		}
+
+		if (!operator_usage_map.usage_is_defined(name))
+		{
+			wxMessageBox("No usage info available for operator: " + name);
+			continue;
+		}
+		OpUsageInfo* usageInfo = operator_usage_map.get_usage_info(name);
+		if (!usageInfo)
+		{
+			wxMessageBox("No usage info found for: " + name);
+			continue;
+		}
+		string_replace_all(local_operator_str, "$inverse-path$", inverse_path);
+		string_replace_all(local_operator_str, "$operator-name$", escape_html_chars(name, escape_html));
+		string_replace_all(local_operator_str, "$operator-description$", escape_html_chars(usageInfo->Description, escape_html));
+		string_replace_all(local_operator_str, "$operator-examples$", escape_html_chars(usageInfo->Examples, escape_html));
+		string_replace_all(local_operator_str, "$operator-see-also$", escape_html_chars(usageInfo->SeeAlso, escape_html));
+
+		std::string operator_types_str = join(fn_map.get_operator_types(name), ", ");
+		string_replace_all(local_operator_str, "$operator-type$", operator_types_str);
+
+		wxMessageBox(local_operator_str);
+
+		// Now write it to disk:
+		std::filesystem::path full_destination_path(destination_path);
+		full_destination_path.append(location);
+		std::string filename = escape_infix_operators(name) + destination_file_extension;
+		wxMessageBox("full destination path: " + full_destination_path.string() + "\nfilename: " + filename);
+
+		write_text_file(full_destination_path.string(), filename, local_operator_str, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
+
+		if (loop_count >= max_count)
+		{
+			break;
+		}
+		loop_count++;
+	}
+
+	// wxMessageBox(operator_str);
 }
 
 void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location)
@@ -204,10 +276,10 @@ void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::st
 		{
 			name_vs_location[reference_name] = path;
 		}
-		
+
 		list += "\n" + local_list_element_string;
 	}
-	wxMessageBox(list);
+	// wxMessageBox(list);
 	settings[list_var] = list;
 }
 
@@ -246,7 +318,15 @@ std::string GenerateDocs2::get_inverse_path(const std::string source_path)
 	{
 		return source_path;
 	}
-	std::filesystem::path sub_path(source_path);
+
+	// Remove trailing directory separator:
+	std::string directory = source_path;
+	while ((directory.back() == '/') || (directory.back() == '\\'))
+	{
+		directory.erase(directory.size() - 1);
+	}
+	
+	std::filesystem::path sub_path(directory);
 	std::filesystem::path inverse_sub_path;
 	for (const auto& p : sub_path)
 	{
@@ -316,7 +396,7 @@ void GenerateDocs2::write_text_file(const std::string& file_path, const std::str
 			will_write_file = false;
 		}
 	}
-	if (overwrite_no)
+	if (overwrite_no && tfile.Exists())
 	{
 		wxMessageBox("Will not overwrite file");
 		will_write_file = false;
