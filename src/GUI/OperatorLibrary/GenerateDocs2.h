@@ -10,6 +10,7 @@
 #include "../../SDB.h"
 #include <map>
 #include <filesystem>
+#include <algorithm>
 #include <wx/datetime.h>
 #include <wx/dir.h>
 #include <wx/msgdlg.h>
@@ -31,6 +32,8 @@ private:
     void populate_and_write_operators(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location);
     void populate_and_write_examples(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location);
     void copy_css_and_images(std::map<std::string, std::string>& settings);
+    void generate_list_and_populate_name_vs_location(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location, const std::string list_var, const std::string path_var, std::vector<std::string>& object_vec);
+    void generate_list_and_populate_name_vs_location(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location, const std::string list_var, const std::string path_var, std::set<ulong>& object_set);
 
     std::string bool_to_string(bool value);
     bool string_to_bool(const std::string s);
@@ -43,5 +46,8 @@ private:
     void write_text_file(const std::string& file_path, const std::string& file_name, const std::string& file_body, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no);
     std::string read_text_file(const std::string& file_path, const std::string& file_name);
     void copy_binary_files(const std::string source_path, const std::string source_sub_path, const std::string destination_path, const std::string destination_sub_path, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no);
+
+    std::string escape_infix_operators(const std::string& raw_string);
+    std::string escape_html_chars(const std::string& source, bool invoke = true);
 };
 

@@ -82,7 +82,32 @@ void GenerateDocs2::populate_settings(std::map<std::string, std::string>& settin
 
 void GenerateDocs2::populate_menu(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location)
 {
+	// Load our variables:
+	std::string template_path = settings["$template-path$"];
+	std::string list_element_template = settings["$list-element-template$"];
+	std::string menu_template = settings["$menu-template$"];
 
+	std::string menu_template_string = read_text_file(template_path, menu_template);
+	settings["$list-element-string$"] = read_text_file(template_path, list_element_template);
+
+	
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-statements-list$", "$menu-language-elements-statements-path$", fn_map.list_of_statements);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-learn-rules-list$", "$menu-language-elements-learn-rules-path$", fn_map.list_of_learn_rules_spaces);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-infix-type-1-list$", "$menu-language-elements-infix-type-1-path$", fn_map.list_of_infix_type1_spaces);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-infix-type-2-list$", "$menu-language-elements-infix-type-2-path$", fn_map.list_of_infix_type2_spaces);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-miscellaneous-elements-list$", "$menu-language-elements-miscellaneous-elements-path$", fn_map.list_of_misc_elements);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-object-types-list$", "$menu-language-elements-object-types-path$", fn_map.list_of_object_types);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-operator-types-list$", "$menu-language-elements-operator-types-path$", fn_map.list_of_operator_types);
+
+	string_replace_all(menu_template_string, "$menu-language-elements-statements-list$", settings["$menu-language-elements-statements-list$"]);
+	string_replace_all(menu_template_string, "$menu-language-elements-learn-rules-list$", settings["$menu-language-elements-learn-rules-list$"]);
+	string_replace_all(menu_template_string, "$menu-language-elements-infix-type-1-list$", settings["$menu-language-elements-infix-type-1-list$"]);
+	string_replace_all(menu_template_string, "$menu-language-elements-infix-type-2-list$", settings["$menu-language-elements-infix-type-2-list$"]);
+	string_replace_all(menu_template_string, "$menu-language-elements-miscellaneous-elements-list$", settings["$menu-language-elements-miscellaneous-elements-list$"]);
+	string_replace_all(menu_template_string, "$menu-language-elements-object-types-list$", settings["$menu-language-elements-object-types-list$"]);
+	string_replace_all(menu_template_string, "$menu-language-elements-operator-types-list$", settings["$menu-language-elements-operator-types-list$"]);
+
+	settings["$menu-structure$"] = menu_template_string;
 }
 
 void GenerateDocs2::populate_and_write_index(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location)
@@ -102,6 +127,7 @@ void GenerateDocs2::populate_and_write_index(std::map<std::string, std::string>&
 
 	// Now write them into our index file:
 	string_replace_all(index_str, "$menu-structure$", settings["$menu-structure$"]);
+	string_replace_all(index_str, "$inverse-path$", "");
 	string_replace_all(index_str, "$destination-css-path$", settings["$destination-css-path$"]);
 	string_replace_all(index_str, "$destination-image-path$", settings["$destination-image-path$"]);
 	string_replace_all(index_str, "$creation-date$", settings["$creation-date$"]);
@@ -137,6 +163,42 @@ void GenerateDocs2::copy_css_and_images(std::map<std::string, std::string>& sett
 
 	// Copy image files:
 	copy_binary_files(template_path, source_image_path, destination_path, destination_image_path, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
+}
+
+void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location, const std::string list_var, const std::string path_var, std::vector<std::string>& object_vec)
+{
+	// Load our variables:
+	std::string list_element_string = settings["$list-element-string$"];
+	std::string path = settings[path_var];
+
+	string_replace_all(list_element_string, "$object-reference-path$", path);
+	string_replace_all(list_element_string, "$object-reference-extension$", ""); // Fill out later!
+
+	std::string list;
+
+	// Loop through our vector:
+	for (const auto& name : object_vec)
+	{
+		std::string local_list_element_string = list_element_string;
+		string_replace_all(local_list_element_string, "$object-label-name$", escape_html_chars(name));
+		string_replace_all(local_list_element_string, "$object-reference-name$", escape_infix_operators(name));
+
+		// If name is not already in the name vs location map, then insert it:
+		// This is so we only save an object to one file location.
+		if (name_vs_location.find(name) == name_vs_location.end())
+		{
+			name_vs_location[name] = path;
+		}
+		
+		list += "\n" + local_list_element_string;
+	}
+	wxMessageBox(list);
+	settings[list_var] = list;
+}
+
+void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location, const std::string list_var, const std::string path_var, std::set<ulong>& object_set)
+{
+
 }
 
 std::string GenerateDocs2::bool_to_string(bool value)
@@ -366,6 +428,56 @@ void GenerateDocs2::copy_binary_files(const std::string source_path, const std::
 }
 
 
+std::string GenerateDocs2::escape_infix_operators(const std::string& raw_string)
+{
+	if (raw_string == " + ") { return "infix_plus"; }
+	if (raw_string == " - ") { return "infix_minus"; }
+	if (raw_string == " _ ") { return "infix_merge"; }
+	if (raw_string == " __ ") { return "infix_smerge"; }
+	if (raw_string == " :_ ") { return "infix_colon_merge"; }
+	if (raw_string == " . ") { return "infix_seq"; }
+	if (raw_string == " => ") { return "learn_rule"; }
+	if (raw_string == " _=> ") { return "non_empty_learn_rule"; }
+	if (raw_string == " +=> ") { return "add_learn_rule"; }
+	if (raw_string == " .=> ") { return "seq_learn_rule"; }
+	if (raw_string == " #=> ") { return "stored_learn_rule"; }
+	if (raw_string == " !=> ") { return "memoize_learn_rule"; }
+	if (raw_string == " == ") { return "infix_equal"; }
+	if (raw_string == " != ") { return "infix_not_equal"; }
+	if (raw_string == " >= ") { return "infix_greater_equal"; }
+	if (raw_string == " > ") { return "infix_greater"; }
+	if (raw_string == " <= ") { return "infix_less_equal"; }
+	if (raw_string == " < ") { return "infix_less"; }
+	if (raw_string == " && ") { return "infix_and"; }
+	if (raw_string == " || ") { return "infix_or"; }
+	if (raw_string == " ++ ") { return "infix_double_plus"; }
+	if (raw_string == " -- ") { return "infix_double_minus"; }
+	if (raw_string == " ** ") { return "infix_double_mult"; }
+	if (raw_string == " // ") { return "infix_double_div"; }
+	if (raw_string == " %% ") { return "infix_double_mod"; }
+	if (raw_string == " ^^ ") { return "infix_double_pow"; }
+	if (raw_string == " .. ") { return "infix_range"; }
+	if (raw_string == "|*>") { return "misc_star_ket"; }
+	if (raw_string == "|category: *>") { return "misc_category_ket"; }
+	if (raw_string == "|_self>") { return "misc_self_ket"; }
+	if (raw_string == "(*,*)") { return "misc_star_params"; }
+	if (raw_string == "|__self>") { return "misc_multi_self_ket"; }
+	if (raw_string == "|context>") { return "misc_context_ket"; }
+	if (raw_string == "|>") { return "misc_empty_ket"; }
+	return raw_string;
+}
+
+std::string GenerateDocs2::escape_html_chars(const std::string& source, bool invoke)
+{
+	if (!invoke)
+	{
+		return source;
+	}
+	std::string result = source;
+	string_replace_all(result, ">", "&gt;");
+	string_replace_all(result, "<", "&lt;");
+	return result;
+}
 
 // Destructor:
 GenerateDocs2::~GenerateDocs2()
