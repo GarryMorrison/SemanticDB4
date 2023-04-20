@@ -84,12 +84,13 @@ void GenerateDocs2::populate_menu(std::map<std::string, std::string>& settings, 
 {
 	// Load our variables:
 	std::string template_path = settings["$template-path$"];
+	std::string examples_path = settings["$examples-path$"];
 	std::string list_element_template = settings["$list-element-template$"];
 	std::string menu_template = settings["$menu-template$"];
 
 	std::string menu_template_string = read_text_file(template_path, menu_template);
 	settings["$list-element-string$"] = read_text_file(template_path, list_element_template);
-
+	std::vector<std::string> sw_files = scan_directory(examples_path);
 	
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-statements-list$", "$menu-language-elements-statements-path$", fn_map.list_of_statements);
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-learn-rules-list$", "$menu-language-elements-learn-rules-path$", fn_map.list_of_learn_rules_spaces);
@@ -98,6 +99,7 @@ void GenerateDocs2::populate_menu(std::map<std::string, std::string>& settings, 
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-miscellaneous-elements-list$", "$menu-language-elements-miscellaneous-elements-path$", fn_map.list_of_misc_elements);
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-object-types-list$", "$menu-language-elements-object-types-path$", fn_map.list_of_object_types);
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-operator-types-list$", "$menu-language-elements-operator-types-path$", fn_map.list_of_operator_types);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-examples-list$", "$menu-examples-path$", sw_files);
 
 	string_replace_all(menu_template_string, "$menu-language-elements-statements-list$", settings["$menu-language-elements-statements-list$"]);
 	string_replace_all(menu_template_string, "$menu-language-elements-learn-rules-list$", settings["$menu-language-elements-learn-rules-list$"]);
@@ -106,6 +108,7 @@ void GenerateDocs2::populate_menu(std::map<std::string, std::string>& settings, 
 	string_replace_all(menu_template_string, "$menu-language-elements-miscellaneous-elements-list$", settings["$menu-language-elements-miscellaneous-elements-list$"]);
 	string_replace_all(menu_template_string, "$menu-language-elements-object-types-list$", settings["$menu-language-elements-object-types-list$"]);
 	string_replace_all(menu_template_string, "$menu-language-elements-operator-types-list$", settings["$menu-language-elements-operator-types-list$"]);
+	string_replace_all(menu_template_string, "$menu-examples-list$", settings["$menu-examples-list$"]);
 
 	settings["$menu-structure$"] = menu_template_string;
 }
@@ -170,9 +173,11 @@ void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::st
 	// Load our variables:
 	std::string list_element_string = settings["$list-element-string$"];
 	std::string path = settings[path_var];
+	bool strip_name_extension = string_to_bool(settings["$strip-extensions-for-menu-items$"]);
+	bool html_escape_menu_item = string_to_bool(settings["$html-escape-menu-items$"]);
 
 	string_replace_all(list_element_string, "$object-reference-path$", path);
-	string_replace_all(list_element_string, "$object-reference-extension$", ""); // Fill out later!
+	string_replace_all(list_element_string, "$object-reference-extension$", settings["$destination-file-extension$"]);
 
 	std::string list;
 
@@ -180,14 +185,24 @@ void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::st
 	for (const auto& name : object_vec)
 	{
 		std::string local_list_element_string = list_element_string;
-		string_replace_all(local_list_element_string, "$object-label-name$", escape_html_chars(name));
-		string_replace_all(local_list_element_string, "$object-reference-name$", escape_infix_operators(name));
+		std::string reference_name = name;
+		if (strip_name_extension)
+		{
+			reference_name = strip_extension(name);
+		}
+		std::string label_name = reference_name;
+		if (html_escape_menu_item)
+		{
+			label_name = escape_html_chars(reference_name);
+		}
+		string_replace_all(local_list_element_string, "$object-label-name$", label_name);
+		string_replace_all(local_list_element_string, "$object-reference-name$", escape_infix_operators(reference_name));
 
 		// If name is not already in the name vs location map, then insert it:
 		// This is so we only save an object to one file location.
-		if (name_vs_location.find(name) == name_vs_location.end())
+		if (name_vs_location.find(reference_name) == name_vs_location.end())
 		{
-			name_vs_location[name] = path;
+			name_vs_location[reference_name] = path;
 		}
 		
 		list += "\n" + local_list_element_string;
