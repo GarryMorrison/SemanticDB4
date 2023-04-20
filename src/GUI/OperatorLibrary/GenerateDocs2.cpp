@@ -162,7 +162,7 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 	string_replace_all(operator_str, "$creation-date$", settings["$creation-date$"]);
 
 	int loop_count = 0;
-	int max_count = 5;
+	int max_count = 2;
 	for (const auto& it : name_vs_location)
 	{
 		std::string name = it.first;
@@ -217,7 +217,73 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 
 void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location)
 {
+	// Load our variables:
+	std::string template_path = settings["$template-path$"];
+	std::string examples_path = settings["$examples-path$"];
+	std::string destination_path = settings["$destination-path$"];
+	std::string destination_css_path = settings["$destination-css-path$"];
+	std::string destination_image_path = settings["$destination-image-path$"];
+	std::string destination_file_extension = settings["$destination-file-extension$"];
+	bool overwrite_yes_to_all = string_to_bool(settings["$overwrite-yes-to-all$"]);
+	bool overwrite_warn = string_to_bool(settings["$overwrite-warn$"]);
+	bool overwrite_dont_warn = string_to_bool(settings["$overwrite-dont-warn$"]);
+	bool escape_html = string_to_bool(settings["$html-escape-example-fields$"]);
+	bool strip_name_extension = string_to_bool(settings["$strip-extensions-for-menu-items$"]);
 
+	std::string example_template = settings["$example-template$"];
+	std::string example_str = read_text_file(template_path, example_template);
+	std::vector<std::string> sw_files = scan_directory(examples_path);
+
+	// Now write into our template string the variables that are universal to all operators:
+	string_replace_all(example_str, "$menu-structure$", ""); // Empty for now.
+	string_replace_all(example_str, "$destination-index-file-name$", settings["$destination-index-file-name$"]);
+	string_replace_all(example_str, "$destination-css-path$", settings["$destination-css-path$"]);
+	string_replace_all(example_str, "$destination-image-path$", settings["$destination-image-path$"]);
+	string_replace_all(example_str, "$creation-date$", settings["$creation-date$"]);
+
+	int loop_count = 0;
+	int max_count = 3;
+	for (const auto& name : sw_files)
+	{
+		std::string local_example_str = example_str;
+		std::string reference_name = name;
+		if (strip_name_extension)
+		{
+			reference_name = strip_extension(name);
+		}
+		std::string location = name_vs_location[reference_name];  // Yeah, all examples should have the same path, but just in case we load from our map.
+		std::string inverse_path = get_inverse_path(location);
+		std::string raw_example_body = read_text_file(examples_path, name);
+		std::string example_body = raw_example_body;
+		if (escape_html)
+		{
+			example_body = escape_html_chars(example_body);
+		}
+
+		string_replace_all(local_example_str, "$inverse-path$", inverse_path);
+		string_replace_all(local_example_str, "$example-name$", reference_name);
+		string_replace_all(local_example_str, "$example-body$", example_body);
+		string_replace_all(local_example_str, "$example-link-to-raw-file$", name);
+
+		wxMessageBox(local_example_str);
+
+		// Now write it to disk:
+		std::filesystem::path full_destination_path(destination_path);
+		full_destination_path.append(location);
+		std::string filename = reference_name + destination_file_extension;
+		wxMessageBox("full destination path: " + full_destination_path.string() + "\nfilename: " + filename);
+
+		write_text_file(full_destination_path.string(), filename, local_example_str, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
+		write_text_file(full_destination_path.string(), name, raw_example_body, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
+
+		if (loop_count >= max_count)
+		{
+			break;
+		}
+		loop_count++;
+	}
+
+	// wxMessageBox(example_str);
 }
 
 void GenerateDocs2::copy_css_and_images(std::map<std::string, std::string>& settings)
