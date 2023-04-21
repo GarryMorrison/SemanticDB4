@@ -41,6 +41,7 @@ private:
     std::string normalize_path_separator(const std::string source_path);
     std::string get_inverse_path(const std::string source_path);
     std::string strip_extension(const std::string our_filename);
+    std::string strip_trailing_white_space(const std::string source, const char* t = " \t\n\r\f\v");
 
     std::vector<std::string> scan_directory(const std::string directory_name);
     void write_text_file(const std::string& file_path, const std::string& file_name, const std::string& file_body, bool overwrite_yes_to_all, bool overwrite_warn, bool overwrite_no);
@@ -49,5 +50,6 @@ private:
 
     std::string escape_infix_operators(const std::string& raw_string);
     std::string escape_html_chars(const std::string& source, bool invoke = true);
+    std::string html_linkify_and_escape(const std::string& source, const std::string& inverse_path, std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location, bool linkify, bool escape);
 };
 

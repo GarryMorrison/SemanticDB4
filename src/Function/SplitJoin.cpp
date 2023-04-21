@@ -75,3 +75,36 @@ std::vector<std::string> split_on_first(const std::string& s, const std::string&
     }
     return result;
 }
+
+std::vector<std::string> split_on_chars(const std::string& s, const std::set<char> chars)
+{
+    std::vector<std::string> result;
+    std::string token;
+    token.clear();
+
+    // loop through our string, one char at a time:
+    for (char c : s)
+    {
+        if (chars.find(c) != chars.end())
+        {
+            if (!token.empty())
+            {
+                result.push_back(token);
+                token.clear();
+            }
+            result.push_back(std::string(1,c));
+        }
+        else
+        {
+            token += c;
+        }
+    }
+
+    // Make sure we catch the last token too:
+    if (!token.empty())
+    {
+        result.push_back(token);
+    }
+
+    return result;
+}

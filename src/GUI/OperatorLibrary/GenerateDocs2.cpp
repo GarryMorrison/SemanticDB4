@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/4/19
-// Updated 2023/4/19
+// Updated 2023/4/21
 // Author Garry Morrison
 // License GPL v3
 //
@@ -89,7 +89,8 @@ void GenerateDocs2::populate_menu(std::map<std::string, std::string>& settings, 
 	std::string menu_template = settings["$menu-template$"];
 
 	std::string menu_template_string = read_text_file(template_path, menu_template);
-	settings["$list-element-string$"] = read_text_file(template_path, list_element_template);
+	settings["$list-element-string$"] = strip_trailing_white_space(read_text_file(template_path, list_element_template));
+
 	std::vector<std::string> sw_files = scan_directory(examples_path);
 	
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-statements-list$", "$menu-language-elements-statements-path$", fn_map.list_of_statements);
@@ -150,12 +151,14 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 	bool overwrite_warn = string_to_bool(settings["$overwrite-warn$"]);
 	bool overwrite_dont_warn = string_to_bool(settings["$overwrite-dont-warn$"]);
 	bool escape_html = string_to_bool(settings["$html-escape-operator-fields$"]);
+	bool linkify_operator_example_field = string_to_bool(settings["$linkify-operator-example-field$"]);
+	bool linkify_operator_see_also_field = string_to_bool(settings["$linkify-operator-see-also-field$"]);
 
 	std::string operator_template = settings["$operator-template$"];
 	std::string operator_str = read_text_file(template_path, operator_template);
 
 	// Now write into our template string the variables that are universal to all operators:
-	string_replace_all(operator_str, "$menu-structure$", ""); // Empty for now.
+	string_replace_all(operator_str, "$menu-structure$", settings["$menu-structure$"]);
 	string_replace_all(operator_str, "$destination-index-file-name$", settings["$destination-index-file-name$"]);
 	string_replace_all(operator_str, "$destination-css-path$", settings["$destination-css-path$"]);
 	string_replace_all(operator_str, "$destination-image-path$", settings["$destination-image-path$"]);
@@ -189,8 +192,8 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 		string_replace_all(local_operator_str, "$inverse-path$", inverse_path);
 		string_replace_all(local_operator_str, "$operator-name$", escape_html_chars(name, escape_html));
 		string_replace_all(local_operator_str, "$operator-description$", escape_html_chars(usageInfo->Description, escape_html));
-		string_replace_all(local_operator_str, "$operator-examples$", escape_html_chars(usageInfo->Examples, escape_html));
-		string_replace_all(local_operator_str, "$operator-see-also$", escape_html_chars(usageInfo->SeeAlso, escape_html));
+		string_replace_all(local_operator_str, "$operator-examples$", html_linkify_and_escape(usageInfo->Examples, inverse_path, settings, name_vs_location, linkify_operator_example_field, escape_html));
+		string_replace_all(local_operator_str, "$operator-see-also$", html_linkify_and_escape(usageInfo->SeeAlso, inverse_path, settings, name_vs_location, linkify_operator_see_also_field, escape_html));
 
 		std::string operator_types_str = join(fn_map.get_operator_types(name), ", ");
 		string_replace_all(local_operator_str, "$operator-type$", operator_types_str);
@@ -228,6 +231,7 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 	bool overwrite_warn = string_to_bool(settings["$overwrite-warn$"]);
 	bool overwrite_dont_warn = string_to_bool(settings["$overwrite-dont-warn$"]);
 	bool escape_html = string_to_bool(settings["$html-escape-example-fields$"]);
+	bool linkify = string_to_bool(settings["$linkify-example-body-field$"]);
 	bool strip_name_extension = string_to_bool(settings["$strip-extensions-for-menu-items$"]);
 
 	std::string example_template = settings["$example-template$"];
@@ -235,7 +239,7 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 	std::vector<std::string> sw_files = scan_directory(examples_path);
 
 	// Now write into our template string the variables that are universal to all operators:
-	string_replace_all(example_str, "$menu-structure$", ""); // Empty for now.
+	string_replace_all(example_str, "$menu-structure$", settings["$menu-structure$"]);
 	string_replace_all(example_str, "$destination-index-file-name$", settings["$destination-index-file-name$"]);
 	string_replace_all(example_str, "$destination-css-path$", settings["$destination-css-path$"]);
 	string_replace_all(example_str, "$destination-image-path$", settings["$destination-image-path$"]);
@@ -254,11 +258,7 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 		std::string location = name_vs_location[reference_name];  // Yeah, all examples should have the same path, but just in case we load from our map.
 		std::string inverse_path = get_inverse_path(location);
 		std::string raw_example_body = read_text_file(examples_path, name);
-		std::string example_body = raw_example_body;
-		if (escape_html)
-		{
-			example_body = escape_html_chars(example_body);
-		}
+		std::string example_body = html_linkify_and_escape(raw_example_body, inverse_path, settings, name_vs_location, linkify, escape_html);
 
 		string_replace_all(local_example_str, "$inverse-path$", inverse_path);
 		string_replace_all(local_example_str, "$example-name$", reference_name);
@@ -636,6 +636,81 @@ std::string GenerateDocs2::escape_html_chars(const std::string& source, bool inv
 	std::string result = source;
 	string_replace_all(result, ">", "&gt;");
 	string_replace_all(result, "<", "&lt;");
+	return result;
+}
+
+std::string GenerateDocs2::strip_trailing_white_space(const std::string source, const char* t)
+{
+	std::string s = source;
+	s.erase(s.find_last_not_of(t) + 1);
+	return s;
+}
+
+
+std::string GenerateDocs2::html_linkify_and_escape(const std::string& source, const std::string& inverse_path, std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location, bool linkify, bool escape)
+{
+	// Handle a couple of easy cases:
+	if (!linkify && !escape)
+	{
+		return source;
+	}
+	if (!linkify && escape)
+	{
+		return escape_html_chars(source, true);
+	}
+
+	// Load our variables:
+	std::string template_path = settings["$template-path$"];
+	std::string linkify_template = settings["$linkify-template$"];
+	std::string destination_file_extension = settings["$destination-file-extension$"];
+
+	std::string linkify_template_str = strip_trailing_white_space(read_text_file(template_path, linkify_template));
+
+	if (linkify_template_str.empty())  // If we don't have a linkify-template we can't do any processing of the source text, so return it.
+	{
+		return source;
+	}
+
+	string_replace_all(linkify_template_str, "$inverse-path$", inverse_path);
+	string_replace_all(linkify_template_str, "$object-reference-extension$", destination_file_extension);
+
+	std::set<char> split_chars = { ' ', ',', '\n', '[', '(' };
+	std::vector<std::string> tokens = split_on_chars(source, split_chars);  // Split our source text into tokens.
+
+	std::string result;
+	for (const auto& token : tokens)
+	{
+		if (token.empty())  // Just a guard, so we don't do token[0] on a zero length string.
+		{
+			continue;
+		}
+		if (split_chars.find(token[0]) != split_chars.end())
+		{
+			result += token;  // We don't need to html escape the split chars, since < or > are not members.
+			continue;
+		}
+		if (name_vs_location.find(token) != name_vs_location.end())
+		{
+			std::string local_linkify_template_str = linkify_template_str;
+			string_replace_all(local_linkify_template_str, "$object-reference-path$", normalize_path_separator(name_vs_location[token]));
+			string_replace_all(local_linkify_template_str, "$object-reference-name$", escape_infix_operators(token));
+			string_replace_all(local_linkify_template_str, "$object-label-name$", escape_html_chars(token, escape));
+			result += local_linkify_template_str;
+		} else if (name_vs_location.find(" " + token + " ") != name_vs_location.end())
+		{
+			std::string local_linkify_template_str = linkify_template_str;
+			std::string token2 = " " + token + " ";
+			string_replace_all(local_linkify_template_str, "$object-reference-path$", normalize_path_separator(name_vs_location[token2]));
+			string_replace_all(local_linkify_template_str, "$object-reference-name$", escape_infix_operators(token2));
+			string_replace_all(local_linkify_template_str, "$object-label-name$", escape_html_chars(token, escape));
+			result += local_linkify_template_str;
+		}
+		else
+		{
+			result += escape_html_chars(token, escape);
+		}
+	}
+
 	return result;
 }
 
