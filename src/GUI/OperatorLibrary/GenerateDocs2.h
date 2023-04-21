@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/4/19
-// Updated 2023/4/19
+// Updated 2023/4/22
 // Author Garry Morrison
 // License GPL v3
 //
@@ -41,6 +41,7 @@ private:
     std::string normalize_path_separator(const std::string source_path);
     std::string get_inverse_path(const std::string source_path);
     std::string strip_extension(const std::string our_filename);
+    std::string smart_strip_extension(const std::string our_filename);
     std::string strip_trailing_white_space(const std::string source, const char* t = " \t\n\r\f\v");
 
     std::vector<std::string> scan_directory(const std::string directory_name);

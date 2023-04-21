@@ -326,7 +326,7 @@ void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::st
 		std::string reference_name = name;
 		if (strip_name_extension)
 		{
-			reference_name = strip_extension(name);
+			reference_name = smart_strip_extension(name);
 		}
 		std::string label_name = reference_name;
 		if (html_escape_menu_item)
@@ -403,6 +403,17 @@ std::string GenerateDocs2::get_inverse_path(const std::string source_path)
 
 std::string GenerateDocs2::strip_extension(const std::string our_filename)
 {
+	std::filesystem::path file_name(our_filename);
+	file_name.replace_extension("");
+	return file_name.string();
+}
+
+std::string GenerateDocs2::smart_strip_extension(const std::string our_filename)
+{
+	if (our_filename != escape_infix_operators(our_filename))  // A little hackish, but should do the job!
+	{
+		return our_filename;
+	}
 	std::filesystem::path file_name(our_filename);
 	file_name.replace_extension("");
 	return file_name.string();
