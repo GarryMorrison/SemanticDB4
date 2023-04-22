@@ -100,6 +100,37 @@ void GenerateDocs2::populate_menu(std::map<std::string, std::string>& settings, 
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-miscellaneous-elements-list$", "$menu-language-elements-miscellaneous-elements-path$", fn_map.list_of_misc_elements);
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-object-types-list$", "$menu-language-elements-object-types-path$", fn_map.list_of_object_types);
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-language-elements-operator-types-list$", "$menu-language-elements-operator-types-path$", fn_map.list_of_operator_types);
+
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-core-normal-list$", "$menu-operators-core-normal-path$", fn_map.set_built_in);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-core-compound-list$", "$menu-operators-core-compound-path$", fn_map.set_compound_built_in);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-core-compound-context-list$", "$menu-operators-core-compound-context-path$", fn_map.set_compound_context_built_in);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-sigmoid-normal-list$", "$menu-operators-sigmoid-normal-path$", fn_map.set_sigmoids);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-sigmoid-compound-list$", "$menu-operators-sigmoid-compound-path$", fn_map.set_compound_sigmoids);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-ket-normal-list$", "$menu-operators-ket-normal-path$", fn_map.set_ket_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-ket-compound-list$", "$menu-operators-ket-compound-path$", fn_map.set_compound_ket_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-ket-context-list$", "$menu-operators-ket-context-path$", fn_map.set_context_ket_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-superposition-normal-list$", "$menu-operators-superposition-normal-path$", fn_map.set_sp_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-superposition-compound-list$", "$menu-operators-superposition-compound-path$", fn_map.set_compound_sp_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-superposition-compound-context-list$", "$menu-operators-superposition-compound-context-path$", fn_map.set_compound_context_sp_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-sequence-normal-list$", "$menu-operators-sequence-normal-path$", fn_map.set_seq_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-sequence-context-list$", "$menu-operators-sequence-context-path$", fn_map.set_context_seq_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-sequence-compound-list$", "$menu-operators-sequence-compound-path$", fn_map.set_compound_seq_fn);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-sequnece-compound-context-list$", "$menu-operators-sequence-compound-context-path$", fn_map.set_compound_context_seq_fn);
+
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-function-normal-1-parameter-list$", "$menu-operators-function-normal-1-parameter-path$", fn_map.set_whitelist_1);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-function-normal-2-parameter-list$", "$menu-operators-function-normal-2-parameter-path$", fn_map.set_whitelist_2);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-function-normal-3-parameter-list$", "$menu-operators-function-normal-3-parameter-path$", fn_map.set_whitelist_3);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-function-normal-4-parameter-list$", "$menu-operators-function-normal-4-parameter-path$", fn_map.set_whitelist_4);
+
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-function-context-1-parameter-list$", "$menu-operators-function-context-1-parameter-path$", fn_map.set_context_whitelist_1);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-function-context-2-parameter-list$", "$menu-operators-function-context-2-parameter-path$", fn_map.set_context_whitelist_2);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-function-context-3-parameter-list$", "$menu-operators-function-context-3-parameter-path$", fn_map.set_context_whitelist_3);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-function-context-4-parameter-list$", "$menu-operators-function-context-4-parameter-path$", fn_map.set_context_whitelist_4);
+	
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-all-simple-list$", "$menu-operators-all-simple-path$", fn_map.set_simple_operators);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-all-compound-list$", "$menu-operators-all-compound-path$", fn_map.set_compound_operators);
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-operators-all-function-list$", "$menu-operators-all-function-path$", fn_map.set_function_operators);
+
 	generate_list_and_populate_name_vs_location(settings, name_vs_location, "$menu-examples-list$", "$menu-examples-path$", sw_files);
 
 	string_replace_all(menu_template_string, "$menu-language-elements-statements-list$", settings["$menu-language-elements-statements-list$"]);
@@ -109,7 +140,41 @@ void GenerateDocs2::populate_menu(std::map<std::string, std::string>& settings, 
 	string_replace_all(menu_template_string, "$menu-language-elements-miscellaneous-elements-list$", settings["$menu-language-elements-miscellaneous-elements-list$"]);
 	string_replace_all(menu_template_string, "$menu-language-elements-object-types-list$", settings["$menu-language-elements-object-types-list$"]);
 	string_replace_all(menu_template_string, "$menu-language-elements-operator-types-list$", settings["$menu-language-elements-operator-types-list$"]);
+
+	string_replace_all(menu_template_string, "$menu-operators-core-normal-list$", settings["$menu-operators-core-normal-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-core-compound-list$", settings["$menu-operators-core-compound-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-core-compound-context-list$", settings["$menu-operators-core-compound-context-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-sigmoid-normal-list$", settings["$menu-operators-sigmoid-normal-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-sigmoid-compound-list$", settings["$menu-operators-sigmoid-compound-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-ket-normal-list$", settings["$menu-operators-ket-normal-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-ket-compound-list$", settings["$menu-operators-ket-compound-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-ket-context-list$", settings["$menu-operators-ket-context-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-superposition-normal-list$", settings["$menu-operators-superposition-normal-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-superposition-compound-list$", settings["$menu-operators-superposition-compound-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-superposition-compound-context-list$", settings["$menu-operators-superposition-compound-context-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-sequence-normal-list$", settings["$menu-operators-sequence-normal-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-sequence-context-list$", settings["$menu-operators-sequence-context-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-sequence-compound-list$", settings["$menu-operators-sequence-compound-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-sequence-compound-context-list$", settings["$menu-operators-sequence-compound-context-list$"]);
+
+	string_replace_all(menu_template_string, "$menu-operators-function-normal-1-parameter-list$", settings["$menu-operators-function-normal-1-parameter-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-function-normal-2-parameter-list$", settings["$menu-operators-function-normal-2-parameter-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-function-normal-3-parameter-list$", settings["$menu-operators-function-normal-3-parameter-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-function-normal-4-parameter-list$", settings["$menu-operators-function-normal-4-parameter-list$"]);
+	
+	string_replace_all(menu_template_string, "$menu-operators-function-context-1-parameter-list$", settings["$menu-operators-function-context-1-parameter-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-function-context-2-parameter-list$", settings["$menu-operators-function-context-2-parameter-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-function-context-3-parameter-list$", settings["$menu-operators-function-context-3-parameter-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-function-context-4-parameter-list$", settings["$menu-operators-function-context-4-parameter-list$"]);
+
+	string_replace_all(menu_template_string, "$menu-operators-all-simple-list$", settings["$menu-operators-all-simple-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-all-compound-list$", settings["$menu-operators-all-compound-list$"]);
+	string_replace_all(menu_template_string, "$menu-operators-all-function-list$", settings["$menu-operators-all-function-list$"]);
+
 	string_replace_all(menu_template_string, "$menu-examples-list$", settings["$menu-examples-list$"]);
+	string_replace_all(menu_template_string, "$menu-website-link$", settings["$menu-website-link$"]);
+	string_replace_all(menu_template_string, "$menu-github-link$", settings["$menu-github-link$"]);
+
 
 	settings["$menu-structure$"] = menu_template_string;
 }
@@ -351,7 +416,15 @@ void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::st
 
 void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::string, std::string>& settings, std::map<std::string, std::string>& name_vs_location, const std::string list_var, const std::string path_var, std::set<ulong>& object_set)
 {
-
+	std::vector<std::string> object_vec;
+	for (ulong idx : object_set)
+	{
+		std::string name = ket_map.get_str(idx);
+		object_vec.push_back(name);
+	}
+	
+	std::sort(object_vec.begin(), object_vec.end());  // Sort object vector.
+	generate_list_and_populate_name_vs_location(settings, name_vs_location, list_var, path_var, object_vec);
 }
 
 std::string GenerateDocs2::bool_to_string(bool value)
@@ -455,7 +528,7 @@ void GenerateDocs2::write_text_file(const std::string& file_path, const std::str
 	}
 	if (overwrite_yes_to_all)
 	{
-		wxMessageBox("Will overwrite file");
+		// wxMessageBox("Will overwrite file");
 		will_write_file = true;
 	}
 	if (overwrite_warn && tfile.Exists())
@@ -475,7 +548,7 @@ void GenerateDocs2::write_text_file(const std::string& file_path, const std::str
 	}
 	if (overwrite_no && tfile.Exists())
 	{
-		wxMessageBox("Will not overwrite file");
+		// wxMessageBox("Will not overwrite file");
 		will_write_file = false;
 	}
 	if (will_write_file)
