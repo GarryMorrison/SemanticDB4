@@ -245,7 +245,10 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 
 		if (!operator_usage_map.usage_is_defined(name))
 		{
-			wxMessageBox("No usage info available for operator: " + name);
+			if (fn_map.list_of_operator_and_statement_names.find(name) != fn_map.list_of_operator_and_statement_names.end()) // This should filter out sw examples.
+			{
+				wxMessageBox("No usage info available for operator: " + name);
+			}
 			continue;
 		}
 		OpUsageInfo* usageInfo = operator_usage_map.get_usage_info(name);
