@@ -229,8 +229,8 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 	string_replace_all(operator_str, "$destination-image-path$", settings["$destination-image-path$"]);
 	string_replace_all(operator_str, "$creation-date$", settings["$creation-date$"]);
 
-	int loop_count = 0;
-	int max_count = 2;
+	// int loop_count = 0;
+	// int max_count = 2;
 	for (const auto& it : name_vs_location)
 	{
 		std::string name = it.first;
@@ -263,7 +263,7 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 		std::string operator_types_str = join(fn_map.get_operator_types(name), ", ");
 		string_replace_all(local_operator_str, "$operator-type$", operator_types_str);
 
-		wxMessageBox(local_operator_str);
+		// wxMessageBox(local_operator_str);
 
 		// Now write it to disk:
 		std::filesystem::path full_destination_path(destination_path);
@@ -273,11 +273,13 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 
 		write_text_file(full_destination_path.string(), filename, local_operator_str, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
 
+		/*
 		if (loop_count >= max_count)
 		{
 			break;
 		}
 		loop_count++;
+		*/
 	}
 
 	// wxMessageBox(operator_str);
@@ -320,8 +322,8 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 	string_replace_all(example_str, "$destination-image-path$", settings["$destination-image-path$"]);
 	string_replace_all(example_str, "$creation-date$", settings["$creation-date$"]);
 
-	int loop_count = 0;
-	int max_count = 5;
+	// int loop_count = 0;
+	// int max_count = 5;
 	for (const auto& name : sw_files)
 	{
 		std::string local_example_str = example_str;
@@ -340,7 +342,7 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 		string_replace_all(local_example_str, "$example-body$", example_body);
 		string_replace_all(local_example_str, "$example-link-to-raw-file$", name);
 
-		wxMessageBox(local_example_str);
+		// wxMessageBox(local_example_str);
 
 		// Now write it to disk:
 		std::filesystem::path full_destination_path(destination_path);
@@ -351,11 +353,13 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 		write_text_file(full_destination_path.string(), filename, local_example_str, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
 		write_text_file(full_destination_path.string(), name, raw_example_body, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
 
+		/*
 		if (loop_count >= max_count)
 		{
 			break;
 		}
 		loop_count++;
+		*/
 	}
 
 	// wxMessageBox(example_str);
