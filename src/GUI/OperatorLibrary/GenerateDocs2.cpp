@@ -393,7 +393,7 @@ void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::st
 	bool strip_name_extension = string_to_bool(settings["$strip-extensions-for-menu-items$"]);
 	bool html_escape_menu_item = string_to_bool(settings["$html-escape-menu-items$"]);
 
-	string_replace_all(list_element_string, "$object-reference-path$", path);
+	// string_replace_all(list_element_string, "$object-reference-path$", path);
 	string_replace_all(list_element_string, "$object-reference-extension$", settings["$destination-file-extension$"]);
 
 	std::string list;
@@ -421,6 +421,7 @@ void GenerateDocs2::generate_list_and_populate_name_vs_location(std::map<std::st
 		{
 			name_vs_location[reference_name] = path;
 		}
+		string_replace_all(local_list_element_string, "$object-reference-path$", name_vs_location[reference_name]);
 
 		list += "\n" + local_list_element_string;
 	}
