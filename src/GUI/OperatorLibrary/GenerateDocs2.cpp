@@ -269,7 +269,7 @@ void GenerateDocs2::populate_and_write_operators(std::map<std::string, std::stri
 		std::filesystem::path full_destination_path(destination_path);
 		full_destination_path.append(location);
 		std::string filename = escape_infix_operators(name) + destination_file_extension;
-		wxMessageBox("full destination path: " + full_destination_path.string() + "\nfilename: " + filename);
+		// wxMessageBox("full destination path: " + full_destination_path.string() + "\nfilename: " + filename);
 
 		write_text_file(full_destination_path.string(), filename, local_operator_str, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
 
@@ -299,9 +299,19 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 	bool linkify = string_to_bool(settings["$linkify-example-body-field$"]);
 	bool strip_name_extension = string_to_bool(settings["$strip-extensions-for-menu-items$"]);
 
+	if (examples_path.empty())  // Directory not specified, so can't load our examples.
+	{
+		return;
+	}
+
 	std::string example_template = settings["$example-template$"];
 	std::string example_str = read_text_file(template_path, example_template);
 	std::vector<std::string> sw_files = scan_directory(examples_path);
+
+	if (sw_files.empty())  // If no files in the given directory, we can't do anything, so return.
+	{
+		return;
+	}
 
 	// Now write into our template string the variables that are universal to all operators:
 	string_replace_all(example_str, "$menu-structure$", settings["$menu-structure$"]);
@@ -336,7 +346,7 @@ void GenerateDocs2::populate_and_write_examples(std::map<std::string, std::strin
 		std::filesystem::path full_destination_path(destination_path);
 		full_destination_path.append(location);
 		std::string filename = reference_name + destination_file_extension;
-		wxMessageBox("full destination path: " + full_destination_path.string() + "\nfilename: " + filename);
+		// wxMessageBox("full destination path: " + full_destination_path.string() + "\nfilename: " + filename);
 
 		write_text_file(full_destination_path.string(), filename, local_example_str, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
 		write_text_file(full_destination_path.string(), name, raw_example_body, overwrite_yes_to_all, overwrite_warn, overwrite_dont_warn);
@@ -495,10 +505,15 @@ std::string GenerateDocs2::smart_strip_extension(const std::string our_filename)
 std::vector<std::string> GenerateDocs2::scan_directory(const std::string directory_name)
 {
 	std::vector<std::string> directory_list;
+	if (directory_name.empty())  // If directory name is not specified we can't do anything, so return the empty vector.
+	{
+		return directory_list;
+	}
+
 	wxDir our_sw_dir(directory_name);
 	if (!our_sw_dir.IsOpened())
 	{
-		wxMessageBox("Scan directory, directory:\n" + directory_name + "\ndoes not exist!");
+		wxMessageBox("Scan directory, directory: \"" + directory_name + "\" does not exist!");
 		return directory_list;
 	}
 	wxString filename;
