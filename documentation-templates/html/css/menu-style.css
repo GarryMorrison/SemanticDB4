@@ -1,0 +1,117 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+*{
+  margin: 0; padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+	background:#0CF;
+}
+
+.cm-e-menu {
+	background-color: #222;
+	position: relative;
+	z-index: 1000;
+	color: #fff;
+	font-weight: 200;
+	box-shadow: 0 0 10px black;
+	}
+	
+.cm-e-menu a:hover{
+	text-decoration: none;
+}
+
+.cm-e-menu ul li.topmenu a:link {
+	color: #fff;
+}
+
+.cm-e-menu ul li.topmenu a:visited {
+	color: #fff;
+}
+	
+.cm-e-menu ul {
+	margin: 0; padding: 0;
+}
+.cm-e-menu li {
+	position: relative;
+	white-space: nowrap;
+	cursor: pointer;
+	/*text-transform: capitalize !important;*/
+	
+	list-style: none;
+
+	-webkit-transition: background-color ease-in 300ms;
+	-moz-transition: background-color ease-in 300ms;
+	-ms-transition: background-color ease-in 300ms;
+	-o-transition: background-color ease-in 300ms;
+	transition: background-color ease-in 300ms;
+}
+.cm-e-menu li:hover {
+	background-color: #3d3d3d;
+	text-shadow: 0 10px 10px #222;
+}
+.cm-e-menu ul li.topmenu {
+	display: inline-table;
+	padding: .3em 1em;
+}
+.cm-e-menu .topmenu ul {
+	display:none;
+	position: absolute;
+	background-color: #222;
+}
+.cm-e-menu li:hover > ul {
+	display: table;
+}
+.cm-e-menu ul.submenu {
+	top: 100%; left: 0;
+	padding-top: .5em;
+	padding-bottom: .5em;	
+	box-shadow: 0 0 10px black;
+}
+.cm-e-menu ul.submenu .submenu {
+	top: -.5em; left: 100%;
+	font-size: 1em
+}
+.cm-e-menu ul.submenu li {
+	padding: .2em 1.5em;
+	font-size: .9rem;
+}
+.cm-e-menu li.divider {
+	padding: 0;
+	border-top: 1px solid #343434;
+	margin: .5rem auto .3rem;
+	cursor: default;
+}
+.cm-e-menu li.divider:hover {
+	background-color: transparent;
+}
+
+
+img {
+	/*transform: scale(0.75);*/
+	transform: scale(0.75) translate(-10%, -15%);
+	/*width: 75vw;*/
+	/*margin: 0;
+	padding: 0;
+	display: block;*/
+	
+}
+
+a:link {
+text-decoration: none;
+}
+
+a:visited {
+text-decoration: none;
+}
+
+a:hover {
+/*text-decoration: none;	*/
+text-decoration: underline;
+/*color: blue;*/
+}
+
+a:active {
+text-decoration: underline;
+}
+
