@@ -1712,7 +1712,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        sread(|1> . |fish> . |11> . |4>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
         "            |one> . |> . |> . |four>\n\n"
         "    see also:\n"
-        "        not-sread, read, not-read\n";
+        "        not-sread, read, not-read, swrite, write\n";
 
     operator_usage_map.map["not-sread"] =
         "\nnot-sread:\n"
@@ -1733,7 +1733,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        not-sread(|-2> + |-4>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
         "            |one> . |two> . |three> . |five> . |seven>\n\n"
         "    see also:\n"
-        "        sread, read, not-read\n";
+        "        sread, read, not-read, swrite, write\n";
 
     operator_usage_map.map["read"] =
         "\nread:\n"
@@ -1755,7 +1755,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        read(|1> + |fish> + |11> + |4>) (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
         "            |one> + |four>\n\n"
         "    see also:\n"
-        "        not-read, sread, not-sread\n";
+        "        not-read, sread, not-sread, swrite, write\n";
 
     operator_usage_map.map["not-read"] =
         "\nnot-read:\n"
@@ -1778,7 +1778,28 @@ OperatorUsageMap::OperatorUsageMap() {
         "        not-read(|1> + |fish> + |11> + |4>) (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
         "            |two> + |three> + |five> + |six> + |seven>\n\n"
         "    see also:\n"
-        "        read, sread, not-sread\n";
+        "        read, sread, not-sread, swrite, write\n";
+
+    operator_usage_map.map["swrite"] =
+        "\nsread:\n"
+        "    description:\n"
+        "        swrite(positions-sp, destination-sp) input-seq\n"
+        "        for each index in positions-sp, overwrite the corresponding element in the input sequence with destination-sp\n"
+        "        index values start from 1, not 0\n"
+        "        negative values are also valid, so -1 is last element, -2 is second last element, etc\n"
+        "        the order of the indices in positions-sp do not matter\n"
+        "        if a ket in positions-sp is out of range, or not a number, ignore that ket\n\n"
+        "    examples:\n"
+        "        -- define a toy sequence:\n"
+        "        the |seq> => ssplit[\" \"] |alpha beta gamma delta epsilon zeta>\n\n"
+        "        -- now see what we have:\n"
+        "        the |seq>\n"
+        "            |alpha> . |beta> . |gamma> . |delta> . |epsilon> . |zeta>\n\n"
+        "        -- overwrite the second and last element of the sequence with the letter Z:\n"
+        "        swrite(|2> + |-1>, |Z>) the |seq>\n"
+        "            |alpha> . |Z> . |gamma> . |delta> . |epsilon> . |Z>\n\n"
+        "    see also:\n"
+        "        write, sread, not-sread, read, not-read\n";
 
     operator_usage_map.map["pick"] =
         "\npick:\n"

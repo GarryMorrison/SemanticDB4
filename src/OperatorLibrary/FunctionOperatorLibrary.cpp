@@ -1418,6 +1418,30 @@ Sequence op_not_read(const Sequence& input_seq, const Sequence& one) {
     return result;
 }
 
+Sequence op_swrite(const Sequence& input_seq, const Sequence& one, const Sequence& two)
+{
+    Sequence result = input_seq;
+    Superposition indices_sp = one.to_sp();
+    Superposition destination_sp = two.to_sp();
+    for (const auto& k : indices_sp)
+    {
+        try {
+            long long idx = std::stoll(k.label()) - 1;
+            if (idx < 0) {
+                idx += input_seq.size() + 1;
+            }
+            if (idx < 0) // If index is still below 0, then out of range, so continue the loop.
+            {
+                continue;
+            }
+            result.set((ulong)idx, destination_sp);
+        }
+        catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
+        }
+    }
+    return result;
+}
 
 Sequence op_string_replace(const Sequence& input_seq, const Sequence& one, const Sequence& two) {  // Could do with some optimization.
     Sequence result;
