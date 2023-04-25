@@ -449,6 +449,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("swrite");
     fn_map.whitelist_2.emplace(idx, &op_swrite);
 
+    idx = ket_map.get_idx("write");
+    fn_map.whitelist_2.emplace(idx, &op_write);
+
     idx = ket_map.get_idx("scompress");
     fn_map.compound_context_seq_fn.emplace(idx, &op_scompress);
 

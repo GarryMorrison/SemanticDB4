@@ -89,6 +89,8 @@ public:
     SuperpositionIter begin() const;
     SuperpositionIter end() const;
 
+    void set(size_t pos, const Ket& k);
+
     /*  // Broken with "a non static member reference must be relative to a specific object" error.
     // New iterator, the last one was deprecated!
     struct Iterator  // See here: https://internalpointers.com/post/writing-custom-iterators-modern-cpp

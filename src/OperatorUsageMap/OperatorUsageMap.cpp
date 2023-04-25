@@ -1781,7 +1781,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        read, sread, not-sread, swrite, write\n";
 
     operator_usage_map.map["swrite"] =
-        "\nsread:\n"
+        "\nswrite:\n"
         "    description:\n"
         "        swrite(positions-sp, destination-sp) input-seq\n"
         "        for each index in positions-sp, overwrite the corresponding element in the input sequence with destination-sp\n"
@@ -1800,6 +1800,49 @@ OperatorUsageMap::OperatorUsageMap() {
         "            |alpha> . |Z> . |gamma> . |delta> . |epsilon> . |Z>\n\n"
         "    see also:\n"
         "        write, sread, not-sread, read, not-read\n";
+
+    operator_usage_map.map["write"] =
+        "\nwrite:\n"
+        "    description:\n"
+        "        write(positions-sp, destination-ket) input-seq\n"
+        "        for each index in positions-sp, overwrite the corresponding element in each of the superpositions in the input sequence with destination-ket\n"
+        "        if destination-ket is actually a sequence or superposition, we force cast it to a ket\n"
+        "        index values start from 1, not 0\n"
+        "        negative values are also valid, so -1 is last element, -2 is second last element, etc\n"
+        "        if a ket in positions-sp is out of range, or not a number, ignore that ket\n"
+        "        Note, write() is somewhat more subtle than the sequence version swrite()\n"
+        "        This is due to the desired properties of superpositions\n"
+        "        If destination-ket is the empty ket |> then we erase all the corresponding kets from the input superposition\n"
+        "        Further, if also given more than one position, then care must be taken when choosing the index positions\n"
+        "        Because the relative indices will change after each erasure event\n"
+        "        Next, if the destination-ket lines up with the same ket, then just update the coefficient to the new value\n"
+        "        Next, if the destination-ket matches another ket already in the superposition, erase the ket at the index, and then update the coeff of the matching ket\n"
+        "        Next, if more than one position is given in positions-sp, then process the input superposition one position at a time, using the above rules\n"
+        "        Also, note the order of the indices in positions-sp do matter\n\n"
+        "    examples:\n"
+        "        -- define a toy superposition:\n"
+        "        the |sp> => split[\" \"] |alpha beta gamma delta epsilon zeta eta>\n\n"
+        "        -- now see what we have:\n"
+        "        the |sp>\n"
+        "            |alpha> + |beta> + |gamma> + |delta> + |epsilon> + |zeta> + |eta>\n\n"
+        "        -- erase the second element from the superposition:\n"
+        "        write(|2>, |>) the |sp>\n"
+        "            |alpha> + |gamma> + |delta> + |epsilon> + |zeta> + |eta>\n\n"
+        "        -- erase two elements from the superposition:\n"
+        "        write(|2> + |5>, |>) the |sp>\n"
+        "            |alpha> + |gamma> + |delta> + |epsilon> + |eta>\n\n"
+        "        -- update the coefficient of an element:\n"
+        "        write(|3>, 37|gamma>) the |sp>\n"
+        "            |alpha> + |beta> + 37|gamma> + |delta> + |epsilon> + |zeta> + |eta>\n\n"
+        "        -- erase a ket, and then update the existing ket:\n"
+        "        write(|6>, 8|beta>) the |sp>\n"
+        "            |alpha> + 9|beta> + |gamma> + |delta> + |epsilon> + |eta>\n\n"
+        "        -- overwrite a ket:\n"
+        "        write(|-3>, 7|EEE>) the |sp>\n"
+        "            |alpha> + |beta> + |gamma> + |delta> + 7|EEE> + |zeta> + |eta>\n\n"
+        "    see also:\n"
+        "        swrite, sread, not-sread, read, not-read\n";
+
 
     operator_usage_map.map["pick"] =
         "\npick:\n"

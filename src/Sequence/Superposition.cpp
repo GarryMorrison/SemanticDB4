@@ -535,6 +535,38 @@ Ket Superposition::get(size_t pos) const {
     return Ket(sp_idx, value);
 }
 
+void Superposition::set(size_t pos, const Ket& k)
+{
+    if (pos >= sort_order.size()) { return; }  // If pos is out of range, do nothing.
+    ulong current_idx = sort_order[pos];
+    ulong next_idx = k.label_idx();
+    double v = k.value();
+    if (current_idx == next_idx)  // If the element is the same as what we are trying to write, then just update the coefficient.
+    {
+        sp[current_idx] = v;
+        return;
+    }
+    sp.erase(current_idx);
+    
+    if (next_idx == ket_map.get_idx(""))  // If we set an element to |> then erase that element.
+    {
+        sort_order.erase(sort_order.begin() + pos);
+        return;
+    }
+    if (sp.find(next_idx) == sp.end())  // If the new ket is not in the superposition, then insert it.
+    {
+        sort_order[pos] = next_idx;
+        sp[next_idx] = v;
+        return;
+    }
+    else  // If the "new" ket is already in the superposition, then we need to handle that.
+    {
+        sort_order.erase(sort_order.begin() + pos);  // First delete it.
+        auto existing_pos = std::find(sort_order.begin(), sort_order.end(), next_idx); // Find the location of the remaining ket.
+        sp[*existing_pos] += v;  // Update the coefficient of the remaining ket.
+    }
+}
+
 /*
 Superposition::Iterator::reference Superposition::Iterator::operator*() const {
     ulong sp_idx = sort_order[m_ptr];

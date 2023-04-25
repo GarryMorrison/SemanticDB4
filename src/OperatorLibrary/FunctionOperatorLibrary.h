@@ -57,7 +57,7 @@ Sequence op_not_sread(const Sequence& input_seq, const Sequence& one);
 Sequence op_read(const Sequence& input_seq, const Sequence& one);
 Sequence op_not_read(const Sequence& input_seq, const Sequence& one);
 Sequence op_swrite(const Sequence& input_seq, const Sequence& one, const Sequence& two);
-
+Sequence op_write(const Sequence& input_seq, const Sequence& one, const Sequence& two);
 Sequence op_string_replace(const Sequence& input_seq, const Sequence& one, const Sequence& two);
 Sequence op_for2(ContextList& context, const Sequence& input_seq, const Sequence& one, const Sequence& two);
 Sequence op_for3(ContextList& context, const Sequence& input_seq, const Sequence& one, const Sequence& two, const Sequence& three);

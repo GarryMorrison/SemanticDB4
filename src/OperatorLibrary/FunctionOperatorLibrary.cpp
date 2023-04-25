@@ -1443,6 +1443,35 @@ Sequence op_swrite(const Sequence& input_seq, const Sequence& one, const Sequenc
     return result;
 }
 
+Sequence op_write(const Sequence& input_seq, const Sequence& one, const Sequence& two)
+{
+    Sequence result;
+    Superposition indices_sp = one.to_sp();
+    Ket destination_ket = two.to_ket();
+    for (auto sp : input_seq)
+    {
+        for (const auto& k : indices_sp)
+        {
+            try {
+                long long idx = std::stoll(k.label()) - 1;
+                if (idx < 0) {
+                    idx += sp.size() + 1;
+                }
+                if (idx < 0) // If index is still below 0, then out of range, so continue the loop.
+                {
+                    continue;
+                }
+                sp.set((ulong)idx, destination_ket);
+            }
+            catch (const std::invalid_argument& e) {
+                (void)e;  // Needed to suppress C4101 warning.
+            }
+        }
+        result.append(sp);  // Not sure which is the better approach. Overwriting each sub-superposition in input-seq, or reconstruct the result sequence with each modified superposition?
+    }
+    return result;
+}
+
 Sequence op_string_replace(const Sequence& input_seq, const Sequence& one, const Sequence& two) {  // Could do with some optimization.
     Sequence result;
     Superposition from_patterns = one.to_sp();
