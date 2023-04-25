@@ -4813,22 +4813,34 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        dump\n";
 
-    operator_usage_map.map["substring-index"] =
-        "\nrecursive-dump:\n"
+    operator_usage_map.map["substring-position"] =
+        "\nsubstring-position:\n"
         "    description:\n"
-        "        substring-index(|substring>) input-seq\n"
-        "        return the substring index of \"substring\" for all the kets in the input sequence\n"
-        "        if the substring is not in a ket, then we return |number: -1>\n"
-        "        index starts at 0, not 1\n\n"
+        "        substring-position(|substring>) input-seq\n"
+        "        return the substring positions of \"substring\" for all kets in the input sequence\n"
+        "        if the substring is not in a ket, then we return the empty ket |>\n"
+        "        positions start at 1, not 0\n"
+        "        if you just want to know if a substring is in the given input, then apply the do-you-know operator\n"
+        "        if the parameter is more than one ket, merge all the positions together, probably don't want this!\n\n"
         "    examples:\n"
-        "        substring-index(|beta>) |alpha beta gamma>\n"
-        "            |number: 6>\n\n"
-        "        substring-index(|beta>) ssplit[\" \"] |alpha beta gamma>\n"
-        "            |number: -1> . |number: 0> . |number: -1>\n\n"
-        "        substring-index(|a>) ssplit[\" \"] |alpha beta gamma>\n"
-        "            |number: 0> . |number: 3> . |number: 1>\n\n"
+        "        -- simple check if the substring \"beta\" is in the given ket:\n"
+        "        substring-position(|beta>) |alpha beta gamma>\n"
+        "            |7>\n\n"
+        "        -- simple check if the substring \"delta\" is in the given ket:\n"
+        "        substring-position(|delta>) |alpha beta gamma>\n"
+        "            |>\n\n"
+        "        -- once again, this time using do-you-know:\n"
+        "        do-you-know substring-position(|delta>) |alpha beta gamma>\n"
+        "            |no>\n\n"
+        "        -- now applied to a toy sequence:\n"
+        "        substring-position(|beta>) ssplit[\" \"] |alpha beta gamma>\n"
+        "            |> . |1> . |>\n\n"
+        "        -- another toy sequence, this time demonstrating multiple matches per ket:\n"
+        "        substring-position(|a>) ssplit[\" \"] |alpha beta gamma>\n"
+        "            |1> + |5> . |4> . |2> + |5>\n\n"
         "    see also:\n"
-        "        \n";
+        "        do-you-know, sdrop\n";
+
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =

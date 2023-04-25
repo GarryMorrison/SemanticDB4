@@ -1902,14 +1902,13 @@ Sequence op_substring_index(const Sequence& input_seq, const Sequence& one)
         for (const Ket& k : sp)
         {
             std::string source_string = k.label();
-            std::size_t idx = source_string.find(sub_string);
-            if (idx == std::string::npos)
+            std::size_t idx = 0;
+            idx = source_string.find(sub_string);
+            while (idx != std::string::npos)
             {
-                loop_sp.add("number: -1");
-            }
-            else 
-            {
-                loop_sp.add("number: " + std::to_string(idx));
+                idx++;  // Positions start from 1, not 0.
+                loop_sp.add(std::to_string(idx));
+                idx = source_string.find(sub_string, idx);
             }
         }
         result_seq.append(loop_sp);
