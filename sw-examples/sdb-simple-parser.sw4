@@ -1,0 +1,555 @@
+-- Exploring a simple English language parser using the Semantic DB
+-- The intent is to learn triples from the given input sentences, to partly auto-construct a graph structure.
+--
+-- The underlying theory of this parser is we first map words to types/parts-of-speech
+-- Eg: |frog> maps to |noun: frog>
+-- Unfortunately we don't currently have a good approach for the common case where a word has more than one possible type
+-- Also, we auto-learn proper-nouns, using the property that if the first char of a word is a capital, and we don't already know its type we label it a proper noun
+-- This way we don't need to manually define proper nouns for all the possible variations of proper-nouns.
+-- 
+-- Once we have words of form: |A: alpha>, where A is a type and alpha is the corresponding word we have an extendable collection of rules that act pair wise on the input sequence
+-- Eg, |A: alpha> . |B: beta> maps to a new ket depending on the relation between the A type and the B type.
+-- For example, the cases where: A == B, or A < B, or A > B.
+-- If there is no known relation between A and B, then we leave the kets unchanged
+--
+-- We also have a merge layer and a cast layer.
+--
+-- The final layer is a small collection of if-then machines that detect grammar structures and then produces a SDB triple.
+-- Eg, |*> . |is> . |*> maps to: is |alpha> +=> |gamma>
+--
+-- It is not known how far this approach can be taken with real world sentences.
+-- Is is also not known if SDB triples are sufficient to represent sentences in general, or if a more general structure is required.
+--
+-- Author: Garry Morrison
+-- Created: 2023/5/1
+-- Updated: 2023/5/2
+
+
+|context> => |SDB simple parser>
+
+print |The simple English Semantic DB parser:>
+
+
+-- define some sentences:
+learn-sentences |*> #=>
+    sentence |1> => |An Albert Einstein quote is " God does not play dice " #EOS#>
+    sentence |2> => |test ( our bracket text here ) #EOS#>
+    sentence |3> => |The capital city of New South Wales is Sydney #EOS#>
+    sentence |4> => |The shopping list is two apples comma three oranges comma bread and milk #EOS#>
+    sentence |5> => |Their example listy is one thousand two hundred and thirty two red and blue green fish comma thirty three sharks comma eel and a green turtle #EOS#>
+    sentence |6> => |Some Einstein quotes are " X " and " Y " #EOS#>
+    sentence |7> => |Some Einstein quotes are " God does not play dice " and " Imagination is more important than knowledge " #EOS#>
+    sentence |8> => |My friends are Sam comma Rob comma Fred Smith and Emma #EOS#>
+    sentence |9> => |The capital cities of Australia are Adelaide comma Brisbane comma Canberra comma Darwin comma Hobart comma Melbourne comma Perth and Sydney #EOS#>
+    sentence |10> => |Not Fred Robert Smith #EOS#>
+    sentence |11> => |Our example bracket test ( our sample bracket text here ) is " just a toy quote " #EOS#>
+    sentence |12> => |My green slippery frog sat on a smooth brown rock #EOS#>
+    sentence |13> => |The tired man used a pair of binoculars #EOS#>
+
+
+-- now load them into memory:
+learn-sentences
+
+-- choose one to parse:
+the |sentence> => sentence |5>
+
+-- display our sentences operator:
+display-sentences |*> #=>
+    print | >
+    print |Our sentences:>
+    for( the |sentence number> in rel-kets[sentence] ):
+        print (|  > _ the |sentence number> _ |)> __ sentence the |sentence number>)
+    end:
+    print | >
+
+-- now display them:
+display-sentences
+
+
+-- our parse operator:
+-- parse |*> #=> learn-layer sdrop cast-types-layer greater-than-layer less-than-layer^3 merge-types-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] |_self>
+-- parse |*> #=> learn-layer sdrop cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] |_self>
+parse |*> #=> learn-layer sdrop cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] sprint["Chosen sentence: "] |_self>
+
+
+-- our not operator:
+not |no> => |yes>
+not |yes> => |no>
+
+-- our quote layer operator:
+quote-layer (*) #=>
+    the |words> => |__self>
+    unlearn[the] (|result> + |quote>)
+    is |quote> => |no>
+    sfor( the |word> in the |words>):
+        if( the |word> == |">):
+            if( is |quote>):
+                the |result> .=> |quote> :_ smerge[" "] the |quote>
+                unlearn[the] |quote>
+            end:
+            is |quote> => not is |quote>
+        else:
+            if( is |quote>):
+                the |quote> .=> the |word>
+            else:
+                the |result> .=> the |word>
+            end:
+        end:
+    end:
+    the |result>
+
+-- a quick test:
+-- sprint parse sentence |1>
+
+-- our bracket-layer operator:
+bracket-layer (*) #=>
+    the |words> => |__self>
+    unlearn[the] (|result> + |bracket text>)
+    is-in |bracket> => |no>
+    sfor( the |word> in the |words>):
+        if( the |word> == |(>):
+            is-in |bracket> => |yes>
+        else:
+            if( the |word> == |)>):
+                is-in |bracket> => |no>
+                the |result> .=> |bracket> :_ smerge[" "] the |bracket text>
+                unlearn[the] |bracket text>
+            else:
+                if( is-in |bracket>):
+                    the |bracket text> .=> the |word>
+                else:
+                    the |result> .=> the |word>
+                end:
+            end:
+        end:
+    end:
+    the |result>
+
+-- a quick test:
+-- sprint parse sentence |2>
+
+-----------------------------------------------------------------------------------------------------------
+
+-- define our lists of parts of speech/types (extend as required):
+list-of |determiner> => ssplit[" "] |The the A a An an Some some This this That that>
+list-of |colour> => ssplit[" "] |red orange yellow green blue indigo violet brown>
+list-of |adj> => ssplit[" "] |hungry tired shopping example smooth slippery>
+list-of |noun> => ssplit[" "] |frog man toad elephant rock bridge list apples oranges bread milk rose listy fish sharks eel turtle capital city cities quote quotes test friends sisters brothers bracket pair binoculars>
+list-of |title> => ssplit[" "] |Mr Mrs Miss Dr Sir Madam>
+-- list-of |proper-noun> => ssplit[" "] |Fred John Smith Frank Roberts Emma Liz Edwards South Western Australia Adelaide Perth New Wales Sydney>
+list-of |number> => ssplit[" "] |one two three four five six seven eight nine ten twenty thirty hundred thousand million>
+list-of |token> => ssplit[" "] |#EOS#>
+list-of |whose> => ssplit[" "] |My my Her her His his Their their Our our>
+list-of |verb> => ssplit[" "] |sat used>
+list-of |preposition> => ssplit[" "] |on>
+
+-----------------------------------------------------------------------------------------------------------
+
+-- function required to learn them:
+apply-prefix {the|prefix>, the |words>} #=>
+    for( the |word> in the |words>):
+        map the |word> => the |prefix> :_ the |word>
+    end:
+
+-- now learn them:
+apply-prefix(|determiner>, list-of |determiner>)
+apply-prefix(|colour>, list-of |colour>)
+apply-prefix(|adj>, list-of |adj>)
+apply-prefix(|noun>, list-of |noun>)
+apply-prefix(|title>, list-of |title>)
+-- apply-prefix(|proper-noun>, list-of |proper-noun>)
+apply-prefix(|number>, list-of |number>)
+apply-prefix(|token>, list-of |token>)
+apply-prefix(|whose>, list-of |whose>)
+apply-prefix(|verb>, list-of |verb>)
+apply-prefix(|preposition>, list-of |preposition>)
+
+
+-- now some special ones:
+map |is> => |is: is>
+map |are> => |are: are>
+map |was> => |was: was>
+map |and> => |and: and>
+map |or> => |or: or>
+map |comma> => |comma: comma>
+map |of> => |of: of>
+map |not> => |not: not>
+map |Not> => |not: not>
+
+
+-- pass quotes and bracket text unchanged:
+map |quote: *> #=> |_self>
+map |bracket: *> #=> |_self>
+
+
+-- learn proper nouns:
+-- making use of the idea of label descent, which causes this function to only be invoked for words that don't have an existing map definition.
+-- we also use memoizing rules so the pattern is stored in memory
+map |*> !=>
+    if( |__self> == to-upper[1] |__self>):
+        |proper-noun> :_ |__self>
+    else:
+        |__self>
+    end:
+
+-- a quick test:
+-- sprint parse sentence |2>
+
+-----------------------------------------------------------------------------------------------------------
+
+-- now the start of the grammar (extend with more rules as required):
+-- equal l relation rules:
+-- |A: alpha> . |B: beta> maps to |A: alpha beta>
+--
+relation-1 |noun __ noun> => |equal 1>
+relation-1 |proper-noun __ proper-noun> => |equal 1>
+relation-1 |proper-noun __ noun> => |equal 1>
+relation-1 |adj __ adj> => |equal 1>
+relation-1 |number __ number> => |equal 1>
+relation-1 |colour __ colour> => |equal 1>
+relation-1 |verb __ preposition> => |equal 1>
+
+-- equal 2 relation rules:
+-- |A: alpha> . |B: beta> maps to |B: alpha beta>
+--
+relation-2 |not __ noun> => |equal 2>
+relation-2 |not __ proper-noun> => |equal 2>
+relation-2 |not __ adj> => |equal 2>
+
+-- merge types layer:
+-- eg: |number: alpha> . |and: and> . |number: beta> maps to |number: alpha and beta>
+--
+type-1 |number __ and __ number> => |number>
+type-1 |colour __ and __ colour> => |colour>
+type-1 |noun __ of __ noun> => |noun>
+type-1 |noun __ of __ proper-noun> => |noun>
+
+
+-- less than relation rules:
+-- If A < B, then |A: alpha> . |B: beta> maps to |B: beta>
+-- and we learn: A |beta> +=> |alpha>
+--
+relation-3 |adj __ noun> => |less than>
+relation-3 |determiner __ noun> => |less than>
+relation-3 |determiner __ proper-noun> => |less than>
+relation-3 |number __ noun> => |less than>
+relation-3 |colour __ noun> => |less than>
+relation-3 |whose __ noun> => |less than>
+relation-3 |title __ proper-noun> => |less than>
+
+-- greater than relation rules:
+-- if A > B then |A: alpha> . |B: beta> maps to |A: alpha>
+-- and we learn: B|alpha> +=> |beta>
+--
+relation-4 |noun __ bracket> => |greater than>
+
+
+-- cast types layer:
+-- eg: |noun: alpha> . |comma: comma> . |noun: beta> maps to |noun-list: alpha comma beta>
+--
+type-2 |noun __ comma __ noun> => |noun-list>
+type-2 |noun-list __ comma __ noun> => |noun-list>
+type-2 |noun-list __ and __ noun> => |noun-list>
+
+type-2 |proper-noun __ comma __ proper-noun> => |proper-noun-list>
+type-2 |proper-noun-list __ comma __ proper-noun> => |proper-noun-list>
+type-2 |proper-noun-list __ and __ proper-noun> => |proper-noun-list>
+
+type-2 |noun __ verb __ noun> => |NVN>
+
+
+-- define some if-then machines for the final layer:
+template |node: 1: 1> => |*> . |is> . |*>
+then |node: 1: *> #=>
+    is sselect[1,1] the |values> +=> sselect[-1,-1] the |values>
+    sselect[1,1] the |values>
+
+template |node: 2: 1> => |*> . |was> . |*>
+then |node: 2: *> #=>
+    was sselect[1,1] the |values> +=> sselect[-1,-1] the |values>
+    sselect[1,1] the |values>
+
+template |node: 3: 1> => |proper-noun> . |comma> . |proper-noun>
+then |node: 3: *> #=>
+    where sselect[1,1] the |values> +=> sselect[-1,-1] the |values>
+    sselect[1,1] the |values>
+
+template |node: 4: 1> => |*> . |are> . |*> . |and> . |*>
+then |node: 4: *> #=>
+    are sselect[1,1] the |values> +=> sselect[3,3] the |values> + sselect[5,5] the |values>
+    sselect[1,1] the |values>
+
+template |node: 5: 1> => |*> . |are> . |*>
+then |node: 5: *> #=>
+    are sselect[1,1] the |values> +=> sselect[3,3] the |values>
+    sselect[1,1] the |values>
+
+-----------------------------------------------------------------------------------------------------------
+
+-- now on to the implementation section:
+
+-- the equality 1 operator:
+apply-equality-1 (*) #=>
+    the |types> => extract-head |__self>
+    the |values> => extract-value |__self>
+    the |relation> => relation-1 smerge[" __ "] the |types>
+    print | >
+    sprint["input: "] |__self>
+    sprint["relation: "] the |relation>
+    if( the |relation> == |equal 1>):
+        sselect[1,1] the |types> :_ smerge[" "] the |values>
+    else:
+        sselect[1,1] |__self>
+    end:
+
+equality-1-layer (*) #=>
+    print |--------------------------->
+    print |equality 1 layer:>
+    unlearn[the] |result>
+    the |pre> => sselect[1,1] |__self>
+    sfor( the |word> in sselect[2,-1] |__self>):
+        local |result> => apply-equality-1( the |pre> . the |word>)
+        if( local |result> == the |pre>):
+            the |result> .=> the |pre>
+            the |pre> => the |word>
+        else:
+            the |pre> => local |result>
+        end:
+    end:
+    the |result> . |> . |>
+
+
+
+-- a quick test:
+-- sprint parse sentence |1>
+
+
+-- the equality 2 operator:
+apply-equality-2 (*) #=>
+    the |types> => extract-head |__self>
+    the |values> => extract-value |__self>
+    the |relation> => relation-2 smerge[" __ "] the |types>
+    print | >
+    sprint["input: "] |__self>
+    sprint["relation: "] the |relation>
+    if( the |relation> == |equal 2>):
+        sselect[2,2] the |types> :_ smerge[" "] the |values>
+    else:
+        sselect[1,1] |__self>
+    end:
+
+equality-2-layer (*) #=>
+    print |--------------------------->
+    print |equality 2 layer:>
+    unlearn[the] |result>
+    the |pre> => sselect[1,1] |__self>
+    sfor( the |word> in sselect[2,-1] |__self>):
+        local |result> => apply-equality-2( the |pre> . the |word>)
+        if( local |result> == the |pre>):
+            the |result> .=> the |pre>
+            the |pre> => the |word>
+        else:
+            the |pre> => local |result>
+        end:
+    end:
+    the |result> . |> . |>
+
+
+-- the less than operator:
+apply-less-than (*) #=>
+    the |types> => extract-head |__self>
+    the |values> => extract-value |__self>
+    the |relation> => relation-3 smerge[" __ "] the |types>
+    print | >
+    sprint["input: "] |__self>
+    sprint["relation: "] the |relation>
+    if( the |relation> == |less than>):
+        the |op> => |op> :_ sselect[1,1] the |types>
+        the |subject> => sselect[2,2] the |values>
+        the |object> => sselect[1,1] the |values>
+        add-learn(the |op>, the |subject>, the |object>)
+        list-of |updated kets> +=> the |subject>
+        sselect[2,2] |__self>
+    else:
+        sselect[1,1] |__self>
+    end:
+
+less-than-layer (*) #=>
+    print |--------------------------->
+    print |less than layer:>
+    unlearn[the] |result>
+    the |pre> => sselect[1,1] |__self>
+    sfor( the |word> in sselect[2,-1] |__self>):
+        local |result> => apply-less-than( the |pre> . the |word>)
+        if( local |result> == the |pre>):
+            the |result> .=> the |pre>
+            the |pre> => the |word>
+        else:
+            the |pre> => local |result>
+        end:
+    end:
+    the |result> . |> . |>
+
+-- a quick test:
+-- sprint parse sentence |1>
+
+
+
+-- the greater than operator:
+apply-greater-than (*) #=>
+    the |types> => extract-head |__self>
+    the |values> => extract-value |__self>
+    the |relation> => relation-4 smerge[" __ "] the |types>
+    print | >
+    sprint["input: "] |__self>
+    sprint["relation: "] the |relation>
+    if( the |relation> == |greater than>):
+        the |op> => |op> :_ sselect[2,2] the |types>
+        the |subject> => sselect[1,1] the |values>
+        the |object> => sselect[2,2] the |values>
+        add-learn(the |op>, the |subject>, the |object>)
+        list-of |updated kets> +=> the |subject>
+        sselect[1,1] |__self>
+    else:
+        sselect[2,2] |__self>
+    end:
+
+greater-than-layer-v1 (*) #=>
+    print |--------------------------->
+    print |greater than layer:>
+    unlearn[the] |result>
+    the |pre> => sselect[1,1] |__self>
+    sfor( the |word> in sselect[2,-1] |__self>):
+        local |result> => apply-greater-than( the |pre> . the |word>)
+        if( local |result> == the |pre>):
+            the |result> .=> the |pre>
+            the |pre> => the |word>
+        else:
+            the |pre> => local |result>
+        end:
+    end:
+    the |result> . |> . |>
+
+greater-than-layer (*) #=>
+    print |--------------------------->
+    print |greater than layer:>
+    unlearn[the] |result>
+    the |pre> => sselect[1,1] |__self>
+    the |result> => the |pre>
+    sfor( the |word> in sselect[2,-1] |__self>):
+        local |result> => apply-greater-than( the |pre> . the |word>)
+        if( local |result> == the |pre>):
+            the |pre> => the |word>
+        else:
+            the |result> .=> local |result>
+            the |pre> => local |result>
+        end:
+    end:
+    the |result> . |> . |>
+
+-- a quick test:
+-- sprint parse sentence |1>
+
+
+apply-merge-types (*) #=>
+    the |types> => extract-head |__self>
+    the |values> => extract-value |__self>
+    the |type> => type-1 smerge[" __ "] the |types>
+    print | >
+    sprint["input: "] |__self>
+    sprint["type: "] the |type>
+    if( do-you-know the |type>):
+        the |type> :_ smerge[" "] the |values>
+    else:
+        sselect[1,1] |__self>
+    end:
+
+
+merge-types-layer (*) #=>
+    print |--------------------------->
+    print |merge types layer:>
+    unlearn[the] |result>
+    the |pre 1> => sselect[1,1] |__self>
+    the |pre 2> => sselect[2,2] |__self>
+    sfor( the |word> in sselect[3,-1] |__self>):
+        local |result> => apply-merge-types( the |pre 1> . the |pre 2> . the |word>)
+        if( local |result> == the |pre 1>):
+            the |result> .=> the |pre 1>
+            the |pre 1> => the |pre 2>
+            the |pre 2> => the |word>
+        else:
+            the |pre 1> => |>
+            the |pre 2> => local |result>
+        end:
+    end:
+    sdrop the |result> . |> . |>
+
+
+-- a quick test:
+-- sprint parse sentence |3>
+-- print | >
+-- dump(|*>) rel-kets[is]
+
+
+apply-cast-types (*) #=>
+    the |types> => extract-head |__self>
+    the |values> => extract-value |__self>
+    the |type> => type-2 smerge[" __ "] the |types>
+    print | >
+    sprint["input: "] |__self>
+    sprint["type: "] the |type>
+    if( do-you-know the |type>):
+        the |type> :_ smerge[" "] the |values>
+    else:
+        sselect[1,1] |__self>
+    end:
+
+
+cast-types-layer (*) #=>
+    print |--------------------------->
+    print |cast types layer:>
+    unlearn[the] |result>
+    the |pre 1> => sselect[1,1] |__self>
+    the |pre 2> => sselect[2,2] |__self>
+    sfor( the |word> in sselect[3,-1] |__self>):
+        local |result> => apply-cast-types( the |pre 1> . the |pre 2> . the |word>)
+        if( local |result> == the |pre 1>):
+            the |result> .=> the |pre 1>
+            the |pre 1> => the |pre 2>
+            the |pre 2> => the |word>
+        else:
+            the |pre 1> => |>
+            the |pre 2> => local |result>
+        end:
+    end:
+    sdrop the |result> . |> . |>
+
+
+-- a quick test:
+-- sprint parse sentence |4>
+-- print | >
+-- dump(|*>) rel-kets[is]
+
+
+
+-- the final layer, where we use if-then machines to learn some rules:
+learn-layer (*) #=>
+    the |types> => extract-head |__self>
+    the |values> => extract-value |__self>
+    print |--------------------------->
+    print |if-then machine learn layer:>
+    sprint["types: "] the |types>
+    sprint["values: "] the |values>
+    list-of |updated kets> +=> then star-equal-input[template] the |types>
+    |__self>
+
+
+
+
+sprint parse the |sentence>
+print | >
+print |---------------------------------------->
+print |Our new learn rules:>
+print | >
+dump(|*>) clean list-of |updated kets>
+
