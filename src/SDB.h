@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2023/4/24
+// Updated 2023/5/4
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,9 +19,9 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2023/4/24"
+#define APP_BUILD_DATE "2023/5/4"
 #define APP_VERSION "4.0.alpha4"
-#define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"
+#define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"  // Update this when we upload our new docs!
 #define APP_WEBSITE "http://semantic-db.org"
 
 #define DEFAULT_STATUS_BAR_TEXT "Welcome to the Semantic DB GUI"

@@ -1743,16 +1743,16 @@ Sequence op_sprint_fn2(const Sequence& input_seq, const Sequence& one, const Seq
 
 Ket op_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one)
 {
-    Superposition input_sp = input_seq.to_sp();
+    Superposition input_sp = input_seq.to_sp().apply_sigmoid(&clean);
     Superposition operators_sp = one.to_sp();
     ulong star_idx = ket_map.get_idx("*");
     ulong ket_op_idx = ket_map.get_idx("op");
     ulong ket_ops_idx = ket_map.get_idx("ops");
-    for (const Ket object : input_sp)
+    for (const Ket& object : input_sp)
     {
         bool found_rule = false;
         ulong object_idx = object.label_idx();
-        for (const Ket op : operators_sp)
+        for (const Ket& op : operators_sp)
         {
             if (op.label_idx() == star_idx)
             {
@@ -1765,15 +1765,15 @@ Ket op_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence&
                     switch (rule_type)
                     {
                     case RULENORMAL: {
-                        std::cout << ket_map.get_str(op_idx) << object.to_string() << " => " << rule_value->to_string() << "\n";
+                        std::cout << ket_map.get_str(op_idx) << " " << object.to_string() << " => " << rule_value->to_string() << "\n";
                         break;
                     }
                     case RULESTORED: {
-                        std::cout << ket_map.get_str(op_idx) << object.to_string() << " #=> " << rule_value->to_string() << "\n";
+                        std::cout << ket_map.get_str(op_idx) << " " << object.to_string() << " #=> " << rule_value->to_string() << "\n";
                         break;
                     }
                     case RULEMEMOIZE: {
-                        std::cout << ket_map.get_str(op_idx) << object.to_string() << " !=> " << rule_value->to_string() << "\n";
+                        std::cout << ket_map.get_str(op_idx) << " " << object.to_string() << " !=> " << rule_value->to_string() << "\n";
                         break;
                     }
                     default:
@@ -1798,15 +1798,15 @@ Ket op_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence&
                 switch (rule_type)
                 {
                 case RULENORMAL: {
-                    std::cout << ket_map.get_str(op_vec[1]) << object.to_string() << " => " << rule_value->to_string() << "\n";
+                    std::cout << ket_map.get_str(op_vec[1]) << " " << object.to_string() << " => " << rule_value->to_string() << "\n";
                     break;
                 }
                 case RULESTORED: {
-                    std::cout << ket_map.get_str(op_vec[1]) << object.to_string() << " #=> " << rule_value->to_string() << "\n";
+                    std::cout << ket_map.get_str(op_vec[1]) << " " << object.to_string() << " #=> " << rule_value->to_string() << "\n";
                     break;
                 }
                 case RULEMEMOIZE: {
-                    std::cout << ket_map.get_str(op_vec[1]) << object.to_string() << " !=> " << rule_value->to_string() << "\n";
+                    std::cout << ket_map.get_str(op_vec[1]) << " " << object.to_string() << " !=> " << rule_value->to_string() << "\n";
                     break;
                 }
                 default:
@@ -1828,7 +1828,7 @@ Ket op_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence&
                 }
                 if (!seq.is_empty_ket())
                 {
-                    std::cout << ket_map.get_str(op_vec[1]) << object.to_string() << " => " << seq.to_string() << "\n";
+                    std::cout << ket_map.get_str(op_vec[1]) << " " << object.to_string() << " => " << seq.to_string() << "\n";
                     found_rule = true;
                 }
             }
@@ -1847,10 +1847,10 @@ Ket op_recursive_dump_fn1(ContextList& context, const Sequence& input_seq, const
     Superposition input_sp = input_seq.to_sp();
     Superposition operators_sp = one.to_sp();
     ulong ket_op_idx = ket_map.get_idx("op");
-    for (const Ket object : input_sp)
+    for (const Ket& object : input_sp)
     {
         ulong object_idx = object.label_idx();
-        for (const Ket op : operators_sp)
+        for (const Ket& op : operators_sp)
         {
             std::vector<ulong> op_vec = op.label_split_idx();
             if (op_vec.size() != 2)
@@ -1865,12 +1865,12 @@ Ket op_recursive_dump_fn1(ContextList& context, const Sequence& input_seq, const
             if (rule_type == RULENORMAL)
             {
                 Sequence rule_value = context.recall(op_vec[1], object_idx)->to_seq();
-                std::cout << ket_map.get_str(op_vec[1]) << object.to_string() << " => " << rule_value.to_string() << "\n";
+                std::cout << ket_map.get_str(op_vec[1]) << " " << object.to_string() << " => " << rule_value.to_string() << "\n";
 
                 Superposition rule_objects;
                 rule_objects.add(object);
                 rule_objects.add(rule_value.to_sp());
-                for (const Ket rule_object : rule_objects)
+                for (const Ket& rule_object : rule_objects)
                 {
                     ulong rule_object_idx = rule_object.label_idx();
                     std::vector<ulong> operators = context.supported_ops(rule_object_idx);
@@ -1881,7 +1881,7 @@ Ket op_recursive_dump_fn1(ContextList& context, const Sequence& input_seq, const
                             continue;
                         }
                         Sequence rule_value = context.recall(op_idx, rule_object_idx)->to_seq();
-                        std::cout << "    " << ket_map.get_str(op_idx) << rule_object.to_string() << " => " << rule_value.to_string() << "\n";
+                        std::cout << "    " << ket_map.get_str(op_idx) << " " << rule_object.to_string() << " => " << rule_value.to_string() << "\n";
                     }
 
                 }
