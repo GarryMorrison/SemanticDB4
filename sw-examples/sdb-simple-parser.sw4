@@ -1,28 +1,54 @@
 -- Exploring a simple English language parser using the Semantic DB
 -- The intent is to learn triples from the given input sentences, to partly auto-construct a graph structure.
 --
--- The underlying theory of this parser is we first map words to types/parts-of-speech
+-- The underlying theory of this parser is we first map words to words with labelled types/parts-of-speech.
+-- (we often deviate from standard parts-of-speech labels, so it is more correct to say we are labelling with types not PoS)
 -- Eg: |frog> maps to |noun: frog>
--- Unfortunately we don't currently have a good approach for the common case where a word has more than one possible type
--- Also, we auto-learn proper-nouns, using the property that if the first char of a word is a capital, and we don't already know its type we label it a proper noun
--- This way we don't need to manually define proper nouns for all the possible variations of proper-nouns.
+-- Unfortunately we don't currently have a good approach for the common case where a word has more than one possible type.
+--
+-- Note, we auto-learn proper-nouns, using the property that if the first char of a word is a capital, and we don't already know its type we label it a proper noun.
+-- This way we don't need to manually define proper nouns for all the possible variations of proper-nouns (which is essentially unlimited).
+-- We also auto learn possesive nouns if the last two characters of a word are 's. The plural noun case is not currently handled, but might be added in later.
 -- 
--- Once we have words of form: |A: alpha>, where A is a type and alpha is the corresponding word we have an extendable collection of rules that act pair wise on the input sequence
+-- We also have quote and bracket layers.  These extract out quoted text, and bracketed text, labelled with types |quote: > and |bracket: > respectively.
+-- These are actually applied just before the map layer, and are passed through the map layer unchanged.
+-- The text inside the quotes and bracket text is not processed by the parser, and passed unchanged through all the layers.
+--
+-- Once we have words of form: |A: alpha>, where A is a type and alpha is the corresponding word we have an extendable collection of rules that act pair wise on the input sequence.
 -- Eg, |A: alpha> . |B: beta> maps to a new ket depending on the relation between the A type and the B type.
--- For example, the cases where: A == B, or A < B, or A > B.
--- If there is no known relation between A and B, then we leave the kets unchanged
+-- For example, we handle the cases where: A == B, or A < B, or A > B.
+-- If there is no known relation between A and B, then we leave the kets unchanged in the given sequence.
+--
+-- Now for a brief description of our type relation rules:
+-- If A == B, ie, they have the same type importance, then there are two possible cases:
+-- The new ket takes the type of the first element, or it takes the type of the second element (the most common case is the first of these):
+-- Eg, |A: alpha> . |B: beta> maps to either |A: alpha beta> or |B: alpha beta> depending on being either equal-type 1 or equal-type 2.
+--
+-- If A < B, ie, A is less important than B, then:
+-- |A: alpha> . |B: beta> maps to |B: beta> and we also learn: A|beta> +=> |alpha>
+--
+-- If A > B, ie A is more important then B (this case is far less common than the previous case), then:
+-- |A: alpha> . |B: beta> maps to |A: alpha> and we also learn: B|alpha> +=> |beta>
+-- The current use case for this is A is type noun, and B is type bracket.
 --
 -- We also have a merge layer and a cast layer.
+-- For example in the merge layer: number . and . number maps to type number
+-- And in the cast layer: noun . comma . noun maps to type noun-list
 --
 -- The final layer is a small collection of if-then machines that detect grammar structures and then produces a SDB triple.
 -- Eg, |*> . |is> . |*> maps to: is |alpha> +=> |gamma>
 --
+-- Finally, the code "dumps" the newly acquired learn rules, so we can see what we have learnt from the parsing stage.
+--
 -- It is not known how far this approach can be taken with real world sentences.
+-- It is not known if the type importance rules are universal, and invariant regardless of a given context.
+-- It is also not known if the requried order of application of our layers is invariant regardless of a given context.
 -- Is is also not known if SDB triples are sufficient to represent sentences in general, or if a more general structure is required.
+-- Finally, it should be mentioned that the SDB language is rather slower than would be desired!
 --
 -- Author: Garry Morrison
 -- Created: 2023/5/1
--- Updated: 2023/5/2
+-- Updated: 2023/5/4
 
 
 |context> => |SDB simple parser>
@@ -36,7 +62,7 @@ learn-sentences |*> #=>
     sentence |2> => |test ( our bracket text here ) #EOS#>
     sentence |3> => |The capital city of New South Wales is Sydney #EOS#>
     sentence |4> => |The shopping list is two apples comma three oranges comma bread and milk #EOS#>
-    sentence |5> => |Their example listy is one thousand two hundred and thirty two red and blue green fish comma thirty three sharks comma eel and a green turtle #EOS#>
+    sentence |5> => |Their example listy is one thousand two hundred and thirty two red and blue green fish , thirty three sharks , an eel and a green turtle #EOS#>
     sentence |6> => |Some Einstein quotes are " X " and " Y " #EOS#>
     sentence |7> => |Some Einstein quotes are " God does not play dice " and " Imagination is more important than knowledge " #EOS#>
     sentence |8> => |My friends are Sam comma Rob comma Fred Smith and Emma #EOS#>
@@ -45,13 +71,14 @@ learn-sentences |*> #=>
     sentence |11> => |Our example bracket test ( our sample bracket text here ) is " just a toy quote " #EOS#>
     sentence |12> => |My green slippery frog sat on a smooth brown rock #EOS#>
     sentence |13> => |The tired man used a pair of binoculars #EOS#>
+    sentence |14> => |Fred's wife's brother's pet dog #EOS#>
 
 
 -- now load them into memory:
 learn-sentences
 
 -- choose one to parse:
-the |sentence> => sentence |5>
+the |sentence> => sentence |14>
 
 -- display our sentences operator:
 display-sentences |*> #=>
@@ -134,7 +161,7 @@ bracket-layer (*) #=>
 list-of |determiner> => ssplit[" "] |The the A a An an Some some This this That that>
 list-of |colour> => ssplit[" "] |red orange yellow green blue indigo violet brown>
 list-of |adj> => ssplit[" "] |hungry tired shopping example smooth slippery>
-list-of |noun> => ssplit[" "] |frog man toad elephant rock bridge list apples oranges bread milk rose listy fish sharks eel turtle capital city cities quote quotes test friends sisters brothers bracket pair binoculars>
+list-of |noun> => ssplit[" "] |frog man toad elephant rock bridge list apples oranges bread milk rose listy fish sharks eel turtle capital city cities quote quotes test friends sisters brothers bracket pair binoculars pet dog>
 list-of |title> => ssplit[" "] |Mr Mrs Miss Dr Sir Madam>
 -- list-of |proper-noun> => ssplit[" "] |Fred John Smith Frank Roberts Emma Liz Edwards South Western Australia Adelaide Perth New Wales Sydney>
 list-of |number> => ssplit[" "] |one two three four five six seven eight nine ten twenty thirty hundred thousand million>
@@ -172,9 +199,11 @@ map |was> => |was: was>
 map |and> => |and: and>
 map |or> => |or: or>
 map |comma> => |comma: comma>
+map |,> => |comma: ,>
 map |of> => |of: of>
 map |not> => |not: not>
 map |Not> => |not: not>
+
 
 
 -- pass quotes and bracket text unchanged:
@@ -186,11 +215,17 @@ map |bracket: *> #=> |_self>
 -- making use of the idea of label descent, which causes this function to only be invoked for words that don't have an existing map definition.
 -- we also use memoizing rules so the pattern is stored in memory
 map |*> !=>
-    if( |__self> == to-upper[1] |__self>):
-        |proper-noun> :_ |__self>
-    else:
-        |__self>
+    unlearn[the] |result>
+    if( sselect[-2,-1] ssplit |__self> == ssplit |'s>):
+         the |result> => |possesive-noun> :_ |__self>
     end:
+    if( not do-you-know the |result> && (|__self> == to-upper[1] |__self>)):
+        the |result> => |proper-noun> :_ |__self>
+    end:
+    if( not do-you-know the |result>):
+        the |result> => |__self>
+    end:
+    the |result>
 
 -- a quick test:
 -- sprint parse sentence |2>
@@ -204,6 +239,7 @@ map |*> !=>
 relation-1 |noun __ noun> => |equal 1>
 relation-1 |proper-noun __ proper-noun> => |equal 1>
 relation-1 |proper-noun __ noun> => |equal 1>
+relation-1 |possesive-noun __ possesive-noun> => |equal 1>
 relation-1 |adj __ adj> => |equal 1>
 relation-1 |number __ number> => |equal 1>
 relation-1 |colour __ colour> => |equal 1>
@@ -236,6 +272,8 @@ relation-3 |number __ noun> => |less than>
 relation-3 |colour __ noun> => |less than>
 relation-3 |whose __ noun> => |less than>
 relation-3 |title __ proper-noun> => |less than>
+relation-3 |possesive-noun __ noun> => |less than>
+
 
 -- greater than relation rules:
 -- if A > B then |A: alpha> . |B: beta> maps to |A: alpha>
@@ -414,21 +452,6 @@ apply-greater-than (*) #=>
         sselect[2,2] |__self>
     end:
 
-greater-than-layer-v1 (*) #=>
-    print |--------------------------->
-    print |greater than layer:>
-    unlearn[the] |result>
-    the |pre> => sselect[1,1] |__self>
-    sfor( the |word> in sselect[2,-1] |__self>):
-        local |result> => apply-greater-than( the |pre> . the |word>)
-        if( local |result> == the |pre>):
-            the |result> .=> the |pre>
-            the |pre> => the |word>
-        else:
-            the |pre> => local |result>
-        end:
-    end:
-    the |result> . |> . |>
 
 greater-than-layer (*) #=>
     print |--------------------------->
@@ -551,5 +574,6 @@ print | >
 print |---------------------------------------->
 print |Our new learn rules:>
 print | >
-dump(|*>) clean list-of |updated kets>
+dump(|*>) list-of |updated kets>
+
 
