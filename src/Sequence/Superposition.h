@@ -90,6 +90,8 @@ public:
     SuperpositionIter end() const;
 
     void set(size_t pos, const Ket& k);
+    size_t get_position(ulong idx);  // Not super sure we need these two. But will implement them anyway.
+    double get_value(size_t pos);    // Also, test them!!
 
     /*  // Broken with "a non static member reference must be relative to a specific object" error.
     // New iterator, the last one was deprecated!

@@ -567,6 +567,22 @@ void Superposition::set(size_t pos, const Ket& k)
     }
 }
 
+size_t Superposition::get_position(ulong idx)
+{
+    auto pos = std::find(sort_order.begin(), sort_order.end(), idx);
+    return *pos;  // Need to test this is correct!!
+}
+
+double Superposition::get_value(size_t pos)
+{
+    if (pos >= sort_order.size())
+    {
+        return 0;
+    }
+    ulong idx = sort_order[pos];
+    return sp[idx];
+}
+
 /*
 Superposition::Iterator::reference Superposition::Iterator::operator*() const {
     ulong sp_idx = sort_order[m_ptr];

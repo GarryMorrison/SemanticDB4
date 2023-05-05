@@ -101,7 +101,7 @@ display-sentences
 -- parse |*> #=> learn-layer sdrop cast-types-layer greater-than-layer less-than-layer^3 merge-types-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] |_self>
 -- parse |*> #=> learn-layer sdrop cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] |_self>
 -- parse |*> #=> learn-layer sdrop cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] sprint["Chosen sentence: "] |_self>
-parse |*> #=> learn-layer sdrop sprint["Final sequence:  "] cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] sprint["Chosen sentence: "] |_self>
+parse |*> #=> learn-layer sdrop sprint["Final sequence: "] cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] sprint["Input sentence: "] |_self>
 
 
 
