@@ -48,7 +48,7 @@
 --
 -- Author: Garry Morrison
 -- Created: 2023/5/1
--- Updated: 2023/5/4
+-- Updated: 2023/5/5
 
 
 |context> => |SDB simple parser>
@@ -61,12 +61,12 @@ learn-sentences |*> #=>
     sentence |1> => |An Albert Einstein quote is " God does not play dice " #EOS#>
     sentence |2> => |test ( our bracket text here ) #EOS#>
     sentence |3> => |The capital city of New South Wales is Sydney #EOS#>
-    sentence |4> => |The shopping list is two apples comma three oranges comma bread and milk #EOS#>
+    sentence |4> => |The shopping list is two apples , three oranges , bread and milk #EOS#>
     sentence |5> => |Their example listy is one thousand two hundred and thirty two red and blue green fish , thirty three sharks , an eel and a green turtle #EOS#>
     sentence |6> => |Some Einstein quotes are " X " and " Y " #EOS#>
     sentence |7> => |Some Einstein quotes are " God does not play dice " and " Imagination is more important than knowledge " #EOS#>
-    sentence |8> => |My friends are Sam comma Rob comma Fred Smith and Emma #EOS#>
-    sentence |9> => |The capital cities of Australia are Adelaide comma Brisbane comma Canberra comma Darwin comma Hobart comma Melbourne comma Perth and Sydney #EOS#>
+    sentence |8> => |My friends are Sam , Rob , Fred Smith and Emma #EOS#>
+    sentence |9> => |The capital cities of Australia are Adelaide , Brisbane , Canberra , Darwin , Hobart , Melbourne , Perth and Sydney #EOS#>
     sentence |10> => |Not Fred Robert Smith #EOS#>
     sentence |11> => |Our example bracket test ( our sample bracket text here ) is " just a toy quote " #EOS#>
     sentence |12> => |My green slippery frog sat on a smooth brown rock #EOS#>
@@ -77,8 +77,12 @@ learn-sentences |*> #=>
 -- now load them into memory:
 learn-sentences
 
--- choose one to parse:
-the |sentence> => sentence |14>
+-- choose one/some to parse:
+the |sentence> => sentence (|4> + |5> + |6> + |7>)
+
+-- switch verbose mode on/off:
+-- verbose |mode> => |yes>
+verbose |mode> => |no>
 
 -- display our sentences operator:
 display-sentences |*> #=>
@@ -96,7 +100,9 @@ display-sentences
 -- our parse operator:
 -- parse |*> #=> learn-layer sdrop cast-types-layer greater-than-layer less-than-layer^3 merge-types-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] |_self>
 -- parse |*> #=> learn-layer sdrop cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] |_self>
-parse |*> #=> learn-layer sdrop cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] sprint["Chosen sentence: "] |_self>
+-- parse |*> #=> learn-layer sdrop cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] sprint["Chosen sentence: "] |_self>
+parse |*> #=> learn-layer sdrop sprint["Final sequence:  "] cast-types-layer less-than-layer^3 merge-types-layer greater-than-layer equality-2-layer equality-1-layer map bracket-layer quote-layer ssplit[" "] sprint["Chosen sentence: "] |_self>
+
 
 
 -- our not operator:
@@ -331,9 +337,11 @@ apply-equality-1 (*) #=>
     the |types> => extract-head |__self>
     the |values> => extract-value |__self>
     the |relation> => relation-1 smerge[" __ "] the |types>
-    print | >
-    sprint["input: "] |__self>
-    sprint["relation: "] the |relation>
+    if( verbose |mode>):
+        print | >
+        sprint["input: "] |__self>
+        sprint["relation: "] the |relation>
+    end:
     if( the |relation> == |equal 1>):
         sselect[1,1] the |types> :_ smerge[" "] the |values>
     else:
@@ -341,8 +349,10 @@ apply-equality-1 (*) #=>
     end:
 
 equality-1-layer (*) #=>
-    print |--------------------------->
-    print |equality 1 layer:>
+    if( verbose |mode>):
+        print |--------------------------->
+        print |equality 1 layer:>
+    end:
     unlearn[the] |result>
     the |pre> => sselect[1,1] |__self>
     sfor( the |word> in sselect[2,-1] |__self>):
@@ -367,9 +377,11 @@ apply-equality-2 (*) #=>
     the |types> => extract-head |__self>
     the |values> => extract-value |__self>
     the |relation> => relation-2 smerge[" __ "] the |types>
-    print | >
-    sprint["input: "] |__self>
-    sprint["relation: "] the |relation>
+    if( verbose |mode>):
+        print | >
+        sprint["input: "] |__self>
+        sprint["relation: "] the |relation>
+    end:
     if( the |relation> == |equal 2>):
         sselect[2,2] the |types> :_ smerge[" "] the |values>
     else:
@@ -377,8 +389,10 @@ apply-equality-2 (*) #=>
     end:
 
 equality-2-layer (*) #=>
-    print |--------------------------->
-    print |equality 2 layer:>
+    if( verbose |mode>):
+        print |--------------------------->
+        print |equality 2 layer:>
+    end:
     unlearn[the] |result>
     the |pre> => sselect[1,1] |__self>
     sfor( the |word> in sselect[2,-1] |__self>):
@@ -398,9 +412,11 @@ apply-less-than (*) #=>
     the |types> => extract-head |__self>
     the |values> => extract-value |__self>
     the |relation> => relation-3 smerge[" __ "] the |types>
-    print | >
-    sprint["input: "] |__self>
-    sprint["relation: "] the |relation>
+    if( verbose |mode>):
+        print | >
+        sprint["input: "] |__self>
+        sprint["relation: "] the |relation>
+    end:
     if( the |relation> == |less than>):
         the |op> => |op> :_ sselect[1,1] the |types>
         the |subject> => sselect[2,2] the |values>
@@ -413,8 +429,10 @@ apply-less-than (*) #=>
     end:
 
 less-than-layer (*) #=>
-    print |--------------------------->
-    print |less than layer:>
+    if( verbose |mode>):
+        print |--------------------------->
+        print |less than layer:>
+    end:
     unlearn[the] |result>
     the |pre> => sselect[1,1] |__self>
     sfor( the |word> in sselect[2,-1] |__self>):
@@ -438,9 +456,11 @@ apply-greater-than (*) #=>
     the |types> => extract-head |__self>
     the |values> => extract-value |__self>
     the |relation> => relation-4 smerge[" __ "] the |types>
-    print | >
-    sprint["input: "] |__self>
-    sprint["relation: "] the |relation>
+    if( verbose |mode>):
+        print | >
+        sprint["input: "] |__self>
+        sprint["relation: "] the |relation>
+    end:
     if( the |relation> == |greater than>):
         the |op> => |op> :_ sselect[2,2] the |types>
         the |subject> => sselect[1,1] the |values>
@@ -454,8 +474,10 @@ apply-greater-than (*) #=>
 
 
 greater-than-layer (*) #=>
-    print |--------------------------->
-    print |greater than layer:>
+    if( verbose |mode>):
+        print |--------------------------->
+        print |greater than layer:>
+    end:
     unlearn[the] |result>
     the |pre> => sselect[1,1] |__self>
     the |result> => the |pre>
@@ -478,9 +500,11 @@ apply-merge-types (*) #=>
     the |types> => extract-head |__self>
     the |values> => extract-value |__self>
     the |type> => type-1 smerge[" __ "] the |types>
-    print | >
-    sprint["input: "] |__self>
-    sprint["type: "] the |type>
+    if( verbose |mode>):
+        print | >
+        sprint["input: "] |__self>
+        sprint["type: "] the |type>
+    end:
     if( do-you-know the |type>):
         the |type> :_ smerge[" "] the |values>
     else:
@@ -489,8 +513,10 @@ apply-merge-types (*) #=>
 
 
 merge-types-layer (*) #=>
-    print |--------------------------->
-    print |merge types layer:>
+    if( verbose |mode>):
+        print |--------------------------->
+        print |merge types layer:>
+    end:
     unlearn[the] |result>
     the |pre 1> => sselect[1,1] |__self>
     the |pre 2> => sselect[2,2] |__self>
@@ -518,9 +544,11 @@ apply-cast-types (*) #=>
     the |types> => extract-head |__self>
     the |values> => extract-value |__self>
     the |type> => type-2 smerge[" __ "] the |types>
-    print | >
-    sprint["input: "] |__self>
-    sprint["type: "] the |type>
+    if( verbose |mode>):
+        print | >
+        sprint["input: "] |__self>
+        sprint["type: "] the |type>
+    end:
     if( do-you-know the |type>):
         the |type> :_ smerge[" "] the |values>
     else:
@@ -529,8 +557,10 @@ apply-cast-types (*) #=>
 
 
 cast-types-layer (*) #=>
-    print |--------------------------->
-    print |cast types layer:>
+    if( verbose |mode>):
+        print |--------------------------->
+        print |cast types layer:>
+    end:
     unlearn[the] |result>
     the |pre 1> => sselect[1,1] |__self>
     the |pre 2> => sselect[2,2] |__self>
@@ -559,17 +589,20 @@ cast-types-layer (*) #=>
 learn-layer (*) #=>
     the |types> => extract-head |__self>
     the |values> => extract-value |__self>
-    print |--------------------------->
-    print |if-then machine learn layer:>
-    sprint["types: "] the |types>
-    sprint["values: "] the |values>
+    if( verbose |mode>):
+        print |--------------------------->
+        print |if-then machine learn layer:>
+        sprint["types: "] the |types>
+        sprint["values: "] the |values>
+    end:
     list-of |updated kets> +=> then star-equal-input[template] the |types>
     |__self>
 
 
 
 
-sprint parse the |sentence>
+-- sprint parse the |sentence>
+parse the |sentence>
 print | >
 print |---------------------------------------->
 print |Our new learn rules:>
