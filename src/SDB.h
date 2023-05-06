@@ -21,7 +21,7 @@
 
 #define APP_BUILD_DATE "2023/5/5"
 #define APP_VERSION "4.0.alpha4"
-#define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage3/"  // Update this when we upload our new docs!
+#define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage4/"
 #define APP_WEBSITE "http://semantic-db.org"
 
 #define DEFAULT_STATUS_BAR_TEXT "Welcome to the Semantic DB GUI"

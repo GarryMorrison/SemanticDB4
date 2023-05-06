@@ -23,9 +23,13 @@
 -- If A == B, ie, they have the same type importance, then there are two possible cases:
 -- The new ket takes the type of the first element, or it takes the type of the second element (the most common case is the first of these):
 -- Eg, |A: alpha> . |B: beta> maps to either |A: alpha beta> or |B: alpha beta> depending on being either equal-type 1 or equal-type 2.
+-- We also auto-learn the map operator applied to |alpha beta>. Eg, map |alpha beta> => |A: alpha beta>
 --
 -- If A < B, ie, A is less important than B, then:
 -- |A: alpha> . |B: beta> maps to |B: beta> and we also learn: A|beta> +=> |alpha>
+-- Due to a quirk of grammar, we actually need to apply this layer at least three times in a row.
+-- It may turn out we need to apply it even more times.
+-- To implement this idea we use a short-cut in our notation: op^k, which applies "op", k times in a row, to the given input.
 --
 -- If A > B, ie A is more important then B (this case is far less common than the previous case), then:
 -- |A: alpha> . |B: beta> maps to |A: alpha> and we also learn: B|alpha> +=> |beta>
@@ -34,11 +38,15 @@
 -- We also have a merge layer and a cast layer.
 -- For example in the merge layer: number . and . number maps to type number
 -- And in the cast layer: noun . comma . noun maps to type noun-list
+-- And again, we auto learn the map operator on our newly generated kets.
 --
 -- The final layer is a small collection of if-then machines that detect grammar structures and then produces a SDB triple.
 -- Eg, |*> . |is> . |*> maps to: is |alpha> +=> |gamma>
+-- We also count how many times a particular if-then machine rule has been activated, using the activation-count variable.
+-- The presumption is that the more times a rule has been activated, the more "grammatically correct" that rule is.
 --
 -- Finally, the code "dumps" the newly acquired learn rules, so we can see what we have learnt from the parsing stage.
+-- And we also dump the if-then machine activation-counts.
 --
 -- It is not known how far this approach can be taken with real world sentences.
 -- It is not known if the type importance rules are universal, and invariant regardless of a given context.
@@ -48,7 +56,7 @@
 --
 -- Author: Garry Morrison
 -- Created: 2023/5/1
--- Updated: 2023/5/5
+-- Updated: 2023/5/6
 
 
 |context> => |SDB simple parser>
@@ -78,7 +86,10 @@ learn-sentences |*> #=>
 learn-sentences
 
 -- choose one/some to parse:
-the |sentence> => sentence (|4> + |5> + |6> + |7>)
+-- the |sentence> => sentence (|2> + |4> + |5> + |6> + |7> + |10> + |14>)
+-- let's learn them all!
+the |sentence> => sentence rel-kets[sentence]
+
 
 -- switch verbose mode on/off:
 -- verbose |mode> => |yes>
@@ -164,17 +175,17 @@ bracket-layer (*) #=>
 -----------------------------------------------------------------------------------------------------------
 
 -- define our lists of parts of speech/types (extend as required):
-list-of |determiner> => ssplit[" "] |The the A a An an Some some This this That that>
-list-of |colour> => ssplit[" "] |red orange yellow green blue indigo violet brown>
-list-of |adj> => ssplit[" "] |hungry tired shopping example smooth slippery>
-list-of |noun> => ssplit[" "] |frog man toad elephant rock bridge list apples oranges bread milk rose listy fish sharks eel turtle capital city cities quote quotes test friends sisters brothers bracket pair binoculars pet dog>
-list-of |title> => ssplit[" "] |Mr Mrs Miss Dr Sir Madam>
--- list-of |proper-noun> => ssplit[" "] |Fred John Smith Frank Roberts Emma Liz Edwards South Western Australia Adelaide Perth New Wales Sydney>
-list-of |number> => ssplit[" "] |one two three four five six seven eight nine ten twenty thirty hundred thousand million>
-list-of |token> => ssplit[" "] |#EOS#>
-list-of |whose> => ssplit[" "] |My my Her her His his Their their Our our>
-list-of |verb> => ssplit[" "] |sat used>
-list-of |preposition> => ssplit[" "] |on>
+list-of |determiner> => split[" "] |The the A a An an Some some This this That that>
+list-of |colour> => split[" "] |red orange yellow green blue indigo violet brown>
+list-of |adj> => split[" "] |hungry tired shopping example smooth slippery>
+list-of |noun> => split[" "] |frog man toad elephant rock bridge list apples oranges bread milk rose listy fish sharks eel turtle capital city cities quote quotes test friends sisters brothers bracket pair binoculars pet dog>
+list-of |title> => split[" "] |Mr Mrs Miss Dr Sir Madam>
+-- list-of |proper-noun> => split[" "] |Fred John Smith Frank Roberts Emma Liz Edwards South Western Australia Adelaide Perth New Wales Sydney>
+list-of |number> => split[" "] |one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty thirty forty fifty sixty seventy eighty ninety hundred thousand million billion trillion>
+list-of |token> => split[" "] |#EOS#>
+list-of |whose> => split[" "] |My my Her her His his Their their Our our>
+list-of |verb> => split[" "] |sat used>
+list-of |preposition> => split[" "] |on>
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -299,34 +310,55 @@ type-2 |proper-noun __ comma __ proper-noun> => |proper-noun-list>
 type-2 |proper-noun-list __ comma __ proper-noun> => |proper-noun-list>
 type-2 |proper-noun-list __ and __ proper-noun> => |proper-noun-list>
 
-type-2 |noun __ verb __ noun> => |NVN>
+-- disable this one for now, and shift to the if-then machine layer:
+-- type-2 |noun __ verb __ noun> => |NVN>
 
 
 -- define some if-then machines for the final layer:
 template |node: 1: 1> => |*> . |is> . |*>
+activation-count |node: 1: 1> => |0>
 then |node: 1: *> #=>
+    activation-count |__self> => plus[1] activation-count |__self>
     is sselect[1,1] the |values> +=> sselect[-1,-1] the |values>
     sselect[1,1] the |values>
 
 template |node: 2: 1> => |*> . |was> . |*>
+activation-count |node: 2: 1> => |0>
 then |node: 2: *> #=>
+    activation-count |__self> => plus[1] activation-count |__self>
     was sselect[1,1] the |values> +=> sselect[-1,-1] the |values>
     sselect[1,1] the |values>
 
 template |node: 3: 1> => |proper-noun> . |comma> . |proper-noun>
+activation-count |node: 3: 1> => |0>
 then |node: 3: *> #=>
+    activation-count |__self> => plus[1] activation-count |__self>
     where sselect[1,1] the |values> +=> sselect[-1,-1] the |values>
     sselect[1,1] the |values>
 
 template |node: 4: 1> => |*> . |are> . |*> . |and> . |*>
+activation-count |node: 4: 1> => |0>
 then |node: 4: *> #=>
+    activation-count |__self> => plus[1] activation-count |__self>
     are sselect[1,1] the |values> +=> sselect[3,3] the |values> + sselect[5,5] the |values>
     sselect[1,1] the |values>
 
 template |node: 5: 1> => |*> . |are> . |*>
+activation-count |node: 5: 1> => |0>
 then |node: 5: *> #=>
+    activation-count |__self> => plus[1] activation-count |__self>
     are sselect[1,1] the |values> +=> sselect[3,3] the |values>
     sselect[1,1] the |values>
+
+template |node: 6: 1> => |noun> . |verb> . |noun>
+activation-count |node: 6: 1> => |0>
+then |node: 6: *> #=>
+    activation-count |__self> => plus[1] activation-count |__self>
+    the |op> => |op> :_ smerge["-"] ssplit[" "] sselect[2,2] the |values>
+    the |subject> => sselect[1,1] the |values>
+    the |object> => sselect[3,3] the |values>
+    add-learn(the |op>, the |subject>, the |object>)
+    the |subject>
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -343,7 +375,9 @@ apply-equality-1 (*) #=>
         sprint["relation: "] the |relation>
     end:
     if( the |relation> == |equal 1>):
-        sselect[1,1] the |types> :_ smerge[" "] the |values>
+        the |new ket> => sselect[1,1] the |types> :_ smerge[" "] the |values>
+        map smerge[" "] the |values> => the |new ket>
+        the |new ket>
     else:
         sselect[1,1] |__self>
     end:
@@ -383,7 +417,9 @@ apply-equality-2 (*) #=>
         sprint["relation: "] the |relation>
     end:
     if( the |relation> == |equal 2>):
-        sselect[2,2] the |types> :_ smerge[" "] the |values>
+        the |new ket> => sselect[2,2] the |types> :_ smerge[" "] the |values>
+        map smerge[" "] the |values> => the |new ket>
+        the |new ket>
     else:
         sselect[1,1] |__self>
     end:
@@ -506,7 +542,9 @@ apply-merge-types (*) #=>
         sprint["type: "] the |type>
     end:
     if( do-you-know the |type>):
-        the |type> :_ smerge[" "] the |values>
+        the |new ket> => the |type> :_ smerge[" "] the |values>
+        map smerge[" "] the |values> => the |new ket>
+        the |new ket>
     else:
         sselect[1,1] |__self>
     end:
@@ -599,14 +637,34 @@ learn-layer (*) #=>
     |__self>
 
 
+-- Extract out lists of possesive nouns and proper nouns:
+-- Doesn't work as initally expected. 
+-- list-of |possesive-noun> => filter(|op: extract-head>, |possesive-noun>) rel-kets[*]
+-- list-of |proper-noun> => filter(|op: extract-head>, |proper-noun>) rel-kets[*]
 
 
--- sprint parse the |sentence>
+-- Let's learn our inverse list-of rules:
+-- Switch off for now.
+-- find-inverse[list-of]
+
+-- Now we have that all in place, let's parse our sentence(s):
 parse the |sentence>
 print | >
 print |---------------------------------------->
 print |Our new learn rules:>
 print | >
 dump(|*>) list-of |updated kets>
+print |---------------------------------------->
+print |Activation counts for our if-then machines:>
+print | >
+dump(|op: activation-count>) rel-kets[activation-count]
+
+-- This is interesting to see once or twice, but not in general, so we comment it out:
+-- print |---------------------------------------->
+-- print |Our maps:>
+-- print | >
+-- dump(|op: map>) rel-kets[map]
+
+
 
 
