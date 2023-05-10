@@ -2928,3 +2928,47 @@ Ket op_random_integer(const Sequence& input_seq, const std::vector<std::shared_p
     int random_integer = uni(rng);
     return Ket(std::to_string(random_integer));
 }
+
+
+Superposition op_tensor_product(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (parameters.size() != 1) { return Superposition(); }
+    if (input_seq.size() <= 1) { return input_seq.to_sp(); }
+    std::string merge_str = parameters[0]->get_string();
+    Superposition result_sp;
+    bool first_loop = true;
+    for (const auto& loop_sp : input_seq)
+    {
+        if (!loop_sp.is_empty_ket())  // If the current vector/superposition is the empty ket, ignore, and proceed with the next vector/superposition.
+        {
+            if (first_loop)
+            {
+                result_sp = loop_sp;  // Is there a faster alternative than assign/copy?
+                first_loop = false;
+            }
+            else
+            {
+                Superposition new_result_sp;
+                for (const auto& k1 : result_sp)
+                {
+                    for (const auto& k2 : loop_sp)
+                    {
+                        std::string new_label;
+                        if (k1.is_empty_ket() || k2.is_empty_ket())
+                        {
+                            new_label = k1.label() + k2.label();
+                        }
+                        else
+                        {
+                            new_label = k1.label() + merge_str + k2.label();
+                        }
+                        double new_value = k1.value() * k2.value();
+                        new_result_sp.add(new_label, new_value);
+                    }
+                }
+                result_sp = new_result_sp;
+            }
+        }
+    }
+    return result_sp;
+}

@@ -4842,6 +4842,37 @@ OperatorUsageMap::OperatorUsageMap() {
         "        do-you-know, sdrop\n";
 
 
+    operator_usage_map.map["tensor-product"] =
+        "\ntensor-product:\n"
+        "    description:\n"
+        "        tensor-product[str] input-seq\n"
+        "        implements a tensor product (see Wikipedia) of the superpositions in the input sequence\n"
+        "        and returns a superposition of the resulting kets\n"
+        "        in the simplest case, if given a sequence of two kets, c1|s1> . c2|s2>, the result is c1*c2|s1 . s2>\n"
+        "        where in this case we used \" . \" for the separator string\n"
+        "        in the general case, we return a sum of the tensor product of all the input kets\n"
+        "        if the input sequence contains the empty ket, then ignore that ket\n"
+        "        tensor-product should speed up a couple of algos\n\n"
+        "    examples:\n"
+        "        -- start with the simplest example, an input sequence of two kets:\n"
+        "        tensor-product[\" . \"] (2|a> . 3|b>)\n"
+        "            6|a . b>\n\n"
+        "        -- another simple example, an input sequence of some kets:\n"
+        "        tensor-product[\" . \"] (2|a> . 3|b> . 5|c> . 7|d>)\n"
+        "            210|a . b . c . d>\n\n"
+        "        -- this time a length 3 sequence:\n"
+        "        tensor-product[\" . \"] (2|a1> + 3|a2> . 5|b1> + 7|b2> . 11|c1>)\n"
+        "            110|a1 . b1 . c1> + 154|a1 . b2 . c1> + 165|a2 . b1 . c1> + 231|a2 . b2. c1>\n\n"
+        "        -- an example with empty kets:\n"
+        "        tensor-product[\" . \"] (|> . |> . 3|a> . 5|b>)\n"
+        "            15|a . b>\n\n"
+        "        -- and another:\n"
+        "        tensor-product[\" . \"] (|> . 3|a> . |> . |> . 5|b> . |> . |> . |>)\n"
+        "            15|a . b>\n\n"
+        "    see also:\n"
+        "        ssplit\n";
+
+
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =
         "|context> => |$1>\n";

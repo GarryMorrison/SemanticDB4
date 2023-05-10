@@ -56,7 +56,7 @@
 --
 -- Author: Garry Morrison
 -- Created: 2023/5/1
--- Updated: 2023/5/6
+-- Updated: 2023/5/8
 
 
 |context> => |SDB simple parser>
@@ -79,7 +79,7 @@ learn-sentences |*> #=>
     sentence |11> => |Our example bracket test ( our sample bracket text here ) is " just a toy quote " #EOS#>
     sentence |12> => |My green slippery frog sat on a smooth brown rock #EOS#>
     sentence |13> => |The tired man used a pair of binoculars #EOS#>
-    sentence |14> => |Fred's wife's brother's pet dog #EOS#>
+    sentence |14> => |Fred Robert Smith's wife's brother's pet dog #EOS#>
 
 
 -- now load them into memory:
@@ -268,6 +268,7 @@ relation-1 |verb __ preposition> => |equal 1>
 relation-2 |not __ noun> => |equal 2>
 relation-2 |not __ proper-noun> => |equal 2>
 relation-2 |not __ adj> => |equal 2>
+relation-2 |proper-noun __ possesive-noun> => |equal 2>
 
 -- merge types layer:
 -- eg: |number: alpha> . |and: and> . |number: beta> maps to |number: alpha and beta>

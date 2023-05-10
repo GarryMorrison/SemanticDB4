@@ -119,3 +119,6 @@ Sequence op_sequence_arc_encoder(const Sequence& input_seq, const std::vector<st
 Ket op_copy(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 
 Ket op_random_integer(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+
+Superposition op_tensor_product(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+
