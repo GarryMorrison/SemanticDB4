@@ -4872,6 +4872,37 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        ssplit\n";
 
+    operator_usage_map.map["TM-ngram-partition"] =
+        "\nTM-ngram-partition:\n"
+        "    description:\n"
+        "        TM-ngram-partition[map, max-ngram-len] input-seq\n"
+        "        TM-ngram-partition[map, max-ngram-len, merge-str, seq-merge-str] input-seq\n"
+        "        This is a member of the \"template machine\" collection of operators\n"
+        "        So far, they are just experimental, and further testing is required\n"
+        "        This one breaks a sequence up into a sequence of ngrams\n"
+        "        But only on ngrams that are known with respect to some operator (RULE NORMAL only), in this case \"map\"\n"
+        "        Single elements are considered \"known\"\n"
+        "        max-ngram-len tells us the max size ngrams to consider in this process\n"
+        "        The elements inside the ngram are merged using \"merge-str\"\n"
+        "        The sequences of ngrams are merged using \"seq-merge-str\"\n"
+        "        If not specified they default to \" \" and \" . \" respectively\n"
+        "        The output of this operator is the superposition of the results\n\n"
+        "    examples:\n"
+        "        -- define a pair of known ngrams:\n"
+        "        -- noting the ngrams can overlap each other:\n"
+        "        map |A B C> => |yes>\n"
+        "        map |B C D> => |yes>\n"
+        "        -- now invoke it:\n"
+        "        TM-ngram-partition[map, 3] ssplit[\" \"] |A B C D E>\n"
+        "            |A . B . C . D . E> + |A . B C D . E> + |A B C . D . E>\n\n"
+        "        -- now learn another ngram:\n"
+        "        map |D E> => |yes>\n"
+        "        -- now invoke it:\n"
+        "        TM-ngram-partition[map, 3] ssplit[\" \"] |A B C D E>\n"
+        "            |A . B . C . D . E> + |A . B . C . D E> + |A . B C D . E> + |A B C . D . E> + |A B C . D E>\n\n"
+        "    see also:\n"
+        "        TM-generate\n";
+
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =

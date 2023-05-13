@@ -554,6 +554,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("tensor-product");
     fn_map.compound_seq_fn.emplace(idx, &op_tensor_product);
+
+    idx = ket_map.get_idx("TM-ngram-partition");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_TM_ngram_partition);
 }
 
 

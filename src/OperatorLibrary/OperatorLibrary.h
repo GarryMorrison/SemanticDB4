@@ -122,3 +122,4 @@ Ket op_random_integer(const Sequence& input_seq, const std::vector<std::shared_p
 
 Superposition op_tensor_product(const Sequence& input_seq, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 
+Superposition op_TM_ngram_partition(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
