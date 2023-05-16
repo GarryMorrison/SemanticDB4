@@ -10,6 +10,7 @@
 #include "../OperatorLibrary/SigmoidLibrary.h"
 #include "../OperatorLibrary/OperatorLibrary.h"
 #include "../OperatorLibrary/FunctionOperatorLibrary.h"
+#include "../OperatorLibrary/TMOperatorLibrary.h"
 
 FunctionOperatorMap::FunctionOperatorMap() {
     ulong idx;

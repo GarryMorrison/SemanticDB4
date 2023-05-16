@@ -9,6 +9,7 @@
 #pragma once
 
 
+
 #include <string>
 #include <vector>
 
@@ -29,3 +30,4 @@ bool is_number(const std::string& str);
 std::string strip_ket(const std::string& str);
 std::string strip_leading_spaces(const std::string& s, const unsigned int spaces_count);
 std::size_t int_vector_to_hash(const std::vector<uint32_t>& vec);
+// std::size_t int_vector_to_hash(const std::vector<ulong>& vec);

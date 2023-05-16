@@ -231,6 +231,9 @@
     <ClInclude Include="src\GUI\OperatorLibrary\GenerateDocs2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\OperatorLibrary\TMOperatorLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -435,6 +438,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\OperatorLibrary\GenerateDocs2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OperatorLibrary\TMOperatorLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

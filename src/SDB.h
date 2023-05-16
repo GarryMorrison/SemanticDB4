@@ -148,6 +148,7 @@
 #include "Sequence/IfElseStatement.h"
 #include "Sequence/ForStatement.h"
 #include "Sequence/WhileStatement.h"
+#include "OperatorLibrary/TMOperatorLibrary.h"
 
 extern ContextList context;
 // extern SDB::Driver driver;

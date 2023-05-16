@@ -226,6 +226,7 @@
     <ClInclude Include="src\Sequence\SuperpositionIter.h" />
     <ClInclude Include="src\Sequence\WhileStatement.h" />
     <ClInclude Include="src\GUI\OperatorLibrary\TableDialog.h" />
+    <ClInclude Include="src\OperatorLibrary\TMOperatorLibrary.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GUI\OperatorLibrary\GenerateDocs2.cpp" />
@@ -296,6 +297,7 @@
     <ClCompile Include="src\Sequence\SuperpositionIter.cpp" />
     <ClCompile Include="src\Sequence\WhileStatement.cpp" />
     <ClCompile Include="src\GUI\OperatorLibrary\TableDialog.cpp" />
+    <ClCompile Include="src\OperatorLibrary\TMOperatorLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="src\Parser\Parser.y">
