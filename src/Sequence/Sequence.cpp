@@ -140,7 +140,7 @@ Sequence Sequence::to_seq() const {
     return *this;
 }
 
-std::vector<ulong> Sequence::get_idx_vector()  // A nod towards "dense vectors"
+std::vector<ulong> Sequence::get_idx_vector() const // A nod towards "dense vectors"
 {
     std::vector<ulong> result;
     for (const auto& sp : seq)
@@ -151,7 +151,7 @@ std::vector<ulong> Sequence::get_idx_vector()  // A nod towards "dense vectors"
     return result;
 }
 
-std::vector<double> Sequence::get_value_vector()
+std::vector<double> Sequence::get_value_vector() const
 {
     std::vector<double> result;
     for (const auto& sp : seq)

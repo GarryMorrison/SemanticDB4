@@ -243,17 +243,17 @@ std::shared_ptr<BaseSequence> Superposition::b_append(std::shared_ptr<BaseSequen
     return result;
 }
 
-std::vector<ulong> Superposition::get_idx_vector()  // A nod towards "dense vectors"
+std::vector<ulong> Superposition::get_idx_vector() const // A nod towards "dense vectors"
 {
     return sort_order;
 }
 
-std::vector<double> Superposition::get_value_vector()
+std::vector<double> Superposition::get_value_vector() const
 {
     std::vector<double> result;
     for (ulong idx : sort_order)
     {
-        double value = sp[idx];
+        double value = sp.at(idx);
         result.push_back(value);
     }
     return result;

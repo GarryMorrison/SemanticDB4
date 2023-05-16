@@ -61,8 +61,8 @@ public:
     std::shared_ptr<BaseSequence> b_add(std::shared_ptr<BaseSequence> bSeq);
     std::shared_ptr<BaseSequence> b_append(std::shared_ptr<BaseSequence> bSeq);
 
-    std::vector<ulong> get_idx_vector();  // A nod towards "dense vectors"
-    std::vector<double> get_value_vector();
+    std::vector<ulong> get_idx_vector() const;  // A nod towards "dense vectors"
+    std::vector<double> get_value_vector() const;
 
     void add(const ulong idx);
     void add(const ulong idx, const double v);

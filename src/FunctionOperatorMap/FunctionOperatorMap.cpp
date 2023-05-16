@@ -558,6 +558,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("TM-ngram-partition");
     fn_map.compound_context_seq_fn.emplace(idx, &op_TM_ngram_partition);
+
+    idx = ket_map.get_idx("TM-sequence-hash");
+    fn_map.seq_fn.emplace(idx, &op_TM_sequence_hash);
 }
 
 

@@ -4903,6 +4903,25 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        TM-generate\n";
 
+    operator_usage_map.map["TM-sequence-hash"] =
+        "\nTM-sequence-hash:\n"
+        "    description:\n"
+        "        Ket TM-sequence-hash input-seq\n"
+        "        hashes the given input sequence into a relatively collision free, deterministic, hash\n"
+        "        the input-seq must be a sequence of kets, not superpositions\n"
+        "        and any coeffs of those kets will be ignored\n"
+        "        if superpositions are required then pre-process with tensor-product\n"
+        "        if the input seq is empty, it returns the empty ket\n"
+        "        this operator is a member of the Template Machine set of operators\n"
+        "        we may later swap to returning a hex-string instead of decimal\n\n"
+        "    examples:\n"
+        "        -- just a toy example:\n"
+        "        TM-sequence-hash ssplit[\"\"] |A B C D E>\n"
+        "            |32516775902268362>\n\n"
+        "    see also:\n"
+        "        tensor-product\n";      
+
+
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =

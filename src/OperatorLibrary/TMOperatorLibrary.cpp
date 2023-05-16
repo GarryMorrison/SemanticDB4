@@ -185,3 +185,10 @@ Superposition op_TM_ngram_partition(const Sequence& input_seq, ContextList& cont
     return TM_head_vec_to_sp(hash_vec, merged_string_map, seq_merge_str);
 }
 
+Ket op_TM_sequence_hash(const Sequence& input_seq)
+{
+    if (input_seq.is_empty_ket()) { return Ket(); }
+    std::vector<ulong> seq_idx_vec = input_seq.get_idx_vector();
+    size_t hash = int_vector_to_hash(seq_idx_vec);
+    return Ket(std::to_string(hash));
+}
