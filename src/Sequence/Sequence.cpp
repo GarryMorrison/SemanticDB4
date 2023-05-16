@@ -140,6 +140,29 @@ Sequence Sequence::to_seq() const {
     return *this;
 }
 
+std::vector<ulong> Sequence::get_idx_vector()  // A nod towards "dense vectors"
+{
+    std::vector<ulong> result;
+    for (const auto& sp : seq)
+    {
+        ulong idx = sp.to_ket().label_idx();
+        result.push_back(idx);
+    }
+    return result;
+}
+
+std::vector<double> Sequence::get_value_vector()
+{
+    std::vector<double> result;
+    for (const auto& sp : seq)
+    {
+        double value = sp.to_ket().value();
+        result.push_back(value);
+    }
+    return result;
+}
+
+
 void Sequence::add(const ulong idx) {
     if (seq.empty()) {
         Superposition tmp(idx);

@@ -147,18 +147,4 @@ std::size_t int_vector_to_hash(const std::vector<uint32_t>& vec)
     return seed;
 }
 
-/*
-std::size_t int_vector_to_hash(const std::vector<ulong>& vec)
-{
-    std::size_t seed = vec.size();
-    for (auto y : vec)
-    {
-        uint32_t x = static_cast<uint32_t>(y);  // Not sure if the magic numbers work with ulong, so we cast them to uint32_t.
-        x = ((x >> 16) ^ x) * 0x45d9f3b;
-        x = ((x >> 16) ^ x) * 0x45d9f3b;
-        x = (x >> 16) ^ x;
-        seed ^= x + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-    }
-    return seed;
-}
-*/
+

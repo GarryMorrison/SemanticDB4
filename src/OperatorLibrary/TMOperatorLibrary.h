@@ -17,6 +17,7 @@
 #include "../CompoundConstant/CompoundConstant.h"
 #include "../Operator/SimpleOperator.h"
 
+std::size_t int_vector_to_hash(const std::vector<ulong>& vec);
 Superposition op_TM_ngram_partition(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 
 

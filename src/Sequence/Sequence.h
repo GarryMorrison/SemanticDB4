@@ -48,6 +48,9 @@ public:
     Superposition to_sp() const;
     Sequence to_seq() const;
 
+    std::vector<ulong> get_idx_vector();  // A nod towards "dense vectors"
+    std::vector<double> get_value_vector();
+
     void add(const ulong idx);
     void add(const Ket& k);
     void add(const Superposition& sp);

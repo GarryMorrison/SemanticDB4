@@ -243,6 +243,22 @@ std::shared_ptr<BaseSequence> Superposition::b_append(std::shared_ptr<BaseSequen
     return result;
 }
 
+std::vector<ulong> Superposition::get_idx_vector()  // A nod towards "dense vectors"
+{
+    return sort_order;
+}
+
+std::vector<double> Superposition::get_value_vector()
+{
+    std::vector<double> result;
+    for (ulong idx : sort_order)
+    {
+        double value = sp[idx];
+        result.push_back(value);
+    }
+    return result;
+}
+
 
 void Superposition::add(const ulong idx) {
     if (ket_map.get_idx("") == idx) { return; }  // maybe we should make idx for "" = 0, as an optimization
