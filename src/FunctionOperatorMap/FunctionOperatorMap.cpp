@@ -561,6 +561,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("TM-sequence-hash");
     fn_map.seq_fn.emplace(idx, &op_TM_sequence_hash);
+
+    idx = ket_map.get_idx("TM-ket-hash");
+    fn_map.ket_fn.emplace(idx, &op_TM_ket_hash);
 }
 
 

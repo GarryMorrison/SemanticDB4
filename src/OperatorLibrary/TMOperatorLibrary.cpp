@@ -188,7 +188,19 @@ Superposition op_TM_ngram_partition(const Sequence& input_seq, ContextList& cont
 Ket op_TM_sequence_hash(const Sequence& input_seq)
 {
     if (input_seq.is_empty_ket()) { return Ket(); }
-    std::vector<ulong> seq_idx_vec = input_seq.get_idx_vector();
-    size_t hash = int_vector_to_hash(seq_idx_vec);
+
+    std::string working_string;
+    for (const auto& sp : input_seq)
+    {
+        working_string.append(sp.to_ket().label());
+    }
+    unsigned int hash = APHash(working_string.c_str(), static_cast<unsigned int>(working_string.size()));
     return Ket(std::to_string(hash));
+}
+
+Ket op_TM_ket_hash(const Ket& k)
+{
+    if (k.is_empty_ket()) { return Ket(); }
+    unsigned int hash = APHash(k.label().c_str(), static_cast<unsigned int>(k.label().size()));
+    return Ket(std::to_string(hash), k.value());
 }

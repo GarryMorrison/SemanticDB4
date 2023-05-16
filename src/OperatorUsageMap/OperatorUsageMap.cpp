@@ -4913,13 +4913,33 @@ OperatorUsageMap::OperatorUsageMap() {
         "        if superpositions are required then pre-process with tensor-product\n"
         "        if the input seq is empty, it returns the empty ket\n"
         "        this operator is a member of the Template Machine set of operators\n"
-        "        we may later swap to returning a hex-string instead of decimal\n\n"
+        "        we may later swap to returning a hex-string instead of decimal\n"
+        "        mostly deprecated by TM-ket-hash\n\n"
         "    examples:\n"
         "        -- just a toy example:\n"
         "        TM-sequence-hash ssplit[\"\"] |A B C D E>\n"
-        "            |32516775902268362>\n\n"
+        "            |1964506506>\n\n"
         "    see also:\n"
-        "        tensor-product\n";      
+        "        TM-ket-hash, tensor-product\n";      
+
+    operator_usage_map.map["TM-ket-hash"] =
+        "\nTM-ket-hash:\n"
+        "    description:\n"
+        "        Ket TM-ket-hash input-ket\n"
+        "        hashes the given input ket into a relatively collision free, deterministic, hash\n"
+        "        any coeffs will be preserved\n"
+        "        if the input ket is empty, it returns the empty ket\n"
+        "        mostly deprecates TM-sequence-hash\n"
+        "        this operator is a member of the Template Machine set of operators\n\n"
+        "    examples:\n"
+        "        -- just a toy example:\n"
+        "        TM-ket-hash 7|A B C D E>\n"
+        "            7|3444274951>\n\n"
+        "    see also:\n"
+        "        TM-sequence-hash, tensor-product\n";
+
+
+
 
 
 
