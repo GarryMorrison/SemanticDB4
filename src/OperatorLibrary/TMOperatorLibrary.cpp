@@ -194,13 +194,13 @@ Ket op_TM_sequence_hash(const Sequence& input_seq)
     {
         working_string.append(sp.to_ket().label());
     }
-    unsigned int hash = APHash(working_string.c_str(), static_cast<unsigned int>(working_string.size()));
+    uint32_t hash = APHash(working_string.c_str(), static_cast<uint32_t>(working_string.size()));
     return Ket(std::to_string(hash));
 }
 
 Ket op_TM_ket_hash(const Ket& k)
 {
     if (k.is_empty_ket()) { return Ket(); }
-    unsigned int hash = APHash(k.label().c_str(), static_cast<unsigned int>(k.label().size()));
+    uint32_t hash = APHash(k.label().c_str(), static_cast<uint32_t>(k.label().size()));
     return Ket(std::to_string(hash), k.value());
 }
