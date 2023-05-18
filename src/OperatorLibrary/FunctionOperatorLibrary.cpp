@@ -52,8 +52,9 @@ Superposition range2(ulong start_idx, ulong stop_idx) {
             long double v1 = std::stold(ket_map.get_str(start_vec[0]));
             long double v2 = std::stold(ket_map.get_str(stop_vec[0]));
             Superposition sp;
-            unsigned int steps = (unsigned int)(std::floor(v2 - v1));  // Do we need ceiling() or floor()?
-            for (unsigned int i = 0; i <= steps; i++) {
+            int steps = static_cast<int>(std::floor(v2 - v1));  // Do we need ceiling() or floor()?
+            if (steps < 0) { return sp; }
+            for (int i = 0; i <= steps; i++) {
                 sp.add(float_to_int(i + v1, default_decimal_places));
             }
             return sp;
@@ -104,18 +105,20 @@ Superposition range2(ulong start_idx, ulong stop_idx) {
     if (categories1 != categories2 || values1.size() != values2.size()) { return Superposition(); }
     if (values1.size() == 1) {
         Superposition sp;
-        unsigned int steps = (unsigned int)(std::floor(values2[0] - values1[0]));  // Do we need ceiling() or floor()?
-        for (unsigned int i = 0; i <= steps; i++) {
+        int steps = static_cast<int>((std::floor(values2[0] - values1[0])));  // Do we need ceiling() or floor()?
+        if (steps < 0) { return sp; }
+        for (int i = 0; i <= steps; i++) {
             sp.add(categories1 + float_to_int(i + values1[0], default_decimal_places));
         }
         return sp;
     }
     if (values1.size() == 2) {
         Superposition sp;
-        unsigned int steps0 = (unsigned int)(std::floor(values2[0] - values1[0]));  // Do we need ceiling() or floor()?
-        unsigned int steps1 = (unsigned int)(std::floor(values2[1] - values1[1]));  // Do we need ceiling() or floor()?
-        for (unsigned int i = 0; i <= steps0; i++) {
-            for (unsigned int j = 0; j <= steps1; j++) {
+        int steps0 = static_cast<int>((std::floor(values2[0] - values1[0])));  // Do we need ceiling() or floor()?
+        int steps1 = static_cast<int>((std::floor(values2[1] - values1[1])));  // Do we need ceiling() or floor()?
+        if (steps0 < 0 || steps1 < 0) { return sp; }
+        for (int i = 0; i <= steps0; i++) {
+            for (int j = 0; j <= steps1; j++) {
                 sp.add(categories1 + float_to_int(i + values1[0], default_decimal_places) + ": " + float_to_int(j + values1[1], default_decimal_places));
             }
         }
