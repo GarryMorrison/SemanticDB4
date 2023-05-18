@@ -376,8 +376,14 @@ std::shared_ptr<BaseSequence> NewContext::recall(const ulong op_idx, const ulong
 
 unsigned int NewContext::recall_type(const std::string& op, const std::string& label) {
     // ulong op_idx = ket_map.get_idx("op: " + op);
-    ulong op_idx = ket_map.get_idx(op);
-    ulong label_idx = ket_map.get_idx(label);
+    // ulong op_idx = ket_map.get_idx(op);
+    // ulong label_idx = ket_map.get_idx(label);
+    ulong op_idx = ket_map.get_idx_if_known(op);  // To avoid ket-map pollution.
+    ulong label_idx = ket_map.get_idx_if_known(label);
+    if (!op_idx || !label_idx)  // idx's are 0 if not known to ket-map, so recall type must be UNDEFINED.
+    {
+        return RULEUNDEFINED;
+    }
     return this->recall_type(op_idx, label_idx);
 }
 

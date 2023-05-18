@@ -87,6 +87,15 @@ ulong KetMap::get_idx(const std::vector<ulong>& uvec) {
     return result;
 }
 
+ulong KetMap::get_idx_if_known(const std::string& s)
+{
+    if (our_map.find(s) == our_map.end())
+    {
+        return 0;
+    }
+    return our_map[s];
+}
+
 std::string KetMap::get_str(const ulong idx) {  // what should we return if idx is not in our_inverse_map?
     if (idx < our_inverse_map.size()) {
         return our_inverse_map[idx];

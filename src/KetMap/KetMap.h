@@ -32,6 +32,8 @@ public:
     ulong get_idx(const std::string& s);
     ulong get_idx(const std::vector<ulong>& uvec);
 
+    ulong get_idx_if_known(const std::string& s);  // If the idx is not known, return 0, else return the idx. To help avoid "ket-map pollution".
+
     std::string get_str(const ulong idx);
     std::string get_str(const std::vector<ulong>& uvec);
 

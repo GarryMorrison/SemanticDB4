@@ -161,12 +161,16 @@ Superposition op_TM_ngram_partition(const Sequence& input_seq, ContextList& cont
                 working_str.append(merge_str);
                 working_str.append(ket_map.get_str(ket_vec[i]));
 
-                ulong working_idx = ket_map.get_idx(working_str);
-                unsigned int rule_type = context.recall_type(op_idx, working_idx);
-                if (rule_type == RULENORMAL)
+                // ulong working_idx = ket_map.get_idx(working_str);  // Causes ket-map "pollution", ie, filling the ket-map with strings we don't need to learn.
+                ulong working_idx = ket_map.get_idx_if_known(working_str);  
+                if (working_idx)   // working_idx is 0 if not known. In which case it can't be a RULENORMAL, as we would already know it.
                 {
-                    merged_string_map.emplace(working_hash, working_str);
-                    exists_map.emplace(working_hash, true);
+                    unsigned int rule_type = context.recall_type(op_idx, working_idx);
+                    if (rule_type == RULENORMAL)
+                    {
+                        merged_string_map.emplace(working_hash, working_str);
+                        exists_map.emplace(working_hash, true);
+                    }
                 }
             }
         }
