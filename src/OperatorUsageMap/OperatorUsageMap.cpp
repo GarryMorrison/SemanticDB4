@@ -4939,7 +4939,23 @@ OperatorUsageMap::OperatorUsageMap() {
         "        TM-sequence-hash, tensor-product\n";
 
 
-
+    operator_usage_map.map["TM-extract-text"] =
+        "\nTM-extract-text:\n"
+        "    description:\n"
+        "        Ket TM-extract-text(indices-sp) input-seq\n"
+        "        first, it sorts the indices in the indices-sp\n"
+        "        where the indices are in range [1, input-seq.size]\n"
+        "        if out of this range, they are ignored, ditto if not an integer\n"
+        "        elements that correspond to sequential indices are concatenated with a space char\n"
+        "        elements that correspond to non sequential indices are concatenated with an underline char\n"
+        "        currently the concatination chars are hard-coded in, later they might be set to globals\n"
+        "        this operator is a member of the Template Machine set of operators\n\n"
+        "    examples:\n"
+        "        -- just a toy example:\n"
+        "        TM-extract-text(|1> + |2> + |3> + |6> + |8>) ssplit[\" \"] |A B C D E F G H I J K>\n"
+        "            |A B C _ F _ H>\n\n"
+        "    see also:\n"
+        "        \n";
 
 
 

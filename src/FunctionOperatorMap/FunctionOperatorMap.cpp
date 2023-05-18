@@ -564,6 +564,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("TM-ket-hash");
     fn_map.ket_fn.emplace(idx, &op_TM_ket_hash);
+
+    idx = ket_map.get_idx("TM-extract-text");
+    fn_map.whitelist_1.emplace(idx, &op_TM_extract_text);
 }
 
 

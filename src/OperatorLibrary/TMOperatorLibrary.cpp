@@ -208,3 +208,50 @@ Ket op_TM_ket_hash(const Ket& k)
     uint32_t hash = APHash(k.label().c_str(), static_cast<uint32_t>(k.label().size()));
     return Ket(std::to_string(hash), k.value());
 }
+
+
+Ket op_TM_extract_text(const Sequence& input_seq, const Sequence& one)
+{
+    if (input_seq.is_empty_ket() || one.is_empty_ket()) { return Ket(); }
+    size_t input_size = input_seq.size();
+    Superposition local_sp = one.to_sp();
+    std::vector<int> int_vec;
+    for (const auto& k : local_sp)  // Maybe use superposition::get_idx_vector() instead of iterating with kets?
+    {
+        int current_val = -1;
+        try {
+            current_val = std::stoi(k.label());
+            if (current_val >= 1 && current_val <= input_size)
+            {
+                int_vec.push_back(current_val);
+            }
+        }
+        catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
+            continue;
+        }
+    }
+    if (int_vec.empty()) { return Ket(); }
+    std::sort(int_vec.begin(), int_vec.end());
+    std::string working_str;
+    bool first_pass = true;
+    int previous_i = -1;
+    for (int current_i : int_vec)
+    {
+        if (!first_pass)
+        {
+            if (previous_i + 1 == current_i)
+            {
+                working_str.append(" "); // Yeah, hard-coded in space and underline chars for now.
+            }
+            else
+            {
+                working_str.append(" _ ");
+            }
+        }
+        working_str.append(input_seq.get(current_i - 1).to_ket().label());
+        previous_i = current_i;
+        first_pass = false;
+    }
+    return Ket(working_str);
+}
