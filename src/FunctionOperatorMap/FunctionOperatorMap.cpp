@@ -11,6 +11,8 @@
 #include "../OperatorLibrary/OperatorLibrary.h"
 #include "../OperatorLibrary/FunctionOperatorLibrary.h"
 #include "../OperatorLibrary/TMOperatorLibrary.h"
+#include "../OperatorLibrary/GUIOperatorLibrary.h"
+
 
 FunctionOperatorMap::FunctionOperatorMap() {
     ulong idx;
@@ -591,6 +593,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("TM-extract-text");
     fn_map.whitelist_1.emplace(idx, &op_TM_extract_text);
+
+    idx = ket_map.get_idx("gmessage");
+    fn_map.ket_fn.emplace(idx, &op_gmessage);
 }
 
 

@@ -4958,6 +4958,18 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        \n";
 
+    operator_usage_map.map["gmessage"] =
+        "\ngmessage:\n"
+        "    description:\n"
+        "        gmessage ket\n"
+        "        display the ket label in a wxMessageBox\n"
+        "        returns the input ket too, so it can be chained\n"
+        "        this is our very first GUI operator,\n"
+        "        hopefully there will be many more!\n\n"
+        "    examples:\n"
+        "        -- simple invoke:\n"
+        "        gmessage |Hello world!>\n\n"
+        "    see also:\n";
 
 
     // fill out statement_prototypes map:

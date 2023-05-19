@@ -234,6 +234,9 @@
     <ClInclude Include="src\OperatorLibrary\TMOperatorLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\OperatorLibrary\GUIOperatorLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -441,6 +444,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\OperatorLibrary\TMOperatorLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OperatorLibrary\GUIOperatorLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
