@@ -89,6 +89,12 @@ public:
 
     void set(size_t pos, const Superposition& sp);
 
+    void extract_head();
+    void extract_tail();
+    void extract_category();
+    void extract_value();
+    void extract_headless();
+
     Sequence apply_sigmoid(const std::function<double(double)>& sigmoid) const;
     Sequence apply_sigmoid(const std::function<double(double, double)>& sigmoid, const double t) const;
     Sequence apply_sigmoid(const std::function<double(double, double, double)>& sigmoid, const double t1, const double t2) const;

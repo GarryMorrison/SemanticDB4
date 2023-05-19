@@ -18,11 +18,19 @@ Sequence op_ssplit(const Ket k, const std::vector<std::shared_ptr<CompoundConsta
 Superposition op_split_ket(const Ket k);
 Sequence op_ssplit_ket(const Ket k);
 
+// Deprecated, for now, by the Sequence versions:
 Ket extract_head(const Ket k);
 Ket extract_tail(const Ket k);
 Ket extract_category(const Ket k);
 Ket extract_value(const Ket k);
 Ket extract_headless(const Ket k);
+
+Sequence op_extract_head(const Sequence& input_seq);
+Sequence op_extract_tail(const Sequence& input_seq);
+Sequence op_extract_category(const Sequence& input_seq);
+Sequence op_extract_value(const Sequence& input_seq);
+Sequence op_extract_headless(const Sequence& input_seq);
+
 Ket op_floor(const Ket& k);
 Ket op_ceiling(const Ket& k);
 Ket op_log(const Ket& k);

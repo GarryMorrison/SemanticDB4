@@ -136,6 +136,43 @@ Ket extract_headless(const Ket k) {
     return Ket(headless_idx, k.value());
 }
 
+// Sequence based versions of extract-*:
+Sequence op_extract_head(const Sequence& input_seq)
+{
+    Sequence result(input_seq);
+    result.extract_head();
+    return result;
+}
+
+Sequence op_extract_tail(const Sequence& input_seq)
+{
+    Sequence result(input_seq);
+    result.extract_tail();
+    return result;
+}
+
+Sequence op_extract_category(const Sequence& input_seq)
+{
+    Sequence result(input_seq);
+    result.extract_category();
+    return result;
+}
+
+Sequence op_extract_value(const Sequence& input_seq)
+{
+    Sequence result(input_seq);
+    result.extract_value();
+    return result;
+}
+
+Sequence op_extract_headless(const Sequence& input_seq)
+{
+    Sequence result(input_seq);
+    result.extract_headless();
+    return result;
+}
+
+
 Ket op_floor(const Ket& k) {
     auto idx_vec = k.label_split_idx();
     if (idx_vec.empty()) { return Ket(); }

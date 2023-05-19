@@ -733,6 +733,48 @@ Sequence Sequence::op_rotate_right1(const std::vector<std::shared_ptr<CompoundCo
 }
 
 
+void Sequence::extract_head()
+{
+    for (size_t i = 0; i < seq.size(); i++)
+    {
+        seq[i].extract_head();
+    }
+}
+
+void Sequence::extract_tail()
+{
+    for (size_t i = 0; i < seq.size(); i++)
+    {
+        seq[i].extract_tail();
+    }
+}
+
+void Sequence::extract_category()
+{
+    for (size_t i = 0; i < seq.size(); i++)
+    {
+        seq[i].extract_category();
+    }
+}
+
+void Sequence::extract_value()
+{
+    for (size_t i = 0; i < seq.size(); i++)
+    {
+        seq[i].extract_value();
+    }
+}
+
+void Sequence::extract_headless()
+{
+    for (size_t i = 0; i < seq.size(); i++)
+    {
+        seq[i].extract_headless();
+    }
+}
+
+
+
 Sequence Sequence::apply_sigmoid(const std::function<double(double)>& sigmoid) const {
     Sequence result;
     for (const auto& sp : seq) {

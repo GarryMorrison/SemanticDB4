@@ -848,6 +848,81 @@ Superposition Superposition::rotate_right(const int n) const {  // We use int fo
     return result;
 }
 
+void Superposition::extract_head() {
+    for (size_t i = 0; i < sort_order.size(); i++)
+    {
+        ulong idx = sort_order[i];
+        ulong new_idx = ket_map.get_head_idx(idx);
+        if (idx != new_idx)
+        {
+            sort_order[i] = new_idx;
+            sp[new_idx] = sp[idx];
+            sp.erase(idx);
+        }
+    }
+}
+
+void Superposition::extract_tail()
+{
+    for (size_t i = 0; i < sort_order.size(); i++)
+    {
+        ulong idx = sort_order[i];
+        ulong new_idx = ket_map.get_tail_idx(idx);
+        if (idx != new_idx)
+        {
+            sort_order[i] = new_idx;
+            sp[new_idx] = sp[idx];
+            sp.erase(idx);
+        }
+    }
+}
+
+void Superposition::extract_category()
+{
+    for (size_t i = 0; i < sort_order.size(); i++)
+    {
+        ulong idx = sort_order[i];
+        ulong new_idx = ket_map.get_category_idx(idx);
+        if (idx != new_idx)
+        {
+            sort_order[i] = new_idx;
+            sp[new_idx] = sp[idx];
+            sp.erase(idx);
+        }
+    }
+}
+
+void Superposition::extract_value()
+{
+    for (size_t i = 0; i < sort_order.size(); i++)
+    {
+        ulong idx = sort_order[i];
+        ulong new_idx = ket_map.get_value_idx(idx);
+        if (idx != new_idx)
+        {
+            sort_order[i] = new_idx;
+            sp[new_idx] = sp[idx];
+            sp.erase(idx);
+        }
+    }
+}
+
+void Superposition::extract_headless()
+{
+    for (size_t i = 0; i < sort_order.size(); i++)
+    {
+        ulong idx = sort_order[i];
+        ulong new_idx = ket_map.get_headless_idx(idx);
+        if (idx != new_idx)
+        {
+            sort_order[i] = new_idx;
+            sp[new_idx] = sp[idx];
+            sp.erase(idx);
+        }
+    }
+}
+
+
 
 Superposition Superposition::apply_sigmoid(const std::function<double(double)>& sigmoid) const {
     Superposition result;

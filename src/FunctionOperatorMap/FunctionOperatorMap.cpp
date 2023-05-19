@@ -102,9 +102,12 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("print");
     fn_map.ket_fn.emplace(idx, &print_ket);
 
+    /*
+    // Old ket based versions of extract-*
+    // Deprecated, for now, by the Sequence versions, which are hopefully faster:
     idx = ket_map.get_idx("extract-head");
     fn_map.ket_fn.emplace(idx, &extract_head);
-
+    
     idx = ket_map.get_idx("extract-tail");
     fn_map.ket_fn.emplace(idx, &extract_tail);
 
@@ -116,6 +119,24 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("extract-headless");
     fn_map.ket_fn.emplace(idx, &extract_headless);
+    */
+
+    // New sequence based versions of extract-*
+    idx = ket_map.get_idx("extract-head");
+    fn_map.seq_fn.emplace(idx, &op_extract_head);
+
+    idx = ket_map.get_idx("extract-tail");
+    fn_map.seq_fn.emplace(idx, &op_extract_tail);
+
+    idx = ket_map.get_idx("extract-category");
+    fn_map.seq_fn.emplace(idx, &op_extract_category);
+
+    idx = ket_map.get_idx("extract-value");
+    fn_map.seq_fn.emplace(idx, &op_extract_value);
+
+    idx = ket_map.get_idx("extract-headless");
+    fn_map.seq_fn.emplace(idx, &op_extract_headless);
+
 
     idx = ket_map.get_idx("floor");
     fn_map.ket_fn.emplace(idx, &op_floor);

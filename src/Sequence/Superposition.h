@@ -148,6 +148,12 @@ public:
     Superposition rotate_left(const int n) const;
     Superposition rotate_right(const int n) const;
 
+    void extract_head();
+    void extract_tail();
+    void extract_category();
+    void extract_value();
+    void extract_headless();
+
     Superposition apply_sigmoid(const std::function<double(double)>& sigmoid) const;
     Superposition apply_sigmoid(const std::function<double(double, double)>& sigmoid, const double t) const;
     Superposition apply_sigmoid(const std::function<double(double, double, double)>& sigmoid, const double t1, const double t2) const;
