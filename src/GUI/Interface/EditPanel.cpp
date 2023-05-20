@@ -86,6 +86,7 @@ void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 	std::stringstream buffer;
 	std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
 	driver.result.clear();
+	driver.context.set_window_pointer(this);
 	bool parse_success = driver.parse_string(current_text + "\n");
 	std::string captured_text = buffer.str();
 	std::cout.rdbuf(old_buffer);
