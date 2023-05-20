@@ -596,6 +596,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("gmessage");
     fn_map.ket_fn.emplace(idx, &op_gmessage);
+
+    idx = ket_map.get_idx("gdump");
+    fn_map.context_whitelist_1.emplace(idx, &op_gdump_fn1);
 }
 
 

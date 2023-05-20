@@ -1,16 +1,22 @@
+
+// #define _CRT_SECURE_NO_WARNINGS  // We need this for the wxwidgets code to compile! Is there a security risk?
+#pragma warning(disable:4996)
 #pragma once
 
 //
 // Created by Garry Morrison on 13/09/2020.
-// Updated 2022/1/23
+// Updated 2023/5/20
 //
 
 
+
+// #include "../SDB.h"
 #include <string>
 #include <vector>
 #include <map>
 #include "NewContext.h"
 
+#include <wx/wx.h>
 
 class ContextList {
 private:
@@ -19,6 +25,7 @@ private:
     ulong max_index;
     std::vector<NewContext> data;
     std::map<std::string, ulong> m_name_idx_map;
+    wxWindow* m_parent;
 
 public:
     ContextList(const std::string& s);
@@ -31,6 +38,9 @@ public:
     std::vector<std::string> get_context_names() const;
     unsigned int get_context_index() const { return index; }
     void show_context_list();
+
+    wxWindow* get_window_pointer() const { return m_parent; }
+    void set_window_pointer(wxWindow* parent) { m_parent = parent; }
 
     /*
         void learn(const ulong op_idx, const ulong label_idx, BaseSequence* bSeq);

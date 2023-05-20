@@ -11,3 +11,4 @@
 
 Ket op_gmessage(const Ket& k);
 
+Ket op_gdump_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);

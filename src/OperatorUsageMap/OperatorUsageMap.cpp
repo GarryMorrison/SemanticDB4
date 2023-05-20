@@ -4969,7 +4969,26 @@ OperatorUsageMap::OperatorUsageMap() {
         "    examples:\n"
         "        -- simple invoke:\n"
         "        gmessage |Hello world!>\n\n"
-        "    see also:\n";
+        "    see also:\n"
+        "        gdump\n";
+
+    operator_usage_map.map["gdump"] =
+        "\ngdump:\n"
+        "    description:\n"
+        "        gdump(|*>) input-sp\n"
+        "        gdump(|op: op1> + |op: op2> + ... + |op: opn>) input-sp\n"
+        "        gdump(|ops: op3 op2 op1>) input-sp\n"
+        "        gdump is the GUI output version of dump\n"
+        "        it is otherwise identical to dump\n"
+        "        Note because of the GUI nature, it is slower!\n"
+        "        when given the |*> ket, dump prints out the knowledge for all supported operators for the given kets\n"
+        "        when given kets with prefix \"op: \" then only print out knowledge for those operators for the given kets\n"
+        "        when given kets with prefix \"ops: \" then print out the knowledge for the operator sequence applied to the given kets\n"
+        "        NB: empty rules are ignored and not printed out\n"
+        "        NB: simple operators are supported in the operator sequence case\n\n"
+        "    examples:\n\n"
+        "    see also:\n"
+        "        dump, gmessage\n";
 
 
     // fill out statement_prototypes map:
