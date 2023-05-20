@@ -218,6 +218,7 @@ Ket op_TM_compress_stars(const Ket& k)
     std::vector<std::string> split_str = split(k.label(), " ");
     std::string result_str;
     std::string replace_str = "..";
+    int word_count = 0;
     bool first_pass = true;
     for (const auto& s : split_str)
     {
@@ -238,10 +239,11 @@ Ket op_TM_compress_stars(const Ket& k)
             }
             result_str.append(s);
             replace_str = "..";
+            word_count++;
         }
         first_pass = false;
     }
-    return Ket(result_str, k.value());
+    return Ket(result_str, word_count);
 }
 
 

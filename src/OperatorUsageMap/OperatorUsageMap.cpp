@@ -4945,6 +4945,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        Ket TM-compress-stars input-ket\n"
         "        the input-ket is split on the \" \" char\n"
         "        then consecutive \"*\" chars are compressed into a single \"..\"\n"
+        "        the returned ket value is the number of \"structure words\" in the input text\n"
         "        the primary use for this operator is in TM-generate\n"
         "        this operator is a member of the Template Machine set of operators\n\n"
         "    examples:\n"
@@ -4953,7 +4954,10 @@ OperatorUsageMap::OperatorUsageMap() {
         "            |.. man ..>\n\n"
         "        -- the second example:\n"
         "        TM-compress-stars |The * * * man *>\n"
-        "            |The .. man ..>\n\n"
+        "            2|The .. man ..>\n\n"
+        "        -- another example, this time with more structure words:\n"
+        "        TM-compress-stars |The * * man sat on * *>\n"
+        "            4|The .. man sat on ..>\n\n"
         "    see also:\n"
         "        TM-generate, TM-ket-hash\n";
 
