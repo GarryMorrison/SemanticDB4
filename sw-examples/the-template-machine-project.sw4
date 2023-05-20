@@ -1,0 +1,126 @@
+-- In this code file we explore the idea of template machines as applied to simple natural language processing
+-- Given this is just an experiment, it is not certain it will produce any results of interest!
+--
+-- Author: Garry Morrison
+-- Created: 2023/5/20
+-- Updated: 2023/5/20
+
+
+|context> => |template machine project>
+
+
+print |Welcome to the template machine>
+print | >
+
+
+-- define some variables:
+-- start with some default variables that can be over-ridden in the sentence sets:
+verbose |mode> => |yes>
+interesting |patch count> => |2>
+interesting |structure word count> => |1>
+
+
+-- define a collection of sentences:
+learn-sentence-set |1> #=>
+    sentence |1> => |The old man>
+    sentence |2> => |The young man>
+    sentence |3> => |Some hungry man>
+    sentence |4> => |The man>
+    sentence |5> => |Some man>
+    sentence |6> => |Some woman>
+
+learn-sentence-set |2> #=>
+    sentence |1> => |The capital city of New South Wales is Sydney>
+    sentence |2> => |The capital city of Victoria is Melbourne>
+    sentence |3> => |The capital city of Queensland is Brisbane>
+    sentence |4> => |The capital city of Western Australia is Perth>
+    sentence |5> => |The capital city of South Australia is Adelaide>
+    sentence |6> => |The capital city of Tasmania is Hobart>
+    sentence |7> => |The capital city of the ACT is Canberra>
+    sentence |8> => |The capital city of the NT is Darwin>
+
+-- a smaller set:
+learn-sentence-set |3> #=>
+    sentence |1> => |The capital city of New South Wales is Sydney>
+    sentence |2> => |The capital city of Victoria is Melbourne>
+    sentence |3> => |The capital city of Queensland is Brisbane>
+    sentence |4> => |The capital city of the ACT is Canberra>
+
+
+-- another toy set:
+learn-sentence-set |4> #=>
+    sentence |1> => |The old man>
+    sentence |2> => |The young man>
+    sentence |3> => |The very hungry man>
+
+
+-- quote example:
+learn-sentence-set |5> #=>
+    interesting |patch count> => |2>
+    interesting |template word count> => |2>
+    sentence |1> => |My favourite Einstein quote is " X ">
+    sentence |2> => |Her favourite Richard Feynman quote was " Y ">
+
+-- just a quick check that append-s and is-are are working correctly:
+learn-sentence-set |6> #=>
+    sentence |1> => |I ate fish soup>
+
+
+-- now learn a set:
+learn-sentence-set |1>
+
+
+-- define the not operator:
+not |yes> => |no>
+not |no> => |yes>
+
+-- in the general case, return "s", if applied to "1" then return "":
+append-s |*> #=> |s>
+append-s |1> #=> |>
+append-s |number: 1> #=> |>
+
+-- in the general case, return "are", if applied to "1" then return "is":
+is-are |*> #=> |are>
+is-are |1> #=> |is>
+is-are |number: 1> #=> |is>
+
+-- print known sentences:
+print-known-sentences |*> #=>
+    print ( |Here> __ is-are how-many rel-kets[sentence] |> __ |our given sentence> _ append-s how-many rel-kets[sentence] |> )
+    for( the-sentence |number> in rel-kets[sentence] ):
+        print (|  > _ the-sentence |number> _ |) > _ sentence the-sentence |number>)
+    end:
+
+-- now invoke it:
+print-known-sentences
+
+
+-- now define our word to types map:
+map |*> #=> |_self>
+apply-map |*> #=> tensor-product[": "] (map |_self> . |_self>)
+splitter |*> #=> apply-map ssplit[" "] |_self>
+
+-- now some specific cases:
+-- eventually these will be auto generated
+-- not used for now, so commented out
+-- map |The> => |#DET#>
+-- map |a> => |#DET#>
+-- map |man> => |#NOUN#>
+
+
+-- now load our sentences into memory:
+new-sentence |count> => TM-learn-sentences[splitter] sentence rel-kets[sentence]
+print | >
+print (|We just learned> __ new-sentence |count> __ |new sentence> _ append-s new-sentence |count> )
+
+-- now dump them:
+dump-sentences |*> #=>
+    if( verbose |mode>):
+        print | >
+        print |A dump of our sentence templates:>
+        dump(|*>) rel-kets[sentence-template]
+    end:
+
+dump-sentences
+
+
