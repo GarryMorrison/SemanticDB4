@@ -25,8 +25,10 @@ Superposition op_TM_ngram_partition(const Sequence& input_seq, ContextList& cont
 
 Ket op_TM_sequence_hash(const Sequence& input_seq);
 Ket op_TM_ket_hash(const Ket& k);
+Ket op_TM_compress_stars(const Ket& k);
 
 Ket op_TM_extract_text(const Sequence& input_seq, const Sequence& one);
 
 // Maybe change type to function, not compound operator?
 Ket op_TM_learn_sentences(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+

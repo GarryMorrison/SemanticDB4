@@ -8,6 +8,7 @@
 
 
 #include "TMOperatorLibrary.h"
+#include "../Function/SplitJoin.h"
 
 
 
@@ -209,6 +210,38 @@ Ket op_TM_ket_hash(const Ket& k)
     if (k.is_empty_ket()) { return Ket(); }
     uint32_t hash = APHash(k.label().c_str(), static_cast<uint32_t>(k.label().size()));
     return Ket(std::to_string(hash), k.value());
+}
+
+Ket op_TM_compress_stars(const Ket& k)
+{
+    if (k.is_empty_ket()) { return Ket(); }
+    std::vector<std::string> split_str = split(k.label(), " ");
+    std::string result_str;
+    std::string replace_str = "..";
+    bool first_pass = true;
+    for (const auto& s : split_str)
+    {
+        if (s == "*")
+        {
+            if (!first_pass && !replace_str.empty())
+            {
+                result_str.append(" ");
+            }
+            result_str.append(replace_str);
+            replace_str = "";
+        }
+        else
+        {
+            if (!first_pass)
+            {
+                result_str.append(" ");
+            }
+            result_str.append(s);
+            replace_str = "..";
+        }
+        first_pass = false;
+    }
+    return Ket(result_str, k.value());
 }
 
 

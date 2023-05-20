@@ -4939,6 +4939,23 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        TM-sequence-hash, tensor-product\n";
 
+    operator_usage_map.map["TM-compress-stars"] =
+        "\nTM-compress-stars:\n"
+        "    description:\n"
+        "        Ket TM-compress-stars input-ket\n"
+        "        the input-ket is split on the \" \" char\n"
+        "        then consecutive \"*\" chars are compressed into a single \"..\"\n"
+        "        the primary use for this operator is in TM-generate\n"
+        "        this operator is a member of the Template Machine set of operators\n\n"
+        "    examples:\n"
+        "        -- the first example:\n"
+        "        TM-compress-stars |* * * * man *>\n"
+        "            |.. man ..>\n\n"
+        "        -- the second example:\n"
+        "        TM-compress-stars |The * * * man *>\n"
+        "            |The .. man ..>\n\n"
+        "    see also:\n"
+        "        TM-generate, TM-ket-hash\n";
 
     operator_usage_map.map["TM-extract-text"] =
         "\nTM-extract-text:\n"

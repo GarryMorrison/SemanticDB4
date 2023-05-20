@@ -582,6 +582,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("tensor-product");
     fn_map.compound_seq_fn.emplace(idx, &op_tensor_product);
 
+
+    // Template machine related operators and functions:
     idx = ket_map.get_idx("TM-ngram-partition");
     fn_map.compound_context_seq_fn.emplace(idx, &op_TM_ngram_partition);
 
@@ -594,14 +596,19 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("TM-extract-text");
     fn_map.whitelist_1.emplace(idx, &op_TM_extract_text);
 
+    idx = ket_map.get_idx("TM-learn-sentences");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_TM_learn_sentences);
+
+    idx = ket_map.get_idx("TM-compress-stars");
+    fn_map.ket_fn.emplace(idx, &op_TM_compress_stars);
+
+
     idx = ket_map.get_idx("gmessage");
     fn_map.ket_fn.emplace(idx, &op_gmessage);
 
     idx = ket_map.get_idx("gdump");
     fn_map.context_whitelist_1.emplace(idx, &op_gdump_fn1);
 
-    idx = ket_map.get_idx("TM-learn-sentences");
-    fn_map.compound_context_seq_fn.emplace(idx, &op_TM_learn_sentences);
 
 }
 
