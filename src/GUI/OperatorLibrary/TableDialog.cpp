@@ -40,7 +40,7 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 	}
 	list_idx = 0;
 	std::string k_label;
-	for (const auto k : input_sp)  // Tidy this section!
+	for (const auto& k : input_sp)  // Tidy this section!
 	{
 		if (!is_tidy)
 		{
@@ -55,7 +55,7 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 	}
 	unsigned int column_idx = 1;
 	unsigned int row_idx = 0;
-	for (const auto k : input_sp)
+	for (const auto& k : input_sp)
 	{
 		std::vector<std::string> row_data;
 		bool first_column = true;
@@ -89,6 +89,89 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 	topsizer->AddSpacer(10);
 
 	m_grid_table->Bind(wxEVT_GRID_LABEL_LEFT_CLICK, &TableDialog::OnTableColumnClick, this);
+
+	SetSizerAndFit(topsizer);
+	CenterOnScreen();
+	// ShowModal();
+	Show();
+}
+
+TableDialog::TableDialog(wxWindow* parent, const std::vector<ulong>& operators, const Superposition& input_sp, bool is_tidy, long style)
+	: wxDialog(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+{
+	SetTitle("Table");
+	wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
+
+	wxStaticText* header = new wxStaticText(this, wxID_ANY, "Table");
+	header->SetFont(wxFontInfo(14));
+	topsizer->Add(header, wxSizerFlags(0).Center().Border(wxALL, 10));
+
+	driver.context.set_window_pointer(this);
+
+
+	m_grid_table = new wxGrid(this, wxID_ANY);
+	m_grid_table->CreateGrid(input_sp.size(), operators.size());
+	unsigned int list_idx = 0;
+	for (ulong op_idx : operators)  // Populate member data structures:
+	{
+		std::string op_label = ket_map.get_str(op_idx);
+		m_operators.push_back(op_label);
+		m_grid_table->SetColLabelValue(list_idx, op_label);
+		m_sort_ascending.push_back(-1);  // -1 for not sorted by this column. 0 for ascending, 1 for descending.
+		list_idx++;
+	}
+	list_idx = 0;
+	std::string k_label;
+	for (const auto& k : input_sp)  // Tidy this section!
+	{
+		if (!is_tidy)
+		{
+			k_label = " " + k.label();
+		}
+		else
+		{
+			k_label = " " + ket_map.get_str(ket_map.get_headless_idx(k.label_idx()));
+		}
+		m_grid_table->SetCellValue(list_idx, 0, k_label);
+		list_idx++;
+	}
+	unsigned int column_idx = 1;
+	unsigned int row_idx = 0;
+	for (const auto& k : input_sp)
+	{
+		std::vector<std::string> row_data;
+		bool first_column = true;
+		column_idx = 1;
+		for (ulong op_idx : operators)
+		{
+			if (first_column)
+			{
+				first_column = false;
+				if (!is_tidy)
+				{
+					row_data.push_back(" " + k.label());
+				}
+				else
+				{
+					row_data.push_back(" " + ket_map.get_str(ket_map.get_headless_idx(k.label_idx())));
+				}
+				continue;
+			}
+			
+			std::string cell_value = " " + driver.context.active_recall(op_idx, k.label_idx()).readable_display(is_tidy);
+			m_grid_table->SetCellValue(row_idx, column_idx, cell_value);
+			row_data.push_back(cell_value);
+			column_idx++;
+		}
+		m_table_data.push_back(row_data);
+		row_idx++;
+	}
+	m_grid_table->AutoSize();
+	topsizer->Add(m_grid_table, wxSizerFlags(1).Expand().Border(wxALL, 10));
+	topsizer->AddSpacer(10);
+
+	m_grid_table->Bind(wxEVT_GRID_LABEL_LEFT_CLICK, &TableDialog::OnTableColumnClick, this);
+
 
 	SetSizerAndFit(topsizer);
 	CenterOnScreen();

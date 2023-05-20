@@ -10,6 +10,8 @@
 #include "GUIOperatorLibrary.h"
 #include <wx/msgdlg.h>
 #include "../GUI/Interface/DumpFrame.h"
+#include "../GUI/OperatorLibrary/TableDialog.h"
+
 
 Ket op_gmessage(const Ket& k)  // Our first, test, GUI operator!
 {
@@ -123,4 +125,21 @@ Ket op_gdump_fn1(ContextList& context, const Sequence& input_seq, const Sequence
 
 	DumpFrame* dump_frame = new DumpFrame(context.get_window_pointer(), "GUI dump operator output", captured_text);
 	return Ket("gdump");
+}
+
+Ket op_gtable(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    if (sp.is_empty_ket() || parameters.empty()) { return Ket(); }
+
+    // Walk the parameters list:
+    std::vector<ulong> operators;
+    for (const auto& p : parameters)
+    {
+        ulong idx = p->get_operator().get_idx();
+        operators.push_back(idx);
+    }
+
+    // Now invoke it:
+    TableDialog* table_frame = new TableDialog(context.get_window_pointer(), operators, sp, false);
+    return Ket("gtable");
 }
