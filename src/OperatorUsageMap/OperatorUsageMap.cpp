@@ -4956,7 +4956,59 @@ OperatorUsageMap::OperatorUsageMap() {
         "        TM-extract-text(|1> + |2> + |3> + |6> + |8>) ssplit[\" \"] |A B C D E F G H I J K>\n"
         "            |A B C _ F _ H>\n\n"
         "    see also:\n"
-        "        \n";
+        "        TM-learn-sentences\n";
+
+    operator_usage_map.map["TM-learn-sentences"] =
+        "\nTM-learn-sentences:\n"
+        "    description:\n"
+        "        TM-learn-sentences[splitter] sp\n"
+        "        for each ket in the input sp,\n"
+        "        split into a sequence using the given splitter operator\n"
+        "        then learn the corresponding sentence sequences\n"
+        "        with respect to the operators: sentence-template, sentence-length, sentence-type, sentence-value\n"
+        "        where:\n"
+        "        sentence-template is the raw sequence\n"
+        "        sentence-length is the number of kets in that sequence\n"
+        "        sentence-type is extract-head applied to the raw sequence\n"
+        "        sentence-value is extract-value applied to the raw sequence\n"
+        "        Note, it keeps track of the number of existing sentence nodes so as not to stomp on them\n"
+        "        this operator is a member of the Template Machine set of operators\n\n"
+        "    examples:\n"
+        "        -- learn some words to types maps:\n"
+        "        -- first, the default is return itself:\n"
+        "        map |*> #=> |_self>\n\n"
+        "        -- now some specific cases (add more as needed):\n"
+        "        map |The> => |#DET#>\n"
+        "        map |a> => |#DET#>\n"
+        "        map |man> => |#NOUN#>\n\n"
+        "        -- now build the splitter operator:\n"
+        "        apply-map |*> #=> tensor-product[\": \"] (map |_self> . |_self>) \n"
+        "        splitter |*> #=> apply-map ssplit[\" \"] |_self>\n\n"
+        "        -- now invoke it all with a couple of toy sentences:\n"
+        "        TM-learn-sentences[splitter] (|The old man sat on a bench> + |The young man walked>)\n\n"
+        "        -- now see what we know using the dump operator:\n"
+        "        dump(|*>) rel-kets[*]\n"
+        "            map |*> #=> |_self>\n"
+        "            apply-map |*> #=> tensor-product[\": \"](map |_self> . |_self> )\n"
+        "            splitter |*> #=> apply-map ssplit[\" \"] |_self>\n\n"        
+        "            map |The> = > |#DET#>\n"
+        "            map |a> = > |#DET#>\n"
+        "            map |man> = > |#NOUN#>\n\n"
+        "            sentence-template |sentence: 1> => |#DET#: The> . |old: old> . |#NOUN#: man> . |sat: sat> . |on: on> . |#DET#: a> . |bench: bench>\n"
+        "            sentence-length |sentence: 1> => |7>\n"
+        "            sentence-type |sentence: 1> => |#DET#> . |old> . |#NOUN#> . |sat> . |on> . |#DET#> . |bench>\n"
+        "            sentence-value |sentence: 1> => |The> . |old> . |man> . |sat> . |on> . |a> . |bench>\n\n"
+        "            sentence-template |sentence: 2> => |#DET#: The> . |young: young> . |#NOUN#: man> . |walked: walked>\n"
+        "            sentence-length |sentence: 2> => |4>\n"
+        "            sentence-type |sentence: 2> => |#DET#> . |young> . |#NOUN#> . |walked>\n"
+        "            sentence-value |sentence: 2> => |The> . |young> . |man> . |walked>\n\n"
+        "    see also:\n"
+        "        tensor-product, TM-extract-text\n";
+
+
+
+
+
 
     operator_usage_map.map["gmessage"] =
         "\ngmessage:\n"
@@ -4989,6 +5041,8 @@ OperatorUsageMap::OperatorUsageMap() {
         "    examples:\n\n"
         "    see also:\n"
         "        dump, gmessage\n";
+
+
 
 
     // fill out statement_prototypes map:

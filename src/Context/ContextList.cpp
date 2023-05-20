@@ -202,6 +202,10 @@ void ContextList::learn(const std::string& op, const std::string& label, const s
     data[index].learn(op, label, srule);
 }
 
+void ContextList::learn(const ulong op_idx, const ulong label_idx, const Sequence& seq)
+{
+    data[index].learn(op_idx, label_idx, seq);
+}
 
 void ContextList::non_empty_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq)
 {

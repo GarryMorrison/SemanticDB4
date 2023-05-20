@@ -257,3 +257,64 @@ Ket op_TM_extract_text(const Sequence& input_seq, const Sequence& one)
     }
     return Ket(working_str);
 }
+
+Ket op_TM_learn_sentences(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters)
+{
+    // Make sure we have the right input conditions:
+    if (input_seq.is_empty_ket() || parameters.size() != 1) { return Ket("0"); }
+
+    // Learn a bunch of indices:
+    ulong splitter_idx = parameters[0]->get_operator().get_idx();
+    ulong sentence_template_idx = ket_map.get_idx("sentence-template");
+    ulong sentence_length_idx = ket_map.get_idx("sentence-length");
+    ulong sentence_type_idx = ket_map.get_idx("sentence-type");
+    ulong sentence_value_idx = ket_map.get_idx("sentence-value");
+
+    // Find max sentence node, so we don't stomp on it, and write to new node numbers:
+    // Perhaps, instead, just use a global variable that stores the current max sentence number? Would be faster!
+    std::vector<ulong> rel_kets_vec = context.relevant_kets(sentence_template_idx);
+    int max_sentence_node = 0;
+    for (ulong idx : rel_kets_vec)
+    {
+        ulong value_idx = ket_map.get_value_idx(idx);
+        try
+        {
+            int sentence_node_number = std::stoi(ket_map.get_str(value_idx));
+            max_sentence_node = std::max(max_sentence_node, sentence_node_number);
+        }
+        catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
+            continue;
+        }
+    }
+
+    // Now, with the preamble out of the way, we can learn our sentences:
+    int new_sentence_count = 0;
+    std::vector<ulong> input_idx_vec = input_seq.to_sp().get_idx_vector();
+    for (ulong input_idx : input_idx_vec)
+    {
+        Sequence our_template = context.active_recall(splitter_idx, input_idx);
+        if (!our_template.is_empty_ket())
+        {
+            // House keeping:
+            max_sentence_node++;
+            new_sentence_count++;
+            
+            // Build them:
+            Sequence template_type(our_template);
+            Sequence template_value(our_template);
+            template_type.extract_head();
+            template_value.extract_value();
+
+            // Now finally learn them:
+            ulong node_idx = ket_map.get_idx("sentence: " + std::to_string(max_sentence_node));
+            context.learn(sentence_template_idx, node_idx, our_template);
+            context.learn(sentence_length_idx, node_idx, Sequence(std::to_string(our_template.size())));
+            context.learn(sentence_type_idx, node_idx, template_type);
+            context.learn(sentence_value_idx, node_idx, template_value);
+        }
+    }
+
+    // Return the number of learn't sentences:
+    return Ket(std::to_string(new_sentence_count));
+}

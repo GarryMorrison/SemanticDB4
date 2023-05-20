@@ -201,6 +201,12 @@ void NewContext::learn(const std::string& op, const std::string& label, const st
     rules_dict[label_idx].learn(op_idx, bSeq);
 }
 
+void NewContext::learn(const ulong op_idx, const ulong label_idx, const Sequence& seq)
+{
+    std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(seq);
+    learn(op_idx, label_idx, bSeq);
+}
+
 void NewContext::non_empty_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq)
 {
     if (bSeq->is_empty_ket()) { return; }

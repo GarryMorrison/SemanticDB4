@@ -599,6 +599,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("gdump");
     fn_map.context_whitelist_1.emplace(idx, &op_gdump_fn1);
+
+    idx = ket_map.get_idx("TM-learn-sentences");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_TM_learn_sentences);
+
 }
 
 
