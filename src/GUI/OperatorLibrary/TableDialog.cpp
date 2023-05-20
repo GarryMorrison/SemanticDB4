@@ -21,7 +21,7 @@ TableDialog::TableDialog(wxWindow* parent, std::vector<std::string>& operators, 
 	topsizer->Add(header, wxSizerFlags(0).Center().Border(wxALL, 10));
 
 	driver.result.clear();
-	bool parse_success = driver.parse_string(input_sp_str + "\n");
+	bool parse_success = driver.parse_string(input_sp_str + "\n");  // WARNING: potentially an SQL-injection type attack here!
 	if (!parse_success)
 	{
 		wxMessageBox("Parse failed for: " + input_sp_str);

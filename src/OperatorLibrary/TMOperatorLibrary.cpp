@@ -229,7 +229,8 @@ Ket op_TM_compress_stars(const Ket& k)
                 result_str.append(" ");
             }
             result_str.append(replace_str);
-            replace_str = "";
+            // replace_str = "";
+            replace_str.clear();
         }
         else
         {

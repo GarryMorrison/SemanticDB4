@@ -29,7 +29,7 @@
 #define AGENT_PROMPT "sa: "
 #define KET_MAP_DISPLAY_MAX_ROWS 400  // Max number of rows to display in the ket map window.
 
-#define EXAMPLE_STARTING_TEXT "|context> => |Fred Sam sample>\nage |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\nage |Sam> => |41>\nfriends |Sam> => |Fred> + |Liz> + |Emma>\n\nspelling |*> #=> ssplit |_self>\nhow-many-friends |*> #=> how-many friends |_self>\ntable[name, age, friends, how-many-friends, spelling] rel-kets[friends]\n"
+#define EXAMPLE_STARTING_TEXT "|context> => |Fred Sam sample>\nage |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\nage |Sam> => |41>\nfriends |Sam> => |Fred> + |Liz> + |Emma>\n\nspelling |*> #=> ssplit |_self>\nhow-many-friends |*> #=> how-many friends |_self>\ntable[name, age, friends, how-many-friends, spelling] rel-kets[friends]\ngtable[name, age, friends, how-many-friends, spelling] rel-kets[friends]\n"
 #define EXAMPLE_KET_KNOWLEDGE "age |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\nspelling |Fred> => |F> . |r> . |e> . |d>"
 #define EXAMPLE_OP_KNOWLEDGE "age |Fred> => |37>\nage |Sam> => |41>"
 #define EDIT_STARTING_TEXT "|context> => |Hello world>\n\nprint |Hello world!>\n"
