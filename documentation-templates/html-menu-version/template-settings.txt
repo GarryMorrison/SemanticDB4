@@ -1,0 +1,247 @@
+-- This file contains all the settings needed to generate Semantic DB 4 documentation, using a template system.
+-- The hope is that it is general enough that we can produce different output styles just using template files and variables.
+-- For example, initially just html, but later maybe text, or md markdown.
+-- The code reads this file a line at a time, splitting on the first space character.
+-- The first token is treated as the variable, the second token is the value.
+-- By convention, the variable names are wrapped in $...$
+--
+-- Author: Garry Morrison
+-- Created: 2023/4/17
+-- Updated: 2023/4/22
+
+
+-- main template files:
+-- html snippet used to construct the menu structure:
+$menu-template$ menu-template.html
+
+-- html template for the index page:
+$index-template$ index-template.html
+
+-- html template for operator usage info:
+$operator-template$ operator-template.html
+
+-- html template for example files:
+$example-template$ example-template.html
+
+-- html snippet wrapped around list elements:
+$list-element-template$ list-element-template.html
+
+-- html snippet wrapped around linkify links:
+$linkify-template$ linkify-template.html
+
+
+
+-- template settings:
+-- generated files will have this extension:
+$destination-file-extension$ .html
+
+-- main index page file name:
+$destination-index-file-name$ index.html
+
+-- css file paths:
+$source-css-path$ css/
+$destination-css-path$ css/
+
+-- image paths:
+$source-image-path$ images/
+$destination-image-path$ images/
+
+-- some destination file settings:
+$strip-extensions-for-menu-items$ yes
+$html-escape-menu-items$ yes
+$html-escape-operator-fields$ yes
+$html-escape-example-fields$ yes
+$linkify-operator-example-field$ yes
+$linkify-operator-see-also-field$ yes
+$linkify-example-body-field$ yes
+
+
+$menu-website-link$ http://semantic-db.org
+$menu-github-link$ https://github.com/GarryMorrison/SemanticDB4
+
+
+-- template files and their member substitution variables:
+-- $index-template$:
+-- 	menu structure (populated using the result of the menu-template code)
+-- 	$menu-structure$
+--
+-- 	required file paths:
+-- 	$destination-css-path$
+-- 	$destination-image-path$
+--
+-- 	document creation date:
+-- 	$creation-date$
+
+
+-- $operator-template$:
+-- 	menu structure (populated using the result of the menu-template code)
+-- 	$menu-structure$
+--
+-- 	filename requried for the link back to the home page:
+-- 	$destination-index-file-name$
+--
+-- 	required file paths:
+-- 	$destination-css-path$
+-- 	$destination-image-path$
+--
+-- 	path back to the index page, auto-calculated based on the path to the operator file:
+-- 	$inverse-path$
+--
+-- 	the main operator fields, auto-calculated from operator-usage-info and function-operator-map:
+-- 	$operator-name$
+-- 	$operator-description$
+-- 	$operator-examples$
+-- 	$operator-see-also$
+-- 	$operator-type$
+--
+-- 	document creation date:
+-- 	$creation-date$
+
+
+-- $example-template$:
+-- 	menu structure (populated using the result of the menu-template code)
+-- 	$menu-structure$
+--
+-- 	filename requried for the link back to the home page:
+-- 	$destination-index-file-name$
+--
+-- 	required file paths:
+-- 	$destination-css-path$
+-- 	$destination-image-path$
+--
+-- 	path back to the index page, auto-calculated based on the path to the operator file:
+-- 	$inverse-path$
+--
+-- 	the main sw example fields, auto-calculated from the example directory fed into our docs generator function:
+-- 	$example-name$
+-- 	$example-body$
+-- 	$example-link-to-raw-file$
+--
+-- 	document creation date:
+-- 	$creation-date$
+
+
+-- $list-element-template$:
+-- 	$inverse-path$
+-- 	$object-reference-path$
+-- 	$object-reference-name$
+-- 	$object-reference-extension$
+-- 	$object-label-name$
+-- eg: <li><a href="$inverse-path$$object-reference-path$$object-reference-name$$object-reference-extension$">$object-label-name$</a></li>
+
+
+-- $linkify-template$:
+-- 	$inverse-path$
+-- 	$object-reference-path$
+-- 	$object-reference-name$
+-- 	$object-reference-extension$
+-- 	$object-label-name$
+-- eg: <a href="$inverse-path$$object-reference-path$$object-reference-name$$object-reference-extension$">$object-label-name$</a>
+
+
+
+-- $menu-template$:
+--	Language Elements menu item:
+--		$menu-language-elements-statements-list$
+--		$menu-language-elements-learn-rules-list$
+--		$menu-language-elements-infix-type-1-list$
+--		$menu-language-elements-infix-type-2-list$
+--		$menu-language-elements-miscellaneous-elements-list$
+--		$menu-language-elements-object-types-list$
+--		$menu-language-elements-operator-types-list$
+--
+--	Operators menu item:
+--		Operators->Core:
+--			$menu-operators-core-normal-list$
+--			$menu-operators-core-compound-list$
+--			$menu-operators-core-compound-context-list$
+--		Operators->Sigmoid:
+--			$menu-operators-sigmoid-normal-list$
+--			$menu-operators-sigmoid-compound-list$
+--		Operators->Ket:
+--			$menu-operators-ket-normal-list$
+--			$menu-operators-ket-compound-list$
+--			$menu-operators-ket-context-list$
+--		Operators->Superposition:
+--			$menu-operators-superposition-normal-list$
+--			$menu-operators-superposition-compound-list$
+--			$menu-operators-superposition-compound-context-list$
+--		Operators->Sequence:
+--			$menu-operators-sequence-normal-list$
+--			$menu-operators-sequence-context-list$
+--			$menu-operators-sequence-compound-list$
+--			$menu-operators-sequence-compound-context-list$
+--		Operators->Function->Normal:
+--			$menu-operators-function-normal-1-parameter-list$
+--			$menu-operators-function-normal-2-parameter-list$
+--			$menu-operators-function-normal-3-parameter-list$
+--			$menu-operators-function-normal-4-parameter-list$
+--		Operators->Function->Context:
+--			$menu-operators-function-context-1-parameter-list$
+--			$menu-operators-function-context-2-parameter-list$
+--			$menu-operators-function-context-3-parameter-list$
+--			$menu-operators-function-context-4-parameter-list$
+--		Operators->All:
+--			$menu-operators-all-simple-list$
+--			$menu-operators-all-compound-list$
+--			$menu-operators-all-function-list$
+--
+--	Examples menu item:
+--		$menu-examples-list$
+--
+--	Menu website link:
+--		$menu-webite-link$
+
+
+-- menu template paths:
+$menu-language-elements-statements-path$ language-elements/statements/
+$menu-language-elements-learn-rules-path$ language-elements/learn-rules/
+$menu-language-elements-infix-type-1-path$ language-elements/infix-type-1/
+$menu-language-elements-infix-type-2-path$ language-elements/infix-type-2/
+$menu-language-elements-miscellaneous-elements-path$ language-elements/miscellaneous-elements/
+$menu-language-elements-object-types-path$ language-elements/object-types/
+$menu-language-elements-operator-types-path$ language-elements/operator-types/
+
+-- Operators->Core:
+$menu-operators-core-normal-path$ operators/core/normal/
+$menu-operators-core-compound-path$ operators/core/compound/
+$menu-operators-core-compound-context-path$ operators/core/compound-context/
+
+-- Operators->Sigmoid:
+$menu-operators-sigmoid-normal-path$ operators/sigmoid/normal/
+$menu-operators-sigmoid-compound-path$ operators/sigmoid/compound/
+
+-- Operators->Ket:
+$menu-operators-ket-normal-path$ operators/ket/normal/
+$menu-operators-ket-compound-path$ operators/ket/compound/
+$menu-operators-ket-context-path$ operators/ket/context/
+
+-- Operators->Superposition:
+$menu-operators-superposition-normal-path$ operators/superposition/normal/
+$menu-operators-superposition-compound-path$ operators/superposition/compound/
+$menu-operators-superposition-compound-context-path$ operators/superposition/compound-context/
+
+-- Operators->Sequence:
+$menu-operators-sequence-normal-path$ operators/sequence/normal/
+$menu-operators-sequence-context-path$ operators/sequence/context/
+$menu-operators-sequence-compound-path$ operators/sequence/compound/
+$menu-operators-sequence-compound-context-path$ operators/sequence/compound-context/
+
+-- Operators->Function->Normal:
+$menu-operators-function-normal-1-parameter-path$ operators/function/normal/1-param/
+$menu-operators-function-normal-2-parameter-path$ operators/function/normal/2-param/
+$menu-operators-function-normal-3-parameter-path$ operators/function/normal/3-param/
+$menu-operators-function-normal-4-parameter-path$ operators/function/normal/4-param/
+
+-- Operators->Function->Context:
+$menu-operators-function-context-1-parameter-path$ operators/function/context/1-param/
+$menu-operators-function-context-2-parameter-path$ operators/function/context/2-param/
+$menu-operators-function-context-3-parameter-path$ operators/function/context/3-param/
+$menu-operators-function-context-4-parameter-path$ operators/function/context/4-param/
+
+-- Operators->All:
+$menu-operators-all-simple-path$ operators/all/simple/
+$menu-operators-all-compound-path$ operators/all/compound/
+$menu-operators-all-function-path$ operators/all/function/
+
+$menu-examples-path$ examples/
