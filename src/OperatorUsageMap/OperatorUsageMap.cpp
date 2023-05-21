@@ -421,7 +421,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "        show-many ssplit |abcdef>\n"
         "            |number: 6>\n\n"
         "    see also:\n"
-        "        how-many, measure-currency, how-many";
+        "        how-many, measure-currency";
 
     operator_usage_map.map["measure-currency"] =
         "\nmeasure-currency:\n"
