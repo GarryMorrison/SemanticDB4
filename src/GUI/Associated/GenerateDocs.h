@@ -7,7 +7,7 @@
 //
 
 #pragma once
-#include "../../SDB.h"
+#include "../SDB_GUI.h"
 #include <wx/datetime.h>
 #include <wx/textfile.h>
 #include <wx/dir.h>

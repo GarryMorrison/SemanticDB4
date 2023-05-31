@@ -7,7 +7,7 @@
 //
 
 #pragma once
-#include "../../SDB.h"
+#include "../SDB_GUI.h"
 #include <wx/radiobut.h>
 #include <wx/filepicker.h>
 

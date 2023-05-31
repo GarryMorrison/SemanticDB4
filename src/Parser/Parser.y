@@ -7,7 +7,7 @@
 #include <vector>
 #include <memory>
 
-#include "../SDB.h"
+#include "../GUI/SDB_GUI.h"
 #include "Driver.h"
 
 %}

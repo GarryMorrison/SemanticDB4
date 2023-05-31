@@ -7,7 +7,7 @@
 //
 
 #pragma once
-#include "../../SDB.h"
+#include "../SDB_GUI.h"
 
 class IfThenMachineDialog : public wxDialog {
 public:

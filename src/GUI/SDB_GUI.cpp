@@ -6,8 +6,8 @@
 // License GPL v3
 //
 
-#include "SDB.h"
-#include "GUI/OperatorLibrary/PopulateGUIOperators.h"
+#include "SDB_GUI.h"
+#include "OperatorLibrary/PopulateGUIOperators.h"
 
 // Start up global ket_map:
 KetMap ket_map;

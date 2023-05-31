@@ -11,7 +11,7 @@
 
 
 #include <string>
-#include "../SDB.h"
+#include "../GUI/SDB_GUI.h"
 class ContextList;
 class Sequence;
 

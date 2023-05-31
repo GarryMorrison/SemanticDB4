@@ -7,7 +7,7 @@
 //
 
 #pragma once
-#include "../../SDB.h"
+#include "../SDB_GUI.h"
 
 int wxCALLBACK SortedListCompareFunction(wxIntPtr, wxIntPtr, wxIntPtr);
 

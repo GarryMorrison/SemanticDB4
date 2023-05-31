@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 
-#include "../SDB.h"
+#include "../GUI/SDB_GUI.h"
 #include "Scanner.h"
 
 int current_indentation = 0;
