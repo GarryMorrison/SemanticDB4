@@ -204,31 +204,31 @@
     <ClInclude Include="src\GUI\Interface\CreateNewFileDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\ActiveTableDialog.h">
+    <ClInclude Include="src\GUI\Associated\ActiveTableDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\TableDialog.h">
+    <ClInclude Include="src\GUI\Associated\TableDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\IfThenMachineDialog.h">
+    <ClInclude Include="src\GUI\Associated\IfThenMachineDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\IfThenOperatorDialog.h">
+    <ClInclude Include="src\GUI\Associated\IfThenOperatorDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\SearchForOperatorDialog.h">
+    <ClInclude Include="src\GUI\Associated\SearchForOperatorDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\SearchResultsDialog.h">
+    <ClInclude Include="src\GUI\Associated\SearchResultsDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\GenerateDocsDialog.h">
+    <ClInclude Include="src\GUI\Associated\GenerateDocsDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\GenerateDocs.h">
+    <ClInclude Include="src\GUI\Associated\GenerateDocs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\OperatorLibrary\GenerateDocs2.h">
+    <ClInclude Include="src\GUI\Associated\GenerateDocs2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\OperatorLibrary\TMOperatorLibrary.h">
@@ -416,31 +416,31 @@
     <ClCompile Include="src\GUI\Interface\CreateNewFileDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\ActiveTableDialog.cpp">
+    <ClCompile Include="src\GUI\Associated\ActiveTableDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\TableDialog.cpp">
+    <ClCompile Include="src\GUI\Associated\TableDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\IfThenMachineDialog.cpp">
+    <ClCompile Include="src\GUI\Associated\IfThenMachineDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\IfThenOperatorDialog.cpp">
+    <ClCompile Include="src\GUI\Associated\IfThenOperatorDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\SearchForOperatorDialog.cpp">
+    <ClCompile Include="src\GUI\Associated\SearchForOperatorDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\SearchResultsDialog.cpp">
+    <ClCompile Include="src\GUI\Associated\SearchResultsDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\GenerateDocsDialog.cpp">
+    <ClCompile Include="src\GUI\Associated\GenerateDocsDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\GenerateDocs.cpp">
+    <ClCompile Include="src\GUI\Associated\GenerateDocs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\OperatorLibrary\GenerateDocs2.cpp">
+    <ClCompile Include="src\GUI\Associated\GenerateDocs2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\OperatorLibrary\TMOperatorLibrary.cpp">

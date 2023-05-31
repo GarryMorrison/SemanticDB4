@@ -10,7 +10,7 @@
 #include "GUIOperatorLibrary.h"
 #include <wx/msgdlg.h>
 #include "../GUI/Interface/DumpFrame.h"
-#include "../GUI/OperatorLibrary/TableDialog.h"
+#include "../GUI/Associated/TableDialog.h"
 
 
 Ket op_gmessage(const Ket& k)  // Our first, test, GUI operator!

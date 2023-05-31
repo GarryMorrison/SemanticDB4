@@ -155,14 +155,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\OperatorLibrary\GUIOperatorLibrary.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\GenerateDocs2.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\GenerateDocs.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\GenerateDocsDialog.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\SearchResultsDialog.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\SearchForOperatorDialog.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\IfThenOperatorDialog.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\IfThenMachineDialog.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\ActiveTableDialog.h" />
+    <ClInclude Include="src\GUI\Associated\GenerateDocs2.h" />
+    <ClInclude Include="src\GUI\Associated\GenerateDocs.h" />
+    <ClInclude Include="src\GUI\Associated\GenerateDocsDialog.h" />
+    <ClInclude Include="src\GUI\Associated\SearchResultsDialog.h" />
+    <ClInclude Include="src\GUI\Associated\SearchForOperatorDialog.h" />
+    <ClInclude Include="src\GUI\Associated\IfThenOperatorDialog.h" />
+    <ClInclude Include="src\GUI\Associated\IfThenMachineDialog.h" />
+    <ClInclude Include="src\GUI\Associated\ActiveTableDialog.h" />
     <ClInclude Include="src\GUI\Interface\CreateNewFileDialog.h" />
     <ClInclude Include="src\GUI\Interface\OutputFrame.h" />
     <ClInclude Include="src\GUI\Interface\EditPanel.h" />
@@ -226,19 +226,19 @@
     <ClInclude Include="src\Sequence\Superposition.h" />
     <ClInclude Include="src\Sequence\SuperpositionIter.h" />
     <ClInclude Include="src\Sequence\WhileStatement.h" />
-    <ClInclude Include="src\GUI\OperatorLibrary\TableDialog.h" />
+    <ClInclude Include="src\GUI\Associated\TableDialog.h" />
     <ClInclude Include="src\OperatorLibrary\TMOperatorLibrary.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\OperatorLibrary\GUIOperatorLibrary.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\GenerateDocs2.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\GenerateDocs.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\GenerateDocsDialog.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\SearchResultsDialog.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\SearchForOperatorDialog.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\IfThenOperatorDialog.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\IfThenMachineDialog.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\ActiveTableDialog.cpp" />
+    <ClCompile Include="src\GUI\Associated\GenerateDocs2.cpp" />
+    <ClCompile Include="src\GUI\Associated\GenerateDocs.cpp" />
+    <ClCompile Include="src\GUI\Associated\GenerateDocsDialog.cpp" />
+    <ClCompile Include="src\GUI\Associated\SearchResultsDialog.cpp" />
+    <ClCompile Include="src\GUI\Associated\SearchForOperatorDialog.cpp" />
+    <ClCompile Include="src\GUI\Associated\IfThenOperatorDialog.cpp" />
+    <ClCompile Include="src\GUI\Associated\IfThenMachineDialog.cpp" />
+    <ClCompile Include="src\GUI\Associated\ActiveTableDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\CreateNewFileDialog.cpp" />
     <ClCompile Include="src\GUI\Interface\OutputFrame.cpp" />
     <ClCompile Include="src\GUI\Interface\EditPanel.cpp" />
@@ -298,7 +298,7 @@
     <ClCompile Include="src\Sequence\Superposition.cpp" />
     <ClCompile Include="src\Sequence\SuperpositionIter.cpp" />
     <ClCompile Include="src\Sequence\WhileStatement.cpp" />
-    <ClCompile Include="src\GUI\OperatorLibrary\TableDialog.cpp" />
+    <ClCompile Include="src\GUI\Associated\TableDialog.cpp" />
     <ClCompile Include="src\OperatorLibrary\TMOperatorLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>

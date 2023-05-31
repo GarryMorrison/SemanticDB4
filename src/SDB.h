@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2023/5/24
+// Updated 2023/5/31
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2023/5/24"
+#define APP_BUILD_DATE "2023/5/31"
 #define APP_VERSION "4.0.alpha4"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage4/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -100,15 +100,15 @@
 #include "GUI/Interface/EditPanel.h"
 #include "GUI/Interface/OutputFrame.h"
 #include "GUI/Interface/CreateNewFileDialog.h"
-#include "GUI/OperatorLibrary/ActiveTableDialog.h"
-#include "GUI/OperatorLibrary/TableDialog.h"
-#include "GUI/OperatorLibrary/IfThenMachineDialog.h"
-#include "GUI/OperatorLibrary/IfThenOperatorDialog.h"
-#include "GUI/OperatorLibrary/SearchForOperatorDialog.h"
-#include "GUI/OperatorLibrary/SearchResultsDialog.h"
-#include "GUI/OperatorLibrary/GenerateDocsDialog.h"
-#include "GUI/OperatorLibrary/GenerateDocs.h"
-#include "GUI/OperatorLibrary/GenerateDocs2.h"
+#include "GUI/Associated/ActiveTableDialog.h"
+#include "GUI/Associated/TableDialog.h"
+#include "GUI/Associated/IfThenMachineDialog.h"
+#include "GUI/Associated/IfThenOperatorDialog.h"
+#include "GUI/Associated/SearchForOperatorDialog.h"
+#include "GUI/Associated/SearchResultsDialog.h"
+#include "GUI/Associated/GenerateDocsDialog.h"
+#include "GUI/Associated/GenerateDocs.h"
+#include "GUI/Associated/GenerateDocs2.h"
 
 
 // Back end includes:
