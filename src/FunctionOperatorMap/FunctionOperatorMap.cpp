@@ -11,7 +11,7 @@
 #include "../OperatorLibrary/OperatorLibrary.h"
 #include "../OperatorLibrary/FunctionOperatorLibrary.h"
 #include "../OperatorLibrary/TMOperatorLibrary.h"
-// #include "../OperatorLibrary/GUIOperatorLibrary.h"
+
 
 
 FunctionOperatorMap::FunctionOperatorMap() {
@@ -603,17 +603,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.ket_fn.emplace(idx, &op_TM_compress_stars);
 
 
-    /*
-    // GUI operators and functions:
-    idx = ket_map.get_idx("gmessage");
-    fn_map.ket_fn.emplace(idx, &op_gmessage);
-
-    idx = ket_map.get_idx("gdump");
-    fn_map.context_whitelist_1.emplace(idx, &op_gdump_fn1);
-
-    idx = ket_map.get_idx("gtable");
-    fn_map.compound_context_sp_fn.emplace(idx, &op_gtable);
-    */
+ 
 
 }
 

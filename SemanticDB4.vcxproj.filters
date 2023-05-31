@@ -237,6 +237,9 @@
     <ClInclude Include="src\GUI\OperatorLibrary\GUIOperatorLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI\OperatorLibrary\PopulateGUIOperators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SDB.cpp">
@@ -447,6 +450,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\OperatorLibrary\GUIOperatorLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\OperatorLibrary\PopulateGUIOperators.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
