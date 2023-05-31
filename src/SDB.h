@@ -149,7 +149,7 @@
 #include "Sequence/ForStatement.h"
 #include "Sequence/WhileStatement.h"
 #include "OperatorLibrary/TMOperatorLibrary.h"
-#include "OperatorLibrary/GUIOperatorLibrary.h"
+#include "GUI/OperatorLibrary/GUIOperatorLibrary.h"
 
 
 extern ContextList context;

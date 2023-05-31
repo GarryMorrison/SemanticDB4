@@ -154,7 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\OperatorLibrary\GUIOperatorLibrary.h" />
+    <ClInclude Include="src\GUI\OperatorLibrary\GUIOperatorLibrary.h" />
     <ClInclude Include="src\GUI\Associated\GenerateDocs2.h" />
     <ClInclude Include="src\GUI\Associated\GenerateDocs.h" />
     <ClInclude Include="src\GUI\Associated\GenerateDocsDialog.h" />
@@ -230,7 +230,7 @@
     <ClInclude Include="src\OperatorLibrary\TMOperatorLibrary.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\OperatorLibrary\GUIOperatorLibrary.cpp" />
+    <ClCompile Include="src\GUI\OperatorLibrary\GUIOperatorLibrary.cpp" />
     <ClCompile Include="src\GUI\Associated\GenerateDocs2.cpp" />
     <ClCompile Include="src\GUI\Associated\GenerateDocs.cpp" />
     <ClCompile Include="src\GUI\Associated\GenerateDocsDialog.cpp" />

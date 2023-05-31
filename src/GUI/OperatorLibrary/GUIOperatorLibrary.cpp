@@ -9,8 +9,8 @@
 #define _CRT_SECURE_NO_WARNINGS  // We need this for the wxwidgets code to compile! Is there a security risk?
 #include "GUIOperatorLibrary.h"
 #include <wx/msgdlg.h>
-#include "../GUI/Interface/DumpFrame.h"
-#include "../GUI/Associated/TableDialog.h"
+#include "../Interface/DumpFrame.h"
+#include "../Associated/TableDialog.h"
 
 
 Ket op_gmessage(const Ket& k)  // Our first, test, GUI operator!

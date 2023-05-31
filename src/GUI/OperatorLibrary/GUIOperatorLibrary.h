@@ -7,7 +7,7 @@
 //
 
 #pragma once
-#include "../Sequence/Ket.h"
+#include "../../Sequence/Ket.h"
 
 Ket op_gmessage(const Ket& k);
 
