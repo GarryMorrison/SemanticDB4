@@ -47,7 +47,7 @@
 #include <vector>
 #include <memory>
 
-#include "../GUI/SDB_GUI.h"
+#include "../SDB_core.h"
 #include "Driver.h"
 
 

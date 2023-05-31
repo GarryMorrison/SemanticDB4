@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "../../FunctionOperatorMap/FunctionOperatorMap.h"
+#include "../../core/FunctionOperatorMap/FunctionOperatorMap.h"
 #include "GUIOperatorLibrary.h"
 
 void PopulateGUIOperators(FunctionOperatorMap& map);

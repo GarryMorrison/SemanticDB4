@@ -18,22 +18,22 @@
     <ClInclude Include="src\GUI\SDB_GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\KetMap\KetMap.h">
+    <ClInclude Include="src\core\KetMap\KetMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FunctionOperatorMap\FunctionOperatorMap.h">
+    <ClInclude Include="src\core\FunctionOperatorMap\FunctionOperatorMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OperatorUsageMap\OperatorUsageMap.h">
+    <ClInclude Include="src\core\OperatorUsageMap\OperatorUsageMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Function\SplitJoin.h">
+    <ClInclude Include="src\core\Function\SplitJoin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Function\Timer.h">
+    <ClInclude Include="src\core\Function\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Function\misc.h">
+    <ClInclude Include="src\core\Function\misc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GUI\Interface\AppAbout.h">
@@ -69,118 +69,118 @@
     <ClInclude Include="src\GUI\Interface\FilteredDumpFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Function\NaturalSort.h">
+    <ClInclude Include="src\core\Function\NaturalSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CompoundConstant\CompoundConstant.h">
+    <ClInclude Include="src\core\CompoundConstant\CompoundConstant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CompoundConstant\ConstantFloat.h">
+    <ClInclude Include="src\core\CompoundConstant\ConstantFloat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CompoundConstant\ConstantInteger.h">
+    <ClInclude Include="src\core\CompoundConstant\ConstantInteger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CompoundConstant\ConstantOperator.h">
+    <ClInclude Include="src\core\CompoundConstant\ConstantOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CompoundConstant\ConstantString.h">
+    <ClInclude Include="src\core\CompoundConstant\ConstantString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Context\BoundFunction.h">
+    <ClInclude Include="src\core\Context\BoundFunction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Context\ContextList.h">
+    <ClInclude Include="src\core\Context\ContextList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Context\Frame.h">
+    <ClInclude Include="src\core\Context\Frame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Context\NewContext.h">
+    <ClInclude Include="src\core\Context\NewContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\BaseOperator.h">
+    <ClInclude Include="src\core\Operator\BaseOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\SimpleOperator.h">
+    <ClInclude Include="src\core\Operator\SimpleOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\NumericOperator.h">
+    <ClInclude Include="src\core\Operator\NumericOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\BaseSequence.h">
+    <ClInclude Include="src\core\Sequence\BaseSequence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\Ket.h">
+    <ClInclude Include="src\core\Sequence\Ket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\Superposition.h">
+    <ClInclude Include="src\core\Sequence\Superposition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\SuperpositionIter.h">
+    <ClInclude Include="src\core\Sequence\SuperpositionIter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\Sequence.h">
+    <ClInclude Include="src\core\Sequence\Sequence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\SelfKet.h">
+    <ClInclude Include="src\core\Sequence\SelfKet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\OperatorWithSequence.h">
+    <ClInclude Include="src\core\Sequence\OperatorWithSequence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\LearnRule.h">
+    <ClInclude Include="src\core\Sequence\LearnRule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\MultiSelfKet.h">
+    <ClInclude Include="src\core\Sequence\MultiSelfKet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\MultiLearnRule.h">
+    <ClInclude Include="src\core\Sequence\MultiLearnRule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\OperatorSequence.h">
+    <ClInclude Include="src\core\Operator\OperatorSequence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\EmptyOperator.h">
+    <ClInclude Include="src\core\Operator\EmptyOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\PoweredOperator.h">
+    <ClInclude Include="src\core\Operator\PoweredOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\CompoundOperator.h">
+    <ClInclude Include="src\core\Operator\CompoundOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\BracketOperator.h">
+    <ClInclude Include="src\core\Operator\BracketOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Operator\FunctionOperator.h">
+    <ClInclude Include="src\core\Operator\FunctionOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\ForStatement.h">
+    <ClInclude Include="src\core\Sequence\ForStatement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\IfElseStatement.h">
+    <ClInclude Include="src\core\Sequence\IfElseStatement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sequence\WhileStatement.h">
+    <ClInclude Include="src\core\Sequence\WhileStatement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OperatorLibrary\SigmoidLibrary.h">
+    <ClInclude Include="src\core\OperatorLibrary\SigmoidLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OperatorLibrary\OperatorLibrary.h">
+    <ClInclude Include="src\core\OperatorLibrary\OperatorLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OperatorLibrary\FunctionOperatorLibrary.h">
+    <ClInclude Include="src\core\OperatorLibrary\FunctionOperatorLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Parser\Driver.h">
+    <ClInclude Include="src\core\Parser\Driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Parser\Scanner.h">
+    <ClInclude Include="src\core\Parser\Scanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Parser\Parser.tab.h">
+    <ClInclude Include="src\core\Parser\Parser.tab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GUI\Interface\GeneralOperatorsFrame.h">
@@ -231,7 +231,7 @@
     <ClInclude Include="src\GUI\Associated\GenerateDocs2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OperatorLibrary\TMOperatorLibrary.h">
+    <ClInclude Include="src\core\OperatorLibrary\TMOperatorLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GUI\OperatorLibrary\GUIOperatorLibrary.h">
@@ -248,22 +248,22 @@
     <ClCompile Include="src\GUI\SDB_GUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\KetMap\KetMap.cpp">
+    <ClCompile Include="src\core\KetMap\KetMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FunctionOperatorMap\FunctionOperatorMap.cpp">
+    <ClCompile Include="src\core\FunctionOperatorMap\FunctionOperatorMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OperatorUsageMap\OperatorUsageMap.cpp">
+    <ClCompile Include="src\core\OperatorUsageMap\OperatorUsageMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Function\SplitJoin.cpp">
+    <ClCompile Include="src\core\Function\SplitJoin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Function\Timer.cpp">
+    <ClCompile Include="src\core\Function\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Function\misc.cpp">
+    <ClCompile Include="src\core\Function\misc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\Interface\AppAbout.cpp">
@@ -299,106 +299,106 @@
     <ClCompile Include="src\GUI\Interface\FilteredDumpFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CompoundConstant\CompoundConstant.cpp">
+    <ClCompile Include="src\core\CompoundConstant\CompoundConstant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CompoundConstant\ConstantFloat.cpp">
+    <ClCompile Include="src\core\CompoundConstant\ConstantFloat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CompoundConstant\ConstantInteger.cpp">
+    <ClCompile Include="src\core\CompoundConstant\ConstantInteger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CompoundConstant\ConstantOperator.cpp">
+    <ClCompile Include="src\core\CompoundConstant\ConstantOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CompoundConstant\ConstantString.cpp">
+    <ClCompile Include="src\core\CompoundConstant\ConstantString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Context\BoundFunction.cpp">
+    <ClCompile Include="src\core\Context\BoundFunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Context\ContextList.cpp">
+    <ClCompile Include="src\core\Context\ContextList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Context\Frame.cpp">
+    <ClCompile Include="src\core\Context\Frame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Context\NewContext.cpp">
+    <ClCompile Include="src\core\Context\NewContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\SimpleOperator.cpp">
+    <ClCompile Include="src\core\Operator\SimpleOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\NumericOperator.cpp">
+    <ClCompile Include="src\core\Operator\NumericOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\Ket.cpp">
+    <ClCompile Include="src\core\Sequence\Ket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\Superposition.cpp">
+    <ClCompile Include="src\core\Sequence\Superposition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\SuperpositionIter.cpp">
+    <ClCompile Include="src\core\Sequence\SuperpositionIter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\Sequence.cpp">
+    <ClCompile Include="src\core\Sequence\Sequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\SelfKet.cpp">
+    <ClCompile Include="src\core\Sequence\SelfKet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\OperatorWithSequence.cpp">
+    <ClCompile Include="src\core\Sequence\OperatorWithSequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\LearnRule.cpp">
+    <ClCompile Include="src\core\Sequence\LearnRule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\MultiSelfKet.cpp">
+    <ClCompile Include="src\core\Sequence\MultiSelfKet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\MultiLearnRule.cpp">
+    <ClCompile Include="src\core\Sequence\MultiLearnRule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\OperatorSequence.cpp">
+    <ClCompile Include="src\core\Operator\OperatorSequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\PoweredOperator.cpp">
+    <ClCompile Include="src\core\Operator\PoweredOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\CompoundOperator.cpp">
+    <ClCompile Include="src\core\Operator\CompoundOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\BracketOperator.cpp">
+    <ClCompile Include="src\core\Operator\BracketOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\FunctionOperator.cpp">
+    <ClCompile Include="src\core\Operator\FunctionOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\ForStatement.cpp">
+    <ClCompile Include="src\core\Sequence\ForStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\IfElseStatement.cpp">
+    <ClCompile Include="src\core\Sequence\IfElseStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sequence\WhileStatement.cpp">
+    <ClCompile Include="src\core\Sequence\WhileStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OperatorLibrary\SigmoidLibrary.cpp">
+    <ClCompile Include="src\core\OperatorLibrary\SigmoidLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OperatorLibrary\OperatorLibrary.cpp">
+    <ClCompile Include="src\core\OperatorLibrary\OperatorLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OperatorLibrary\FunctionOperatorLibrary.cpp">
+    <ClCompile Include="src\core\OperatorLibrary\FunctionOperatorLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Parser\Driver.cpp">
+    <ClCompile Include="src\core\Parser\Driver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Parser\Parser.tab.cpp">
+    <ClCompile Include="src\core\Parser\Parser.tab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Parser\Scanner.flex.cpp">
+    <ClCompile Include="src\core\Parser\Scanner.flex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\Interface\GeneralOperatorsFrame.cpp">
@@ -449,7 +449,7 @@
     <ClCompile Include="src\GUI\Associated\GenerateDocs2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OperatorLibrary\TMOperatorLibrary.cpp">
+    <ClCompile Include="src\core\OperatorLibrary\TMOperatorLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\OperatorLibrary\GUIOperatorLibrary.cpp">
@@ -460,9 +460,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Bison Include="src\Parser\Parser.y" />
+    <Bison Include="src\core\Parser\Parser.y" />
   </ItemGroup>
   <ItemGroup>
-    <Flex Include="src\Parser\Scanner.l" />
+    <Flex Include="src\core\Parser\Scanner.l" />
   </ItemGroup>
 </Project>
