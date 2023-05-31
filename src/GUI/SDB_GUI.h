@@ -42,6 +42,10 @@
 #include <wx/wx.h>
 #endif
 
+// Include the SDB_core header:
+#include "../core/SDB_core.h"
+
+
 #include <wx/aboutdlg.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
@@ -75,12 +79,6 @@
 #include <sstream>
 #include <filesystem>
 
-#include "../Function/SplitJoin.h"
-#include "../KetMap/KetMap.h"
-#include "../FunctionOperatorMap/FunctionOperatorMap.h"
-#include "../OperatorUsageMap/OperatorUsageMap.h"
-// #include "src/Function/CoutRedirect.h"
-#include "../Function/Timer.h"
 
 #include "Interface/PrimaryFrame.h"
 #include "Interface/AppAbout.h"
@@ -100,6 +98,7 @@
 #include "Interface/EditPanel.h"
 #include "Interface/OutputFrame.h"
 #include "Interface/CreateNewFileDialog.h"
+
 #include "Associated/ActiveTableDialog.h"
 #include "Associated/TableDialog.h"
 #include "Associated/IfThenMachineDialog.h"
@@ -110,45 +109,6 @@
 #include "Associated/GenerateDocs.h"
 #include "Associated/GenerateDocs2.h"
 
-
-// Back end includes:
-#include "../KetMap/KetMap.h"
-#include "../Sequence/Ket.h"
-#include "../Sequence/Superposition.h"
-#include "../Sequence/Sequence.h"
-#include "../Context/Frame.h"
-#include "../Context/NewContext.h"
-#include "../Context/ContextList.h"
-#include "../Operator/SimpleOperator.h"
-#include "../Operator/NumericOperator.h"
-#include "../Operator/PoweredOperator.h"
-#include "../Operator/OperatorSequence.h"
-#include "../OperatorLibrary/SigmoidLibrary.h"
-#include "../FunctionOperatorMap/FunctionOperatorMap.h"
-#include "../Operator/BracketOperator.h"
-#include "../CompoundConstant/ConstantInteger.h"
-#include "../CompoundConstant/ConstantFloat.h"
-#include "../CompoundConstant/ConstantOperator.h"
-#include "../CompoundConstant/ConstantString.h"
-#include "../Operator/CompoundOperator.h"
-#include "../Sequence/OperatorWithSequence.h"
-#include "../Sequence/SelfKet.h"
-#include "../Operator/EmptyOperator.h"
-#include "../OperatorLibrary/OperatorLibrary.h"
-#include "../OperatorLibrary/FunctionOperatorLibrary.h"
-#include "../Function/misc.h"
-#include "../Function/Timer.h"
-#include "../Operator/FunctionOperator.h"
-#include "../Sequence/LearnRule.h"
-#include "../Sequence/MultiLearnRule.h"
-#include "../Sequence/MultiSelfKet.h"
-#include "../Parser/Driver.h"
-#include "../OperatorUsageMap/OperatorUsageMap.h"
-// #include "DocsGenerator/DocsGenerator.h"
-#include "../Sequence/IfElseStatement.h"
-#include "../Sequence/ForStatement.h"
-#include "../Sequence/WhileStatement.h"
-#include "../OperatorLibrary/TMOperatorLibrary.h"
 #include "OperatorLibrary/GUIOperatorLibrary.h"
 
 

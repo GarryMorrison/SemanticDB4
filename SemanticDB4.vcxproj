@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\SDB_core.h" />
     <ClInclude Include="src\GUI\OperatorLibrary\PopulateGUIOperators.h" />
     <ClInclude Include="src\GUI\OperatorLibrary\GUIOperatorLibrary.h" />
     <ClInclude Include="src\GUI\Associated\GenerateDocs2.h" />

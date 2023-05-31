@@ -240,6 +240,9 @@
     <ClInclude Include="src\GUI\OperatorLibrary\PopulateGUIOperators.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\SDB_core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GUI\SDB_GUI.cpp">
