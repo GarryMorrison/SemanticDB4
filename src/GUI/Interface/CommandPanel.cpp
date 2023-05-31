@@ -821,7 +821,7 @@ void CommandPanel::OnRunAllButtonDown(wxCommandEvent& event)
                 std::stringstream buffer;
                 std::streambuf* old_buffer = std::cout.rdbuf(buffer.rdbuf());
                 driver.result.clear();
-                driver.context.set_window_pointer(this);
+                driver.context.set_window_pointer(static_cast<void *>(this));  // We cast to void* so that ContextList can be wxWidgets free.
                 bool parse_success = driver.parse_string(the_command.ToStdString() + "\n");  // wxString vs std::string again!!
                 std::string captured_text = buffer.str();
                 std::cout.rdbuf(old_buffer);

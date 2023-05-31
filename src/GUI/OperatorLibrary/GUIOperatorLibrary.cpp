@@ -123,7 +123,7 @@ Ket op_gdump_fn1(ContextList& context, const Sequence& input_seq, const Sequence
 
 	std::string captured_text = buffer.str();
 
-	DumpFrame* dump_frame = new DumpFrame(context.get_window_pointer(), "GUI dump operator output", captured_text);
+	DumpFrame* dump_frame = new DumpFrame(static_cast<wxWindow*>(context.get_window_pointer()), "GUI dump operator output", captured_text);
 	return Ket("gdump");
 }
 
@@ -140,6 +140,6 @@ Ket op_gtable(const Superposition& sp, ContextList& context, const std::vector<s
     }
 
     // Now invoke it:
-    TableDialog* table_frame = new TableDialog(context.get_window_pointer(), operators, sp, false);
+    TableDialog* table_frame = new TableDialog(static_cast<wxWindow*>(context.get_window_pointer()), operators, sp, false);
     return Ket("gtable");
 }
