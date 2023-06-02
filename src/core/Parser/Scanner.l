@@ -6,8 +6,8 @@
 #include <string>
 #include <memory>
 
-#include "../SDB_core.h"
-#include "Scanner.h"
+#include "src/core/SDB_core.h"
+#include "src/core/Parser/Scanner.h"
 
 int current_indentation = 0;
 

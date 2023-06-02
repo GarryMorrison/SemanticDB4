@@ -2176,7 +2176,7 @@ Ket op_hash(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> >& 
     unsigned int hash_size = parameters[0]->get_int();
     std::hash<std::string> str_hash;
     size_t ket_hash = str_hash(k.label());
-    size_t new_ket_hash = ket_hash % (1i64 << hash_size);
+    size_t new_ket_hash = ket_hash % (static_cast<size_t>(1) << hash_size);
     return Ket(std::to_string(new_ket_hash), k.value());
 }
 

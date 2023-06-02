@@ -7,8 +7,8 @@
 #include <vector>
 #include <memory>
 
-#include "../SDB_core.h"
-#include "Driver.h"
+#include "src/core/SDB_core.h"
+#include "src/core/Parser/Driver.h"
 
 %}
 
@@ -167,8 +167,8 @@
 %{
 
 #include <memory>
-#include "Driver.h"
-#include "Scanner.h"
+#include "src/core/Parser/Driver.h"
+#include "src/core/Parser/Scanner.h"
 
 /* this "connects" the bison parser in the driver to the flex scanner class
  * object. it defines the yylex() function call to pull the next token from the

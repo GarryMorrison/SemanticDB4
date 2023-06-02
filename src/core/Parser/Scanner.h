@@ -29,7 +29,7 @@
 #endif
 
 // #include "parser.h"
-#include "Parser.tab.h"
+#include "parser.tab.h"
 
 namespace SDB {
 

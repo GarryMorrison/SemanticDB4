@@ -539,8 +539,8 @@ static const flex_int16_t yy_chk[310] =
 #include <string>
 #include <memory>
 
-#include "../SDB_core.h"
-#include "Scanner.h"
+#include "src/core/SDB_core.h"
+#include "src/core/Parser/Scanner.h"
 
 int current_indentation = 0;
 

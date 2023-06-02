@@ -9,6 +9,8 @@
 #pragma once
 #include "../SDB_GUI.h"
 
+class CommandPanel;
+class EditPanel;
 
 class PrimaryFrame : public wxFrame
 {
