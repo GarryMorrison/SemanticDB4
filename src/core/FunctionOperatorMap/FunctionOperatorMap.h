@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2021/12/28
+// Updated 2023/6/4
 // Author Garry Morrison
 // License GPL v3
 //
@@ -101,6 +101,8 @@ public:
     std::set<std::string> list_of_operator_and_statement_names;
 
     std::vector<std::string> get_operator_types(const std::string operator_name);
+
+    void print() const;
 };
 
 extern FunctionOperatorMap fn_map;

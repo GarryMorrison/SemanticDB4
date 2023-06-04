@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2023/5/31
+// Updated 2023/6/4
 // Author Garry Morrison
 // License GPL v3
 //
@@ -11,7 +11,8 @@
 #include "../OperatorLibrary/OperatorLibrary.h"
 #include "../OperatorLibrary/FunctionOperatorLibrary.h"
 #include "../OperatorLibrary/TMOperatorLibrary.h"
-
+#include "../OperatorUsageMap/OperatorUsageMap.h"
+extern OperatorUsageMap operator_usage_map;
 
 
 FunctionOperatorMap::FunctionOperatorMap() {
@@ -853,4 +854,48 @@ std::vector<std::string> FunctionOperatorMap::get_operator_types(const std::stri
     }
 
     return result;
+}
+
+
+template <class T>
+void print_map(const std::string& s, T& our_map) {
+    std::cout << s << std::endl;
+    std::vector<std::string> tmp_sorted;
+    for (const auto& it : our_map) {
+        tmp_sorted.push_back(ket_map.get_str(it.first));
+    }
+    std::sort(tmp_sorted.begin(), tmp_sorted.end());
+    for (const auto& str : tmp_sorted) {
+        std::string star;
+        if (operator_usage_map.usage_is_defined(str)) {
+            star = " * ";
+        }
+        std::cout << "    " << str << star << std::endl;
+    }
+}
+
+void FunctionOperatorMap::print() const { // Doesn't need to be optimized at all.
+    print_map("built_in:", built_in);
+    print_map("compound_built_in:", compound_built_in);
+    print_map("compound_context_built_in:", compound_context_built_in);
+    print_map("sigmoid:", sigmoids);
+    print_map("compound_sigmoid:", compound_sigmoids);
+    print_map("ket_fn:", ket_fn);
+    print_map("context_ket_fn:", context_ket_fn);
+    print_map("context_seq_fn:", context_seq_fn);
+    print_map("compound_ket_fn:", compound_ket_fn);
+    print_map("sp_fn:", sp_fn);
+    print_map("compound_sp_fn:", compound_sp_fn);
+    print_map("seq_fn:", seq_fn);
+    print_map("compound_seq_fn:", compound_seq_fn);
+    print_map("compound_context_sp_fn:", compound_context_sp_fn);
+    print_map("compound_context_seq_fn:", compound_context_seq_fn);
+    print_map("function_1:", whitelist_1);
+    print_map("function_2:", whitelist_2);
+    print_map("function_3:", whitelist_3);
+    print_map("function_4:", whitelist_4);
+    print_map("context_function_1:", context_whitelist_1);
+    print_map("context_function_2:", context_whitelist_2);
+    print_map("context_function_3:", context_whitelist_3);
+    print_map("context_function_4:", context_whitelist_4);
 }
