@@ -1,6 +1,6 @@
 # Semantic DB 4 Ubuntu build instructions
 
-This text file gives brief build instructions for Ubuntu. For windows users, use the provided Visual Studio solution.
+This text file gives brief build instructions for Ubuntu. For windows users, use the provided Visual Studio solution or use the [release .exe](https://github.com/GarryMorrison/SemanticDB4/releases).
 
 The SDB4 code-base is divided into 3 parts, the core library, the CLI interface and the GUI interface. 
 All three require the installation of flex and bison, and for windows [winflexbison](https://github.com/lexxmark/winflexbison).
