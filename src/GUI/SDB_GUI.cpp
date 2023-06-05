@@ -32,7 +32,15 @@ SDB::Driver driver(context, result);
 
 wxIMPLEMENT_APP(SDBApp);
 bool SDBApp::OnInit()
-{                                           
+{  
+
+    // macOS-specific code
+#ifdef __WXOSX__
+        // Create and initialize the wxOSXApp instance
+    wxApp::SetInstance(new wxOSXApp);
+    wxApp::GetInstance()->OnInit();
+#endif
+
     PopulateGUIOperators(fn_map);           // Load GUI operators into our fn_map.
     fn_map.PopulateOperatorSets();          // Need a line to populate fn_map too, from maps to sets for operator names and types.
     operator_usage_map.PopulateUsageMap();  // Need to add a line to this constructor to enable images in wxAutoBufferedPaintDC.
@@ -41,6 +49,17 @@ bool SDBApp::OnInit()
     return true;
 }
 
+int SDBApp::OnExit()
+{
+    // macOS-specific code
+#ifdef __WXOSX__
+        // Cleanup wxOSXApp instance
+    wxApp::GetInstance()->OnExit();
+    wxApp::SetInstance(nullptr);
+#endif
+
+    return wxApp::OnExit();
+}
 
 
 
