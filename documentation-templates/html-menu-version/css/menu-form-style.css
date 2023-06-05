@@ -200,7 +200,7 @@ text-decoration: underline;
 	background-color: transparent;
 }
 
-
+/* FIXME: this ugly hack! Instead of scaling to 75%, just upload images of the right size */
 img {
 	/*transform: scale(0.75);*/
 	transform: scale(0.75) translate(-10%, -15%);
