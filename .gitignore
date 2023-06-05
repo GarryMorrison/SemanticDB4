@@ -3,6 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# flex-bison generated files:
+src/core/Parser/Parser.tab.cpp
+src/core/Parser/Parser.tab.h
+src/core/Parser/flex.cpp
+src/core/Parser/location.hh
+
+
 # User-specific files
 *.rsuser
 *.suo
