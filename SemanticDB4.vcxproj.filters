@@ -180,9 +180,6 @@
     <ClInclude Include="src\core\Parser\Scanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Parser\Parser.tab.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\GUI\Interface\GeneralOperatorsFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -393,12 +390,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\Parser\Driver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Parser\Parser.tab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Parser\Scanner.flex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\Interface\GeneralOperatorsFrame.cpp">
