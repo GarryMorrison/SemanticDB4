@@ -176,6 +176,7 @@
     <ClInclude Include="src\core\OperatorLibrary\FunctionOperatorLibrary.h" />
     <ClInclude Include="src\core\OperatorLibrary\OperatorLibrary.h" />
     <ClInclude Include="src\core\OperatorLibrary\SigmoidLibrary.h" />
+    <ClInclude Include="src\core\Parser\Parser.tab.h" />
     <ClInclude Include="src\core\Parser\Scanner.h" />
     <ClInclude Include="src\core\Sequence\IfElseStatement.h" />
     <ClInclude Include="src\core\Sequence\ForStatement.h" />
@@ -252,6 +253,8 @@
     <ClCompile Include="src\core\OperatorLibrary\FunctionOperatorLibrary.cpp" />
     <ClCompile Include="src\core\OperatorLibrary\OperatorLibrary.cpp" />
     <ClCompile Include="src\core\OperatorLibrary\SigmoidLibrary.cpp" />
+    <ClCompile Include="src\core\Parser\Parser.tab.cpp" />
+    <ClCompile Include="src\core\Parser\Scanner.flex.cpp" />
     <ClCompile Include="src\core\Sequence\IfElseStatement.cpp" />
     <ClCompile Include="src\core\Sequence\ForStatement.cpp" />
     <ClCompile Include="src\core\Operator\FunctionOperator.cpp" />
