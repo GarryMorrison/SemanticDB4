@@ -6,14 +6,16 @@
 #include "ImageViewer.h"
 
 
-cImageViewer::cImageViewer(wxWindow* parent, wxString title) : wxFrame(parent, wxID_ANY, title)
+cImageViewer::cImageViewer(wxWindow* parent, const wxString title, const wxString image_path) : wxFrame(parent, wxID_ANY, title)
 {
+    m_title = title;
     m_scaleToFit = false;
     m_panInProgress = false;
     m_FirstPaint = true;
 
     // m_RawBitmap = wxBitmap("d:\\_big.jpg", wxBITMAP_TYPE_ANY);
-    m_RawBitmap = wxBitmap("6000_4000.jpg", wxBITMAP_TYPE_ANY);
+    // m_RawBitmap = wxBitmap("6000_4000.jpg", wxBITMAP_TYPE_ANY);
+    m_RawBitmap = wxBitmap(image_path, wxBITMAP_TYPE_ANY);
 
     Bind(wxEVT_PAINT, &cImageViewer::OnPaint, this);
     Bind(wxEVT_MOUSEWHEEL, &cImageViewer::OnMouseWheel, this);
@@ -36,6 +38,9 @@ cImageViewer::cImageViewer(wxWindow* parent, wxString title) : wxFrame(parent, w
     // Maximize();
     // m_scaleToFit = true;
     // ScaleToFit();
+
+    SetSize(1200, 800);
+    Show();
 }
 
 void cImageViewer::ScaleToFit()
@@ -68,7 +73,8 @@ void cImageViewer::DoDrawCanvas(wxGraphicsContext* gc)
 {
     gc->DrawBitmap(m_DrawBitmap, m_Start_X_Pos, m_Start_Y_Pos, m_BitmapWidth, m_BitmapHeight);
 
-    SetTitle(wxString::Format("x: %.2f, y: %.2f", m_Start_X_Pos, m_Start_Y_Pos));
+    // SetTitle(wxString::Format("x: %.2f, y: %.2f", m_Start_X_Pos, m_Start_Y_Pos));
+    SetTitle(wxString::Format("%s: x: %.2f, y: %.2f", m_title, m_Start_X_Pos, m_Start_Y_Pos));
 }
 
 

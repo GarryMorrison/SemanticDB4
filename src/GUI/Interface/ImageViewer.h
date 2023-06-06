@@ -11,7 +11,7 @@
 class cImageViewer : public wxFrame
 {
 public:
-    cImageViewer(wxWindow* parent, wxString title);
+    cImageViewer(wxWindow* parent, const wxString title, const wxString image_path);
     wxRect2DDouble GetUntransformedRect() const;
 
 protected:
@@ -32,6 +32,8 @@ private:
     void ProcessPan(const wxPoint&, bool);
     void ScaleToFit();
     void FinishPan(bool);
+
+    wxString m_title;
 
     double m_ZoomFactor{};
     int m_BitmapWidth{};
