@@ -921,6 +921,9 @@ void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
                 {
                     wxMessageBox("Graphviz generated an image");
                     image_success = true;
+
+                    // Now try to display it:
+                    ImageFrame* image_frame = new ImageFrame("Graph", filename_png);
                 }
                 else
                 {

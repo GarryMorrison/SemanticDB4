@@ -69,6 +69,11 @@
 #include <wx/url.h>
 #include <wx/sstream.h>
 #include <wx/filename.h>
+
+#include <wx/image.h>  
+#include <wx/sizer.h>
+#include <wx/statbmp.h>
+
 #include <set>
 #include <map>
 #include <string>
@@ -98,6 +103,7 @@
 #include "Interface/EditPanel.h"
 #include "Interface/OutputFrame.h"
 #include "Interface/CreateNewFileDialog.h"
+#include "Interface/ImageFrame.h"
 
 #include "Associated/ActiveTableDialog.h"
 #include "Associated/TableDialog.h"
