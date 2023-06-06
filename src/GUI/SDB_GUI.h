@@ -74,6 +74,8 @@
 #include <wx/sizer.h>
 #include <wx/statbmp.h>
 
+#include <wx/graphics.h>
+#include <wx/dcbuffer.h>
 
 #include <set>
 #include <map>
@@ -105,6 +107,7 @@
 #include "Interface/OutputFrame.h"
 #include "Interface/CreateNewFileDialog.h"
 #include "Interface/ImageFrame.h"
+#include "Interface/ImageViewer.h"
 
 #include "Associated/ActiveTableDialog.h"
 #include "Associated/TableDialog.h"
