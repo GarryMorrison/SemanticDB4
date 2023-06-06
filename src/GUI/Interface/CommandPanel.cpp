@@ -930,7 +930,7 @@ void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
                     // Try with a full path:
                     std::filesystem::path current_path = std::filesystem::current_path();
                     std::filesystem::path full_filename_png = current_path / filename_png;
-                    ImageFrame* image_frame = new ImageFrame("Graph", full_filename_png.string());  // Still reports unknown data format.
+                    ImageFrame* image_frame = new ImageFrame(driver.context.get_context_name(), full_filename_png.string());  // Still reports unknown data format.
                 }
                 else
                 {
