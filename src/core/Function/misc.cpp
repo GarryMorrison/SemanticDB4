@@ -11,6 +11,7 @@
 #include <sstream>
 #include "misc.h"
 #include <regex>
+#include <random>
 
 
 bool double_eq(const double v1, const double v2) {
@@ -163,3 +164,18 @@ uint32_t APHash(const char* str, uint32_t length)
     return hash;
 }
 
+
+std::string generate_random_string(int length)
+{
+    const std::string charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_int_distribution<int> distribution(0, static_cast<int>(charset.size()) - 1);
+
+    std::string random_string;
+    for (int i = 0; i < length; ++i) {
+        random_string += charset[distribution(generator)];
+    }
+
+    return random_string;
+}

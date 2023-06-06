@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2023/5/12
+// Updated 2023/6/6
 // Author Garry Morrison
 // License GPL v3
 //
@@ -32,3 +32,4 @@ std::string strip_leading_spaces(const std::string& s, const unsigned int spaces
 std::size_t int_vector_to_hash(const std::vector<uint32_t>& vec);
 // std::size_t int_vector_to_hash(const std::vector<ulong>& vec);
 uint32_t APHash(const char* str, uint32_t length);
+std::string generate_random_string(int length);
