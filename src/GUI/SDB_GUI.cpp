@@ -41,6 +41,8 @@ bool SDBApp::OnInit()
     wxApp::GetInstance()->OnInit();
 #endif
 
+    ::wxInitAllImageHandlers();  // This fixes the unknown image format bug in ImageFrame!
+
     PopulateGUIOperators(fn_map);           // Load GUI operators into our fn_map.
     fn_map.PopulateOperatorSets();          // Need a line to populate fn_map too, from maps to sets for operator names and types.
     operator_usage_map.PopulateUsageMap();  // Need to add a line to this constructor to enable images in wxAutoBufferedPaintDC.
