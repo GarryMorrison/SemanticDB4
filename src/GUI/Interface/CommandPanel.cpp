@@ -923,7 +923,12 @@ void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
                     image_success = true;
 
                     // Now try to display it:
-                    ImageFrame* image_frame = new ImageFrame("Graph", filename_png);
+                    // ImageFrame* image_frame = new ImageFrame("Graph", filename_png);  // Doesn't work yet!
+
+                    // Try with a full path:
+                    std::filesystem::path current_path = std::filesystem::current_path();
+                    std::filesystem::path full_filename_png = current_path / filename_png;
+                    ImageFrame* image_frame = new ImageFrame("Graph", full_filename_png.string());  // Still reports unknown data format.
                 }
                 else
                 {

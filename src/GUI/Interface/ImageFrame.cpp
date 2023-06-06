@@ -14,7 +14,7 @@ ImageFrame::ImageFrame(const wxString& title, const wxString& image_path) : wxFr
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
 	// Load the png image:
-	wxImage image(image_path, wxBITMAP_TYPE_PNG);
+	wxImage image(image_path);
 	if (!image.IsOk())
 	{
 		wxMessageBox("Image could not be loaded: " + image_path);  // FIXME: For some reason, when this fails SDB.exe doesn't exit from task manager!
