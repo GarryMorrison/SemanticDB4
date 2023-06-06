@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/2/11
+// Updated 2023/6/6
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,6 +19,7 @@ public:
 	void OnRunButtonDown(wxCommandEvent& event);
 	void OnDumpButtonDown(wxCommandEvent& event);
 	void OnResetButtonDown(wxCommandEvent& event);
+	void OnGraphButtonDown(wxCommandEvent& event);
 	void OnPageChange(wxCommandEvent& event);
 	void OnPageEdit(wxCommandEvent& event);
 	void OnPageClose(wxCommandEvent& event);

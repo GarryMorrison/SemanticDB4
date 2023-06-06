@@ -8,6 +8,9 @@
 
 #include "EditPanel.h"
 extern SDB::Driver driver;
+#include <fstream>
+#include <cstdlib>
+
 
 EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	: wxPanel(parent, id, wxDefaultPosition, wxSize(400, 300), 0)
@@ -18,6 +21,7 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	wxButton* run_button = new wxButton(this, ID_Edit_Run, "Run");
 	wxButton* dump_button = new wxButton(this, ID_Edit_Dump, "Dump");
 	wxButton* reset_button = new wxButton(this, ID_Edit_Reset, "Reset");
+	wxButton* graph_button = new wxButton(this, ID_Edit_Graph, "Graph");
 	wxCheckBox* m_auto_save = new wxCheckBox(this, wxID_ANY, "Auto Save");
 	m_auto_save->SetValue(m_use_auto_save);
 	wxArrayString context_list;  
@@ -37,6 +41,8 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	hbox->Add(m_auto_save);
 	hbox->AddSpacer(10);
 	hbox->Add(m_context_selector);
+	hbox->AddSpacer(10);
+	hbox->Add(graph_button);
 
 	vbox->AddSpacer(5);
 	// vbox->Add(run_button, wxSizerFlags(0).Left().Border(wxLEFT | wxRIGHT, 10));
@@ -59,6 +65,7 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	run_button->Bind(wxEVT_BUTTON, &EditPanel::OnRunButtonDown, this);
 	dump_button->Bind(wxEVT_BUTTON, &EditPanel::OnDumpButtonDown, this);
 	reset_button->Bind(wxEVT_BUTTON, &EditPanel::OnResetButtonDown, this);
+	graph_button->Bind(wxEVT_BUTTON, &EditPanel::OnGraphButtonDown, this);
 	// m_auto_save->Bind(wxEVT_CHECKBOX, &EditPanel::OnAutoSaveCheck, this);
 	m_auto_save->Bind(wxEVT_CHECKBOX, [=](wxCommandEvent& event) {
 		m_use_auto_save = m_auto_save->GetValue();
@@ -120,6 +127,97 @@ void EditPanel::OnResetButtonDown(wxCommandEvent& event)
 	if (dlg->ShowModal() == wxID_OK)
 	{
 		driver.context.reset_current_context();
+	}
+}
+
+void EditPanel::OnGraphButtonDown(wxCommandEvent& event)
+{
+	std::string random_string = generate_random_string(15);
+	std::string filename_dot = random_string + ".dot";
+	std::string filename_png = random_string + ".png";
+
+	if (!std::filesystem::exists(filename_dot) && !std::filesystem::exists(filename_png))
+	{
+		wxMessageBox("Graph is about to generate: " + filename_dot);
+		std::string dot_text = context_to_dot(driver.context);
+		wxMessageBox(dot_text);
+
+		bool success = false;
+		std::ofstream our_file(filename_dot);
+		if (our_file.is_open())
+		{
+			our_file << dot_text << std::endl;
+			our_file.close();
+			success = true;
+		}
+		else
+		{
+			wxMessageBox("Graph failed to open: " + filename_dot);
+		}
+
+		bool image_success = false;
+		if (success)  // Convert dot file to a png image:
+		{
+			wxMessageBox("Graph about to invoke the dot command");
+			// Now check if dot is installed:
+			int exit_code = std::system("dot --version");
+			if (exit_code == 0)
+			{
+				wxMessageBox("Graphviz is installed");
+				// Now create the image:
+				// dot -Tpng filename.dot -o outfile.png
+				std::string dot_command = "dot -Tpng " + filename_dot + " -o " + filename_png;
+
+				int dot_exit_code = std::system(dot_command.c_str());  // There is no user controllable input, so should be safe to run.
+				if (dot_exit_code == 0)
+				{
+					wxMessageBox("Graphviz generated an image");
+					image_success = true;
+
+					// Now try to display it:
+					// ImageFrame* image_frame = new ImageFrame("Graph", filename_png);  // Doesn't work yet!
+
+					// Try with a full path:
+					std::filesystem::path current_path = std::filesystem::current_path();
+					std::filesystem::path full_filename_png = current_path / filename_png;
+					ImageFrame* image_frame = new ImageFrame(driver.context.get_context_name(), full_filename_png.string());  // Still reports unknown data format.
+				}
+				else
+				{
+					wxMessageBox("Graphviz failed to generate an image");
+				}
+			}
+			else
+			{
+				wxMessageBox("Graphviz not installed, or not in path");
+			}
+		}
+
+		if (success)  // Tidy up:
+		{
+			try
+			{
+				std::filesystem::remove(filename_dot);
+			}
+			catch (const std::filesystem::filesystem_error& e)
+			{
+				(void)e; // To silence C4101 warning.
+				wxMessageBox("Graph failed to delete temporary file: " + filename_dot);
+			}
+		}
+
+		if (image_success)  // Delete the temporary image too:
+		{
+			try
+			{
+				std::filesystem::remove(filename_png);
+			}
+			catch (const std::filesystem::filesystem_error& e)
+			{
+				(void)e; // To silence C4101 warning.
+				wxMessageBox("Graph failed to delete temporary file: " + filename_png);
+			}
+		}
 	}
 }
 

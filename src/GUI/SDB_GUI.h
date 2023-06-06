@@ -274,6 +274,7 @@ enum
     ID_Edit_Run,
     ID_Edit_Dump,
     ID_Edit_Reset,
+    ID_Edit_Graph,
 
     ID_Copy_All,
 
