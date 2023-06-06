@@ -13,6 +13,8 @@ ImageFrame::ImageFrame(const wxString& title, const wxString& image_path) : wxFr
 {
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
+	::wxInitAllImageHandlers();  // This fixes the unknown format bug!
+
 	// Load the png image:
 	wxImage image(image_path);
 	if (!image.IsOk())

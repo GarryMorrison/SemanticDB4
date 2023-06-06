@@ -885,6 +885,7 @@ void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
     std::string random_string = generate_random_string(15);
     std::string filename_dot = random_string + ".dot";
     std::string filename_png = random_string + ".png";
+    
     if (!std::filesystem::exists(filename_dot) && !std::filesystem::exists(filename_png))
     {
         wxMessageBox("Graph is about to generate: " + filename_dot);
@@ -916,6 +917,7 @@ void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
                 // Now create the image:
                 // dot -Tpng filename.dot -o outfile.png
                 std::string dot_command = "dot -Tpng " + filename_dot + " -o " + filename_png;
+                
                 int dot_exit_code = std::system(dot_command.c_str());  // There is no user controllable input, so should be safe to run.
                 if (dot_exit_code == 0)
                 {
