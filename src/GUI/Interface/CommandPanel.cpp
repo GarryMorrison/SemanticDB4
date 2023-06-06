@@ -8,6 +8,9 @@
 
 #include "CommandPanel.h"
 extern SDB::Driver driver;
+#include <fstream>
+#include <cstdlib>
+
 
 CommandPanel::CommandPanel(wxPanel* parent, wxWindowID id)
     : wxPanel(parent, id, wxDefaultPosition, wxSize(400, 300), 0)
@@ -878,7 +881,84 @@ void CommandPanel::OnSaveAsButtonDown(wxCommandEvent& event)
 
 void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
 {
-    wxMessageBox("Graph button pressed.\nLater we will insert a graph!\nFor now see save-as-dot[].");
+    // wxMessageBox("Graph button pressed.\nLater we will insert a graph!\nFor now see save-as-dot[].");
+    std::string random_string = generate_random_string(15);
+    std::string filename_dot = random_string + ".dot";
+    std::string filename_png = random_string + ".png";
+    if (!std::filesystem::exists(filename_dot) && !std::filesystem::exists(filename_png))
+    {
+        wxMessageBox("Graph is about to generate: " + filename_dot);
+        std::string dot_text = context_to_dot(driver.context);
+        wxMessageBox(dot_text);
+
+        bool success = false;
+        std::ofstream our_file(filename_dot);
+        if (our_file.is_open())
+        {
+            our_file << dot_text << std::endl;
+            our_file.close();
+            success = true;
+        }
+        else
+        {
+            wxMessageBox("Graph failed to open: " + filename_dot);
+        }
+
+        bool image_success = false;
+        if (success)  // Convert dot file to a png image:
+        {
+            wxMessageBox("Graph about to invoke the dot command");
+            // Now check if dot is installed:
+            int exit_code = std::system("dot --version");
+            if (exit_code == 0)
+            {
+                wxMessageBox("Graphviz is installed");
+                // Now create the image:
+                // dot -Tpng filename.dot -o outfile.png
+                std::string dot_command = "dot -Tpng " + filename_dot + " -o " + filename_png;
+                int dot_exit_code = std::system(dot_command.c_str());  // There is no user controllable input, so should be safe to run.
+                if (dot_exit_code == 0)
+                {
+                    wxMessageBox("Graphviz generated an image");
+                    image_success = true;
+                }
+                else
+                {
+                    wxMessageBox("Graphviz failed to generate an image");
+                }
+            }
+            else
+            {
+                wxMessageBox("Graphviz not installed, or not in path");
+            }
+        }
+
+        if (success)  // Tidy up:
+        {
+            try
+            {
+                std::filesystem::remove(filename_dot);
+            }
+            catch (const std::filesystem::filesystem_error& e)
+            {
+                (void)e; // To silence C4101 warning.
+                wxMessageBox("Graph failed to delete temporary file: " + filename_dot);
+            }
+        }
+
+        if (image_success)  // Delete the temporary image too:
+        {
+            try
+            {
+                std::filesystem::remove(filename_png);
+            }
+            catch (const std::filesystem::filesystem_error& e)
+            {
+                (void)e; // To silence C4101 warning.
+                wxMessageBox("Graph failed to delete temporary file: " + filename_png);
+            }
+        }
+    }
 }
 
 void CommandPanel::OnResetContextButtonDown(wxCommandEvent& event)
