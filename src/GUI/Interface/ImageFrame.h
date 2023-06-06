@@ -9,7 +9,6 @@
 #pragma once
 #include "../SDB_GUI.h"
 
-// wxImage::AddHandler(new wxPNGHandler);
 
 class ImageFrame : public wxFrame
 {
