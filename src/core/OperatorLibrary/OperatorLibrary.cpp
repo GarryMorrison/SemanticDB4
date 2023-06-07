@@ -2435,7 +2435,7 @@ std::string context_to_dot(ContextList& context)  // Need to test it is correct!
                     node_label_idx_map[stored_RHS] = node_idx;
                     dot_file += "  " + std::to_string(node_idx) + " [ shape=box label=\"" + stored_RHS + "\" ]\n";
                 }
-                dot_file += "  " + std::to_string(node_label_idx_map[k_label]) + " -> " + std::to_string(node_label_idx_map[stored_RHS]) + " [ label=\"" + op_str + "\" ]\n";
+                dot_file += "  " + std::to_string(node_label_idx_map[k_label]) + " -> " + std::to_string(node_label_idx_map[stored_RHS]) + " [ arrowhead=box, label=\"" + op_str + "\" ]\n";
             }
             if (rule_type == RULEMEMOIZE)  // Handle memoizing rules branch:  Maybe later visually distinguish between stored and memoizing rules, using arrow-types perhaps?
             {
@@ -2450,7 +2450,7 @@ std::string context_to_dot(ContextList& context)  // Need to test it is correct!
                     node_label_idx_map[stored_RHS] = node_idx;
                     dot_file += "  " + std::to_string(node_idx) + " [ shape=box label=\"" + stored_RHS + "\" ]\n";
                 }
-                dot_file += "  " + std::to_string(node_label_idx_map[k_label]) + " -> " + std::to_string(node_label_idx_map[stored_RHS]) + " [ label=\"" + op_str + "\" ]\n";
+                dot_file += "  " + std::to_string(node_label_idx_map[k_label]) + " -> " + std::to_string(node_label_idx_map[stored_RHS]) + " [ arrowhead=tee, label=\"" + op_str + "\" ]\n";
             }
             Sequence RHS = context.recall(op_idx, ket_idx)->to_seq();
             if (RHS.size() <= 1) {
