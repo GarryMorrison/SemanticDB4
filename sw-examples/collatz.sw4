@@ -1,0 +1,22 @@
+-- An implementation of Collatz
+--
+-- Author: Garry Morrison
+-- Created: 2023/6/7
+-- Updated: 2023/6/7
+
+|context> => |Collatz>
+
+
+-- define the Collatz operator
+-- and use memoization, so calculations are stored.
+collatz |*> !=>
+    if( mod[2] |__self> == |0>):
+        divide-by[2] |__self>
+    else:
+        plus[1] times-by[3] |__self>
+    end:
+
+-- display a table of some of them:
+table[number, collatz] (|1> .. |100>)
+
+-- then invoke a graph of them
