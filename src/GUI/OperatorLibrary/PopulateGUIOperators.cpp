@@ -21,4 +21,7 @@ void PopulateGUIOperators(FunctionOperatorMap& map)
 
 	idx = ket_map.get_idx("gtable");
 	map.compound_context_sp_fn.emplace(idx, &op_gtable);
+
+	idx = ket_map.get_idx("ggraph");
+	map.context_whitelist_1.emplace(idx, &op_ggraph_fn1);
 }

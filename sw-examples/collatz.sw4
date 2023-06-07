@@ -19,4 +19,6 @@ collatz |*> !=>
 -- display a table of some of them:
 table[number, collatz] (|1> .. |100>)
 
--- then invoke a graph of them
+-- then invoke a graph of them:
+ggraph(|*>) rel-kets[*]
+

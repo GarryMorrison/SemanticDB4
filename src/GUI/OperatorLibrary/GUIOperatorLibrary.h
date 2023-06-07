@@ -14,3 +14,5 @@ Ket op_gmessage(const Ket& k);
 Ket op_gdump_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);
 
 Ket op_gtable(const Superposition& sp, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
+
+Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);
