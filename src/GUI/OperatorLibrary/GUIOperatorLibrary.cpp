@@ -203,13 +203,13 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
                     case RULESTORED: {
                         box_shape = "shape=box ";
                         arrowhead_type = "arrowhead=box, ";
-                        rule_sp = Superposition(rule_value->to_string());
+                        rule_sp = Superposition(rule_value->to_string() + "\n");
                         break;
                     }
                     case RULEMEMOIZE: {
                         box_shape = "shape=box ";
                         arrowhead_type = "arrowhead=tee, ";
-                        rule_sp = Superposition(rule_value->to_string());
+                        rule_sp = Superposition(rule_value->to_string() + "\n");
                         break;
                     }
                     default:
@@ -240,6 +240,96 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
         }
     }
     dot_file += "}\n";
-    std::cout << dot_file;
+    std::cout << dot_file;  // Comment this out later, when we are finished with debugging.
+
+    // Now on to the GUI component of the ggraph operator:
+    std::string random_string = generate_random_string(15);
+    std::string filename_dot = random_string + ".dot";
+    std::string filename_png = random_string + ".png";
+
+    if (!std::filesystem::exists(filename_dot) && !std::filesystem::exists(filename_png))
+    {
+        wxMessageBox("Graph is about to generate: " + filename_dot);
+        wxMessageBox(dot_file);
+
+        bool success = false;
+        std::ofstream our_file(filename_dot);
+        if (our_file.is_open())
+        {
+            our_file << dot_file << std::endl;
+            our_file.close();
+            success = true;
+        }
+        else
+        {
+            wxMessageBox("Graph failed to open: " + filename_dot);
+        }
+
+        bool image_success = false;
+        if (success)  // Convert dot file to a png image:
+        {
+            wxMessageBox("Graph about to invoke the dot command");
+            // Now check if dot is installed:
+            int exit_code = std::system("dot --version");
+            if (exit_code == 0)
+            {
+                wxMessageBox("Graphviz is installed");
+                // Now create the image:
+                // dot -Tpng filename.dot -o outfile.png
+                std::string dot_command = "dot -Tpng " + filename_dot + " -o " + filename_png;
+
+                int dot_exit_code = std::system(dot_command.c_str());  // There is no user controllable input, so should be safe to run.
+                if (dot_exit_code == 0)
+                {
+                    wxMessageBox("Graphviz generated an image");
+                    image_success = true;
+
+                    // Now try to display it:
+                    // ImageFrame* image_frame = new ImageFrame("Graph", filename_png);  // Doesn't work yet!
+
+                    // Try with a full path:
+                    std::filesystem::path current_path = std::filesystem::current_path();
+                    std::filesystem::path full_filename_png = current_path / filename_png;
+                    // ImageFrame* image_frame = new ImageFrame(driver.context.get_context_name(), full_filename_png.string());
+                    cImageViewer* image_frame = new cImageViewer(static_cast<wxWindow*>(context.get_window_pointer()), context.get_context_name(), full_filename_png.string());
+                }
+                else
+                {
+                    wxMessageBox("Graphviz failed to generate an image");
+                }
+            }
+            else
+            {
+                wxMessageBox("Graphviz not installed, or not in path");
+            }
+        }
+
+        if (success)  // Tidy up:
+        {
+            try
+            {
+                std::filesystem::remove(filename_dot);
+            }
+            catch (const std::filesystem::filesystem_error& e)
+            {
+                (void)e; // To silence C4101 warning.
+                wxMessageBox("Graph failed to delete temporary file: " + filename_dot);
+            }
+        }
+
+        if (image_success)  // Delete the temporary image too:
+        {
+            try
+            {
+                std::filesystem::remove(filename_png);
+            }
+            catch (const std::filesystem::filesystem_error& e)
+            {
+                (void)e; // To silence C4101 warning.
+                wxMessageBox("Graph failed to delete temporary file: " + filename_png);
+            }
+        }
+    }
+
     return Ket("ggraph");
 }

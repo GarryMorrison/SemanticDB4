@@ -8,6 +8,7 @@
 
 #pragma once
 #include "../../core/Sequence/Ket.h"
+#include <fstream>
 
 Ket op_gmessage(const Ket& k);
 
