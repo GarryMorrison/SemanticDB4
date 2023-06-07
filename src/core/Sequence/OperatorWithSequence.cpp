@@ -86,7 +86,8 @@ const std::string OperatorWithSequence::to_string() const {
         // std::string post = " ) ";
         std::string pre = "(";
         std::string post = ")";
-        if ((*seq_vec_iter)->is_ket()) { pre = ""; post = ""; }
+        // if ((*seq_vec_iter)->is_ket()) { pre = ""; post = ""; }
+        if ((*seq_vec_iter)->is_ket()) { pre = " "; post = ""; }
         // s += (*op_vec_iter)->to_string() + " ( " + (*seq_vec_iter)->to_string() + " ) ";
         s += (*op_vec_iter)->to_string() + pre + (*seq_vec_iter)->to_string() + post;
     }
