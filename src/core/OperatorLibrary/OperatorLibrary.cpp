@@ -2437,6 +2437,21 @@ std::string context_to_dot(ContextList& context)  // Need to test it is correct!
                 }
                 dot_file += "  " + std::to_string(node_label_idx_map[k_label]) + " -> " + std::to_string(node_label_idx_map[stored_RHS]) + " [ label=\"" + op_str + "\" ]\n";
             }
+            if (rule_type == RULEMEMOIZE)  // Handle memoizing rules branch:  Maybe later visually distinguish between stored and memoizing rules, using arrow-types perhaps?
+            {
+                std::string stored_RHS = context.recall(op_idx, ket_idx)->to_string();
+                string_replace_all(stored_RHS, "|", "\\|");
+                string_replace_all(stored_RHS, ">", "&gt;");
+                string_replace_all(stored_RHS, "\n", "\\n");
+                string_replace_all(stored_RHS, "\"", "\\\"");
+                if (node_label_idx_map.find(stored_RHS) == node_label_idx_map.end())
+                {
+                    node_idx++;
+                    node_label_idx_map[stored_RHS] = node_idx;
+                    dot_file += "  " + std::to_string(node_idx) + " [ shape=box label=\"" + stored_RHS + "\" ]\n";
+                }
+                dot_file += "  " + std::to_string(node_label_idx_map[k_label]) + " -> " + std::to_string(node_label_idx_map[stored_RHS]) + " [ label=\"" + op_str + "\" ]\n";
+            }
             Sequence RHS = context.recall(op_idx, ket_idx)->to_seq();
             if (RHS.size() <= 1) {
                 for (const auto& k2 : RHS.to_sp()) {
