@@ -44,7 +44,8 @@ AppAbout::AppAbout(wxWindow* parent, long style)
     // wxBitmap bitmap = wxBitmap(wxICON(sample));  // Modify the Bitmap/Icon later.
     // aboutpane->Add(new wxStaticBitmap(this, wxID_ANY, bitmap),
     //     0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 20);
-    aboutpane->Add(aboutinfo, 1, wxEXPAND);
+    aboutpane->Add(60, 0);
+    aboutpane->Add(aboutinfo, 1, wxALIGN_CENTER);
     aboutpane->Add(60, 0);
 
     // about complete
