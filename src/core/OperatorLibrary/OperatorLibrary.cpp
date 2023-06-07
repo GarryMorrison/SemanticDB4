@@ -2403,7 +2403,11 @@ std::string context_to_dot(ContextList& context)  // Need to test it is correct!
         std::vector<ulong> supported_ops = context.supported_ops(idx);
         operators.insert(std::begin(supported_ops), std::end(supported_ops));
     }
-    std::string dot_file = "digraph G {\n  node [ shape=Mrecord ]\n";
+    // std::string dot_file = "digraph G {\n  node [ shape=Mrecord ]\n";
+    std::string dot_file = "digraph G {\n";
+    dot_file += "  labelloc=\"t\";\n";
+    dot_file += "  label=\"" + context.get_context_name() + "\";\n";
+    dot_file += "  node [ shape=Mrecord ]\n";
     unsigned int cluster_idx = 0;
     unsigned int node_idx = 0;
     std::map<std::string, unsigned int> node_label_idx_map;
