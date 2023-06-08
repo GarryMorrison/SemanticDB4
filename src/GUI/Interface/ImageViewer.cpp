@@ -91,7 +91,8 @@ void cImageViewer::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.Clear();
 
     // direct2d renderer
-    wxGraphicsRenderer* d2dr = wxGraphicsRenderer::GetDirect2DRenderer();
+    // wxGraphicsRenderer* d2dr = wxGraphicsRenderer::GetDirect2DRenderer();  // This is Windows specific!
+    wxGraphicsRenderer* d2dr = wxGraphicsRenderer::GetDefaultRenderer();
     wxGraphicsContext* gc = d2dr->CreateContext(dc);
 
     // wxGraphicsContext* gc = wxGraphicsContext::Create(dc);

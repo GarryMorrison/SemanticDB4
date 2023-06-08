@@ -33,14 +33,6 @@ SDB::Driver driver(context, result);
 wxIMPLEMENT_APP(SDBApp);
 bool SDBApp::OnInit()
 {  
-
-    // macOS-specific code
-#ifdef __WXOSX__
-        // Create and initialize the wxOSXApp instance
-    wxApp::SetInstance(new wxOSXApp);
-    wxApp::GetInstance()->OnInit();
-#endif
-
     ::wxInitAllImageHandlers();  // This fixes the unknown image format bug in ImageFrame!
 
     PopulateGUIOperators(fn_map);           // Load GUI operators into our fn_map.
@@ -53,13 +45,6 @@ bool SDBApp::OnInit()
 
 int SDBApp::OnExit()
 {
-    // macOS-specific code
-#ifdef __WXOSX__
-        // Cleanup wxOSXApp instance
-    wxApp::GetInstance()->OnExit();
-    wxApp::SetInstance(nullptr);
-#endif
-
     return wxApp::OnExit();
 }
 
