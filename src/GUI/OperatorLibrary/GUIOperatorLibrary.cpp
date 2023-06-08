@@ -147,9 +147,12 @@ Ket op_gtable(const Superposition& sp, ContextList& context, const std::vector<s
 Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one)
 {
     if (input_seq.is_empty_ket() || one.is_empty_ket()) { return Ket(); }
-    
-    bool verbose_message_box = false;
 
+    bool verbose_message_box = false;
+    std::string dot_file = generate_dot_string(context, input_seq, one);
+    if (dot_file.empty()) { return Ket(); }
+
+    /*
     Superposition input_sp = input_seq.to_sp().apply_sigmoid(&clean);
     Superposition operators_sp = one.to_sp();
 
@@ -195,15 +198,6 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
         std::string object_label = object.label();
         bool found_rule = false;
         ulong object_idx = object.label_idx();
-
-        /* Shifted down lower, since if we put it here, we learn unwanted nodes when they don't have an operator defined for them.
-        // Learn node index for our object:
-        if (node_label_idx_map.find(object_label) == node_label_idx_map.end()) {
-            node_idx++;
-            node_label_idx_map[object_label] = node_idx;
-            dot_file += "  " + std::to_string(node_idx) + " [ label=\"" + object_label + "\" ]\n";
-        }
-        */
 
         for (ulong requested_op : requested_operators)
         {
@@ -307,6 +301,7 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
         }
     }
     dot_file += "}\n";
+    */
 
     if (verbose_message_box)
     {
