@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/3/27
+// Updated 2023/6/8
 // Author Garry Morrison
 // License GPL v3
 //
@@ -5063,8 +5063,22 @@ OperatorUsageMap::OperatorUsageMap() {
         "        NB: simple operators are supported in the operator sequence case\n\n"
         "    examples:\n\n"
         "    see also:\n"
-        "        dump, gmessage\n";
+        "        dump, ggraph, gmessage\n";
 
+    operator_usage_map.map["ggraph"] =
+        "\nggraph:\n"
+        "    description:\n"
+        "        ggraph(|*>) input-sp\n"
+        "        ggraph(|op: op1> + |op: op2> + ... + |op: opn>) input-sp\n"
+        "        ggraph uses Graphviz and the dot language to generate a visual graph of the current context\n"
+        "        when given the |*> ket, ggraph graphs all knowledge for the kets given in input-sp\n"
+        "        when given kets with the \"op: \" prefix, then only graph the knowledge with respect to those operators\n"
+        "        Note, it is quite slow!\n"
+        "        This is because it invokes \"dot\" from the commandline using std::system()\n"
+        "        This also means dot must be in the current path for ggraph to work\n\n"
+        "    examples:\n\n"
+        "    see also:\n"
+        "        gdump\n";
 
 
 

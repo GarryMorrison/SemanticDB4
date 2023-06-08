@@ -381,7 +381,7 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
                 }
                 else
                 {
-                    if (verbose_message_box)
+                    if (true || verbose_message_box)  // For now, allow generation of this message.
                     {
                         wxMessageBox("Graphviz failed to generate an image");
                     }
