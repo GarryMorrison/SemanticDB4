@@ -35,11 +35,11 @@ bool SDBApp::OnInit()
 {  
 
     // macOS-specific code
-#ifdef __WXOSX__
+//#ifdef __WXOSX__
         // Create and initialize the wxOSXApp instance
-    wxApp::SetInstance(new wxOSXApp);
-    wxApp::GetInstance()->OnInit();
-#endif
+//    wxApp::SetInstance(new wxOSXApp);
+//    wxApp::GetInstance()->OnInit();
+//#endif
 
     ::wxInitAllImageHandlers();  // This fixes the unknown image format bug in ImageFrame!
 
