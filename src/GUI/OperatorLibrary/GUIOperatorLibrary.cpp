@@ -148,6 +148,8 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
 {
     if (input_seq.is_empty_ket() || one.is_empty_ket()) { return Ket(); }
     
+    bool verbose_message_box = false;
+
     Superposition input_sp = input_seq.to_sp().apply_sigmoid(&clean);
     Superposition operators_sp = one.to_sp();
 
@@ -305,7 +307,11 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
         }
     }
     dot_file += "}\n";
-    std::cout << dot_file;  // Comment this out later, when we are finished with debugging.
+
+    if (verbose_message_box)
+    {
+        std::cout << dot_file;  // Comment this out later, when we are finished with debugging.
+    }
 
     // Now on to the GUI component of the ggraph operator:
     std::string random_string = generate_random_string(15);
@@ -314,8 +320,11 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
 
     if (!std::filesystem::exists(filename_dot) && !std::filesystem::exists(filename_png))
     {
-        wxMessageBox("Graph is about to generate: " + filename_dot);
-        wxMessageBox(dot_file);
+        if (verbose_message_box)
+        {
+            wxMessageBox("Graph is about to generate: " + filename_dot);
+            wxMessageBox(dot_file);
+        }
 
         bool success = false;
         std::ofstream our_file(filename_dot);
@@ -333,12 +342,20 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
         bool image_success = false;
         if (success)  // Convert dot file to a png image:
         {
-            wxMessageBox("Graph about to invoke the dot command");
+            if (verbose_message_box)
+            {
+                wxMessageBox("Graph about to invoke the dot command");
+            }
+
             // Now check if dot is installed:
             int exit_code = std::system("dot --version");
             if (exit_code == 0)
             {
-                wxMessageBox("Graphviz is installed");
+                if (verbose_message_box)
+                {
+                    wxMessageBox("Graphviz is installed");
+                }
+                
                 // Now create the image:
                 // dot -Tpng filename.dot -o outfile.png
                 std::string dot_command = "dot -Tpng " + filename_dot + " -o " + filename_png;
@@ -346,7 +363,11 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
                 int dot_exit_code = std::system(dot_command.c_str());  // There is no user controllable input, so should be safe to run.
                 if (dot_exit_code == 0)
                 {
-                    wxMessageBox("Graphviz generated an image");
+                    if (verbose_message_box)
+                    {
+                        wxMessageBox("Graphviz generated an image");
+                    }
+                    
                     image_success = true;
 
                     // Now try to display it:
@@ -360,7 +381,10 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
                 }
                 else
                 {
-                    wxMessageBox("Graphviz failed to generate an image");
+                    if (verbose_message_box)
+                    {
+                        wxMessageBox("Graphviz failed to generate an image");
+                    }
                 }
             }
             else
