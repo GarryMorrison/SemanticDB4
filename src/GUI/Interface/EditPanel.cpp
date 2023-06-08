@@ -132,17 +132,23 @@ void EditPanel::OnResetButtonDown(wxCommandEvent& event)
 
 void EditPanel::OnGraphButtonDown(wxCommandEvent& event)
 {
+	bool verbose_mode = false;
 	std::string random_string = generate_random_string(15);
 	std::string filename_dot = random_string + ".dot";
 	std::string filename_png = random_string + ".png";
 
 	if (!std::filesystem::exists(filename_dot) && !std::filesystem::exists(filename_png))
 	{
-		wxMessageBox("Graph is about to generate: " + filename_dot);
+		
 		// std::string dot_text = context_to_dot(driver.context);  // context_to_dot() is deprecated and will eventually be deleted
 		Superposition relevant_kets(driver.context.relevant_kets("*"));
 		std::string dot_text = generate_dot_string(driver.context, relevant_kets, Ket("*"));
-		wxMessageBox(dot_text);
+		
+		if (verbose_mode)
+		{
+			wxMessageBox("Graph is about to generate: " + filename_dot);
+			wxMessageBox(dot_text);
+		}
 
 		bool success = false;
 		std::ofstream our_file(filename_dot);
@@ -160,12 +166,20 @@ void EditPanel::OnGraphButtonDown(wxCommandEvent& event)
 		bool image_success = false;
 		if (success)  // Convert dot file to a png image:
 		{
-			wxMessageBox("Graph about to invoke the dot command");
+			if (verbose_mode)
+			{
+				wxMessageBox("Graph about to invoke the dot command");
+			}
+			
 			// Now check if dot is installed:
 			int exit_code = std::system("dot --version");
 			if (exit_code == 0)
 			{
-				wxMessageBox("Graphviz is installed");
+				if (verbose_mode)
+				{
+					wxMessageBox("Graphviz is installed");
+				}
+				
 				// Now create the image:
 				// dot -Tpng filename.dot -o outfile.png
 				std::string dot_command = "dot -Tpng " + filename_dot + " -o " + filename_png;
@@ -173,7 +187,11 @@ void EditPanel::OnGraphButtonDown(wxCommandEvent& event)
 				int dot_exit_code = std::system(dot_command.c_str());  // There is no user controllable input, so should be safe to run.
 				if (dot_exit_code == 0)
 				{
-					wxMessageBox("Graphviz generated an image");
+					if (verbose_mode)
+					{
+						wxMessageBox("Graphviz generated an image");
+					}
+					
 					image_success = true;
 
 					// Now try to display it:
