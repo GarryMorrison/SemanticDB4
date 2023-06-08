@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2023/6/7
+// Updated 2023/6/8
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2023/6/7"
+#define APP_BUILD_DATE "2023/6/8"
 #define APP_VERSION "4.0.alpha5"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage4/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -29,7 +29,7 @@
 #define AGENT_PROMPT "sa: "
 #define KET_MAP_DISPLAY_MAX_ROWS 400  // Max number of rows to display in the ket map window.
 
-#define EXAMPLE_STARTING_TEXT "|context> => |Fred Sam sample>\nage |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\nage |Sam> => |41>\nfriends |Sam> => |Fred> + |Liz> + |Emma>\n\nspelling |*> #=> ssplit |_self>\nhow-many-friends |*> #=> how-many friends |_self>\ntable[name, age, friends, how-many-friends, spelling] rel-kets[friends]\ngtable[name, age, friends, how-many-friends, spelling] rel-kets[friends]"
+#define EXAMPLE_STARTING_TEXT "|context> => |Fred Sam sample>\nage |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\n\nage |Sam> => |41>\nfriends |Sam> => |Fred> + |Liz> + |Emma>\n\nspelling |*> !=> ssplit |_self>\nhow-many-friends |*> #=> how-many friends |_self>\ntable[name, age, friends, how-many-friends, spelling] rel-kets[friends]\ngtable[name, age, friends, how-many-friends, spelling] rel-kets[friends]\nggraph(|*>) rel-kets[*]"
 #define EXAMPLE_KET_KNOWLEDGE "age |Fred> => |37>\nfriends |Fred> => |Rob> + |Mary> + |Matt> + |Sam>\nspelling |Fred> => |F> . |r> . |e> . |d>"
 #define EXAMPLE_OP_KNOWLEDGE "age |Fred> => |37>\nage |Sam> => |41>"
 #define EDIT_STARTING_TEXT "|context> => |Hello world>\n\nprint |Hello world!>\n"

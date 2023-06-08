@@ -194,12 +194,14 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
         bool found_rule = false;
         ulong object_idx = object.label_idx();
 
+        /* Shifted down lower, since if we put it here, we learn unwanted nodes when they don't have an operator defined for them.
         // Learn node index for our object:
         if (node_label_idx_map.find(object_label) == node_label_idx_map.end()) {
             node_idx++;
             node_label_idx_map[object_label] = node_idx;
             dot_file += "  " + std::to_string(node_idx) + " [ label=\"" + object_label + "\" ]\n";
         }
+        */
 
         for (ulong requested_op : requested_operators)
         {
@@ -241,6 +243,13 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
             }
             if (found_rule)
             {
+                // Learn node index for our object if it has any valid rules:
+                if (node_label_idx_map.find(object_label) == node_label_idx_map.end()) {
+                    node_idx++;
+                    node_label_idx_map[object_label] = node_idx;
+                    dot_file += "  " + std::to_string(node_idx) + " [ label=\"" + object_label + "\" ]\n";
+                }
+
                 if (rule_seq.size() == 1)
                 {
                     for (const Ket& rule_ket : rule_seq.to_sp())

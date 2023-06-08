@@ -2,7 +2,7 @@
 --
 -- Author: Garry Morrison
 -- Created: 2023/6/7
--- Updated: 2023/6/7
+-- Updated: 2023/6/8
 
 |context> => |Collatz>
 
@@ -19,10 +19,8 @@ collatz |*> !=>
 -- display a table of some of them:
 table[number, collatz] (|1> .. |100>)
 
--- quick test:
-spelling |Collatz> => ssplit |_self>
-
 -- then invoke a graph of them:
 ggraph(|*>) rel-kets[*]
+
 
 
