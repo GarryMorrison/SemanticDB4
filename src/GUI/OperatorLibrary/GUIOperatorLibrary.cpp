@@ -210,25 +210,29 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
             std::string box_shape;
             std::string arrowhead_type;
             std::string RHS_string;
-            Superposition rule_sp;
+            // Superposition rule_sp;
+            Sequence rule_seq;
             switch (rule_type)
             {
             case RULENORMAL: {
                 box_shape = "";
                 arrowhead_type = "";
-                rule_sp = rule_value->to_sp(); // FIXME: Handle sequences better later!
+                // rule_sp = rule_value->to_sp(); // FIXME: Handle sequences better later!
+                rule_seq = rule_value->to_seq();
                 break;
             }
             case RULESTORED: {
                 box_shape = "shape=box ";
                 arrowhead_type = "arrowhead=box, ";
-                rule_sp = Superposition(rule_value->to_string() + "\n");
+                // rule_sp = Superposition(rule_value->to_string() + "\n");
+                rule_seq = Sequence(rule_value->to_string() + "\n");
                 break;
             }
             case RULEMEMOIZE: {
                 box_shape = "shape=box ";
                 arrowhead_type = "arrowhead=tee, ";
-                rule_sp = Superposition(rule_value->to_string() + "\n");
+                // rule_sp = Superposition(rule_value->to_string() + "\n");
+                rule_seq = Sequence(rule_value->to_string() + "\n");
                 break;
             }
             default:
@@ -237,25 +241,56 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
             }
             if (found_rule)
             {
-                for (const Ket& rule_ket : rule_sp)
+                if (rule_seq.size() == 1)
                 {
-                    RHS_string = rule_ket.label();
-
-                    // Escape chars for Graphviz/dot code:
-                    string_replace_all(RHS_string, "|", "\\|");
-                    string_replace_all(RHS_string, ">", "&gt;");
-                    // string_replace_all(RHS_string, "\n", "\\n");
-                    string_replace_all(RHS_string, "\n", "\\l");
-                    string_replace_all(RHS_string, "\"", "\\\"");
-
-                    // Now learn them:
-                    if (node_label_idx_map.find(RHS_string) == node_label_idx_map.end())
+                    for (const Ket& rule_ket : rule_seq.to_sp())
                     {
-                        node_idx++;
-                        node_label_idx_map[RHS_string] = node_idx;
-                        dot_file += "  " + std::to_string(node_idx) + " [ " + box_shape + "label=\"" + RHS_string + "\" ]\n";
+                        RHS_string = rule_ket.label();
+
+                        // Escape chars for Graphviz/dot code:
+                        string_replace_all(RHS_string, "|", "\\|");
+                        string_replace_all(RHS_string, ">", "&gt;");
+                        // string_replace_all(RHS_string, "\n", "\\n");
+                        string_replace_all(RHS_string, "\n", "\\l");
+                        string_replace_all(RHS_string, "\"", "\\\"");
+
+                        // Now learn them:
+                        if (node_label_idx_map.find(RHS_string) == node_label_idx_map.end())
+                        {
+                            node_idx++;
+                            node_label_idx_map[RHS_string] = node_idx;
+                            dot_file += "  " + std::to_string(node_idx) + " [ " + box_shape + "label=\"" + RHS_string + "\" ]\n";
+                        }
+                        dot_file += "  " + std::to_string(node_label_idx_map[object_label]) + " -> " + std::to_string(node_label_idx_map[RHS_string]) + " [ " + arrowhead_type + "label = \"" + op_label + "\" ]\n";
                     }
-                    dot_file += "  " + std::to_string(node_label_idx_map[object_label]) + " -> " + std::to_string(node_label_idx_map[RHS_string]) + " [ " + arrowhead_type + "label = \"" + op_label + "\" ]\n";
+                }
+                else
+                {
+                    dot_file += "\n  subgraph cluster_" + std::to_string(cluster_idx) + " {\n  label=\"\";\n  rank=max;\n  rankdir=\"LR\"\n  ranksep=\"0.05\"\n";
+                    cluster_idx++;
+                    std::string first_element;
+                    unsigned int current_node_idx = node_idx;
+                    for (const auto& sp2 : rule_seq) {
+                        std::string current_element = sp2.readable_display();  // Do we need to escape this string for dot?
+                        node_idx++;
+                        dot_file += "  " + std::to_string(node_idx) + " [ label=\"" + current_element + "\" ]\n";
+                    }
+                    node_idx = current_node_idx;
+                    unsigned int first_element_idx = current_node_idx;
+                    bool first_pass = true;
+                    for (const auto& sp2 : rule_seq) {
+                        node_idx++;
+                        if (first_pass) {
+                            first_pass = false;
+                            first_element_idx = node_idx;
+                            dot_file += "  " + std::to_string(first_element_idx);
+                        }
+                        else {
+                            dot_file += " -> " + std::to_string(node_idx);
+                        }
+                    }
+                    dot_file += " [ arrowhead=dot ]\n  }\n  " + std::to_string(node_label_idx_map[object_label]) + " -> " + std::to_string(first_element_idx) +
+                        "  [ label=\"" + op_label + "\" ] \n";
                 }
             }
         }
