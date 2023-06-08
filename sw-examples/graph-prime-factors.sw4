@@ -1,0 +1,8 @@
+|context> => |prime factors>
+
+factors |*> !=> prime-factors |_self>
+
+table[number, factors] (|2> .. |50>)
+
+ggraph(|*>) rel-kets[*]
+
