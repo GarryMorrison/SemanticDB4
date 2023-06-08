@@ -580,6 +580,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("substring-position");
     fn_map.whitelist_1.emplace(idx, &op_substring_index);
 
+    idx = ket_map.get_idx("print-dot");
+    fn_map.context_whitelist_1.emplace(idx, &op_print_dot_fn1);
+
     idx = ket_map.get_idx("tensor-product");
     fn_map.compound_seq_fn.emplace(idx, &op_tensor_product);
 

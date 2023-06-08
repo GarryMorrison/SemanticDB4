@@ -76,3 +76,6 @@ Sequence op_sprint_fn2(const Sequence& input_seq, const Sequence& one, const Seq
 Ket op_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);
 Ket op_recursive_dump_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);
 Sequence op_substring_index(const Sequence& input_seq, const Sequence& one);
+std::string generate_dot_string(ContextList& context, const Sequence& input_seq, const Sequence& one);
+Ket op_print_dot_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);
+

@@ -5078,8 +5078,22 @@ OperatorUsageMap::OperatorUsageMap() {
         "        This also means dot must be in the current path for ggraph to work\n\n"
         "    examples:\n\n"
         "    see also:\n"
-        "        gdump\n";
+        "        print-dot, gdump\n";
 
+
+    operator_usage_map.map["print-dot"] =
+        "\nprint-dot:\n"
+        "    description:\n"
+        "        print-dot(|*>) input-sp\n"
+        "        print-dot(|op: op1> + |op: op2> + ... + |op: opn>) input-sp\n"
+        "        print-dot converts the current context into the Graphviz dot language\n"
+        "        most of the time you would use ggraph to visualize this,\n"
+        "        but if you want the back-end dot you would use this operator\n"
+        "        when given the |*> ket, we use all knowledge for the kets given in input-sp\n"
+        "        when given kets with the \"op: \" prefix, then only the knowledge with respect to those operators\n\n"
+        "    examples:\n\n"
+        "    see also:\n"
+        "        ggraph, gdump\n";
 
 
     // fill out statement_prototypes map:
