@@ -153,7 +153,32 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
 
     ulong star_idx = ket_map.get_idx("*");
     ulong ket_op_idx = ket_map.get_idx("op");
-    std::set<ulong> operators;
+    
+    // Learn requested operators:
+    std::set<ulong> requested_operators;
+    for (const Ket& op : operators_sp)
+    {
+        if (op.label_idx() == star_idx)
+        {
+            requested_operators.clear();
+            for (const Ket& k : input_sp)
+            {
+                std::vector<ulong> supported_ops = context.supported_ops(k.label_idx());
+                requested_operators.insert(std::begin(supported_ops), std::end(supported_ops));
+            }
+            break;
+        }
+        std::vector<ulong> op_idx_vec = op.label_split_idx();
+        if (op_idx_vec.size() != 2)
+        {
+            continue;
+        }
+        if (op_idx_vec[0] != ket_op_idx)
+        {
+            continue;
+        }
+        requested_operators.insert(op_idx_vec[1]);
+    }
 
     std::string dot_file = "digraph G {\n";
     dot_file += "  labelloc=\"t\";\n";
@@ -176,65 +201,61 @@ Ket op_ggraph_fn1(ContextList& context, const Sequence& input_seq, const Sequenc
             dot_file += "  " + std::to_string(node_idx) + " [ label=\"" + object_label + "\" ]\n";
         }
 
-        for (const Ket& op : operators_sp)
+        for (ulong requested_op : requested_operators)
         {
-            std::string op_label = op.label();
-            if (op.label_idx() == star_idx)
+            std::string op_label = ket_map.get_str(requested_op);
+            found_rule = true;
+            unsigned int rule_type = context.recall_type(requested_op, object_idx);
+            std::shared_ptr<BaseSequence> rule_value = context.recall(requested_op, object_idx);
+            std::string box_shape;
+            std::string arrowhead_type;
+            std::string RHS_string;
+            Superposition rule_sp;
+            switch (rule_type)
             {
-                std::vector<ulong> supported_operators = context.supported_ops(object_idx);
-                for (ulong supported_op_idx : supported_operators)
+            case RULENORMAL: {
+                box_shape = "";
+                arrowhead_type = "";
+                rule_sp = rule_value->to_sp(); // FIXME: Handle sequences better later!
+                break;
+            }
+            case RULESTORED: {
+                box_shape = "shape=box ";
+                arrowhead_type = "arrowhead=box, ";
+                rule_sp = Superposition(rule_value->to_string() + "\n");
+                break;
+            }
+            case RULEMEMOIZE: {
+                box_shape = "shape=box ";
+                arrowhead_type = "arrowhead=tee, ";
+                rule_sp = Superposition(rule_value->to_string() + "\n");
+                break;
+            }
+            default:
+                found_rule = false;
+                break;
+            }
+            if (found_rule)
+            {
+                for (const Ket& rule_ket : rule_sp)
                 {
-                    std::string supported_op_label = ket_map.get_str(supported_op_idx);
-                    found_rule = true;
-                    unsigned int rule_type = context.recall_type(supported_op_idx, object_idx);
-                    std::shared_ptr<BaseSequence> rule_value = context.recall(supported_op_idx, object_idx);
-                    std::string box_shape;
-                    std::string arrowhead_type;
-                    std::string RHS_string;
-                    Superposition rule_sp;
-                    switch (rule_type)
-                    {
-                    case RULENORMAL: {
-                        box_shape = "";
-                        arrowhead_type = "";
-                        rule_sp = rule_value->to_sp(); // FIXME: Handle sequences better later!
-                        break;
-                    }
-                    case RULESTORED: {
-                        box_shape = "shape=box ";
-                        arrowhead_type = "arrowhead=box, ";
-                        rule_sp = Superposition(rule_value->to_string() + "\n");
-                        break;
-                    }
-                    case RULEMEMOIZE: {
-                        box_shape = "shape=box ";
-                        arrowhead_type = "arrowhead=tee, ";
-                        rule_sp = Superposition(rule_value->to_string() + "\n");
-                        break;
-                    }
-                    default:
-                        break;
-                    }
-                    for (const Ket& rule_ket : rule_sp)
-                    {
-                        RHS_string = rule_ket.label();
+                    RHS_string = rule_ket.label();
 
-                        // Escape chars for Graphviz/dot code:
-                        string_replace_all(RHS_string, "|", "\\|");
-                        string_replace_all(RHS_string, ">", "&gt;");
-                        // string_replace_all(RHS_string, "\n", "\\n");
-                        string_replace_all(RHS_string, "\n", "\\l");
-                        string_replace_all(RHS_string, "\"", "\\\"");
+                    // Escape chars for Graphviz/dot code:
+                    string_replace_all(RHS_string, "|", "\\|");
+                    string_replace_all(RHS_string, ">", "&gt;");
+                    // string_replace_all(RHS_string, "\n", "\\n");
+                    string_replace_all(RHS_string, "\n", "\\l");
+                    string_replace_all(RHS_string, "\"", "\\\"");
 
-                        // Now learn them:
-                        if (node_label_idx_map.find(RHS_string) == node_label_idx_map.end())
-                        {
-                            node_idx++;
-                            node_label_idx_map[RHS_string] = node_idx;
-                            dot_file += "  " + std::to_string(node_idx) + " [ " + box_shape + "label=\"" + RHS_string + "\" ]\n";
-                        }
-                        dot_file += "  " + std::to_string(node_label_idx_map[object_label]) + " -> " + std::to_string(node_label_idx_map[RHS_string]) + " [ " + arrowhead_type + "label = \"" + supported_op_label + "\" ]\n";
+                    // Now learn them:
+                    if (node_label_idx_map.find(RHS_string) == node_label_idx_map.end())
+                    {
+                        node_idx++;
+                        node_label_idx_map[RHS_string] = node_idx;
+                        dot_file += "  " + std::to_string(node_idx) + " [ " + box_shape + "label=\"" + RHS_string + "\" ]\n";
                     }
+                    dot_file += "  " + std::to_string(node_label_idx_map[object_label]) + " -> " + std::to_string(node_label_idx_map[RHS_string]) + " [ " + arrowhead_type + "label = \"" + op_label + "\" ]\n";
                 }
             }
         }
