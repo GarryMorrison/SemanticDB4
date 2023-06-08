@@ -889,7 +889,9 @@ void CommandPanel::OnGraphButtonDown(wxCommandEvent& event)
     if (!std::filesystem::exists(filename_dot) && !std::filesystem::exists(filename_png))
     {
         wxMessageBox("Graph is about to generate: " + filename_dot);
-        std::string dot_text = context_to_dot(driver.context);
+        // std::string dot_text = context_to_dot(driver.context);  // context_to_dot() is deprecated and will eventually be deleted
+        Superposition relevant_kets(driver.context.relevant_kets("*"));
+        std::string dot_text = generate_dot_string(driver.context, relevant_kets, Ket("*"));
         wxMessageBox(dot_text);
 
         bool success = false;
