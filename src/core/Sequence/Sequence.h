@@ -29,6 +29,7 @@ public:
     Sequence(const Superposition& sp);
     Sequence(const Sequence& seq);
     Sequence(const std::vector<Superposition>& vec) : seq(vec) {};
+    Sequence(const std::vector<ulong>& vec);
 
     bool operator==(const Sequence& other) const;
 

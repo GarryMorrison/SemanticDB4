@@ -10,25 +10,29 @@
 
 
 Sequence::Sequence(const std::string& s) {
-    Superposition tmp(s);
-    seq.push_back(tmp);
+    // Superposition tmp(s);
+    // seq.push_back(tmp);
+    seq.push_back(Superposition(s));
 }
 
 Sequence::Sequence(const std::string& s, const double d) {
-    Superposition tmp(s, d);
-    seq.push_back(tmp);
+    // Superposition tmp(s, d);
+    // seq.push_back(tmp);
+    seq.push_back(Superposition(s, d));
 }
 
 Sequence::Sequence(const Ket& k) {
-    Superposition tmp;  // why not use constructor here?
-    tmp.add(k);
-    seq.push_back(tmp);
+    // Superposition tmp;  // why not use constructor here?
+    // tmp.add(k);
+    // seq.push_back(tmp);
+    seq.push_back(Superposition(k));
 }
 
 Sequence::Sequence(const Superposition& sp) {
-    Superposition tmp;  // why not use constructor here?
-    tmp.add(sp);
-    seq.push_back(tmp);
+    // Superposition tmp;  // why not use constructor here?
+    // tmp.add(sp);
+    // seq.push_back(tmp);
+    seq.push_back(sp);
 }
 
 Sequence::Sequence(const Sequence& seq2) {
@@ -36,6 +40,14 @@ Sequence::Sequence(const Sequence& seq2) {
     //     seq.push_back(sp);
     // }
     seq.assign(seq2.seq.begin(), seq2.seq.end());  // Is this faster or slower than the for loop version??
+}
+
+Sequence::Sequence(const std::vector<ulong>& vec)
+{
+    for (ulong idx : vec)
+    {
+        seq.push_back(Superposition(idx));
+    }
 }
 
 bool Sequence::operator==(const Sequence& other) const {
