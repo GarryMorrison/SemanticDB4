@@ -177,8 +177,9 @@ std::vector<double> Sequence::get_value_vector() const
 
 void Sequence::add(const ulong idx) {
     if (seq.empty()) {
-        Superposition tmp(idx);
-        seq.push_back(tmp);
+        // Superposition tmp(idx);
+        // seq.push_back(tmp);
+        seq.push_back(Superposition(idx));
     }
     else {
         seq.back().add(idx);
@@ -187,8 +188,9 @@ void Sequence::add(const ulong idx) {
 
 void Sequence::add(const Ket& k) {
     if (seq.empty()) {
-        Superposition tmp(k);
-        seq.push_back(tmp);
+        // Superposition tmp(k);
+        // seq.push_back(tmp);
+        seq.push_back(Superposition(k));
     }
     else {
         seq.back().add(k);
@@ -290,8 +292,9 @@ void Sequence::insert_range(const Sequence& seq2) {
 }
 
 void Sequence::append(const Ket& k) {
-    Superposition tmp(k);
-    seq.push_back(tmp);
+    // Superposition tmp(k);
+    // seq.push_back(tmp);
+    seq.push_back(Superposition(k));
 }
 
 void Sequence::append(const Superposition& sp) {
@@ -306,13 +309,15 @@ void Sequence::append(const Sequence& seq2) {
 }
 
 void Sequence::append(const std::string& s) {
-    Superposition tmp(s);
-    seq.push_back(tmp);  // Use std::move here?
+    // Superposition tmp(s);
+    // seq.push_back(tmp);  // Use std::move here?
+    seq.push_back(Superposition(s));
 }
 
 void Sequence::append(const std::string& s, const double v) {
-    Superposition tmp(s, v);
-    seq.push_back(tmp);  // Use std::move here?
+    // Superposition tmp(s, v);
+    // seq.push_back(tmp);  // Use std::move here?
+    seq.push_back(Superposition(s, v));
 }
 
 
