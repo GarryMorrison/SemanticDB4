@@ -18,6 +18,18 @@
 #include "../Operator/SimpleOperator.h"
 #include <algorithm>
 
+struct TemplateMachine {
+	bool has_daughters = false;
+	ulong the_node_idx = 0;
+	ulong text_idx = 0;  // I don't remember what this parameter is for...
+	std::vector<std::string> text_seq_vec;
+	std::vector<ulong> head_seq_vec;
+	std::vector<ulong> value_seq_vec;
+	std::string compressed_text;
+	int structure_word_count = 0;
+	std::vector<int> range_stars;
+	std::vector<int> range_non_stars;
+};
 
 
 std::size_t int_vector_to_hash(const std::vector<ulong>& vec);
