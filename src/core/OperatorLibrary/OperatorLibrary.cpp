@@ -58,12 +58,18 @@ Superposition op_split(const Ket k, const std::vector<std::shared_ptr<CompoundCo
 
 Sequence ssplit(const Ket k) {
     Sequence seq;
+    /*
     for (const auto c : k.label()) {
         // std::cout << c << std::endl;
         std::string s;
         s.push_back(c);
         // Ket k2(s, k.value());
         seq.append(s, k.value());
+    }
+    */
+    for (char c : k.label())
+    {
+        seq.append(std::string(1, c), k.value());
     }
     return seq;
 }
@@ -108,7 +114,12 @@ Superposition op_split_ket(const Ket k) {
 }
 
 Sequence op_ssplit_ket(const Ket k) {
-    return ssplit(k);
+    Sequence seq;
+    for (char c : k.label())
+    {
+        seq.append(std::string(1, c), k.value());
+    }
+    return seq;
 }
 
 Ket extract_head(const Ket k) {
