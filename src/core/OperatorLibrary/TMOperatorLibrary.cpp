@@ -505,7 +505,7 @@ Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
     }
 
     TM_populate(context, max_template_node, TMs);
-    TM_write_template_to_context(context, TMs);
+    TM_write_templates_to_context(context, TMs);
 
     return Superposition("TM-generate");
 }
@@ -581,7 +581,7 @@ void TM_seed(ContextList& context, const SentenceStruct& sentence, int& max_temp
     }
 }
 
-void TM_write_template_to_context(ContextList& context, std::map<int, std::shared_ptr<TemplateMachine>>& TMs)
+void TM_write_templates_to_context(ContextList& context, std::map<int, std::shared_ptr<TemplateMachine>>& TMs)
 {
     // First, learn some string to idx mappings:
     ulong template_type_idx = ket_map.get_idx("template-type");
@@ -593,10 +593,21 @@ void TM_write_template_to_context(ContextList& context, std::map<int, std::share
     ulong range_star_idx = ket_map.get_idx("range-star");
     ulong range_non_star_idx = ket_map.get_idx("range-non-star");
 
+    std::map<size_t, std::vector<ulong>> size_of_node_lists;
+
     //  Now write them to context:
     for (const auto iter : TMs)
     {
         ulong node_idx = iter.second->the_node_idx;
+
+        size_t current_size = iter.second->size;
+        if (size_of_node_lists.find(current_size) == size_of_node_lists.end())
+        {
+            std::vector<ulong> node_list;
+            size_of_node_lists[current_size] = node_list;
+        }
+        size_of_node_lists[current_size].push_back(node_idx);
+
         context.learn(compressed_text_idx, node_idx, Sequence(iter.second->compressed_text));
         context.learn(template_type_idx, node_idx, Sequence(iter.second->type_vec));
         context.learn(template_value_idx, node_idx, Sequence(iter.second->value_vec));
@@ -618,6 +629,13 @@ void TM_write_template_to_context(ContextList& context, std::map<int, std::share
         context.learn(range_non_star_idx, node_idx, range_non_star_sp);
 
         context.learn(structure_word_count_idx, iter.second->compressed_text_idx, Sequence(std::to_string(iter.second->structure_word_count)));
+    }
+
+    // Now write size of node lists to context:
+    ulong size_of_node_list_idx = ket_map.get_idx("list-of-size-?-nodes");
+    for (const auto iter : size_of_node_lists)
+    {
+        context.learn(size_of_node_list_idx, ket_map.get_idx(std::to_string(iter.first)), Superposition(iter.second));
     }
 }
 

@@ -131,6 +131,8 @@ TM-generate rel-kets[sentence-template]
 dump(|*>) rel-kets[template-node]
 dump(|*>) rel-kets[compressed-text]
 dump(|*>) rel-kets[structure-word-count]
+dump(|op: list-of-size-?-nodes>) rel-kets[list-of-size-?-nodes]
+
 
 
 
