@@ -895,6 +895,7 @@ std::map<int, std::shared_ptr<TemplateMachine>> TM_load_machines(ContextList& co
         max_template_node++;
 
         local_TM->the_node_idx = node;
+        local_TM->compressed_text_idx = context.recall(compressed_text_idx, node)->to_ket().label_idx();
         local_TM->type_vec = context.recall(template_type_idx, node)->to_seq().get_idx_vector();
         local_TM->value_vec = context.recall(template_value_idx, node)->to_seq().get_idx_vector();
         local_TM->size = local_TM->type_vec.size();  // Currently we don't load size from context
