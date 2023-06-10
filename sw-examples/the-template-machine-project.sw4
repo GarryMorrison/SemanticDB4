@@ -138,7 +138,12 @@ dump(|op: list-of-size-?-nodes>) rel-kets[list-of-size-?-nodes]
 
 
 -- now test TM-learn-patches:
-TM-learn-patches |sentence: 1>
+-- TM-learn-patches |sentence: 1>
+new-patch |count> => TM-learn-patches rel-kets[sentence-template]
+print (|We just learned> __ new-patch |count> __ |new patches>)
+print | >
+
+dump(|*>) rel-kets[compressed-text]
 
 
 

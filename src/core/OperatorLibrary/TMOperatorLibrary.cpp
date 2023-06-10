@@ -747,10 +747,125 @@ Ket op_TM_learn_patches(const Sequence& input_seq, ContextList& context)
     std::vector<ulong> sentence_nodes = input_seq.to_sp().get_idx_vector();
 
     // First learn some label to idx mappings:
+    ulong star_idx = ket_map.get_idx("*");
     ulong sentence_type_idx = ket_map.get_idx("sentence-type");
     ulong sentence_value_idx = ket_map.get_idx("sentence-value");
+    ulong size_of_node_list_idx = ket_map.get_idx("list-of-size-?-nodes");
+    ulong patch_idx = ket_map.get_idx("patch");
+    ulong compressed_patch_idx = ket_map.get_idx("compressed-patch");
+    ulong compressed_text_idx = ket_map.get_idx("compressed-text");
+    ulong activation_count_idx = ket_map.get_idx("activation-count");
 
-    return Ket("0");
+    // Load our template machines (yeah, this is why it is an optimization to merge TM-generate and TM-learn-patches)
+    std::map<int, std::shared_ptr<TemplateMachine>> TMs = TM_load_machines(context);
+
+    /*  // First attempt:
+    // Load our nodes lists:
+    std::map<size_t, std::vector<ulong>> size_of_node_lists;
+    std::vector<ulong> nodes_lists = context.relevant_kets(size_of_node_list_idx);
+    for (ulong node : nodes_lists)
+    {
+        try
+        {
+            size_t size = std::stoi(ket_map.get_str(node));
+            size_of_node_lists[size] = context.recall(size_of_node_list_idx, node)->to_sp().get_idx_vector();
+        }
+        catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
+            continue;
+        }
+    }
+    */
+
+    // Load our nodes lists:
+    std::map<size_t, std::vector<int>> size_of_node_lists;
+    for (const auto iter : TMs)
+    {
+        size_t size = iter.second->size;
+        if (size_of_node_lists.find(size) == size_of_node_lists.end())
+        {
+            std::vector<int> node_list;
+            size_of_node_lists[size] = node_list;
+        }
+        size_of_node_lists[size].push_back(iter.first);
+    }
+
+    // Now iterate through our sentences:
+    std::set<int> matching_nodes;
+    for (ulong sentence_node : sentence_nodes)
+    {
+        std::vector<ulong> type_vec = context.recall(sentence_type_idx, sentence_node)->to_seq().get_idx_vector();
+        std::vector<ulong> value_vec = context.recall(sentence_value_idx, sentence_node)->to_seq().get_idx_vector();
+        if (type_vec.size() != value_vec.size()) { continue; }
+        size_t size = type_vec.size();
+        if (size_of_node_lists.find(size) == size_of_node_lists.end())  // No template nodes of the right size, so continue to next sentence node
+        {
+            continue;
+        }
+        std::vector<int> template_machine_nodes = size_of_node_lists[size];
+        // std::set<int> matching_nodes;
+        for (int template_machine_node : template_machine_nodes)
+        {
+            std::shared_ptr<TemplateMachine> local_TM = TMs[template_machine_node];
+            if (type_vec.size() != local_TM->size) { continue; }  // They should be the same size, but check anyway.
+            bool found_match = true;
+            for (size_t i = 0; i < size; i++)
+            {
+                if (type_vec[i] != local_TM->type_vec[i] && local_TM->type_vec[i] != star_idx)
+                {
+                    found_match = false;
+                    break;
+                }
+            }
+            if (found_match)
+            {
+                matching_nodes.insert(template_machine_node);
+            }
+        }
+        for (int template_machine_node : matching_nodes)
+        {
+            std::shared_ptr<TemplateMachine> local_TM = TMs[template_machine_node];
+            std::string patch;
+            bool first_pass = true;
+            int previous_pos = -1;
+            for (int current_pos : local_TM->range_stars)  // Assumes std::set<int> iterates based on numerical order!
+            {
+                if (!first_pass)
+                {
+                    if (previous_pos + 1 == current_pos)
+                    {
+                        patch.append(" "); // Yeah, hard-coded in space and underline chars for now.
+                    }
+                    else
+                    {
+                        patch.append(" _ ");
+                    }
+                }
+                patch.append(ket_map.get_str(value_vec[current_pos - 1]));
+                previous_pos = current_pos;
+                first_pass = false;
+            }
+            ulong patch_idx = ket_map.get_idx(patch);
+            local_TM->patch_vec.push_back(patch_idx);
+            local_TM->activation_count++;
+        }
+    }
+
+    // Now write them out to context:
+    for (int template_machine_node : matching_nodes)
+    {
+        std::shared_ptr<TemplateMachine> local_TM = TMs[template_machine_node];
+        ulong node = local_TM->the_node_idx;
+        ulong compressed_text_idx = local_TM->compressed_text_idx;
+        Superposition patch_sp(local_TM->patch_vec);
+        context.learn(patch_idx, node, patch_sp);
+        context.learn(compressed_patch_idx, compressed_text_idx, patch_sp);
+        // context.add_learn(compressed_patch_idx, compressed_text_idx, patch_sp);  // I think this is more correct. Need to test, then tweak ContextList.
+        context.learn(activation_count_idx, node, Sequence(std::to_string(local_TM->activation_count)));
+    }
+
+    return Ket(std::to_string(matching_nodes.size()));
+    // return Ket("0");
 }
 
 std::map<int, std::shared_ptr<TemplateMachine>> TM_load_machines(ContextList& context)
