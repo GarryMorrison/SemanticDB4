@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/1/8
+// Updated 2023/6/11
 // Author Garry Morrison
 // License GPL v3
 //
@@ -32,10 +32,12 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
 
     // Add a copy-all button:
     wxButton* copy_all_button = new wxButton(panel, ID_Copy_All, "Copy All");
+    wxButton* save_button = new wxButton(panel, ID_Save_Output, "Save");
     wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
 
     hbox->Add(close_button, wxSizerFlags(0).Left().Border(wxALL, 10));
     hbox->Add(copy_all_button, wxSizerFlags(0).Left().Border(wxALL, 10));
+    hbox->Add(save_button, wxSizerFlags(0).Left().Border(wxALL, 10));
     topsizer->Add(hbox);
 
     // Add a timer string:
@@ -51,6 +53,7 @@ OutputFrame::OutputFrame(wxWindow* parent, const wxString& title, const wxString
         });
 
     copy_all_button->Bind(wxEVT_BUTTON, &OutputFrame::OnCopyAll, this);
+    save_button->Bind(wxEVT_BUTTON, &OutputFrame::OnSave, this);
 
     panel->SetSizerAndFit(topsizer);
     CenterOnScreen();
@@ -78,6 +81,30 @@ void OutputFrame::OnCopyAll(wxCommandEvent& event)
         return;  // Failed to flush clipboard.
     }
     wxMessageBox("Frame copied.");  // Do we need this?
+}
+
+void OutputFrame::OnSave(wxCommandEvent& event)
+{
+    // wxMessageBox("Output frame Save button pressed");
+    wxFileDialog saveFileDialog(this, "Save output", "", "output.txt", "Text file (*.txt)|*.txt", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    SaveFile(saveFileDialog.GetPath());
+}
+
+void OutputFrame::SaveFile(const wxString& filename)
+{
+    // wxMessageBox("OutputFrame SaveFile: " + filename);
+    wxFileOutputStream output_stream(filename);
+    if (!output_stream.IsOk())
+    {
+        wxLogError("Cannot save to file '%s'.", filename);
+        return;
+    }
+    wxTextOutputStream text(output_stream);
+    text.WriteString(m_result_canvas->GetText());
 }
 
 void OutputFrame::SetRunTime(long long time)

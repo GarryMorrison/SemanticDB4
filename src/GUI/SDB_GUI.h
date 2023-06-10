@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2023/6/10
+// Updated 2023/6/11
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2023/6/10"
+#define APP_BUILD_DATE "2023/6/11"
 #define APP_VERSION "4.0.alpha5"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage4/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -281,6 +281,7 @@ enum
     ID_Edit_Graph,
 
     ID_Copy_All,
+    ID_Save_Output,
 
     ID_Update_Button,
 

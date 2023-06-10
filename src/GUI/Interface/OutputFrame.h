@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2022/1/8
-// Updated 2022/1/8
+// Updated 2023/6/11
 // Author Garry Morrison
 // License GPL v3
 //
@@ -17,6 +17,8 @@ public:
     OutputFrame(wxWindow* parent, const wxString& title, const wxString& content, const wxString& seq_result = wxEmptyString, const wxPoint position_delta = wxPoint(0, 0), long style = 0);
 
     void OnCopyAll(wxCommandEvent& event);
+    void OnSave(wxCommandEvent& event);
+    void SaveFile(const wxString& filename);
     void SetRunTime(long long time);
     ~OutputFrame();
 
