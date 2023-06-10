@@ -357,7 +357,8 @@ Ket op_TM_learn_sentences(const Sequence& input_seq, ContextList& context, const
         {
             std::string raw_sentence = ket_map.get_str(input_idx);
             Sequence our_template = context.active_recall(splitter_idx, input_idx);
-            if (!our_template.is_empty_ket())
+            // if (!our_template.is_empty_ket())
+            if (our_template.size() > 1)
             {
                 // House keeping:
                 max_sentence_node++;
@@ -418,7 +419,7 @@ Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
     if (max_sentence_length == 0) { return Superposition(); }
 
     // Now, learn "empty" nodes:
-    std::set<ulong> known_kets;  // We dont' currently use this...
+    std::set<ulong> known_kets;  // We don't currently use this...
     std::string empty_node_text = "*";
     for (int i = 0; i < max_sentence_length; i++)
     {
@@ -514,6 +515,7 @@ void TM_seed(ContextList& context, const SentenceStruct& sentence, int& max_temp
     ulong star_idx = ket_map.get_idx("*");
     ulong template_node_idx = ket_map.get_idx("template-node");
     size_t size = sentence.size;
+    if (size <= 1) { return; }  // Nothing to learn from 1 word "sentences"
 
     // Learn range_stars and range_non_stars:
     std::set<int> range_stars;
@@ -642,6 +644,7 @@ void TM_populate(ContextList& context, int& max_template_node, std::map<int, std
         {
             std::shared_ptr<TemplateMachine> parent_TM = TMs[i];
             size_t size = parent_TM->size;
+            if (size <= 1) { continue; }  // If single word "sentence", then nothing to do.
 
             // Learn range_stars and range_non_stars:
             std::set<int> range_stars;
