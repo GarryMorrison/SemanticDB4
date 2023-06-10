@@ -280,6 +280,10 @@ void ContextList::add_learn(const std::string& op, const std::string& label, con
     data[index].add_learn(op, label, srule);
 }
 
+void ContextList::add_learn(const ulong op_idx, const ulong label_idx, const Sequence& seq)
+{
+    data[index].add_learn(op_idx, label_idx, seq);
+}
 
 void ContextList::seq_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
     // data[index].seq_learn(op_idx, label_idx, bSeq);

@@ -254,6 +254,11 @@ void NewContext::add_learn(const std::string& op, const std::string& label, cons
     this->add_learn(op_idx, label_idx, bSeq);
 }
 
+void NewContext::add_learn(const ulong op_idx, const ulong label_idx, const Sequence& seq)
+{
+    std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(seq);
+    this->add_learn(op_idx, label_idx, bSeq);
+}
 
 void NewContext::seq_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
     if (op_idx == ket_map.get_idx("supported-ops")) { return; }  // maybe hard wire in "supported-ops" as ket_map idx = 1?

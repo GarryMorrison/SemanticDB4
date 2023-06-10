@@ -863,8 +863,8 @@ Ket op_TM_learn_patches(const Sequence& input_seq, ContextList& context)
         ulong compressed_text_idx = local_TM->compressed_text_idx;
         Superposition patch_sp(local_TM->patch_vec);
         context.learn(patch_idx, node, patch_sp);
-        context.learn(compressed_patch_idx, compressed_text_idx, patch_sp);
-        // context.add_learn(compressed_patch_idx, compressed_text_idx, patch_sp);  // I think this is more correct. Need to test, then tweak ContextList.
+        // context.learn(compressed_patch_idx, compressed_text_idx, patch_sp);
+        context.add_learn(compressed_patch_idx, compressed_text_idx, patch_sp);  // I think this is more correct. Need to test, then tweak ContextList.
         context.learn(activation_count_idx, node, Sequence(std::to_string(local_TM->activation_count)));
     }
 
