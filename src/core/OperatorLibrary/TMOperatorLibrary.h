@@ -31,6 +31,8 @@ struct TemplateMachine {
 	int structure_word_count = 0;
 	std::set<int> range_stars;
 	std::set<int> range_non_stars;
+	int activation_count = 0;
+	std::vector<ulong> patch_vec;
 };
 
 struct SentenceStruct {
@@ -60,3 +62,6 @@ Ket op_TM_generate(const Sequence& input_seq, ContextList& context);
 void TM_seed(ContextList& context, const SentenceStruct& sentence, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);
 void TM_write_templates_to_context(ContextList& context, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);
 void TM_populate(ContextList& context, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);
+
+Ket op_TM_learn_patches(const Sequence& input_seq, ContextList& context);
+std::map<int, std::shared_ptr<TemplateMachine>> TM_load_machines(ContextList& context);

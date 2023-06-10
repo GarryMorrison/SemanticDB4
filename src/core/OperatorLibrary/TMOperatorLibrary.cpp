@@ -597,6 +597,7 @@ void TM_write_templates_to_context(ContextList& context, std::map<int, std::shar
     ulong structure_word_count_idx = ket_map.get_idx("structure-word-count");
     ulong range_star_idx = ket_map.get_idx("range-star");
     ulong range_non_star_idx = ket_map.get_idx("range-non-star");
+    ulong patch_idx = ket_map.get_idx("patch");
 
     std::map<size_t, std::vector<ulong>> size_of_node_lists;
 
@@ -632,6 +633,8 @@ void TM_write_templates_to_context(ContextList& context, std::map<int, std::shar
 
         context.learn(range_star_idx, node_idx, range_star_sp);
         context.learn(range_non_star_idx, node_idx, range_non_star_sp);
+        context.learn(activation_count_idx, node_idx, Sequence(std::to_string(iter.second->activation_count)));
+        context.learn(patch_idx, node_idx, Sequence(iter.second->patch_vec));
 
         context.learn(structure_word_count_idx, iter.second->compressed_text_idx, Sequence(std::to_string(iter.second->structure_word_count)));
     }
@@ -736,4 +739,87 @@ void TM_populate(ContextList& context, int& max_template_node, std::map<int, std
 
         unprocessed_machines = std::move(local_unprocessed_machines);
     }
+}
+
+Ket op_TM_learn_patches(const Sequence& input_seq, ContextList& context)
+{
+    if (input_seq.is_empty_ket()) { return Ket("0"); }
+    std::vector<ulong> sentence_nodes = input_seq.to_sp().get_idx_vector();
+
+    // First learn some label to idx mappings:
+    ulong sentence_type_idx = ket_map.get_idx("sentence-type");
+    ulong sentence_value_idx = ket_map.get_idx("sentence-value");
+
+    return Ket("0");
+}
+
+std::map<int, std::shared_ptr<TemplateMachine>> TM_load_machines(ContextList& context)
+{
+    std::map<int, std::shared_ptr<TemplateMachine>> TMs;
+
+    // Learn some string to idx mappings:
+    ulong compressed_text_idx = ket_map.get_idx("compressed-text");
+    ulong template_type_idx = ket_map.get_idx("template-type");
+    ulong template_value_idx = ket_map.get_idx("template-value");
+    ulong length_idx = ket_map.get_idx("length");
+    ulong range_star_idx = ket_map.get_idx("range-star");
+    ulong range_non_star_idx = ket_map.get_idx("range-non-star");
+    ulong activation_count_idx = ket_map.get_idx("activation-count");
+    ulong patch_idx = ket_map.get_idx("patch");
+
+    std::vector<ulong> template_nodes = context.relevant_kets(template_type_idx);
+
+    int max_template_node = 0;
+    for (ulong node : template_nodes)
+    {
+        std::shared_ptr<TemplateMachine> local_TM = std::make_shared<TemplateMachine>();
+        max_template_node++;
+
+        local_TM->the_node_idx = node;
+        local_TM->type_vec = context.recall(template_type_idx, node)->to_seq().get_idx_vector();
+        local_TM->value_vec = context.recall(template_value_idx, node)->to_seq().get_idx_vector();
+        local_TM->size = local_TM->type_vec.size();  // Currently we don't load size from context
+        local_TM->compressed_text = context.recall(compressed_text_idx, node)->to_ket().label();
+        local_TM->patch_vec = context.recall(patch_idx, node)->to_seq().get_idx_vector();
+
+        std::vector<ulong> range_star_vec = context.recall(range_star_idx, node)->to_sp().get_idx_vector();
+        std::vector<ulong> range_non_star_vec = context.recall(range_non_star_idx, node)->to_sp().get_idx_vector();
+        for (ulong elt : range_star_vec)
+        {
+            try
+            {
+                int pos = std::stoi(ket_map.get_str(elt));
+                local_TM->range_stars.insert(pos);
+            }
+            catch (const std::invalid_argument& e) {
+                (void)e;  // Needed to suppress C4101 warning.
+                continue;
+            }
+        }
+        for (ulong elt : range_non_star_vec)
+        {
+            try
+            {
+                int pos = std::stoi(ket_map.get_str(elt));
+                local_TM->range_non_stars.insert(pos);
+            }
+            catch (const std::invalid_argument& e) {
+                (void)e;  // Needed to suppress C4101 warning.
+                continue;
+            }
+        }
+        try
+        {
+            int activation_count = std::stoi(context.recall(activation_count_idx, node)->to_ket().label());
+            local_TM->activation_count = activation_count;
+        }
+        catch (const std::invalid_argument& e) {
+            (void)e;  // Needed to suppress C4101 warning.
+            continue;
+        }
+
+        TMs[max_template_node] = local_TM;
+    }
+
+    return TMs;
 }

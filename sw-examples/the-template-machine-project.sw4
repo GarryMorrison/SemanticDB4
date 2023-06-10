@@ -137,6 +137,10 @@ dump(|*>) rel-kets[structure-word-count]
 dump(|op: list-of-size-?-nodes>) rel-kets[list-of-size-?-nodes]
 
 
+-- now test TM-learn-patches:
+TM-learn-patches |sentence: 1>
+
+
 
 
 

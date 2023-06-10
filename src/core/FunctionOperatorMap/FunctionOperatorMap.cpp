@@ -609,7 +609,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("TM-generate");
     fn_map.context_seq_fn.emplace(idx, &op_TM_generate);
  
-
+    idx = ket_map.get_idx("TM-learn-patches");
+    fn_map.context_seq_fn.emplace(idx, &op_TM_learn_patches);
 }
 
 
