@@ -127,11 +127,15 @@ dump-sentences
 
 -- now test TM-generate:
 -- TM-generate |sentence: 1>
-TM-generate rel-kets[sentence-template]
+new-TM |count> => TM-generate rel-kets[sentence-template]
+print (|We just learned> __ new-TM |count> __ |new template machine> _ append-s new-TM |count>)
+print | >
+
 dump(|*>) rel-kets[template-node]
 dump(|*>) rel-kets[compressed-text]
 dump(|*>) rel-kets[structure-word-count]
 dump(|op: list-of-size-?-nodes>) rel-kets[list-of-size-?-nodes]
+
 
 
 

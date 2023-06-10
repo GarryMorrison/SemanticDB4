@@ -55,7 +55,8 @@ Ket op_TM_extract_text(const Sequence& input_seq, const Sequence& one);
 // Maybe change type to function, not compound operator?
 Ket op_TM_learn_sentences(const Sequence& input_seq, ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> >& parameters);
 
-Superposition op_TM_generate(const Sequence& input_seq, ContextList& context);
+// Superposition op_TM_generate(const Sequence& input_seq, ContextList& context);
+Ket op_TM_generate(const Sequence& input_seq, ContextList& context);
 void TM_seed(ContextList& context, const SentenceStruct& sentence, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);
 void TM_write_templates_to_context(ContextList& context, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);
 void TM_populate(ContextList& context, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);

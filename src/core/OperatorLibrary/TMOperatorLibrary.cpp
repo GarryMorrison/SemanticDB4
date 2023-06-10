@@ -390,9 +390,9 @@ Ket op_TM_learn_sentences(const Sequence& input_seq, ContextList& context, const
     return Ket(std::to_string(new_sentence_count));
 }
 
-Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
+Ket op_TM_generate(const Sequence& input_seq, ContextList& context)
 {
-    if (input_seq.is_empty_ket()) { return Superposition(); }
+    if (input_seq.is_empty_ket()) { return Ket("0"); }
     std::vector<ulong> sentence_nodes = input_seq.to_sp().get_idx_vector();
 
     // Learn some indices:
@@ -416,7 +416,7 @@ Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
         (void)e;  // Needed to suppress C4101 warning.
     }
     // If max sentence length is 0, we have nothing to do, so return the empty ket:
-    if (max_sentence_length == 0) { return Superposition(); }
+    if (max_sentence_length == 0) { return Ket("0"); }
 
     // Now, learn "empty" nodes:
     std::set<ulong> known_kets;  // We don't currently use this...
@@ -481,6 +481,9 @@ Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
     }
     */
     // Next version:
+
+    int starting_max_template_node = max_template_node;
+
     std::map<int, std::shared_ptr<TemplateMachine>> TMs;
     for (ulong node_idx : sentence_nodes)
     {
@@ -507,7 +510,9 @@ Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
     TM_populate(context, max_template_node, TMs);
     TM_write_templates_to_context(context, TMs);
 
-    return Superposition("TM-generate");
+    int finish_max_template_node = max_template_node;
+    return Ket(std::to_string(finish_max_template_node - starting_max_template_node));
+    // return Superposition("TM-generate");
 }
 
 void TM_seed(ContextList& context, const SentenceStruct& sentence, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs)
