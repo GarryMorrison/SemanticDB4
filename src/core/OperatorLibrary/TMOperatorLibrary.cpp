@@ -825,6 +825,10 @@ Ket op_TM_learn_patches(const Sequence& input_seq, ContextList& context)
         for (int template_machine_node : matching_nodes)
         {
             std::shared_ptr<TemplateMachine> local_TM = TMs[template_machine_node];
+            if (local_TM->size != value_vec.size())
+            {
+                continue;
+            }
             std::string patch;
             bool first_pass = true;
             int previous_pos = -1;
