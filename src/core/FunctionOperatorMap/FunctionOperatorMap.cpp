@@ -606,7 +606,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("TM-compress-stars");
     fn_map.ket_fn.emplace(idx, &op_TM_compress_stars);
 
-
+    idx = ket_map.get_idx("TM-generate");
+    fn_map.context_seq_fn.emplace(idx, &op_TM_generate);
  
 
 }

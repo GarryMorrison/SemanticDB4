@@ -388,3 +388,231 @@ Ket op_TM_learn_sentences(const Sequence& input_seq, ContextList& context, const
     // Return the number of learn't sentences:
     return Ket(std::to_string(new_sentence_count));
 }
+
+Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
+{
+    if (input_seq.is_empty_ket()) { return Superposition(); }
+    std::vector<ulong> sentence_nodes = input_seq.to_sp().get_idx_vector();
+
+    // Learn some indices:
+    ulong max_idx = ket_map.get_idx("max");
+    ulong sentence_length_idx = ket_map.get_idx("sentence-length");
+    ulong template_node_idx = ket_map.get_idx("template-node");
+
+    // Load in a couple of needed globals:
+    std::string max_sentence_length_str = context.recall(max_idx, sentence_length_idx)->to_ket().label();
+    std::string max_template_node_str = context.recall(max_idx, template_node_idx)->to_ket().label();
+
+    // Try to convert them to integers:
+    int max_sentence_length = 0;
+    int max_template_node = 0;
+    try
+    {
+        max_sentence_length = std::stoi(max_sentence_length_str);
+        max_template_node = std::stoi(max_template_node_str);
+    }
+    catch (const std::invalid_argument& e) {
+        (void)e;  // Needed to suppress C4101 warning.
+    }
+    // If max sentence length is 0, we have nothing to do, so return the empty ket:
+    if (max_sentence_length == 0) { return Superposition(); }
+
+    // Now, learn "empty" nodes:
+    std::set<ulong> known_kets;
+    std::string empty_node_text = "*";
+    for (int i = 0; i < max_sentence_length; i++)
+    {
+        empty_node_text.append(" *");
+        ulong empty_node_idx = ket_map.get_idx(empty_node_text);
+        known_kets.insert(empty_node_idx);
+        std::cout << "Empty node text: " << empty_node_text << "\n";
+    }
+
+    // Now load up the sentences into memory:
+    // First learn some label to idx mappings:
+    ulong sentence_raw_idx = ket_map.get_idx("sentence-raw");
+    ulong sentence_type_idx = ket_map.get_idx("sentence-type");
+    ulong sentence_value_idx = ket_map.get_idx("sentence-value");
+
+    // Now load them:
+    /*
+    std::map<int, SentenceStruct> sentences;  // Use pointer here instead?
+    int sentence_number = 0;
+    for (ulong node_idx : sentence_nodes)
+    {
+        SentenceStruct local_sentence;
+        local_sentence.node_idx = node_idx;
+        local_sentence.raw_sentence_idx = context.recall(sentence_raw_idx, node_idx)->to_ket().label_idx();  // Check they are actually defined?
+        local_sentence.type_vec = context.recall(sentence_type_idx, node_idx)->to_seq().get_idx_vector();
+        local_sentence.value_vec = context.recall(sentence_value_idx, node_idx)->to_seq().get_idx_vector();
+        local_sentence.size = local_sentence.type_vec.size();
+
+        sentence_number++;
+        sentences[sentence_number] = std::move(local_sentence);
+    }
+    */
+    /*
+    // Pointer version:
+    std::map<int, std::shared_ptr<SentenceStruct>> sentences;
+    int sentence_number = 0;
+    for (ulong node_idx : sentence_nodes)
+    {
+        if (context.recall_type(sentence_raw_idx, node_idx) != RULENORMAL) { continue; }  // Check they are defined.
+        if (context.recall_type(sentence_type_idx, node_idx) != RULENORMAL) { continue; }
+        if (context.recall_type(sentence_value_idx, node_idx) != RULENORMAL) { continue; }
+
+        std::shared_ptr<SentenceStruct> local_sentence = std::make_shared<SentenceStruct>();
+        local_sentence->node_idx = node_idx;
+        local_sentence->raw_sentence_idx = context.recall(sentence_raw_idx, node_idx)->to_ket().label_idx();
+        local_sentence->type_vec = context.recall(sentence_type_idx, node_idx)->to_seq().get_idx_vector();
+        local_sentence->value_vec = context.recall(sentence_value_idx, node_idx)->to_seq().get_idx_vector();
+        if (local_sentence->type_vec.size() != local_sentence->value_vec.size()) { continue; }  // Sanity check they are both the same size.
+        for (ulong value_idx : local_sentence->value_vec)
+        {
+            local_sentence->text_vec.push_back(ket_map.get_str(value_idx));
+        }
+
+        local_sentence->size = local_sentence->type_vec.size();
+
+        sentence_number++;
+        sentences[sentence_number] = local_sentence;
+    }
+    */
+    // Next version:
+    std::map<int, std::shared_ptr<TemplateMachine>> TMs;
+    for (ulong node_idx : sentence_nodes)
+    {
+        if (context.recall_type(sentence_raw_idx, node_idx) != RULENORMAL) { continue; }  // Check they are defined.
+        if (context.recall_type(sentence_type_idx, node_idx) != RULENORMAL) { continue; }
+        if (context.recall_type(sentence_value_idx, node_idx) != RULENORMAL) { continue; }
+
+        SentenceStruct sentence;
+        sentence.node_idx = node_idx;
+        sentence.raw_sentence_idx = context.recall(sentence_raw_idx, node_idx)->to_ket().label_idx();
+        sentence.type_vec = context.recall(sentence_type_idx, node_idx)->to_seq().get_idx_vector();
+        sentence.value_vec = context.recall(sentence_value_idx, node_idx)->to_seq().get_idx_vector();
+        if (sentence.type_vec.size() != sentence.value_vec.size()) { continue; }  // Sanity check they are both the same size.
+        for (ulong value_idx : sentence.value_vec)
+        {
+            sentence.text_vec.push_back(ket_map.get_str(value_idx));
+        }
+
+        sentence.size = sentence.type_vec.size();
+
+        TM_seed(context, sentence, max_template_node, TMs);
+    }
+
+    TM_write_template_to_context(context, TMs);
+
+    return Superposition("TM-generate");
+}
+
+void TM_seed(ContextList& context, const SentenceStruct& sentence, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs)
+{
+    ulong star_idx = ket_map.get_idx("*");
+    ulong template_node_idx = ket_map.get_idx("template-node");
+    size_t size = sentence.size;
+
+    // Learn range_stars and range_non_stars:
+    std::set<int> range_stars;
+    std::set<int> range_non_stars;
+    for (int i = 0; i < size; i++)
+    {
+        if (sentence.type_vec[i] == star_idx)
+        {
+            range_stars.insert(i);
+        }
+        else
+        {
+            range_non_stars.insert(i);
+        }
+    }
+
+    // for (size_t i = 0; i < size; i++)
+    for (int i : range_non_stars)
+    {
+        std::vector<std::string> local_text_vec(sentence.text_vec);
+        if (local_text_vec[i] == "*") { continue; }  // If range_non_stars is correct, we probably don't need this check
+        local_text_vec[i] = "*";
+        bool first_pass = true;
+        std::string local_text;
+        for (const auto& s : local_text_vec)
+        {
+            if (!first_pass)
+            {
+                local_text.append(" ");
+            }
+            local_text.append(s);
+            first_pass = false;
+        }
+        ulong local_text_idx = ket_map.get_idx(local_text);
+        if (context.recall_type(template_node_idx, local_text_idx) == RULEUNDEFINED)
+        {
+            std::shared_ptr<TemplateMachine> local_TM = std::make_shared<TemplateMachine>();
+            max_template_node++;
+            std::string the_node = "node: " + std::to_string(max_template_node);
+            context.learn(template_node_idx, local_text_idx, Sequence(the_node));
+            ulong the_node_idx = ket_map.get_idx(the_node);
+
+            local_TM->the_node_idx = the_node_idx;
+            local_TM->size = size;
+            local_TM->text_vec = std::move(local_text_vec);
+            local_TM->type_vec = sentence.type_vec;
+            local_TM->value_vec = sentence.value_vec;
+            local_TM->type_vec[i] = star_idx;
+            local_TM->value_vec[i] = star_idx;
+
+            Ket compressed_text_ket = op_TM_compress_stars(Ket(local_text_idx));
+            local_TM->compressed_text = compressed_text_ket.label();
+            local_TM->structure_word_count = static_cast<int>(compressed_text_ket.value());
+            local_TM->compressed_text_idx = ket_map.get_idx(local_TM->compressed_text);
+
+            local_TM->range_stars = range_stars;
+            local_TM->range_non_stars = range_non_stars;
+            local_TM->range_stars.insert(i);
+            local_TM->range_non_stars.erase(i);
+
+            TMs[max_template_node] = local_TM;
+        }
+    }
+}
+
+void TM_write_template_to_context(ContextList& context, std::map<int, std::shared_ptr<TemplateMachine>>& TMs)
+{
+    // First, learn some string to idx mappings:
+    ulong template_type_idx = ket_map.get_idx("template-type");
+    ulong template_value_idx = ket_map.get_idx("template-value");
+    ulong length_idx = ket_map.get_idx("length");
+    ulong compressed_text_idx = ket_map.get_idx("compressed-text");
+    ulong activation_count_idx = ket_map.get_idx("activation-count");
+    ulong structure_word_count_idx = ket_map.get_idx("structure-word-count");
+    ulong range_star_idx = ket_map.get_idx("range-star");
+    ulong range_non_star_idx = ket_map.get_idx("range-non-star");
+
+    //  Now write them to context:
+    for (const auto iter : TMs)
+    {
+        ulong node_idx = iter.second->the_node_idx;
+        context.learn(compressed_text_idx, node_idx, Sequence(iter.second->compressed_text));
+        context.learn(template_type_idx, node_idx, Sequence(iter.second->type_vec));
+        context.learn(template_value_idx, node_idx, Sequence(iter.second->value_vec));
+        context.learn(length_idx, node_idx, Sequence(std::to_string(iter.second->size)));
+
+        // Create range_star and range_non_star superpositions:
+        Superposition range_star_sp;
+        Superposition range_non_star_sp;
+        for (int i : iter.second->range_stars)
+        {
+            range_star_sp.add(std::to_string(i + 1));
+        }
+        for (int i : iter.second->range_non_stars)
+        {
+            range_non_star_sp.add(std::to_string(i + 1));
+        }
+
+        context.learn(range_star_idx, node_idx, range_star_sp);
+        context.learn(range_non_star_idx, node_idx, range_non_star_sp);
+
+        context.learn(structure_word_count_idx, iter.second->compressed_text_idx, Sequence(std::to_string(iter.second->structure_word_count)));
+    }
+}
