@@ -809,9 +809,11 @@ Ket op_TM_learn_patches(const Sequence& input_seq, ContextList& context)
             std::shared_ptr<TemplateMachine> local_TM = TMs[template_machine_node];
             if (type_vec.size() != local_TM->size) { continue; }  // They should be the same size, but check anyway.
             bool found_match = true;
-            for (size_t i = 0; i < size; i++)
+            // for (size_t i = 0; i < size; i++)
+            for( size_t i : local_TM->range_non_stars)
             {
-                if (type_vec[i] != local_TM->type_vec[i] && local_TM->type_vec[i] != star_idx)
+                // if (type_vec[i] != local_TM->type_vec[i] && local_TM->type_vec[i] != star_idx)
+                if (type_vec[i - 1] != local_TM->type_vec[i - 1])  // We subtract 1 because range-non-stars starts at 1, not 0
                 {
                     found_match = false;
                     break;
