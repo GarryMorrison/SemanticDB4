@@ -418,14 +418,15 @@ Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
     if (max_sentence_length == 0) { return Superposition(); }
 
     // Now, learn "empty" nodes:
-    std::set<ulong> known_kets;
+    std::set<ulong> known_kets;  // We dont' currently use this...
     std::string empty_node_text = "*";
     for (int i = 0; i < max_sentence_length; i++)
     {
         empty_node_text.append(" *");
         ulong empty_node_idx = ket_map.get_idx(empty_node_text);
         known_kets.insert(empty_node_idx);
-        std::cout << "Empty node text: " << empty_node_text << "\n";
+        // std::cout << "Empty node text: " << empty_node_text << "\n";
+        context.learn(template_node_idx, empty_node_idx, Sequence("empty: " + std::to_string(i + 2)));
     }
 
     // Now load up the sentences into memory:
@@ -502,6 +503,7 @@ Superposition op_TM_generate(const Sequence& input_seq, ContextList& context)
         TM_seed(context, sentence, max_template_node, TMs);
     }
 
+    TM_populate(context, max_template_node, TMs);
     TM_write_template_to_context(context, TMs);
 
     return Superposition("TM-generate");
@@ -614,5 +616,98 @@ void TM_write_template_to_context(ContextList& context, std::map<int, std::share
         context.learn(range_non_star_idx, node_idx, range_non_star_sp);
 
         context.learn(structure_word_count_idx, iter.second->compressed_text_idx, Sequence(std::to_string(iter.second->structure_word_count)));
+    }
+}
+
+void TM_populate(ContextList& context, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs)
+{
+    // Walk the TM's looking for those with no daughters:
+    std::set<int> unprocessed_machines;
+    for (const auto iter : TMs)
+    {
+        if (!iter.second->has_daughters)
+        {
+            unprocessed_machines.insert(iter.first);
+        }
+    }
+
+    ulong star_idx = ket_map.get_idx("*");
+    ulong template_node_idx = ket_map.get_idx("template-node");
+
+    // Now learn them all:
+    while (!unprocessed_machines.empty())
+    {
+        std::set<int> local_unprocessed_machines;
+        for (int i : unprocessed_machines)
+        {
+            std::shared_ptr<TemplateMachine> parent_TM = TMs[i];
+            size_t size = parent_TM->size;
+
+            // Learn range_stars and range_non_stars:
+            std::set<int> range_stars;
+            std::set<int> range_non_stars;
+            for (int j = 0; j < size; j++)
+            {
+                if (parent_TM->type_vec[j] == star_idx)
+                {
+                    range_stars.insert(j);
+                }
+                else
+                {
+                    range_non_stars.insert(j);
+                }
+            }
+
+            for (int k : range_non_stars)
+            {
+                std::vector<std::string> local_text_vec(parent_TM->text_vec);
+                if (local_text_vec[k] == "*") { continue; }  // If range_non_stars is correct, we probably don't need this check
+                local_text_vec[k] = "*";
+                bool first_pass = true;
+                std::string local_text;
+                for (const auto& s : local_text_vec)
+                {
+                    if (!first_pass)
+                    {
+                        local_text.append(" ");
+                    }
+                    local_text.append(s);
+                    first_pass = false;
+                }
+                ulong local_text_idx = ket_map.get_idx(local_text);
+                if (context.recall_type(template_node_idx, local_text_idx) == RULEUNDEFINED)
+                {
+                    std::shared_ptr<TemplateMachine> daughter_TM = std::make_shared<TemplateMachine>();
+                    max_template_node++;
+                    std::string the_node = "node: " + std::to_string(max_template_node);
+                    context.learn(template_node_idx, local_text_idx, Sequence(the_node));
+                    ulong the_node_idx = ket_map.get_idx(the_node);
+
+                    daughter_TM->the_node_idx = the_node_idx;
+                    daughter_TM->size = size;
+                    daughter_TM->text_vec = std::move(local_text_vec);
+                    daughter_TM->type_vec = parent_TM->type_vec;
+                    daughter_TM->value_vec = parent_TM->value_vec;
+                    daughter_TM->type_vec[k] = star_idx;
+                    daughter_TM->value_vec[k] = star_idx;
+
+                    Ket compressed_text_ket = op_TM_compress_stars(Ket(local_text_idx));
+                    daughter_TM->compressed_text = compressed_text_ket.label();
+                    daughter_TM->structure_word_count = static_cast<int>(compressed_text_ket.value());
+                    daughter_TM->compressed_text_idx = ket_map.get_idx(daughter_TM->compressed_text);
+
+                    daughter_TM->range_stars = range_stars;
+                    daughter_TM->range_non_stars = range_non_stars;
+                    daughter_TM->range_stars.insert(k);
+                    daughter_TM->range_non_stars.erase(k);
+
+                    TMs[max_template_node] = daughter_TM;
+                    local_unprocessed_machines.insert(max_template_node);
+                    parent_TM->has_daughters = true;
+                }
+            }
+        }
+
+        unprocessed_machines = std::move(local_unprocessed_machines);
     }
 }

@@ -125,11 +125,12 @@ dump-sentences
 
 
 -- now test TM-generate:
--- TM-generate |sentence: 1>
-TM-generate rel-kets[sentence-template]
+TM-generate |sentence: 1>
+-- TM-generate rel-kets[sentence-template]
 dump(|*>) rel-kets[template-node]
 dump(|*>) rel-kets[compressed-text]
 dump(|*>) rel-kets[structure-word-count]
+
 
 
 

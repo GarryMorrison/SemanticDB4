@@ -58,3 +58,4 @@ Ket op_TM_learn_sentences(const Sequence& input_seq, ContextList& context, const
 Superposition op_TM_generate(const Sequence& input_seq, ContextList& context);
 void TM_seed(ContextList& context, const SentenceStruct& sentence, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);
 void TM_write_template_to_context(ContextList& context, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);
+void TM_populate(ContextList& context, int& max_template_node, std::map<int, std::shared_ptr<TemplateMachine>>& TMs);
