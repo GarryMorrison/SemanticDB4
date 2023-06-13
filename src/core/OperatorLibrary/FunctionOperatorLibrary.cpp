@@ -1731,8 +1731,9 @@ Sequence op_parallel_sum(const Sequence& input_seq, const Sequence& one)
 
 Sequence op_sprint_fn1(const Sequence& input_seq, const Sequence& one)
 {
-    std::string pre = one.to_ket().label();
-    std::cout << pre << input_seq.to_string() << "\n";
+    // std::string pre = one.to_ket().label();
+    // std::cout << pre << input_seq.to_string() << "\n";
+    std::cout << input_seq.to_string(one.to_ket().label()) << "\n";
     return input_seq;
 }
 
@@ -2090,3 +2091,4 @@ Ket op_print_dot_fn1(ContextList& context, const Sequence& input_seq, const Sequ
     std::cout << generate_dot_string(context, input_seq, one) << "\n";
     return Ket("dot file");
 }
+

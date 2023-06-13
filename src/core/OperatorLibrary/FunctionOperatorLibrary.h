@@ -79,3 +79,5 @@ Sequence op_substring_index(const Sequence& input_seq, const Sequence& one);
 std::string generate_dot_string(ContextList& context, const Sequence& input_seq, const Sequence& one);
 Ket op_print_dot_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);
 
+
+
