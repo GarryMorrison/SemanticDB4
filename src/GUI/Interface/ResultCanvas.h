@@ -150,6 +150,7 @@ private:
     int m_scroll_delta = 0;
     int m_scroll_scale_x = 20;
     int m_scroll_scale_y = 20;
+    int m_mouse_scroll_total = 0;
     std::vector<wxPoint> m_mouse_positions;
     bool m_is_shift_down = false;
 

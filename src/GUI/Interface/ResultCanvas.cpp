@@ -300,7 +300,7 @@ void ResultCanvas::OnMouseMove(wxMouseEvent& event)
     long x = 0;
     long y = 0;
     event.GetPosition(&x, &y);
-    // y += m_scroll_delta;  // Nope. Doesn't fix my problem.
+    y += m_scroll_scale_y * m_scroll_delta;
     m_mouse_pos = wxPoint(x, y);
     SetFocusIgnoringChildren();
     Refresh();
@@ -313,6 +313,7 @@ void ResultCanvas::OnMouseLeftClick(wxMouseEvent& event)
     long x = 0;
     long y = 0;
     event.GetPosition(&x, &y);
+    y += m_scroll_scale_y * m_scroll_delta;
     m_mouse_pos = wxPoint(x, y);
     
     if (event.ShiftDown())
@@ -366,17 +367,21 @@ void ResultCanvas::Draw(wxAutoBufferedPaintDC& pdc)
 void ResultCanvas::OnScroll(wxScrollWinEvent& scroll_event)
 {
     m_scroll_delta = scroll_event.GetPosition();
-    wxMessageBox("Scroll delta: " + std::to_string(m_scroll_delta));
+    // wxMessageBox("Scroll delta: " + std::to_string(m_scroll_delta));
     // wxScrolledWindow::HandleOnScroll(scroll_event);
     // Refresh();
 }
 
 void ResultCanvas::OnMouseWheel(wxMouseEvent& event)
 {
-    int rotation = event.GetWheelRotation();
-
-    wxMessageBox("Mouse wheel moved: " + std::to_string(rotation));
-
+    // Not correctly implemented!
+    // The solution is in here somewhere:
+    // https://docs.wxwidgets.org/3.0/classwx_mouse_event.html
+    /*
+    m_mouse_scroll_total -= event.GetLinesPerAction() * event.GetWheelRotation() / event.GetWheelDelta();
+    m_scroll_delta = m_mouse_scroll_total;
+    wxMessageBox("Mouse wheel moved to: " + std::to_string(m_scroll_delta));
+    */
     event.Skip();
 }
 
@@ -392,27 +397,12 @@ wxFont ResultCanvas::GetStartingFont()
 
 wxPoint ResultCanvas::GetMousePos()
 {
-    wxPoint tmp(m_mouse_pos);
-    tmp.y += m_scroll_scale_y * m_scroll_delta;
-    return tmp;
-    // return m_mouse_pos;
+    return m_mouse_pos;
 }
 
 std::vector<wxPoint> ResultCanvas::GetMousePositions()
 {
-    if (m_scroll_delta == 0)
-    {
-        return m_mouse_positions;
-    }
-    std::vector<wxPoint> scrolled_points;
-    for (const auto& pt : m_mouse_positions)  // Feels somewhat inefficient. Is there a smarter approach?
-    {
-        wxPoint tmp(pt);
-        tmp.y += m_scroll_scale_y * m_scroll_delta;
-        scrolled_points.push_back(tmp);
-    }
-    return scrolled_points;
-    // return m_mouse_positions;
+    return m_mouse_positions;
 }
 
 wxPoint ResultCanvas::GetPositionDelta()
