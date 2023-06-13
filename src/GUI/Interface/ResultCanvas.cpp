@@ -12,9 +12,9 @@
 ResultCanvas::ResultCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
     : wxScrolledWindow(parent, id, pos, size, style | wxBORDER_THEME)
 {
-    SetScrollbars(20, 20, 50, 50);  // Finally solved my scrolling issue!
+    SetScrollbars(m_scroll_scale_x, m_scroll_scale_y, 50, 50);  // Finally solved my scrolling issue!
     m_mouse_pos = wxPoint(0, 0);
-
+    
     // Set font types:
     wxClientDC local_dc(this);
     m_starting_font = local_dc.GetFont();
@@ -27,7 +27,20 @@ ResultCanvas::ResultCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
     Bind(wxEVT_LEFT_DOWN, &ResultCanvas::OnMouseLeftClick, this);
     Bind(wxEVT_KEY_DOWN, &ResultCanvas::OnKeyDown, this);
     Bind(wxEVT_KEY_UP, &ResultCanvas::OnKeyUp, this);
-    // Bind(wxEVT_SCROLLWIN_BOTTOM, &ResultPanel::OnScroll, this);  // Scrolling is broken for now!
+
+    /*
+    // Bind(wxEVT_SCROLLWIN_BOTTOM, &ResultCanvas::OnScroll, this);  // Scrolling is broken for now!
+    Bind(wxEVT_SCROLLWIN_TOP, &ResultCanvas::OnScroll, this);
+    Bind(wxEVT_SCROLLWIN_BOTTOM, &ResultCanvas::OnScroll, this);
+    Bind(wxEVT_SCROLLWIN_LINEUP, &ResultCanvas::OnScroll, this);
+    Bind(wxEVT_SCROLLWIN_LINEDOWN, &ResultCanvas::OnScroll, this);
+    Bind(wxEVT_SCROLLWIN_PAGEUP, &ResultCanvas::OnScroll, this);
+    Bind(wxEVT_SCROLLWIN_PAGEDOWN, &ResultCanvas::OnScroll, this);
+    // Bind(wxEVT_SCROLLWIN_THUMBTRACK, &ResultCanvas::OnScroll, this);
+    */
+    Bind(wxEVT_SCROLLWIN_THUMBRELEASE, &ResultCanvas::OnScroll, this);
+    Bind(wxEVT_MOUSEWHEEL, &ResultCanvas::OnMouseWheel, this);
+
 }
 
 void ResultCanvas::OnPaint(wxPaintEvent& event)
@@ -279,6 +292,7 @@ void ResultCanvas::OnKeyUp(wxKeyEvent& event)
 void ResultCanvas::SetMousePosition(const wxPoint& pt)
 {
     m_mouse_pos = pt;
+    // m_mouse_pos.y -= m_scroll_delta;
 }
 
 void ResultCanvas::OnMouseMove(wxMouseEvent& event)
@@ -286,6 +300,7 @@ void ResultCanvas::OnMouseMove(wxMouseEvent& event)
     long x = 0;
     long y = 0;
     event.GetPosition(&x, &y);
+    // y += m_scroll_delta;  // Nope. Doesn't fix my problem.
     m_mouse_pos = wxPoint(x, y);
     SetFocusIgnoringChildren();
     Refresh();
@@ -350,9 +365,19 @@ void ResultCanvas::Draw(wxAutoBufferedPaintDC& pdc)
 
 void ResultCanvas::OnScroll(wxScrollWinEvent& scroll_event)
 {
-    wxScrolledWindow::HandleOnScroll(scroll_event);
+    m_scroll_delta = scroll_event.GetPosition();
+    wxMessageBox("Scroll delta: " + std::to_string(m_scroll_delta));
+    // wxScrolledWindow::HandleOnScroll(scroll_event);
+    // Refresh();
+}
 
-    Refresh();
+void ResultCanvas::OnMouseWheel(wxMouseEvent& event)
+{
+    int rotation = event.GetWheelRotation();
+
+    wxMessageBox("Mouse wheel moved: " + std::to_string(rotation));
+
+    event.Skip();
 }
 
 wxFont ResultCanvas::GetMonoFont()
@@ -367,12 +392,27 @@ wxFont ResultCanvas::GetStartingFont()
 
 wxPoint ResultCanvas::GetMousePos()
 {
-    return m_mouse_pos;
+    wxPoint tmp(m_mouse_pos);
+    tmp.y += m_scroll_scale_y * m_scroll_delta;
+    return tmp;
+    // return m_mouse_pos;
 }
 
 std::vector<wxPoint> ResultCanvas::GetMousePositions()
 {
-    return m_mouse_positions;
+    if (m_scroll_delta == 0)
+    {
+        return m_mouse_positions;
+    }
+    std::vector<wxPoint> scrolled_points;
+    for (const auto& pt : m_mouse_positions)  // Feels somewhat inefficient. Is there a smarter approach?
+    {
+        wxPoint tmp(pt);
+        tmp.y += m_scroll_scale_y * m_scroll_delta;
+        scrolled_points.push_back(tmp);
+    }
+    return scrolled_points;
+    // return m_mouse_positions;
 }
 
 wxPoint ResultCanvas::GetPositionDelta()

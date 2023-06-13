@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/28
-// Updated 2022/1/18
+// Updated 2023/6/13
 // Author Garry Morrison
 // License GPL v3
 //
@@ -105,6 +105,7 @@ public:
     void OnPaint(wxPaintEvent& e);
     void OnEraseBg(wxEraseEvent& WXUNUSED(e)) {};
     void OnScroll(wxScrollWinEvent& scroll_event);
+    void OnMouseWheel(wxMouseEvent& event);
 
     // void Draw(wxPaintDC& pdc);
     // void Draw(wxBufferedPaintDC& pdc);
@@ -146,6 +147,9 @@ private:
     std::vector<std::shared_ptr<ResultCanvasObject> > m_canvas_objects;
 
     wxPoint m_mouse_pos;
+    int m_scroll_delta = 0;
+    int m_scroll_scale_x = 20;
+    int m_scroll_scale_y = 20;
     std::vector<wxPoint> m_mouse_positions;
     bool m_is_shift_down = false;
 
