@@ -432,7 +432,36 @@ const void ResultCanvasString::Draw(wxAutoBufferedPaintDC& pdc) const
     }
     else if (m_isactive)
     {
-        pdc.SetTextForeground(*wxBLUE);
+        switch (m_object_type)
+        {
+        case RC_OBJECT_KET: {
+            pdc.SetTextForeground(*wxBLUE);
+            break;
+        }
+        case RC_OBJECT_SIMPLE_OP: {
+            if (operator_usage_map.usage_is_defined(m_text.ToStdString()))
+            {
+                pdc.SetTextForeground(*wxRED);
+            }
+            else
+            {
+                pdc.SetTextForeground(*wxLIGHT_GREY);
+            }
+            break;
+        }
+        case RC_OBJECT_COMPOUND_OP: {
+            pdc.SetTextForeground(*wxCYAN);
+            break;
+        }
+        case RC_OBJECT_FUNCTION_OP: {
+            pdc.SetTextForeground(*wxYELLOW);
+            break;
+        }
+        default:
+            pdc.SetTextForeground(*wxBLACK);
+            break;
+        }
+        // pdc.SetTextForeground(*wxBLUE);
         pdc.SetBackgroundMode(wxTRANSPARENT);
         pdc.DrawText(m_text, m_rect.x, m_rect.y);
     }
