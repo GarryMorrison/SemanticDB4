@@ -450,11 +450,11 @@ const void ResultCanvasString::Draw(wxAutoBufferedPaintDC& pdc) const
             break;
         }
         case RC_OBJECT_COMPOUND_OP: {
-            pdc.SetTextForeground(*wxCYAN);
+            pdc.SetTextForeground(*wxBLUE);
             break;
         }
         case RC_OBJECT_FUNCTION_OP: {
-            pdc.SetTextForeground(*wxYELLOW);
+            pdc.SetTextForeground(*wxRED);
             break;
         }
         default:
