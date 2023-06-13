@@ -377,11 +377,12 @@ void ResultCanvas::OnMouseWheel(wxMouseEvent& event)
     // Not correctly implemented!
     // The solution is in here somewhere:
     // https://docs.wxwidgets.org/3.0/classwx_mouse_event.html
-    /*
-    m_mouse_scroll_total -= event.GetLinesPerAction() * event.GetWheelRotation() / event.GetWheelDelta();
-    m_scroll_delta = m_mouse_scroll_total;
-    wxMessageBox("Mouse wheel moved to: " + std::to_string(m_scroll_delta));
-    */
+    
+    // Mostly works, but is not correct when the scroll meets the top or bottom of the scroll range.
+    // If there was someway to test for that case, then we could fix it.
+    m_scroll_delta -= event.GetLinesPerAction() * event.GetWheelRotation() / event.GetWheelDelta();
+    // wxMessageBox("Mouse wheel moved to: " + std::to_string(m_scroll_delta));
+    
     event.Skip();
 }
 
