@@ -439,7 +439,9 @@ const void ResultCanvasString::Draw(wxAutoBufferedPaintDC& pdc) const
             break;
         }
         case RC_OBJECT_SIMPLE_OP: {
-            if (operator_usage_map.usage_is_defined(m_text.ToStdString()))
+            // if (operator_usage_map.usage_is_defined(m_text.ToStdString()))
+            ulong idx = ket_map.get_idx(m_text.ToStdString());
+            if (fn_map.set_simple_operators.find(idx) != fn_map.set_simple_operators.end())  // I think this is a better approach than using usage map.
             {
                 pdc.SetTextForeground(*wxRED);
             }
