@@ -380,7 +380,17 @@ void ResultCanvas::OnMouseWheel(wxMouseEvent& event)
     
     // Mostly works, but is not correct when the scroll meets the top or bottom of the scroll range.
     // If there was someway to test for that case, then we could fix it.
+    // m_scroll_delta -= event.GetLinesPerAction() * event.GetWheelRotation() / event.GetWheelDelta();
+
+    // int x, y;
+    // GetViewStart(&x, &y);
+    // int max_x, max_y;
+    // GetScrollRange(&max_x, &max_y);
+
     m_scroll_delta -= event.GetLinesPerAction() * event.GetWheelRotation() / event.GetWheelDelta();
+    // wxSize virtual_size = GetVirtualSize();
+    // int max_y = virtual_size.y - GetSize().y;
+    // m_scroll_delta = std::min(m_scroll_delta, max_y);
     // wxMessageBox("Mouse wheel moved to: " + std::to_string(m_scroll_delta));
     
     event.Skip();
