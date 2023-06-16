@@ -6,6 +6,11 @@
 // License GPL v3
 //
 
+// Written with the help of this page:
+// https://wiki.wxwidgets.org/Adding_a_custom_lexer_with_syntax_highlighting_and_folding_to_a_WxStyledTextCtrl
+// And ChatGPT
+
+
 #pragma once
 
 #include "../SDB_GUI.h"

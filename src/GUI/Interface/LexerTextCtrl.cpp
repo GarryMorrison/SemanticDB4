@@ -12,16 +12,16 @@ LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& te
 	: wxStyledTextCtrl(parent, id, pos, size, style)
 {
     // Set up some initial styles
-    StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:Courier New,size:10");
+    // StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:Courier New,size:10");
     StyleClearAll();
     // SetLexer(wxSTC_LEX_PYTHON);
 
     // Load up some text:
     SetText(text);
 
-    // Enable line numbers
+    // Enable and configure line numbers:
     SetMarginType(1, wxSTC_MARGIN_NUMBER);
-    SetMarginWidth(1, 40);
+    SetMarginWidth(1, 30);
 }
 
 void LexerTextCtrl::LoadLexerStyles()

@@ -11,6 +11,7 @@
 
 
 // class ResultCanvas;
+class LexerTextCtrl;
 
 class EditPanel : public wxPanel
 {
@@ -50,7 +51,8 @@ public:
 	~EditPanel();
 private:
 	wxAuiNotebook* m_aui_notebook;
-	wxTextCtrl* m_text_ctrl;
+	// wxTextCtrl* m_text_ctrl;
+	LexerTextCtrl* m_text_ctrl;  // Will it still all work if we just swap in LexerTextCtrl in place of wxTextCtrl?
 	wxString m_current_tab;
 	std::map<wxString, bool> m_unsaved_tabs;
 	bool m_use_auto_save = false;

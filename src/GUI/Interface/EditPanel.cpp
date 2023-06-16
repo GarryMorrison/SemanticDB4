@@ -53,7 +53,13 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	
 	// Sample content:
 	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "Enter your code here ... \n");
-	m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, EDIT_STARTING_TEXT, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+	
+	// Original version:
+	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, EDIT_STARTING_TEXT, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+
+	// New version:
+	m_text_ctrl = new LexerTextCtrl(m_aui_notebook, wxID_ANY, EDIT_STARTING_TEXT, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+
 	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "|context> => |Hello world>\n\nprint |Hello world!>\n");
 	m_aui_notebook->AddPage(m_text_ctrl, "hello-world.sw4", true);
 
@@ -245,7 +251,12 @@ void EditPanel::OnGraphButtonDown(wxCommandEvent& event)
 
 void EditPanel::OnPageChange(wxCommandEvent& event)
 {
-	m_text_ctrl = (wxTextCtrl*)(m_aui_notebook->GetCurrentPage());
+	// Original version:
+	// m_text_ctrl = (wxTextCtrl*)(m_aui_notebook->GetCurrentPage());
+
+	// Updated version:
+	m_text_ctrl = (LexerTextCtrl*)(m_aui_notebook->GetCurrentPage());
+
 	m_current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection());
 	if (m_unsaved_tabs.find(m_current_tab) == m_unsaved_tabs.end())  // This tab is new to us, so add it to the unsaved_tabs map.
 	{
