@@ -43,13 +43,28 @@ void LexerTextCtrl::LoadLexerStyles()
 {
     // Map LEX objects to foreground colours:  // Choose better colours using wxColor() later!
     StyleSetForeground(static_cast<int>(LEX::LEX_NONE), *wxBLACK);
-    StyleSetForeground(static_cast<int>(LEX::LEX_LITERAL), *wxLIGHT_GREY);
-    StyleSetForeground(static_cast<int>(LEX::LEX_SIMPLE), *wxRED);
+    StyleSetForeground(static_cast<int>(LEX::LEX_LITERAL), wxColor(144, 144, 144));
+    StyleSetForeground(static_cast<int>(LEX::LEX_SIMPLE), wxColor(255, 0, 0));
     StyleSetForeground(static_cast<int>(LEX::LEX_COMPOUND), *wxRED);
     StyleSetForeground(static_cast<int>(LEX::LEX_FUNCTION), *wxRED);
-    StyleSetForeground(static_cast<int>(LEX::LEX_KET), *wxBLUE);
+    StyleSetForeground(static_cast<int>(LEX::LEX_KEYWORD), *wxRED);
+    StyleSetForeground(static_cast<int>(LEX::LEX_KET), wxColor(0, 0, 0));
     StyleSetForeground(static_cast<int>(LEX::LEX_COMMENT), *wxBLACK);
     StyleSetForeground(static_cast<int>(LEX::LEX_STRING), *wxBLUE);
+    StyleSetForeground(static_cast<int>(LEX::LEX_USER_FN), *wxBLUE);
+    StyleSetForeground(static_cast<int>(LEX::LEX_ERROR), *wxBLUE);
+
+    StyleSetBackground(static_cast<int>(LEX::LEX_NONE), *wxWHITE);
+    StyleSetBackground(static_cast<int>(LEX::LEX_LITERAL), *wxWHITE);
+    StyleSetBackground(static_cast<int>(LEX::LEX_SIMPLE), *wxWHITE);
+    StyleSetBackground(static_cast<int>(LEX::LEX_COMPOUND), *wxWHITE);
+    StyleSetBackground(static_cast<int>(LEX::LEX_FUNCTION), *wxWHITE);
+    StyleSetBackground(static_cast<int>(LEX::LEX_KEYWORD), *wxWHITE);
+    StyleSetBackground(static_cast<int>(LEX::LEX_KET), wxColor(244, 244, 255));
+    StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), wxColor(236, 255, 236));
+    StyleSetBackground(static_cast<int>(LEX::LEX_STRING), *wxWHITE);
+    StyleSetBackground(static_cast<int>(LEX::LEX_USER_FN), *wxWHITE);
+    StyleSetBackground(static_cast<int>(LEX::LEX_ERROR), *wxRED);
 }
 
 void LexerTextCtrl::LoadOperatorMaps()
@@ -112,6 +127,16 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             continue;
         }
 
+        if (inside_object && c == '\n')
+        {
+            object.LEX_ID = LEX::LEX_LITERAL;
+            object.end = text_pos;
+            lex_objects.push_back(object);
+            inside_object = false;
+            text_pos++;
+            continue;
+        }
+
         if (c == '|')
         {
             if (inside_object)
@@ -149,7 +174,6 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             object.end = text_pos;
             if (c == ' ' || c == ',' || c == ']' || c == ')')
             {
-                // wxString op = text.Mid(object.start, text_pos - object.start);
                 std::string op = text.substr(object.start, text_pos - object.start);
                 if (m_simple.find(op) != m_simple.end())
                 {
@@ -162,11 +186,27 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             }
             else if (c == '[')
             {
-                object.LEX_ID = LEX::LEX_COMPOUND;  // We could do a check to see if it is a known compound operator? If not, error colour?
+                std::string op = text.substr(object.start, text_pos - object.start);
+                if (m_compound.find(op) != m_compound.end())
+                {
+                    object.LEX_ID = LEX::LEX_COMPOUND;
+                }
+                else
+                {
+                    object.LEX_ID = LEX::LEX_ERROR;
+                }
             }
             else if (c == '(')
             {
-                object.LEX_ID = LEX::LEX_FUNCTION;  // Likewise something here with a call to context.recall_type()?
+                std::string op = text.substr(object.start, text_pos - object.start);
+                if (m_function.find(op) != m_function.end())
+                {
+                    object.LEX_ID = LEX::LEX_FUNCTION;
+                }
+                else
+                {
+                    object.LEX_ID = LEX::LEX_USER_FN;
+                }
             }
             lex_objects.push_back(object);
 

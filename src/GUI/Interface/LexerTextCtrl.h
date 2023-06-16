@@ -24,7 +24,9 @@ enum class LEX : int {
 	LEX_KEYWORD = 15,
 	LEX_KET = 16,     // I would prefer not to have the LEX_ prefix, but "KET" is already taken! It would take some work to fix that.
 	LEX_COMMENT = 17,
-	LEX_STRING = 18
+	LEX_STRING = 18,
+	LEX_USER_FN = 19,
+	LEX_ERROR = 20
 };
 
 struct LEX_OBJECT {
