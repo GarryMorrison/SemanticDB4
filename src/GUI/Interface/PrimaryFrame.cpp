@@ -271,7 +271,9 @@ PrimaryFrame::PrimaryFrame()
     // Set up the sizer for the frame and resize the frame
     // according to its contents
     m_topSizer = new wxBoxSizer(wxHORIZONTAL);
-    m_topSizer->SetMinSize(650, 600);
+    // m_topSizer->SetMinSize(650, 600);
+    // m_topSizer->SetMinSize(650, 900);
+    m_topSizer->SetMinSize(750, 600);
     m_topSizer->Add(panel, 1, wxEXPAND);
     SetSizerAndFit(m_topSizer);
 
