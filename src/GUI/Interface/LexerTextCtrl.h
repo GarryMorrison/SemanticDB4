@@ -50,7 +50,6 @@ public:
 private:
 	bool m_use_highlighting = true;  // Apply highlighting by default, potentially add a checkbox to the EditFrame to enable/disable.
 
-	std::map<LEX, wxColor> m_style_map;
 	std::set<std::string> m_simple;
 	std::set<std::string> m_compound;
 	std::set<std::string> m_function;

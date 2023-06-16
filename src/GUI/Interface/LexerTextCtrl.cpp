@@ -41,29 +41,15 @@ LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& te
 
 void LexerTextCtrl::LoadLexerStyles()
 {
-    /*
-    m_style_map[LEX::LEX_NONE] = *wxBLACK;
-    m_style_map[LEX::LEX_LITERAL] = *wxBLUE;
-    m_style_map[LEX::LEX_SIMPLE] = *wxBLUE;
-    m_style_map[LEX::LEX_COMPOUND] = *wxBLUE;
-    m_style_map[LEX::LEX_FUNCTION] = *wxBLUE;
-    m_style_map[LEX::LEX_KEYWORD] = *wxBLUE;
-    m_style_map[LEX::LEX_KET] = *wxBLUE;
-    m_style_map[LEX::LEX_COMMENT] = *wxBLUE;
-    m_style_map[LEX::LEX_STRING] = *wxBLUE;
-    */
-
-    // Map LEX objects to foreground colours:
+    // Map LEX objects to foreground colours:  // Choose better colours using wxColor() later!
     StyleSetForeground(static_cast<int>(LEX::LEX_NONE), *wxBLACK);
     StyleSetForeground(static_cast<int>(LEX::LEX_LITERAL), *wxLIGHT_GREY);
-    // StyleSetForeground(static_cast<int>(LEX::LEX_SIMPLE), *wxBLUE);
     StyleSetForeground(static_cast<int>(LEX::LEX_SIMPLE), *wxRED);
-    StyleSetForeground(static_cast<int>(LEX::LEX_COMPOUND), *wxBLUE);
-    StyleSetForeground(static_cast<int>(LEX::LEX_FUNCTION), *wxBLUE);
+    StyleSetForeground(static_cast<int>(LEX::LEX_COMPOUND), *wxRED);
+    StyleSetForeground(static_cast<int>(LEX::LEX_FUNCTION), *wxRED);
     StyleSetForeground(static_cast<int>(LEX::LEX_KET), *wxBLUE);
-    StyleSetForeground(static_cast<int>(LEX::LEX_COMMENT), *wxBLUE);
+    StyleSetForeground(static_cast<int>(LEX::LEX_COMMENT), *wxBLACK);
     StyleSetForeground(static_cast<int>(LEX::LEX_STRING), *wxBLUE);
-
 }
 
 void LexerTextCtrl::LoadOperatorMaps()
@@ -94,6 +80,7 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     size_t start_pos = 0;
     size_t end_of_text = text.size();
     size_t start_token = 0;
+    bool inside_comment = false;
     bool inside_ket = false;
     bool inside_object = false;
     char c;
@@ -103,6 +90,28 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     {
         c = text[text_pos];
         
+        if (c == '-' && text_pos > 0 && text[text_pos - 1] == '-')
+        {
+            object.LEX_ID = LEX::LEX_COMMENT;
+            object.start = text_pos - 1;
+            inside_comment = true;
+            text_pos++;
+            continue;
+        }
+        if (inside_comment && c == '\n')
+        {
+            object.end = text_pos;
+            lex_objects.push_back(object);
+            inside_comment = false;
+            text_pos++;
+            continue;
+        }
+        if (inside_comment)
+        {
+            text_pos++;
+            continue;
+        }
+
         if (c == '|')
         {
             if (inside_object)
@@ -153,11 +162,11 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             }
             else if (c == '[')
             {
-                object.LEX_ID = LEX::LEX_COMPOUND;
+                object.LEX_ID = LEX::LEX_COMPOUND;  // We could do a check to see if it is a known compound operator? If not, error colour?
             }
             else if (c == '(')
             {
-                object.LEX_ID = LEX::LEX_FUNCTION;
+                object.LEX_ID = LEX::LEX_FUNCTION;  // Likewise something here with a call to context.recall_type()?
             }
             lex_objects.push_back(object);
 
