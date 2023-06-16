@@ -11,6 +11,7 @@
 
 class CommandPanel;
 class EditPanel;
+class LexerTextCtrl;
 
 class PrimaryFrame : public wxFrame
 {
@@ -87,7 +88,8 @@ private:
     wxAuiNotebook* m_auiNotebook;
     bool m_command_window_active = true;
     bool m_edit_window_active = false;
-    std::map<wxString, wxTextCtrl*> m_open_file_text_ctrl;
+    // std::map<wxString, wxTextCtrl*> m_open_file_text_ctrl;
+    std::map<wxString, LexerTextCtrl*> m_open_file_text_ctrl;
     wxMenu* m_menuWindow;
 
     CommandPanel* m_frame_commandPanel;

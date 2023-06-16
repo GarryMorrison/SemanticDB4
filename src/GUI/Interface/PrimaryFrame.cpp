@@ -447,19 +447,22 @@ void PrimaryFrame::OnNew(wxCommandEvent& event)
         starting_code += "|context> => |" + context_name + ">\n\n";
     }
 
-    wxTextCtrl* textCtrlLocal;
+    // wxTextCtrl* textCtrlLocal;
+    LexerTextCtrl* textCtrlLocal;
     if (m_frame_edit_panel->TabLabelExists(file_name))
     {
         if (wxMessageBox(file_name + " has not been saved! Proceed?", "Please confirm", wxICON_QUESTION | wxYES_NO, this) == wxNO)
         {
             return;
         }
-        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        // textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        textCtrlLocal = new LexerTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
         m_frame_edit_panel->ModifyPage(textCtrlLocal, file_name, true);
     }
     else
     {
-        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        // textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
+        textCtrlLocal = new LexerTextCtrl(m_frame_edit_panel, wxID_ANY, starting_code, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER);
         m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
         m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?
     }
@@ -495,20 +498,22 @@ void PrimaryFrame::OnOpen(wxCommandEvent& event)
     }
     
     wxString file_name = openFileDialog.GetFilename();  // Check here if we already know this file name, before creating a new wxTextCtrl.
-    wxTextCtrl* textCtrlLocal; 
+    // wxTextCtrl* textCtrlLocal; 
+    LexerTextCtrl* textCtrlLocal;
     if (m_frame_edit_panel->TabLabelExists(file_name))
     {
         if (wxMessageBox(file_name + " has not been saved! Proceed?", "Please confirm", wxICON_QUESTION | wxYES_NO, this) == wxNO)
         {
             return;
         }
-        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2);
+        // textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2);
+        textCtrlLocal = new LexerTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2);
         m_frame_edit_panel->ModifyPage(textCtrlLocal, file_name, true);
     }
     else
     {
-        textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2);
-        m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
+        // textCtrlLocal = new wxTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2);
+        textCtrlLocal = new LexerTextCtrl(m_frame_edit_panel, wxID_ANY, file_content, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2); m_frame_edit_panel->AddPage(textCtrlLocal, file_name, true);
         m_open_file_text_ctrl[file_name] = textCtrlLocal;  // Probably a memory leak if we open the same file twice?
     }
 
