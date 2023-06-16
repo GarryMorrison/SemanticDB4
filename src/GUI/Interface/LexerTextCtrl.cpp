@@ -52,7 +52,7 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetForeground(static_cast<int>(LEX::LEX_COMMENT), *wxBLACK);
     StyleSetForeground(static_cast<int>(LEX::LEX_STRING), *wxBLUE);
     StyleSetForeground(static_cast<int>(LEX::LEX_USER_FN), *wxBLUE);
-    StyleSetForeground(static_cast<int>(LEX::LEX_ERROR), *wxBLUE);
+    StyleSetForeground(static_cast<int>(LEX::LEX_ERROR), *wxWHITE);
 
     StyleSetBackground(static_cast<int>(LEX::LEX_NONE), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_LITERAL), *wxWHITE);
@@ -64,7 +64,7 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), wxColor(236, 255, 236));
     StyleSetBackground(static_cast<int>(LEX::LEX_STRING), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_USER_FN), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_ERROR), *wxRED);
+    StyleSetBackground(static_cast<int>(LEX::LEX_ERROR), wxColor(255, 64, 64));
 }
 
 void LexerTextCtrl::LoadOperatorMaps()
@@ -236,7 +236,7 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     // Style the lex objects:
     for (LEX_OBJECT object : lex_objects)
     {
-        StartStyling(object.start);
+        StartStyling(start + object.start);
         SetStyling(object.end - object.start, static_cast<int>(object.LEX_ID));
     }
 }
