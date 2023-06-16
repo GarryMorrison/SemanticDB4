@@ -110,6 +110,9 @@ void LexerTextCtrl::LoadOperatorMaps()
     {
         m_keyword.insert(s);
     }
+    m_keyword.insert("in");
+    m_keyword.insert("else:");
+    m_keyword.insert("end:");
 }
 
 // void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const wxString& text)
@@ -156,9 +159,17 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             continue;
         }
 
-        if (inside_object && c == '\n')
+        if (c == '\n' && inside_object)
         {
-            object.LEX_ID = LEX::LEX_LITERAL;
+            std::string op = text.substr(object.start, text_pos - object.start);
+            if (m_keyword.find(op) != m_keyword.end())
+            {
+                object.LEX_ID = LEX::LEX_KEYWORD;
+            }
+            else
+            {
+                object.LEX_ID = LEX::LEX_LITERAL;
+            }
             object.end = text_pos;
             lex_objects.push_back(object);
             inside_object = false;
@@ -212,6 +223,10 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
                 if (m_simple.find(op) != m_simple.end())
                 {
                     object.LEX_ID = LEX::LEX_SIMPLE;
+                }
+                else if (m_keyword.find(op) != m_keyword.end())
+                {
+                    object.LEX_ID = LEX::LEX_KEYWORD;
                 }
                 else
                 {

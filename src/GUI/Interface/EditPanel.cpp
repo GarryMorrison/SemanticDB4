@@ -382,7 +382,7 @@ void EditPanel::SaveFile(const wxString& filename)
 	wxWindow* current_page = m_aui_notebook->GetCurrentPage();
 	// wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
 	LexerTextCtrl* current_text_ctrl = (LexerTextCtrl*)current_page;
-	wxString current_text = current_text_ctrl->GetValue();
+	wxString current_text = current_text_ctrl->GetText();
 	wxFileOutputStream output_stream(filename);
 	if (!output_stream.IsOk())
 	{

@@ -1,2 +1,38 @@
+-- a script to test out different highlighting for tokens
+-- Note, it will not run due to the deliberate parse errors
+--
+--  Author: Garry Morrison
+-- Updated: 2023/6/17
+-- Updated: 2023/6/17
+
+
+
 |context> => |syntax highlight>
+
+age |Fred> => |37>
+friends |Fred> => ssplit[", "] |Sam Max Liz Emma Tom Jane>
+spelling |*> #=> ssplit |_self>
+
+
+table[name, age, friends, spelling] |Fred>
+
+print-range |*> #=>
+    for( the |idx> in |1> .. |5>):
+        print the |idx>
+    end:
+
+
+-- now some errors:
+-- spaces not mod 4:
+   
+       
+
+-- unknown compound operator:
+the |result> => foo[bah] |_self>
+
+-- unmatched brackets:
+print ( |alpha> __ |beta>
+
+-- unclosed compound operator:
+table[name, age
 
