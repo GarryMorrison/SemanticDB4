@@ -23,10 +23,11 @@ enum class LEX : int {
 	LEX_FUNCTION = 14,
 	LEX_KEYWORD = 15,
 	LEX_KET = 16,     // I would prefer not to have the LEX_ prefix, but "KET" is already taken! It would take some work to fix that.
-	LEX_COMMENT = 17,
-	LEX_STRING = 18,
-	LEX_USER_FN = 19,
-	LEX_ERROR = 20
+	LEX_KET_SPECIAL = 17,
+	LEX_COMMENT = 18,
+	LEX_STRING = 19,
+	LEX_USER_FN = 20,
+	LEX_ERROR = 21
 };
 
 struct LEX_OBJECT {
@@ -52,6 +53,7 @@ public:
 private:
 	bool m_use_highlighting = true;  // Apply highlighting by default, potentially add a checkbox to the EditFrame to enable/disable.
 
+	std::set<std::string> m_ket_special;
 	std::set<std::string> m_simple;
 	std::set<std::string> m_compound;
 	std::set<std::string> m_function;

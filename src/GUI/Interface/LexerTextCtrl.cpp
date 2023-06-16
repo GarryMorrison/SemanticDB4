@@ -41,14 +41,15 @@ LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& te
 
 void LexerTextCtrl::LoadLexerStyles()
 {
-    // Map LEX objects to foreground colours:  // Choose better colours using wxColor() later!
+    // Map LEX objects to colours:  // Choose better colours using wxColor() later!
     StyleSetForeground(static_cast<int>(LEX::LEX_NONE), *wxBLACK);
     StyleSetForeground(static_cast<int>(LEX::LEX_LITERAL), wxColor(144, 144, 144));
     StyleSetForeground(static_cast<int>(LEX::LEX_SIMPLE), wxColor(255, 0, 0));
     StyleSetForeground(static_cast<int>(LEX::LEX_COMPOUND), *wxRED);
     StyleSetForeground(static_cast<int>(LEX::LEX_FUNCTION), *wxRED);
-    StyleSetForeground(static_cast<int>(LEX::LEX_KEYWORD), *wxRED);
+    StyleSetForeground(static_cast<int>(LEX::LEX_KEYWORD), *wxBLUE);
     StyleSetForeground(static_cast<int>(LEX::LEX_KET), wxColor(0, 0, 0));
+    StyleSetForeground(static_cast<int>(LEX::LEX_KET_SPECIAL), wxColor(0, 0, 0));
     StyleSetForeground(static_cast<int>(LEX::LEX_COMMENT), *wxBLACK);
     StyleSetForeground(static_cast<int>(LEX::LEX_STRING), *wxBLUE);
     StyleSetForeground(static_cast<int>(LEX::LEX_USER_FN), *wxBLUE);
@@ -61,14 +62,38 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetBackground(static_cast<int>(LEX::LEX_FUNCTION), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_KEYWORD), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_KET), wxColor(244, 244, 255));
+    StyleSetBackground(static_cast<int>(LEX::LEX_KET_SPECIAL), wxColor(194, 194, 255));
     StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), wxColor(236, 255, 236));
     StyleSetBackground(static_cast<int>(LEX::LEX_STRING), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_USER_FN), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_ERROR), wxColor(255, 64, 64));
+
+    StyleSetUnderline(static_cast<int>(LEX::LEX_NONE), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_LITERAL), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_SIMPLE), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_COMPOUND), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_FUNCTION), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_KEYWORD), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_KET), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_KET_SPECIAL), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_COMMENT), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_STRING), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_USER_FN), false);
+    StyleSetUnderline(static_cast<int>(LEX::LEX_ERROR), false);
 }
 
 void LexerTextCtrl::LoadOperatorMaps()
 {
+    m_ket_special.insert("|context>");
+    m_ket_special.insert("|*>");
+    m_ket_special.insert("|_self>");
+    m_ket_special.insert("|__self>");
+    m_ket_special.insert("|__self0>");
+    m_ket_special.insert("|__self1>");
+    m_ket_special.insert("|__self2>");
+    m_ket_special.insert("|__self3>");
+    m_ket_special.insert("|__self4>");
+
     for (ulong idx : fn_map.set_simple_operators)
     {
         m_simple.insert(ket_map.get_str(idx));
@@ -98,6 +123,10 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     bool inside_comment = false;
     bool inside_ket = false;
     bool inside_object = false;
+    bool inside_compound_parameters = false;
+    bool inside_compound_string = false;
+    bool inside_brackets = false;
+    bool inside_braces = false;
     char c;
     std::string token;
     LEX_OBJECT object;
@@ -150,8 +179,13 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             object.start = text_pos;
             inside_ket = true;
         }
-        else if (inside_ket && c == '>')
+        else if (c == '>' && inside_ket)
         {
+            std::string op = text.substr(object.start, text_pos - object.start + 1);
+            if (m_ket_special.find(op) != m_ket_special.end())
+            {
+                object.LEX_ID = LEX::LEX_KET_SPECIAL;
+            }
             object.end = text_pos + 1;
             lex_objects.push_back(object);
 
