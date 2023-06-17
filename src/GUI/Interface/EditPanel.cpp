@@ -86,8 +86,10 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 void EditPanel::OnRunButtonDown(wxCommandEvent& event)  // Add a timer too??
 {
 	wxWindow* current_page = m_aui_notebook->GetCurrentPage();
-	wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
-	std::string current_text = current_text_ctrl->GetValue().ToStdString();
+	// wxTextCtrl* current_text_ctrl = (wxTextCtrl*)current_page;
+	// std::string current_text = current_text_ctrl->GetValue().ToStdString();
+	LexerTextCtrl* current_text_ctrl = (LexerTextCtrl*)current_page;
+	std::string current_text = current_text_ctrl->GetText().ToStdString();
 	std::string current_tab = m_aui_notebook->GetPageText(m_aui_notebook->GetSelection()).ToStdString();
 	if (string_ends_with(current_tab, SW_EXPERIMENT_EXTENSION))  // If the current file has experiment extension, then parse the experiment.
 	{
