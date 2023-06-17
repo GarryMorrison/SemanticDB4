@@ -57,14 +57,24 @@ where:
 - compound operators are library operators that have constant parameters (of type int, float, string, or simple operator)
 - function operators have sequence parameters
 
-A particular type of simple operator is the so called "sigmoid". This has the property of only changing the coefficients of the kets it is applied to. The "clean" operator mentioned above, is the most commonly used sigmoid.
+We further subdivide operators into their application type:
+- sigmoids
+- ket-wise
+- superposition-wise
+- sequence
+
+where:
+- sigmoids are applied to each ket in the given input sequence, and only modify their coefficients. The "structure" of the sequence is left intact. The "clean" operator mentioned above is the most commonly used sigmoid.
+- ket-wise operators apply the given operator to each k_i in the given input sequence
+- superposition-wise operators apply the given operator to sp_i in the given input sequence
+- sequence operators apply to the entire sequence, and may or may not preserve the input sequence "structure"
 
 
 The next component of the language is an associative memory system, where we can define user simple and function operators (compound operators are only possible in the library):
 - standard learn rule: op1 k1 RULE_TYPE seq1
 - slightly more general learn rule: op1 sp1 RULE_TYPE seq1
 
-where in the standard case, once a learn rule is defined, "op1" is a particular type of simple operator called a "literal operator". And henceforth, any application of "op1" to "k1" returns "seq1".
+where in the standard case, once a learn rule is defined, "op1" is a particular type of simple operator called a "literal operator". And henceforth, any application of "op1" to "k1" returns "seq1". Literal operators act ket-wise to the given input sequence.
 where in the second case, we learn the literal operators "op1" with respect to k_i for each k_i in sp1.
 
 Where we have several variants for "RULE_TYPE":
@@ -101,6 +111,7 @@ plural |*> #=> |_self> _ |s>
 plural |foot> => |feet>
 plural |tooth> => |teeth>
 
+With a note that since literal operators act ket-wise on the input sequence, we can use |*> to define a function that also acts ket-wise.
 
 
 We can also define user functions, here "fn1", of form:
@@ -120,7 +131,7 @@ So we have:
 |__selfk> is the k'th parameter
 
 For bound functions, the parameters are already bound for you to specific "op_i k_i" (and are deleted at the end of the function).
-
+In contrast to functions defined using |*> that act ket-wise, user functions defined with respect to (*) have access to the entire input sequence.
 
 Finally, the RHS of learn rules can be a multi-line function. This has the form:
 fn1 PARAM_TYPE RULE_TYPE
