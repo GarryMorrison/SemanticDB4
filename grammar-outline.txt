@@ -57,6 +57,8 @@ where:
 - compound operators are library operators that have constant parameters (of type int, float, string, or simple operator)
 - function operators have sequence parameters
 
+A particular type of simple operator is the so called "sigmoid". This has the property of only changing the coefficients of the kets it is applied to. The "clean" operator mentioned above, is the most commonly used sigmoid.
+
 
 The next component of the language is an associative memory system, where we can define user simple and function operators (compound operators are only possible in the library):
 - standard learn rule: op1 k1 RULE_TYPE seq1
