@@ -37,6 +37,7 @@ LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& te
 
     // Bind to our Styling method:
     Bind(wxEVT_STC_STYLENEEDED, &LexerTextCtrl::OnStyleNeeded, this);
+    Bind(wxEVT_LEFT_UP, &LexerTextCtrl::OnMouseClick, this);
 }
 
 void LexerTextCtrl::LoadLexerStyles()
@@ -358,8 +359,8 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     }
 
     // Remove the old styling:  // This is buggy for now, so leave it out
-    // StartStyling(start);
-    // SetStyling(end - start, 0);
+    StartStyling(start);
+    SetStyling(end - start, static_cast<int>(LEX::LEX_NONE));
 
     // Style the lex objects:
     for (LEX_OBJECT object : lex_objects)
@@ -369,7 +370,7 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     }
 }
 
-void LexerTextCtrl::OnStyleNeeded(wxStyledTextEvent& event)  // Buggy on update, for some reason!
+void LexerTextCtrl::OnStyleNeeded(wxStyledTextEvent& event)
 {
     size_t line_end = LineFromPosition(GetCurrentPos());
     size_t line_start = LineFromPosition(GetEndStyled());
@@ -392,10 +393,28 @@ void LexerTextCtrl::OnStyleNeeded(wxStyledTextEvent& event)  // Buggy on update,
     std::string local_text = GetTextRange(start_pos, end_pos).ToStdString();
 
     // Now highlight it all:
-    this->SyntaxHighlight(start_pos, end_pos, local_text);
+    SyntaxHighlight(start_pos, end_pos, local_text);
 
     // event.Skip();   // Is this needed?
 }
+
+void LexerTextCtrl::OnMouseClick(wxMouseEvent& event)
+{
+    // wxMessageBox("Mouse click");
+    size_t line_start = 0;
+    size_t line_end = LinesOnScreen() - 1;
+
+    // Now find positions:
+    size_t start_pos = PositionFromLine(line_start);
+    size_t end_pos = GetLineEndPosition(line_end);
+    std::string local_text = GetTextRange(start_pos, end_pos).ToStdString();
+
+    // Now highlight it all:
+    SyntaxHighlight(start_pos, end_pos, local_text);
+
+    event.Skip();
+}
+
 
 LexerTextCtrl::~LexerTextCtrl()
 {};

@@ -47,6 +47,7 @@ public:
 	// void SyntaxHighlight(size_t start, size_t end, const wxString& text);
 	void SyntaxHighlight(size_t start, size_t end, const std::string& text);
 	void OnStyleNeeded(wxStyledTextEvent& event);
+	void OnMouseClick(wxMouseEvent& event);
 
 	~LexerTextCtrl();
 
