@@ -20,8 +20,12 @@ print-range |*> #=>
     for( the |idx> in |1> .. |5>):
         print the |idx>
     end:
-
-the |result> => |5> -- |3>
+
+
+the |result> => |5> -- |3>
+the |fn result> => fn(2.3|a>, 3.5|b>) |_self>
+
+sprint(|    >) the |result>
 
 
 -- now some parse errors:
@@ -40,4 +44,7 @@ table[name, age
 
 -- unclosed ket:
 the |result> => |some thing
+
+
+
 

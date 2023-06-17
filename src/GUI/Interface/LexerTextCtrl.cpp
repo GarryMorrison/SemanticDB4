@@ -53,7 +53,7 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetForeground(static_cast<int>(LEX::LEX_KET_SPECIAL), wxColor(0, 0, 0));
     StyleSetForeground(static_cast<int>(LEX::LEX_COMMENT), *wxBLACK);
     StyleSetForeground(static_cast<int>(LEX::LEX_STRING), *wxBLUE);
-    StyleSetForeground(static_cast<int>(LEX::LEX_USER_FN), *wxBLUE);
+    StyleSetForeground(static_cast<int>(LEX::LEX_USER_FN), wxColor(144, 144, 144));
     StyleSetForeground(static_cast<int>(LEX::LEX_ERROR), *wxWHITE);
 
     StyleSetBackground(static_cast<int>(LEX::LEX_NONE), *wxWHITE);
@@ -64,7 +64,8 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetBackground(static_cast<int>(LEX::LEX_KEYWORD), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_KET), wxColor(244, 244, 255));
     StyleSetBackground(static_cast<int>(LEX::LEX_KET_SPECIAL), wxColor(194, 194, 255));
-    StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), wxColor(236, 255, 236));
+    // StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), wxColor(236, 255, 236));
+    StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_STRING), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_USER_FN), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_ERROR), wxColor(255, 64, 64));
@@ -342,6 +343,10 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
                 if (m_function.find(op) != m_function.end())
                 {
                     object.LEX_ID = LEX::LEX_FUNCTION;
+                }
+                else if (m_keyword.find(op) != m_keyword.end())
+                {
+                    object.LEX_ID = LEX::LEX_KEYWORD;
                 }
                 else
                 {
