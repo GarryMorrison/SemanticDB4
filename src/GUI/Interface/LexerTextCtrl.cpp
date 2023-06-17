@@ -81,6 +81,19 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetUnderline(static_cast<int>(LEX::LEX_STRING), false);
     StyleSetUnderline(static_cast<int>(LEX::LEX_USER_FN), false);
     StyleSetUnderline(static_cast<int>(LEX::LEX_ERROR), false);
+
+    StyleSetItalic(static_cast<int>(LEX::LEX_NONE), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_LITERAL), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_SIMPLE), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_COMPOUND), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_FUNCTION), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_KEYWORD), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_KET), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_KET_SPECIAL), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_COMMENT), true);
+    StyleSetItalic(static_cast<int>(LEX::LEX_STRING), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_USER_FN), false);
+    StyleSetItalic(static_cast<int>(LEX::LEX_ERROR), false);
 }
 
 void LexerTextCtrl::LoadOperatorMaps()
@@ -131,7 +144,7 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     bool inside_compound_string = false;
     bool inside_brackets = false;
     bool inside_braces = false;
-    bool is_fresh_line = false;
+    bool is_fresh_line = true;
     size_t start_square_bracket = 0;
     size_t start_bracket = 0;
     size_t start_line = 0;
@@ -141,6 +154,21 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     while (text_pos < end_of_text)
     {
         c = text[text_pos];
+        
+        
+        if (c == '-' && end_of_text > 2 && text[text_pos + 1] == '-')
+        {
+            if (is_fresh_line)
+            {
+                object.LEX_ID = LEX::LEX_COMMENT;
+                object.start = text_pos - 1;
+                inside_comment = true;
+            }
+            is_fresh_line = false;
+            text_pos++;
+            continue;
+        }
+
         if (!(c == '\n' || c == ' '))
         {
             if (is_fresh_line)
@@ -156,15 +184,7 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             }
             is_fresh_line = false;
         }
-        
-        if (c == '-' && text_pos > 0 && text[text_pos - 1] == '-')
-        {
-            object.LEX_ID = LEX::LEX_COMMENT;
-            object.start = text_pos - 1;
-            inside_comment = true;
-            text_pos++;
-            continue;
-        }
+
         if (inside_comment && c == '\n')
         {
             object.end = text_pos;
