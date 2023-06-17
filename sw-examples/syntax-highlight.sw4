@@ -22,7 +22,7 @@ print-range |*> #=>
     end:
 
 
--- now some errors:
+-- now some parse errors:
 -- spaces not mod 4:
    
        
@@ -36,3 +36,5 @@ print ( |alpha> __ |beta>
 -- unclosed compound operator:
 table[name, age
 
+-- unclosed ket:
+the |result> => |some thing

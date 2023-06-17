@@ -130,12 +130,31 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     bool inside_compound_string = false;
     bool inside_brackets = false;
     bool inside_braces = false;
+    bool is_fresh_line = false;
+    size_t start_square_bracket = 0;
+    size_t start_bracket = 0;
+    size_t start_line = 0;
     char c;
     std::string token;
     LEX_OBJECT object;
-    while (text_pos < end_of_text)  // This approach vs using for (const char c: string) ?
+    while (text_pos < end_of_text)
     {
         c = text[text_pos];
+        if (!(c == '\n' || c == ' '))
+        {
+            if (is_fresh_line)
+            {
+                size_t space_delta = text_pos - start_line - 1;
+                if (space_delta % 4 != 0)
+                {
+                    object.LEX_ID = LEX::LEX_ERROR;
+                    object.start = start_line + 1;
+                    object.end = text_pos;
+                    lex_objects.push_back(object);
+                }
+            }
+            is_fresh_line = false;
+        }
         
         if (c == '-' && text_pos > 0 && text[text_pos - 1] == '-')
         {
@@ -150,6 +169,8 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             object.end = text_pos;
             lex_objects.push_back(object);
             inside_comment = false;
+            is_fresh_line = true;
+            start_line = text_pos;
             text_pos++;
             continue;
         }
@@ -173,9 +194,55 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             object.end = text_pos;
             lex_objects.push_back(object);
             inside_object = false;
+            is_fresh_line = true;
+            start_line = text_pos;
             text_pos++;
             continue;
         }
+
+        if (c == '\n')
+        {
+            if (is_fresh_line)
+            {
+                size_t space_delta = text_pos - start_line - 1;
+                if (space_delta % 4 != 0)
+                {
+                    object.LEX_ID = LEX::LEX_ERROR;
+                    object.start = start_line + 1;
+                    object.end = text_pos;
+                    lex_objects.push_back(object);
+                }
+            }
+            if (inside_ket)
+            {
+                object.LEX_ID = LEX::LEX_ERROR;
+                object.end = text_pos;
+                lex_objects.push_back(object);
+                inside_ket = false;
+            }
+            else if (inside_brackets)
+            {
+                object.LEX_ID = LEX::LEX_ERROR;
+                object.start = start_bracket;
+                object.end = object.start + 1;
+                lex_objects.push_back(object);
+                inside_brackets = false;
+            }
+            else if (inside_compound_parameters)
+            {
+                object.LEX_ID = LEX::LEX_ERROR;
+                object.start = start_square_bracket;
+                object.end = object.start + 1;
+                lex_objects.push_back(object);
+                inside_compound_parameters = false;
+            }
+            is_fresh_line = true;
+            start_line = text_pos;
+            text_pos++;
+            continue;
+        }
+
+        
 
         if (c == '|')
         {
@@ -199,15 +266,8 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
             }
             object.end = text_pos + 1;
             lex_objects.push_back(object);
-
-            // Reset object:  // Do we even need this?
-            // object.LEX_ID = LEX::LEX_NONE;
-            // object.start = 0;
-            // object.end = 0;
-
-            // Switch off inside_ket:
             inside_ket = false;
-            // token.Clear();  // Shouldn't be needed
+            
         }
         else if (!inside_ket && !inside_object && ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')))
         {
@@ -232,6 +292,14 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
                 {
                     object.LEX_ID = LEX::LEX_LITERAL;
                 }
+                if (c == ']')
+                {
+                    inside_compound_parameters = false;
+                }
+                else if (c == ')')
+                {
+                    inside_brackets = false;
+                }
             }
             else if (c == '[')
             {
@@ -244,6 +312,8 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
                 {
                     object.LEX_ID = LEX::LEX_ERROR;
                 }
+                inside_compound_parameters = true;
+                start_square_bracket = text_pos;
             }
             else if (c == '(')
             {
@@ -256,25 +326,34 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
                 {
                     object.LEX_ID = LEX::LEX_USER_FN;
                 }
+                inside_brackets = true;
+                start_bracket = text_pos;
             }
             lex_objects.push_back(object);
-
-            // Do we need to clear object here? Possibly not, if we do it right.
-            // object.LEX_ID = LEX::LEX_NONE;
-            // object.start = 0;
-            // object.end = 0;
-
             inside_object = false;
         }
-        /*
         else if (!inside_ket)
         {
-            
-
-            token.Append(c);
+            if (c == '(')
+            {
+                inside_brackets = true;
+                start_bracket = text_pos;
+                text_pos++;
+                continue;
+            }
+            if (c == ')')
+            {
+                inside_brackets = false;
+                text_pos++;
+                continue;
+            }
+            if (c == ']')
+            {
+                inside_compound_parameters = false;
+                text_pos++;
+                continue;
+            }
         }
-        */
-
         text_pos++;  // Move on to next char position
     }
 
