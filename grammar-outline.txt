@@ -1,0 +1,190 @@
+In this document, we provide an outline of the grammar of the SDB language:
+
+The "atoms" of this language are so called kets, borrowed from quantum mechanics:
+There are basically three forms:
+- the empty ket: |>
+- the naked ket: |s>
+- the full ket: c|s>
+where "s" is an arbitrary string, with the exception of the pipe and angle-bracket characters (if they are needed, they must first be escaped).
+and where "c" is an arbitrary float (in quantum mechanics "c" is an arbitrary complex number).
+
+- The "empty ket" has no associated float, or string, and has a special meaning. It is both the identity element (in a maths sense) for superposition addition, and returned by operators when the answer is "don't know". We can check for the empty ket using the "do-you-know" operator.
+- The naked ket has no associated float, so the coefficient defaults to 1, but has an associated string.
+- The full ket has both an explicit float and a string. This is the most general type of ket.
+
+Further, we have conventions regarding the string "s". We use the ": " substring to denote "categories" vs "values".
+For example, we can label "bread" as a sub-type of "food" using the ket |food: bread>.
+Or perhaps animal, with sub-type mammal, with sub-type cat: |animal: mammal: cat>
+
+
+Using kets, the next object of interest is a superposition:
+- the simple superposition: k1
+- the general superposition: k1 + k2 + ... + kn
+where k_i are arbitrary kets. Noting in a maths sense, kets are a particular type of superposition, so all kets are also superpositions, but the inverse is not true, only simple superpositions are a type of ket.
+
+Note:
+- If k_i is the empty ket |>, ie, the identity element for superposition addition, it leaves the rest of the superposition unchanged.
+- If k_i and k_j share the same label s_i then the result of: k_i + k_j is: (c_i + c_j) |s_i>
+
+Also, we have "clean superpositions", these are superpositions with all ket coefficients either 0 or 1. Clean superpositions are mathematically equivalent to a set. Eg: {alpha, beta, gamma} <-> |alpha> + |beta> + |gamma>
+Note, we have the "clean" operator which maps an arbitrary superposition to a clean superposition.
+
+Indeed, superpositions are a type of generalization of sets, and for example, we have "union", and "intersection" functions that act on general superpositions. Unions are coefficient-wise maximum, and intersections are coefficient-wise minimum. If an element is not in one of the superpositions, its coefficient is treated as 0. In the case of clean superpositions these functions reproduce that expected for sets.
+In general, superpositions are equivalent to real-valued vectors, with explicit basis labels. The presence of the basis labels allows for the representation of sparse vectors in a clean way.
+
+
+Using superpositions we can construct the next object, a sequence:
+- the simple sequence: sp1
+- the general sequence: sp1 . sp2 . ... . spn
+where sp_i are arbitrary superpositions. Noting in a maths sense, superpositions are a particular type of sequence, so all superpositions are also sequences, and hence all kets are also a particular type of sequence. Again, in general the inverse is not true.
+
+
+The second component of our language are operators. Mathematically they are abstract maps from sequence to sequence. A large class of them are linear operators (effectively sparse matrices), but this is not true in general. Given their input type is the same as their output type, we can chain sequences of them into so called operator sequences (a generalization of matrix multiplication):
+- an operator sequence: op1 op2 ... opn
+
+And we can exponent them (a generalization of matrix exponentation):
+- a powered operator sequence: (op1 op2 ... opn)^k
+Eg: k = 3, maps: (op1 op2 ... opn)^3 to the operator sequence: op1 op2 ... opn op1 op2 ... opn op1 op2 ... opn
+
+
+We have 3 basic classes of operator types, depending on if they have parameters:
+- simple operators: op
+- compound operators: op[param1, param2 ... , param_n]
+- function operators: op( seq1, seq2, ..., seqn)
+
+where: 
+- simple operators have no parameters
+- compound operators are library operators that have constant parameters (of type int, float, string, or simple operator)
+- function operators have sequence parameters
+
+
+The next component of the language is an associative memory system, where we can define user simple and function operators (compound operators are only possible in the library):
+- standard learn rule: op1 k1 RULE_TYPE seq1
+- slightly more general learn rule: op1 sp1 RULE_TYPE seq1
+
+where in the standard case, once a learn rule is defined, "op1" is a particular type of simple operator called a "literal operator". And henceforth, any application of "op1" to "k1" returns "seq1".
+where in the second case, we learn the literal operators "op1" with respect to k_i for each k_i in sp1.
+
+Where we have several variants for "RULE_TYPE":
+- standard: =>
+- non-empty: _=>
+- add-learn: +=>
+- seq-learn: .=>
+- stored-rule: #=>
+- memoizing-rule: !=>
+
+where:
+- in the standard case, "op1 k1" returns "seq1"
+- in the non-empty case, only learn "op1 k1" when "seq1" is not the empty ket |>
+- in the add-learn case, superposition add "seq1" to the existing definition of "op1 k1"
+- in the seq-learn case, sequence append "seq1" to the existing definition of "op1 k1"
+- in the stored-rule case, store the right hand side of the learn rule, and only calculate it at invocation time
+- in the memoizing-rule case, store the right hand side of the learn rule, calculate it at invocation time, and then store the result (for cases like Fibonacci numbers, this can be a big efficiency gain, at the expense of a little bit of memory).
+
+
+Note, we have two special types of learn rule. The first is the context learn rule:
+|context> => |s>
+This labels the current "context" with the string "s". Once this rule has been executed, all following learn rules are in that particular "context". With the aid of context, it is possible to define mutually conflicting learn rules, provided they are in different contexts. There is very limited access from one context to another.
+
+The next is the general ket rule:
+op2 |*> RULE_TYPE seq2
+which has the property of defining the general case of a rule (eg, in the case of plurals with regular vs irregular cases).
+If "op2 k2" is defined, then return its value. But if "op2 k2" is not defined then return "seq2".
+The calculation of "seq2" often requires knowing the value of "k2", so that is accessible through the |_self> ket.
+For example, the case of plurals:
+-- define a general rule:
+plural |*> #=> |_self> _ |s>
+
+-- define some irregular plurals:
+plural |foot> => |feet>
+plural |tooth> => |teeth>
+
+
+
+We can also define user functions, here "fn1", of form:
+fn1 PARAM_TYPE RULE_TYPE seq1
+
+where RULE_TYPE is usually either stored or memoizing (#=> or !=>), and PARAM_TYPE is one of:
+- single unlabelled parameter: (*)
+- two parameters: (*,*)
+- three parameters: (*,*,*)
+- four parameters: (*,*,*,*)
+- bound function: {op1 k1, op2 k2, ... , opn kn}
+
+If we use unlabelled parameters, we need some way to access the values of them.
+So we have:
+|__self0> is the input sequence
+|__self> or |__self1> is the first parameter
+|__selfk> is the k'th parameter
+
+For bound functions, the parameters are already bound for you to specific "op_i k_i" (and are deleted at the end of the function).
+
+
+Finally, the RHS of learn rules can be a multi-line function. This has the form:
+fn1 PARAM_TYPE RULE_TYPE
+    learn-rule-1
+    learn-rule-2
+    ...
+    learn-rule-n
+
+For multi-line functions, the sequence in the last evaluated line is the return value.
+The language also has "if", "if-else", "for", "sfor" and "while" constructs.
+
+
+
+Next, we have infix type 1:
+- addition: +
+- subtraction: -
+- sequence: .
+- merge: _
+- space-merge: __
+- colon-merge: :_
+
+where:
+- addition implements superposition addition: k1 + k2 + ... + kn
+- subtraction implements superposition subtraction: sp1 - sp2
+- sequence implements sequence construction: sp1 . sp2 . ... . spn
+- merge, merges ket labels: Eg, |alpha> _ |beta> becomes |alphabeta>
+- space-merge, merges ket labels with a space in between: Eg, |alpha> __ |beta> becomes |alpha beta>
+- colon-merge, merges ket labels into category-value lists: Eg, |alpha> :_ |beta> becomes |alpha: beta>
+
+
+Next, we have infix type 2:
+- Comparison:
+-- equality check: ==
+-- inequality check: !=
+-- greater-equal: >=
+-- greater: >
+-- less-equal: <=
+-- less: <
+
+- Logical:
+-- and: &&
+-- or: ||
+
+- Arithmetic:
+-- addition: ++
+-- subtraction: --
+-- multiplication: **
+-- division: //
+-- modulus: %%
+-- exponentiation: ^^
+
+- Range: ..
+where most of these infix operators should be self evident, we only need to explain range:
+Eg: |3> .. |7> becomes the superposition (not a sequence): |3> + |4> + |5> + |6> + |7>
+And 2 dimensional ranges are also supported, eg: |0: 0> .. |2: 3> becomes the superposition:
+|0: 0> + |0: 1> + |0: 2> + |0: 3> + |1: 0> + |1: 1> + |1: 2> + |1: 3> + |2: 0> + |2: 1> + |2: 2> + |2: 3>
+
+
+The infix type 2 operators act pairwise with respect to kets: 
+k1 infix-op k2
+If k1 or k2 are not kets, the result is currently undefined in our language.
+For more complex expressions, use brackets as needed.
+
+
+
+For much more on the language, see: http://semantic-db.org/docs/usage4/
+
+
+
