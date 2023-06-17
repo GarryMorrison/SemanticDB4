@@ -103,6 +103,7 @@ void LexerTextCtrl::LoadLexerStyles()
 void LexerTextCtrl::LoadOperatorMaps()
 {
     m_ket_special.insert("|context>");
+    m_ket_special.insert("|>");
     m_ket_special.insert("|*>");
     m_ket_special.insert("|_self>");
     m_ket_special.insert("|__self>");
