@@ -63,7 +63,8 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetBackground(static_cast<int>(LEX::LEX_FUNCTION), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_KEYWORD), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_KET), wxColor(244, 244, 255));
-    StyleSetBackground(static_cast<int>(LEX::LEX_KET_SPECIAL), wxColor(194, 194, 255));
+    // StyleSetBackground(static_cast<int>(LEX::LEX_KET_SPECIAL), wxColor(194, 194, 255));
+    StyleSetBackground(static_cast<int>(LEX::LEX_KET_SPECIAL), *wxWHITE);
     // StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), wxColor(236, 255, 236));
     StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), *wxWHITE);
     StyleSetBackground(static_cast<int>(LEX::LEX_STRING), *wxWHITE);
@@ -95,6 +96,8 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetItalic(static_cast<int>(LEX::LEX_STRING), false);
     StyleSetItalic(static_cast<int>(LEX::LEX_USER_FN), false);
     StyleSetItalic(static_cast<int>(LEX::LEX_ERROR), false);
+
+    StyleSetBold(static_cast<int>(LEX::LEX_KET_SPECIAL), true);
 }
 
 void LexerTextCtrl::LoadOperatorMaps()
