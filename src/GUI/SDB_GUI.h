@@ -2,7 +2,7 @@
 //
 // Semantic DB 4
 // Created 2021/12/5
-// Updated 2023/6/17
+// Updated 2023/6/18
 // Author Garry Morrison
 // License GPL v3
 //
@@ -19,7 +19,7 @@
 #define APP_COPYRIGHT "(C) 2021 Garry Morrison"
 #define APP_LICENCE "GPL v3"
 
-#define APP_BUILD_DATE "2023/6/17"
+#define APP_BUILD_DATE "2023/6/18"
 #define APP_VERSION "4.0.alpha5"
 #define APP_USAGE_WEBSITE "http://semantic-db.org/docs/usage4/"
 #define APP_WEBSITE "http://semantic-db.org"
@@ -109,6 +109,8 @@
 #include "Interface/ImageFrame.h"
 #include "Interface/ImageViewer.h"
 #include "Interface/LexerTextCtrl.h"
+#include "LexerColorMap/LexerColorMap.h"
+
 
 #include "Associated/ActiveTableDialog.h"
 #include "Associated/TableDialog.h"

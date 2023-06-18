@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GUI\LexerColorMap\LexerColorMap.h" />
     <ClInclude Include="src\GUI\Interface\LexerTextCtrl.h" />
     <ClInclude Include="src\GUI\Interface\ImageViewer.h" />
     <ClInclude Include="src\GUI\Interface\ImageFrame.h" />
@@ -235,6 +236,7 @@
     <ClInclude Include="src\core\OperatorLibrary\TMOperatorLibrary.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\LexerColorMap\LexerColorMap.cpp" />
     <ClCompile Include="src\GUI\Interface\LexerTextCtrl.cpp" />
     <ClCompile Include="src\GUI\Interface\ImageViewer.cpp" />
     <ClCompile Include="src\GUI\Interface\ImageFrame.cpp" />

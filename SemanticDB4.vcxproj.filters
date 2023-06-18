@@ -252,6 +252,9 @@
     <ClInclude Include="src\GUI\Interface\LexerTextCtrl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI\LexerColorMap\LexerColorMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GUI\SDB_GUI.cpp">
@@ -474,6 +477,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\Interface\LexerTextCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\LexerColorMap\LexerColorMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

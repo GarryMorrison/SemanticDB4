@@ -15,6 +15,10 @@
 
 #include "../SDB_GUI.h"
 
+enum class LEX;
+struct LEX_OBJECT;
+
+/* // Moved to LexerColorMap:
 enum class LEX : int {
 	LEX_NONE = 10,
 	LEX_LITERAL = 11,
@@ -22,7 +26,7 @@ enum class LEX : int {
 	LEX_COMPOUND = 13,
 	LEX_FUNCTION = 14,
 	LEX_KEYWORD = 15,
-	LEX_KET = 16,     // I would prefer not to have the LEX_ prefix, but "KET" is already taken! It would take some work to fix that.
+	LEX_KET = 16,
 	LEX_KET_SPECIAL = 17,
 	LEX_COMMENT = 18,
 	LEX_STRING = 19,
@@ -30,11 +34,13 @@ enum class LEX : int {
 	LEX_ERROR = 21
 };
 
+
 struct LEX_OBJECT {
 	LEX LEX_ID = LEX::LEX_NONE;
 	size_t start = 0;
 	size_t end = 0;
 };
+*/
 
 
 class LexerTextCtrl : public wxStyledTextCtrl
