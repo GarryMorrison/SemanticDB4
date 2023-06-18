@@ -10,6 +10,19 @@
 
 LexerColorMap::LexerColorMap()
 {
+	m_ID_list.push_back(LEX::LEX_NONE);
+	m_ID_list.push_back(LEX::LEX_LITERAL);
+	m_ID_list.push_back(LEX::LEX_SIMPLE);
+	m_ID_list.push_back(LEX::LEX_COMPOUND);
+	m_ID_list.push_back(LEX::LEX_FUNCTION);
+	m_ID_list.push_back(LEX::LEX_KEYWORD);
+	m_ID_list.push_back(LEX::LEX_KET);
+	m_ID_list.push_back(LEX::LEX_KET_SPECIAL);
+	m_ID_list.push_back(LEX::LEX_COMMENT);
+	m_ID_list.push_back(LEX::LEX_STRING);
+	m_ID_list.push_back(LEX::LEX_USER_FN);
+	m_ID_list.push_back(LEX::LEX_ERROR);
+
 	m_string_map["LEX_NONE"] = LEX::LEX_NONE;
 	m_string_map["LEX_LITERAL"] = LEX::LEX_LITERAL;
 	m_string_map["LEX_SIMPLE"] = LEX::LEX_SIMPLE;
@@ -37,31 +50,31 @@ void LexerColorMap::DisableHighlights()
 void LexerColorMap::LoadDefaults()
 {
 	// Load the default background colours:
-	for (const auto& id : LEX_values)
+	for (const auto& id : m_ID_list)
 	{
 		m_background_colors[id] = *wxWHITE;
 	}
 
 	// Load the default foreground colours:
-	for (const auto& id : LEX_values)
+	for (const auto& id : m_ID_list)
 	{
 		m_foreground_colors[id] = *wxBLACK;
 	}
 
 	// Load the default underline state:
-	for (const auto& id : LEX_values)
+	for (const auto& id : m_ID_list)
 	{
 		m_underlines[id] = false;
 	}
 
 	// Load the default italic state:
-	for (const auto& id : LEX_values)
+	for (const auto& id : m_ID_list)
 	{
 		m_italics[id] = false;
 	}
 
 	// Load the default bold state:
-	for (const auto& id : LEX_values)
+	for (const auto& id : m_ID_list)
 	{
 		m_bold[id] = false;
 	}
@@ -89,6 +102,11 @@ void LexerColorMap::LoadSettings(const wxString& filepath)
 	// Load a local driver/context and load in the style sw file?
 }
 
+std::vector<LEX> LexerColorMap::GetIDList()
+{
+	return m_ID_list;
+}
+
 LEX LexerColorMap::GetID(const std::string& s)
 {
 	if (m_string_map.find(s) == m_string_map.end())
@@ -107,7 +125,7 @@ wxColor LexerColorMap::GetBackgroundColor(LEX id)
 	return m_background_colors[id];
 }
 
-wxColor LexerColorMap::GetforegroundColor(LEX id)
+wxColor LexerColorMap::GetForegroundColor(LEX id)
 {
 	if (m_foreground_colors.find(id) == m_foreground_colors.end())
 	{

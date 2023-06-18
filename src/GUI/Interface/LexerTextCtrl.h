@@ -14,9 +14,13 @@
 #pragma once
 
 #include "../SDB_GUI.h"
+#include "../LexerColorMap/LexerColorMap.h"
 
 enum class LEX;
 struct LEX_OBJECT;
+// extern const LEX LEX_values[];  // Deprecated by LexerColorMap::GetIDList()
+class LexerColorMap;
+extern LexerColorMap lexer_color_map;
 
 /* // Moved to LexerColorMap:
 enum class LEX : int {

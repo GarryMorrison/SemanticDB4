@@ -25,7 +25,8 @@ enum class LEX : int {
 	LEX_ERROR = 21
 };
 
-constexpr LEX LEX_values[] = {
+/*  // Deprecated by GetIDList()
+const LEX LEX_values[] = {
 	LEX::LEX_NONE,
 	LEX::LEX_LITERAL,
 	LEX::LEX_SIMPLE,
@@ -39,6 +40,7 @@ constexpr LEX LEX_values[] = {
 	LEX::LEX_USER_FN,
 	LEX::LEX_ERROR
 };
+*/
 
 struct LEX_OBJECT {  // Seems we need it here, and not in LexerTextCtrl. Else LEX::LEX_NONE is not defined.
 	LEX LEX_ID = LEX::LEX_NONE;
@@ -67,9 +69,10 @@ public:
 	bool GetBold(LEX id) { return m_bold.at(id); }
 	*/
 
+	std::vector<LEX> GetIDList();
 	LEX GetID(const std::string& s);
 	wxColor GetBackgroundColor(LEX id);
-	wxColor GetforegroundColor(LEX id);
+	wxColor GetForegroundColor(LEX id);
 	bool GetUnderline(LEX id);
 	bool GetItalic(LEX id);
 	bool GetBold(LEX id);
@@ -78,6 +81,7 @@ public:
 
 private:
 	bool m_use_highlights = true;
+	std::vector<LEX> m_ID_list;
 	std::map<std::string, LEX> m_string_map;
 	std::map<LEX, wxColor> m_background_colors;
 	std::map<LEX, wxColor> m_foreground_colors;

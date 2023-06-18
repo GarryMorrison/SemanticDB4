@@ -42,6 +42,7 @@ LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& te
 
 void LexerTextCtrl::LoadLexerStyles()
 {
+    /*  // Deprecated!
     // Map LEX objects to colours:  // Choose better colours using wxColor() later!
     StyleSetForeground(static_cast<int>(LEX::LEX_NONE), *wxBLACK);
     StyleSetForeground(static_cast<int>(LEX::LEX_LITERAL), wxColor(144, 144, 144));
@@ -98,7 +99,42 @@ void LexerTextCtrl::LoadLexerStyles()
     StyleSetItalic(static_cast<int>(LEX::LEX_ERROR), false);
 
     StyleSetBold(static_cast<int>(LEX::LEX_KET_SPECIAL), true);
+    */
+
+    // Let's use our new LexerColorMap:
+    std::vector<LEX> ID_list = lexer_color_map.GetIDList();
+
+    // Define background colours:
+    for (LEX id : ID_list)
+    {
+        StyleSetBackground(static_cast<int>(id), lexer_color_map.GetBackgroundColor(id));
+    }
+
+    // Define foreground colours:
+    for (LEX id : ID_list)
+    {
+        StyleSetForeground(static_cast<int>(id), lexer_color_map.GetForegroundColor(id));
+    }
+
+    // Define underlines:
+    for (LEX id : ID_list)
+    {
+        StyleSetUnderline(static_cast<int>(id), lexer_color_map.GetUnderline(id));
+    }
+
+    // Define italics:
+    for (LEX id : ID_list)
+    {
+        StyleSetItalic(static_cast<int>(id), lexer_color_map.GetItalic(id));
+    }
+
+    // Define bold:
+    for (LEX id : ID_list)
+    {
+        StyleSetBold(static_cast<int>(id), lexer_color_map.GetBold(id));
+    }
 }
+
 
 void LexerTextCtrl::LoadOperatorMaps()
 {
