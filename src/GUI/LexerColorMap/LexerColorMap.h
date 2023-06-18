@@ -58,12 +58,21 @@ public:
 	void LoadDefaults();
 	void LoadSettings(const wxString& filepath);
 
+	/*
 	LEX GetID(const std::string& s) { return m_string_map.at(s); }  // Maybe use wrappers to return default values if s or id is not in the map
 	wxColor GetBackgroundColor(LEX id) { return m_background_colors.at(id); }
 	wxColor GetforegroundColor(LEX id) { return m_foreground_colors.at(id); }
 	bool GetUnderline(LEX id) { return m_underlines.at(id); }
 	bool GetItalic(LEX id) { return m_italics.at(id); }
 	bool GetBold(LEX id) { return m_bold.at(id); }
+	*/
+
+	LEX GetID(const std::string& s);
+	wxColor GetBackgroundColor(LEX id);
+	wxColor GetforegroundColor(LEX id);
+	bool GetUnderline(LEX id);
+	bool GetItalic(LEX id);
+	bool GetBold(LEX id);
 
 	~LexerColorMap();
 

@@ -89,5 +89,59 @@ void LexerColorMap::LoadSettings(const wxString& filepath)
 	// Load a local driver/context and load in the style sw file?
 }
 
+LEX LexerColorMap::GetID(const std::string& s)
+{
+	if (m_string_map.find(s) == m_string_map.end())
+	{
+		return LEX::LEX_NONE;
+	}
+	return m_string_map[s];
+}
+
+wxColor LexerColorMap::GetBackgroundColor(LEX id)
+{
+	if (m_background_colors.find(id) == m_background_colors.end())
+	{
+		return *wxWHITE;
+	}
+	return m_background_colors[id];
+}
+
+wxColor LexerColorMap::GetforegroundColor(LEX id)
+{
+	if (m_foreground_colors.find(id) == m_foreground_colors.end())
+	{
+		return *wxBLACK;
+	}
+	return m_foreground_colors[id];
+}
+
+bool LexerColorMap::GetUnderline(LEX id)
+{
+	if (m_underlines.find(id) == m_underlines.end())
+	{
+		return false;
+	}
+	return m_underlines[id];
+}
+
+bool LexerColorMap::GetItalic(LEX id)
+{
+	if (m_italics.find(id) == m_italics.end())
+	{
+		return false;
+	}
+	return m_italics[id];
+}
+
+bool LexerColorMap::GetBold(LEX id)
+{
+	if (m_bold.find(id) == m_bold.end())
+	{
+		return false;
+	}
+	return m_bold[id];
+}
+
 LexerColorMap::~LexerColorMap()
 {}
