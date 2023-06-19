@@ -163,7 +163,7 @@ bool LexerColorMap::LoadSettings(const wxString& filepath)
 	// Now parse it:
 	local_driver.parse_string(lexer_content.ToStdString());
 
-	std::string use_syntax_highlight = local_context.recall("use", "syntax highlight")->to_ket().label();
+	std::string use_syntax_highlight = local_context.recall("use", "syntax highlight")->to_ket().label();  // Should I use recall_type() first?
 	if ( use_syntax_highlight == "false")
 	{
 		wxMessageBox("Don't use syntax highlighting");
@@ -180,8 +180,107 @@ bool LexerColorMap::LoadSettings(const wxString& filepath)
 		return false;
 	}
 
+	for (const auto& s : m_string_map)
+	{
+		/*
+		if (local_context.recall_type("foreground-color", s.first) == RULENORMAL)  // Nope, for some reason |*> rules don't work in this case.
+		{
+			std::string color_string = local_context.recall("foreground-color", s.first)->to_ket().label(); // What happens if color_string is not correct?
+			m_foreground_colors[s.second] = wxColor(color_string);
+		}
+
+		if (local_context.recall_type("background-color", s.first) == RULENORMAL)
+		{
+			std::string color_string = local_context.recall("background-color", s.first)->to_ket().label(); // What happens if color_string is not correct?
+			m_background_colors[s.second] = wxColor(color_string);
+		}
+
+		if (local_context.recall_type("is-underline", s.first) == RULENORMAL)
+		{
+			std::string is_underline = local_context.recall("is-underline", s.first)->to_ket().label();
+			if (is_underline == "false")
+			{
+				m_underlines[s.second] = false;
+			}
+			else if (is_underline == "true")
+			{
+				m_underlines[s.second] = true;
+			}
+		}
+
+		if (local_context.recall_type("is-italic", s.first) == RULENORMAL)
+		{
+			std::string is_italic = local_context.recall("is-italic", s.first)->to_ket().label();
+			if (is_italic == "false")
+			{
+				m_italics[s.second] = false;
+			}
+			else if (is_italic == "true")
+			{
+				m_italics[s.second] = true;
+			}
+		}
+
+		if (local_context.recall_type("is-bold", s.first) == RULENORMAL)
+		{
+			std::string is_bold = local_context.recall("is-bold", s.first)->to_ket().label();
+			if (is_bold == "false")
+			{
+				m_bold[s.second] = false;
+			}
+			else if (is_bold == "true")
+			{
+				m_bold[s.second] = true;
+			}
+		}
+		*/
+
+		std::string color_string = local_context.recall("foreground-color", s.first)->to_ket().label(); // What happens if color_string is not correct?
+		if (color_string.size() == 7 || color_string.size() == 9)
+		{
+			m_foreground_colors[s.second] = wxColor(color_string);
+		}
+
+		color_string = local_context.recall("background-color", s.first)->to_ket().label(); // What happens if color_string is not correct?
+		if (color_string.size() == 7 || color_string.size() == 9)
+		{
+			m_background_colors[s.second] = wxColor(color_string);
+		}
+
+		std::string is_underline = local_context.recall("is-underline", s.first)->to_ket().label();
+		if (is_underline == "false")
+		{
+			m_underlines[s.second] = false;
+		}
+		else if (is_underline == "true")
+		{
+			m_underlines[s.second] = true;
+		}
+
+		std::string is_italic = local_context.recall("is-italic", s.first)->to_ket().label();
+		if (is_italic == "false")
+		{
+			m_italics[s.second] = false;
+		}
+		else if (is_italic == "true")
+		{
+			m_italics[s.second] = true;
+		}
+
+		std::string is_bold = local_context.recall("is-bold", s.first)->to_ket().label();
+		if (is_bold == "false")
+		{
+			m_bold[s.second] = false;
+		}
+		else if (is_bold == "true")
+		{
+			m_bold[s.second] = true;
+		}
+
+	}
 	return true;
 }
+
 
 std::vector<LEX> LexerColorMap::GetIDList()
 {
