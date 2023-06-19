@@ -58,7 +58,7 @@ public:
 	void DisableHighlights();
 
 	void LoadDefaults();
-	void LoadSettings(const wxString& filepath);
+	bool LoadSettings(const wxString& filepath);
 
 	/*
 	LEX GetID(const std::string& s) { return m_string_map.at(s); }  // Maybe use wrappers to return default values if s or id is not in the map

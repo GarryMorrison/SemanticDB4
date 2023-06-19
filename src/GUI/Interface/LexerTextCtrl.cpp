@@ -377,7 +377,7 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
 void LexerTextCtrl::RefreshSyntaxHighlight()
 {
     // If using highlighting, let's highlight the text:
-    if (m_use_highlighting)
+    if (true || m_use_highlighting)  // Disable this for now
     {
         LoadLexerStyles();
         SyntaxHighlight(0, GetTextLength(), GetText().ToStdString());

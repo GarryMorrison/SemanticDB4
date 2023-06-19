@@ -568,6 +568,12 @@ void PrimaryFrame::OnStyleLoad(wxCommandEvent& event)
     wxString file_name = openFileDialog.GetPath();
 
     lexer_color_map.LoadSettings(file_name);
+
+    // Now apply them:
+    for (const auto& iter : m_open_file_text_ctrl)
+    {
+        iter.second->RefreshSyntaxHighlight();
+    }
 }
 
 void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)

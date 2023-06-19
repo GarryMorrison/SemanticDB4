@@ -128,7 +128,7 @@ void LexerColorMap::LoadDefaults()
 	m_bold[LEX::LEX_KET_SPECIAL] = true;
 }
 
-void LexerColorMap::LoadSettings(const wxString& filepath)
+bool LexerColorMap::LoadSettings(const wxString& filepath)
 {
 	// Load a local driver/context and load in the style sw file:
 
@@ -142,7 +142,7 @@ void LexerColorMap::LoadSettings(const wxString& filepath)
 	if (!input_stream.IsOk())
 	{
 		wxLogError("Cannot open style file '%s'.", filepath);
-		return;
+		return false;
 	}
 
 	wxString lexer_content;
@@ -155,7 +155,7 @@ void LexerColorMap::LoadSettings(const wxString& filepath)
 
 	if (lexer_content.IsEmpty())  // If it is somehow empty, we can't do anything!
 	{
-		return;
+		return false;
 	}
 
 	wxMessageBox("Lexer content:\n" + lexer_content);
@@ -168,7 +168,7 @@ void LexerColorMap::LoadSettings(const wxString& filepath)
 	{
 		wxMessageBox("Don't use syntax highlighting");
 		DisableHighlights();
-		return;
+		return false;
 	}
 	else if (use_syntax_highlight == "true")
 	{
@@ -177,10 +177,10 @@ void LexerColorMap::LoadSettings(const wxString& filepath)
 	}
 	else
 	{
-		return;
+		return false;
 	}
 
-
+	return true;
 }
 
 std::vector<LEX> LexerColorMap::GetIDList()
