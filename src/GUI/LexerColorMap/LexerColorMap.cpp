@@ -40,11 +40,42 @@ LexerColorMap::LexerColorMap()
 void LexerColorMap::EnableHighlights()
 {
 	m_use_highlights = true;  // Do more here later!
+	LoadDefaults();
 }
 
 void LexerColorMap::DisableHighlights()
 {
 	m_use_highlights = false; // Do more here later!
+
+	// Load the default background colours:
+	for (const auto& id : m_ID_list)
+	{
+		m_background_colors[id] = *wxWHITE;
+	}
+
+	// Load the default foreground colours:
+	for (const auto& id : m_ID_list)
+	{
+		m_foreground_colors[id] = *wxBLACK;
+	}
+
+	// Load the default underline state:
+	for (const auto& id : m_ID_list)
+	{
+		m_underlines[id] = false;
+	}
+
+	// Load the default italic state:
+	for (const auto& id : m_ID_list)
+	{
+		m_italics[id] = false;
+	}
+
+	// Load the default bold state:
+	for (const auto& id : m_ID_list)
+	{
+		m_bold[id] = false;
+	}
 }
 
 void LexerColorMap::LoadDefaults()
@@ -99,7 +130,57 @@ void LexerColorMap::LoadDefaults()
 
 void LexerColorMap::LoadSettings(const wxString& filepath)
 {
-	// Load a local driver/context and load in the style sw file?
+	// Load a local driver/context and load in the style sw file:
+
+	ContextList local_context("load lexer colors");
+	Sequence local_result;
+	SDB::Driver local_driver(local_context, local_result);
+
+	wxMessageBox("Lexer to load file: " + filepath);
+
+	wxFileInputStream input_stream(filepath);
+	if (!input_stream.IsOk())
+	{
+		wxLogError("Cannot open style file '%s'.", filepath);
+		return;
+	}
+
+	wxString lexer_content;
+	wxTextInputStream text(input_stream, wxT("\x09"), wxConvUTF8);  // Check these settings are correct later.
+	while (input_stream.IsOk() && !input_stream.Eof())
+	{
+		lexer_content.Append(text.ReadLine());
+		lexer_content.Append("\n");  // There must be a better way to keep newlines in the text!
+	}
+
+	if (lexer_content.IsEmpty())  // If it is somehow empty, we can't do anything!
+	{
+		return;
+	}
+
+	wxMessageBox("Lexer content:\n" + lexer_content);
+
+	// Now parse it:
+	local_driver.parse_string(lexer_content.ToStdString());
+
+	std::string use_syntax_highlight = local_context.recall("use", "syntax highlight")->to_ket().label();
+	if ( use_syntax_highlight == "false")
+	{
+		wxMessageBox("Don't use syntax highlighting");
+		DisableHighlights();
+		return;
+	}
+	else if (use_syntax_highlight == "true")
+	{
+		wxMessageBox("Use syntax highlighting");
+		EnableHighlights();  // Note this function loads in the default highlights.
+	}
+	else
+	{
+		return;
+	}
+
+
 }
 
 std::vector<LEX> LexerColorMap::GetIDList()

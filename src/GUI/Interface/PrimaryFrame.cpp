@@ -18,6 +18,8 @@ PrimaryFrame::PrimaryFrame()
     menuFile->Append(ID_Open, "&Open", "Open a file");
     menuFile->Append(ID_Save, "&Save", "Save a file");
     menuFile->AppendSeparator();
+    menuFile->Append(ID_Load_Style, "&Load Style", "Load a style");
+    menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
 
     m_starting_highest_insert_menu_id = ID_Command_Insert_Text + 1;  // A little ugly, and dangerous to hard code this in here!
@@ -286,6 +288,7 @@ PrimaryFrame::PrimaryFrame()
     Bind(wxEVT_MENU, &PrimaryFrame::OnNew, this, ID_New);
     Bind(wxEVT_MENU, &PrimaryFrame::OnOpen, this, ID_Open);
     Bind(wxEVT_MENU, &PrimaryFrame::OnSave, this, ID_Save);
+    Bind(wxEVT_MENU, &PrimaryFrame::OnStyleLoad, this, ID_Load_Style);
     Bind(wxEVT_MENU, &PrimaryFrame::SelectKnownKet, this, ID_Insert_Window_Known_Kets);
     Bind(wxEVT_MENU, &PrimaryFrame::SelectKnownOperator, this, ID_Insert_Window_Known_Literal_Operators);
     Bind(wxEVT_MENU, &PrimaryFrame::SelectFromLearnRules, this, ID_Insert_Window_Learn_Rules);
@@ -552,6 +555,19 @@ void PrimaryFrame::OnSave(wxCommandEvent& event)
     {
         m_frame_edit_panel->SaveFile(saveFileDialog.GetPath());
     }
+}
+
+void PrimaryFrame::OnStyleLoad(wxCommandEvent& event)
+{
+    // wxMessageBox("Load a style ... ");
+
+    wxFileDialog openFileDialog(this, "Open style file", "", "", "sw style file (*.sw)|*.sw", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+        return;
+
+    wxString file_name = openFileDialog.GetPath();
+
+    lexer_color_map.LoadSettings(file_name);
 }
 
 void PrimaryFrame::SelectKnownKet(wxCommandEvent& event)

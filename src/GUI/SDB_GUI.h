@@ -150,6 +150,7 @@ enum
     ID_New,
     ID_Open,
     ID_Save,
+    ID_Load_Style,
     ID_Insert,
 
     ID_YES,

@@ -45,6 +45,7 @@ private:
     void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
+    void OnStyleLoad(wxCommandEvent& event);
     void SelectKnownKet(wxCommandEvent& event);
     void OnSelectKetDialogItem(wxCommandEvent& event);
     void SelectKnownOperator(wxCommandEvent& event);
@@ -59,7 +60,6 @@ private:
     void UsageForOperator(wxCommandEvent& event);
     void ShowKetMap(wxCommandEvent& event);
     void SwitchWindow(wxCommandEvent& event);
-
 
     void InvokeActiveTable(wxCommandEvent& event);
     void OnIfThenInsert(wxCommandEvent& event);
