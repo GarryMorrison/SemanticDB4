@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/6/16
-// Updated 2023/6/16
+// Updated 2023/6/19
 // Author Garry Morrison
 // License GPL v3
 //
@@ -18,27 +18,10 @@
 
 enum class LEX;
 struct LEX_OBJECT;
-// extern const LEX LEX_values[];  // Deprecated by LexerColorMap::GetIDList()
 class LexerColorMap;
 extern LexerColorMap lexer_color_map;
 
 /* // Moved to LexerColorMap:
-enum class LEX : int {
-	LEX_NONE = 10,
-	LEX_LITERAL = 11,
-	LEX_SIMPLE = 12,
-	LEX_COMPOUND = 13,
-	LEX_FUNCTION = 14,
-	LEX_KEYWORD = 15,
-	LEX_KET = 16,
-	LEX_KET_SPECIAL = 17,
-	LEX_COMMENT = 18,
-	LEX_STRING = 19,
-	LEX_USER_FN = 20,
-	LEX_ERROR = 21
-};
-
-
 struct LEX_OBJECT {
 	LEX LEX_ID = LEX::LEX_NONE;
 	size_t start = 0;
@@ -54,8 +37,9 @@ public:
 	void LoadLexerStyles();
 	void LoadOperatorMaps();
 
-	// void SyntaxHighlight(size_t start, size_t end, const wxString& text);
+	void SetUseHighlight(bool use_highlight) { m_use_highlighting = use_highlight; }  // Maybe something more here later.
 	void SyntaxHighlight(size_t start, size_t end, const std::string& text);
+	void RefreshSyntaxHighlight();
 	void OnStyleNeeded(wxStyledTextEvent& event);
 	void OnMouseClick(wxMouseEvent& event);
 

@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/6/16
-// Updated 2023/6/16
+// Updated 2023/6/19
 // Author Garry Morrison
 // License GPL v3
 //
@@ -14,7 +14,6 @@ LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& te
     // Set up some initial styles
     // StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:Courier New,size:10");
     StyleClearAll();
-    // SetLexer(wxSTC_LEX_PYTHON);
 
     // Load up some text:
     SetText(text);
@@ -42,65 +41,6 @@ LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& te
 
 void LexerTextCtrl::LoadLexerStyles()
 {
-    /*  // Deprecated!
-    // Map LEX objects to colours:  // Choose better colours using wxColor() later!
-    StyleSetForeground(static_cast<int>(LEX::LEX_NONE), *wxBLACK);
-    StyleSetForeground(static_cast<int>(LEX::LEX_LITERAL), wxColor(144, 144, 144));
-    StyleSetForeground(static_cast<int>(LEX::LEX_SIMPLE), wxColor(255, 0, 0));
-    StyleSetForeground(static_cast<int>(LEX::LEX_COMPOUND), *wxRED);
-    StyleSetForeground(static_cast<int>(LEX::LEX_FUNCTION), *wxRED);
-    StyleSetForeground(static_cast<int>(LEX::LEX_KEYWORD), *wxBLUE);
-    StyleSetForeground(static_cast<int>(LEX::LEX_KET), wxColor(0, 0, 0));
-    StyleSetForeground(static_cast<int>(LEX::LEX_KET_SPECIAL), wxColor(0, 0, 0));
-    StyleSetForeground(static_cast<int>(LEX::LEX_COMMENT), *wxBLACK);
-    StyleSetForeground(static_cast<int>(LEX::LEX_STRING), *wxBLUE);
-    StyleSetForeground(static_cast<int>(LEX::LEX_USER_FN), wxColor(144, 144, 144));
-    StyleSetForeground(static_cast<int>(LEX::LEX_ERROR), *wxWHITE);
-
-    StyleSetBackground(static_cast<int>(LEX::LEX_NONE), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_LITERAL), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_SIMPLE), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_COMPOUND), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_FUNCTION), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_KEYWORD), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_KET), wxColor(244, 244, 255));
-    // StyleSetBackground(static_cast<int>(LEX::LEX_KET_SPECIAL), wxColor(194, 194, 255));
-    StyleSetBackground(static_cast<int>(LEX::LEX_KET_SPECIAL), *wxWHITE);
-    // StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), wxColor(236, 255, 236));
-    StyleSetBackground(static_cast<int>(LEX::LEX_COMMENT), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_STRING), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_USER_FN), *wxWHITE);
-    StyleSetBackground(static_cast<int>(LEX::LEX_ERROR), wxColor(255, 64, 64));
-
-    StyleSetUnderline(static_cast<int>(LEX::LEX_NONE), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_LITERAL), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_SIMPLE), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_COMPOUND), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_FUNCTION), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_KEYWORD), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_KET), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_KET_SPECIAL), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_COMMENT), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_STRING), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_USER_FN), false);
-    StyleSetUnderline(static_cast<int>(LEX::LEX_ERROR), false);
-
-    StyleSetItalic(static_cast<int>(LEX::LEX_NONE), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_LITERAL), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_SIMPLE), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_COMPOUND), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_FUNCTION), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_KEYWORD), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_KET), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_KET_SPECIAL), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_COMMENT), true);
-    StyleSetItalic(static_cast<int>(LEX::LEX_STRING), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_USER_FN), false);
-    StyleSetItalic(static_cast<int>(LEX::LEX_ERROR), false);
-
-    StyleSetBold(static_cast<int>(LEX::LEX_KET_SPECIAL), true);
-    */
-
     // Let's use our new LexerColorMap:
     std::vector<LEX> ID_list = lexer_color_map.GetIDList();
 
@@ -170,7 +110,6 @@ void LexerTextCtrl::LoadOperatorMaps()
     m_keyword.insert("end:");
 }
 
-// void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const wxString& text)
 void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string& text)
 {
     std::vector<LEX_OBJECT> lex_objects;
@@ -432,6 +371,16 @@ void LexerTextCtrl::SyntaxHighlight(size_t start, size_t end, const std::string&
     {
         StartStyling(start + object.start);
         SetStyling(object.end - object.start, static_cast<int>(object.LEX_ID));
+    }
+}
+
+void LexerTextCtrl::RefreshSyntaxHighlight()
+{
+    // If using highlighting, let's highlight the text:
+    if (m_use_highlighting)
+    {
+        LoadLexerStyles();
+        SyntaxHighlight(0, GetTextLength(), GetText().ToStdString());
     }
 }
 
