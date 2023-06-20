@@ -117,7 +117,7 @@ bool LexerColorMap::LoadSettings(const wxString& filepath)
 	Sequence local_result;
 	SDB::Driver local_driver(local_context, local_result);
 
-	wxMessageBox("Lexer to load file: " + filepath);
+	// wxMessageBox("Lexer to load file: " + filepath);
 
 	wxFileInputStream input_stream(filepath);
 	if (!input_stream.IsOk())
@@ -139,24 +139,23 @@ bool LexerColorMap::LoadSettings(const wxString& filepath)
 		return false;
 	}
 
-	wxMessageBox("Lexer content:\n" + lexer_content);
+	// wxMessageBox("Lexer content:\n" + lexer_content);
 
 	// Now parse it:
 	local_driver.parse_string(lexer_content.ToStdString());
 
-	LoadDefaults();
+	LoadDefaults();  // Load empty style
+
 	std::string use_syntax_highlight = local_context.recall("use", "syntax highlight")->to_ket().label();  // Should I use recall_type() first?
 	if ( use_syntax_highlight == "false")
 	{
-		wxMessageBox("Don't use syntax highlighting");
-		// DisableHighlights();
+		// wxMessageBox("Don't use syntax highlighting");
 		m_use_highlights = false;
 		return false;
 	}
 	else if (use_syntax_highlight == "true")
 	{
-		wxMessageBox("Use syntax highlighting");
-		// EnableHighlights();  // Note this function loads in the default highlights, and my highlights too.
+		// wxMessageBox("Use syntax highlighting");
 		m_use_highlights = true;
 	}
 	else
@@ -165,13 +164,13 @@ bool LexerColorMap::LoadSettings(const wxString& filepath)
 	}
 
 	std::string color_string = local_context.recall("foreground-color", "PANEL")->to_ket().label();
-	if (color_string.size() == 7 || color_string.size() == 9)
+	if (IsValidColorString(color_string))
 	{
 		m_panel_foreground_color = wxColor(color_string);
 	}
 
 	color_string = local_context.recall("background-color", "PANEL")->to_ket().label();
-	if (color_string.size() == 7 || color_string.size() == 9)
+	if (IsValidColorString(color_string))
 	{
 		m_panel_background_color = wxColor(color_string);
 	}
@@ -179,13 +178,13 @@ bool LexerColorMap::LoadSettings(const wxString& filepath)
 	for (const auto& s : m_string_map)
 	{
 		color_string = local_context.recall("foreground-color", s.first)->to_ket().label(); // What happens if color_string is not valid?
-		if (color_string.size() == 7 || color_string.size() == 9)  // Maybe do even more checking here. Eg, starts with #, and chars in 0-9A-F
+		if (IsValidColorString(color_string))  // Maybe do even more checking here. Eg, starts with #, and chars in 0-9A-F
 		{
 			m_foreground_colors[s.second] = wxColor(color_string);
 		}
 
 		color_string = local_context.recall("background-color", s.first)->to_ket().label(); // What happens if color_string is not valid?
-		if (color_string.size() == 7 || color_string.size() == 9)
+		if (IsValidColorString(color_string))
 		{
 			m_background_colors[s.second] = wxColor(color_string);
 		}
@@ -282,6 +281,27 @@ bool LexerColorMap::GetBold(LEX id)
 		return false;
 	}
 	return m_bold[id];
+}
+
+bool LexerColorMap::IsValidColorString(const wxString& color_string)
+{
+	if (color_string.size() != 7 && color_string.size() != 9)
+	{
+		return false;
+	}
+	if (color_string[0] != '#')
+	{
+		return false;
+	}
+	for (size_t i = 1; i < color_string.size(); i++)
+	{
+		char c = color_string[i];
+		if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 LexerColorMap::~LexerColorMap()

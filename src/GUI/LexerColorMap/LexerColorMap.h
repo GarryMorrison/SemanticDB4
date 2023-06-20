@@ -74,6 +74,8 @@ public:
 	~LexerColorMap();
 
 private:
+	bool IsValidColorString(const wxString& color_string);
+
 	bool m_use_highlights = true;
 	std::vector<LEX> m_ID_list;
 	std::map<std::string, LEX> m_string_map;
