@@ -49,7 +49,9 @@ EditPanel::EditPanel(wxPanel* parent, wxWindowID id)
 	vbox->Add(hbox);
 	vbox->AddSpacer(5);
 
+	// SetBackgroundColour(*wxBLACK); // Testing
 	m_aui_notebook = new wxAuiNotebook(this, wxID_ANY);
+	// m_aui_notebook->SetBackgroundColour(*wxBLACK);  // Testing
 	
 	// Sample content:
 	// m_text_ctrl = new wxTextCtrl(m_aui_notebook, wxID_ANY, "Enter your code here ... \n");

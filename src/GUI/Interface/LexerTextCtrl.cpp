@@ -11,6 +11,8 @@
 LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& text, const wxPoint& pos, const wxSize& size, long style)
 	: wxStyledTextCtrl(parent, id, pos, size, style)
 {
+    m_parent = parent;
+
     // Set up some initial styles
     // StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:Courier New,size:10");
     StyleClearAll();
@@ -43,11 +45,11 @@ void LexerTextCtrl::LoadLexerStyles()
 {
     // Nope! These two don't do anything!
     // Define panel background color:
-    SetBackgroundColour(lexer_color_map.GetPanelBackgroundColor());
-    // SetBackgroundColour(*wxBLACK);
+    // SetBackgroundColour(lexer_color_map.GetPanelBackgroundColor());
+    // m_parent->SetBackgroundColour(*wxBLACK);  // Still nope!
 
     // Define panel foreground color:
-    SetForegroundColour(lexer_color_map.GetPanelForegroundColor());
+    // SetForegroundColour(lexer_color_map.GetPanelForegroundColor());
 
     // Let's use our new LexerColorMap:
     std::vector<LEX> ID_list = lexer_color_map.GetIDList();

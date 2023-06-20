@@ -46,6 +46,7 @@ public:
 	~LexerTextCtrl();
 
 private:
+	wxWindow* m_parent;
 	bool m_use_highlighting = true;  // Apply highlighting by default, potentially add a checkbox to the EditFrame to enable/disable.
 
 	std::set<std::string> m_ket_special;
