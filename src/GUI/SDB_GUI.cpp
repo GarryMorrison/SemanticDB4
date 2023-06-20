@@ -42,6 +42,7 @@ bool SDBApp::OnInit()
     fn_map.PopulateOperatorSets();          // Need a line to populate fn_map too, from maps to sets for operator names and types.
     operator_usage_map.PopulateUsageMap();  // Need to add a line to this constructor to enable images in wxAutoBufferedPaintDC.
     lexer_color_map.LoadDefaults();         // Load our default lexer object colours.
+    lexer_color_map.LoadMyDefaults();       // Load my preferences.
     PrimaryFrame* frame = new PrimaryFrame();
     frame->Show(true);
     return true;

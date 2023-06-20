@@ -41,6 +41,14 @@ LexerTextCtrl::LexerTextCtrl(wxWindow* parent, wxWindowID id, const wxString& te
 
 void LexerTextCtrl::LoadLexerStyles()
 {
+    // Nope! These two don't do anything!
+    // Define panel background color:
+    SetBackgroundColour(lexer_color_map.GetPanelBackgroundColor());
+    // SetBackgroundColour(*wxBLACK);
+
+    // Define panel foreground color:
+    SetForegroundColour(lexer_color_map.GetPanelForegroundColor());
+
     // Let's use our new LexerColorMap:
     std::vector<LEX> ID_list = lexer_color_map.GetIDList();
 

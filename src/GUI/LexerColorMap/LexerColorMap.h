@@ -58,19 +58,13 @@ public:
 	void DisableHighlights();
 
 	void LoadDefaults();
+	void LoadMyDefaults();
 	bool LoadSettings(const wxString& filepath);
-
-	/*
-	LEX GetID(const std::string& s) { return m_string_map.at(s); }  // Maybe use wrappers to return default values if s or id is not in the map
-	wxColor GetBackgroundColor(LEX id) { return m_background_colors.at(id); }
-	wxColor GetforegroundColor(LEX id) { return m_foreground_colors.at(id); }
-	bool GetUnderline(LEX id) { return m_underlines.at(id); }
-	bool GetItalic(LEX id) { return m_italics.at(id); }
-	bool GetBold(LEX id) { return m_bold.at(id); }
-	*/
 
 	std::vector<LEX> GetIDList();
 	LEX GetID(const std::string& s);
+	wxColor GetPanelBackgroundColor() { return m_panel_background_color; }
+	wxColor GetPanelForegroundColor() { return m_panel_foreground_color; }
 	wxColor GetBackgroundColor(LEX id);
 	wxColor GetForegroundColor(LEX id);
 	bool GetUnderline(LEX id);
@@ -83,6 +77,8 @@ private:
 	bool m_use_highlights = true;
 	std::vector<LEX> m_ID_list;
 	std::map<std::string, LEX> m_string_map;
+	wxColor m_panel_background_color;
+	wxColor m_panel_foreground_color;
 	std::map<LEX, wxColor> m_background_colors;
 	std::map<LEX, wxColor> m_foreground_colors;
 	std::map<LEX, bool> m_underlines;

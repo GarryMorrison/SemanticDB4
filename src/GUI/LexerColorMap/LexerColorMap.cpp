@@ -1,7 +1,7 @@
 //
 // Semantic DB 4
 // Created 2023/6/18
-// Updated 2023/6/18
+// Updated 2023/6/20
 // Author Garry Morrison
 // License GPL v3
 //
@@ -41,11 +41,22 @@ void LexerColorMap::EnableHighlights()
 {
 	m_use_highlights = true;  // Do more here later!
 	LoadDefaults();
+	LoadMyDefaults();
 }
 
 void LexerColorMap::DisableHighlights()
 {
 	m_use_highlights = false; // Do more here later!
+	LoadDefaults();
+}
+
+void LexerColorMap::LoadDefaults()
+{
+	// Set the panel background colour:
+	m_panel_background_color = *wxWHITE;
+
+	// Set the panel foreground colour:
+	m_panel_foreground_color = *wxBLACK;
 
 	// Load the default background colours:
 	for (const auto& id : m_ID_list)
@@ -78,38 +89,8 @@ void LexerColorMap::DisableHighlights()
 	}
 }
 
-void LexerColorMap::LoadDefaults()
+void LexerColorMap::LoadMyDefaults()
 {
-	// Load the default background colours:
-	for (const auto& id : m_ID_list)
-	{
-		m_background_colors[id] = *wxWHITE;
-	}
-
-	// Load the default foreground colours:
-	for (const auto& id : m_ID_list)
-	{
-		m_foreground_colors[id] = *wxBLACK;
-	}
-
-	// Load the default underline state:
-	for (const auto& id : m_ID_list)
-	{
-		m_underlines[id] = false;
-	}
-
-	// Load the default italic state:
-	for (const auto& id : m_ID_list)
-	{
-		m_italics[id] = false;
-	}
-
-	// Load the default bold state:
-	for (const auto& id : m_ID_list)
-	{
-		m_bold[id] = false;
-	}
-
 	// Now my choices:
 	m_foreground_colors[LEX::LEX_LITERAL] = wxColor(144, 144, 144);
 	m_foreground_colors[LEX::LEX_SIMPLE] = *wxRED;
@@ -122,9 +103,9 @@ void LexerColorMap::LoadDefaults()
 
 	m_background_colors[LEX::LEX_KET] = wxColor(244, 244, 255);
 	m_background_colors[LEX::LEX_ERROR] = wxColor(255, 64, 64);
-	
+
 	m_italics[LEX::LEX_COMMENT] = true;
-	
+
 	m_bold[LEX::LEX_KET_SPECIAL] = true;
 }
 
@@ -163,85 +144,47 @@ bool LexerColorMap::LoadSettings(const wxString& filepath)
 	// Now parse it:
 	local_driver.parse_string(lexer_content.ToStdString());
 
+	LoadDefaults();
 	std::string use_syntax_highlight = local_context.recall("use", "syntax highlight")->to_ket().label();  // Should I use recall_type() first?
 	if ( use_syntax_highlight == "false")
 	{
 		wxMessageBox("Don't use syntax highlighting");
-		DisableHighlights();
+		// DisableHighlights();
+		m_use_highlights = false;
 		return false;
 	}
 	else if (use_syntax_highlight == "true")
 	{
 		wxMessageBox("Use syntax highlighting");
-		EnableHighlights();  // Note this function loads in the default highlights.
+		// EnableHighlights();  // Note this function loads in the default highlights, and my highlights too.
+		m_use_highlights = true;
 	}
 	else
 	{
 		return false;
 	}
 
+	std::string color_string = local_context.recall("foreground-color", "PANEL")->to_ket().label();
+	if (color_string.size() == 7 || color_string.size() == 9)
+	{
+		m_panel_foreground_color = wxColor(color_string);
+	}
+
+	color_string = local_context.recall("background-color", "PANEL")->to_ket().label();
+	if (color_string.size() == 7 || color_string.size() == 9)
+	{
+		m_panel_background_color = wxColor(color_string);
+	}
+
 	for (const auto& s : m_string_map)
 	{
-		/*
-		if (local_context.recall_type("foreground-color", s.first) == RULENORMAL)  // Nope, for some reason |*> rules don't work in this case.
-		{
-			std::string color_string = local_context.recall("foreground-color", s.first)->to_ket().label(); // What happens if color_string is not correct?
-			m_foreground_colors[s.second] = wxColor(color_string);
-		}
-
-		if (local_context.recall_type("background-color", s.first) == RULENORMAL)
-		{
-			std::string color_string = local_context.recall("background-color", s.first)->to_ket().label(); // What happens if color_string is not correct?
-			m_background_colors[s.second] = wxColor(color_string);
-		}
-
-		if (local_context.recall_type("is-underline", s.first) == RULENORMAL)
-		{
-			std::string is_underline = local_context.recall("is-underline", s.first)->to_ket().label();
-			if (is_underline == "false")
-			{
-				m_underlines[s.second] = false;
-			}
-			else if (is_underline == "true")
-			{
-				m_underlines[s.second] = true;
-			}
-		}
-
-		if (local_context.recall_type("is-italic", s.first) == RULENORMAL)
-		{
-			std::string is_italic = local_context.recall("is-italic", s.first)->to_ket().label();
-			if (is_italic == "false")
-			{
-				m_italics[s.second] = false;
-			}
-			else if (is_italic == "true")
-			{
-				m_italics[s.second] = true;
-			}
-		}
-
-		if (local_context.recall_type("is-bold", s.first) == RULENORMAL)
-		{
-			std::string is_bold = local_context.recall("is-bold", s.first)->to_ket().label();
-			if (is_bold == "false")
-			{
-				m_bold[s.second] = false;
-			}
-			else if (is_bold == "true")
-			{
-				m_bold[s.second] = true;
-			}
-		}
-		*/
-
-		std::string color_string = local_context.recall("foreground-color", s.first)->to_ket().label(); // What happens if color_string is not correct?
-		if (color_string.size() == 7 || color_string.size() == 9)
+		color_string = local_context.recall("foreground-color", s.first)->to_ket().label(); // What happens if color_string is not valid?
+		if (color_string.size() == 7 || color_string.size() == 9)  // Maybe do even more checking here. Eg, starts with #, and chars in 0-9A-F
 		{
 			m_foreground_colors[s.second] = wxColor(color_string);
 		}
 
-		color_string = local_context.recall("background-color", s.first)->to_ket().label(); // What happens if color_string is not correct?
+		color_string = local_context.recall("background-color", s.first)->to_ket().label(); // What happens if color_string is not valid?
 		if (color_string.size() == 7 || color_string.size() == 9)
 		{
 			m_background_colors[s.second] = wxColor(color_string);
