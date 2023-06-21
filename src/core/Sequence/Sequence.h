@@ -136,7 +136,7 @@ public:
     Sequence op_drop_below1(const std::vector<std::shared_ptr<CompoundConstant> >& parameters) const;
     Sequence drop_above(const double t) const;
     Sequence op_drop_above1(const std::vector<std::shared_ptr<CompoundConstant> >& parameters) const;
-    Sequence pick(const ulong n) const;
+    Sequence pick(const size_t n) const;
     Sequence op_pick1(const std::vector<std::shared_ptr<CompoundConstant> >& parameters) const;
     Sequence pick_elt() const;
     Sequence weighted_pick_elt() const;

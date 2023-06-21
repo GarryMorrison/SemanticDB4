@@ -556,17 +556,17 @@ Sequence Sequence::op_pick1(const std::vector<std::shared_ptr<CompoundConstant> 
 Sequence Sequence::drop_above(const double t) const {
     Sequence result;
     for (const auto& sp : seq) {
-        Superposition r = sp.drop_above(t);
-        result.seq.push_back(r);
+        // Superposition r = sp.drop_above(t);
+        result.seq.push_back(sp.drop_above(t));
     }
     return result;
 }
 
-Sequence Sequence::pick(const ulong n) const {
+Sequence Sequence::pick(const size_t n) const {
     Sequence result;
     for (const auto& sp : seq) {
-        Superposition r = sp.pick(n);
-        result.seq.push_back(r);
+        // Superposition r = sp.pick(n);
+        result.seq.push_back(sp.pick(n));
     }
     return result;
 }
@@ -574,8 +574,8 @@ Sequence Sequence::pick(const ulong n) const {
 Sequence Sequence::pick_elt() const {
     Sequence result;
     for (const auto& sp : seq) {
-        Superposition r = sp.pick_elt();
-        result.seq.push_back(r);
+        // Superposition r = sp.pick_elt();
+        result.seq.push_back(sp.pick_elt());
     }
     return result;
 }
@@ -583,8 +583,8 @@ Sequence Sequence::pick_elt() const {
 Sequence Sequence::weighted_pick_elt() const {
     Sequence result;
     for (const auto& sp : seq) {
-        Superposition r = sp.weighted_pick_elt();
-        result.seq.push_back(r);
+        // Superposition r = sp.weighted_pick_elt();
+        result.seq.push_back(sp.weighted_pick_elt());
     }
     return result;
 }

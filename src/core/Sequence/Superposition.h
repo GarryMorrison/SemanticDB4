@@ -141,7 +141,7 @@ public:
     Superposition drop() const;
     Superposition drop_below(const double t) const;
     Superposition drop_above(const double t) const;
-    Superposition pick(const ulong n) const;
+    Superposition pick(const size_t n) const;
     Ket pick_elt() const;
     Ket weighted_pick_elt() const;
     Superposition select(const int start, const int stop) const;
