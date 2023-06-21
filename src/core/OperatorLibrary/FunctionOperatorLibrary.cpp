@@ -6,6 +6,7 @@
 #include <set>
 #include <unordered_set>
 #include <math.h>
+#include <random>
 #include "FunctionOperatorLibrary.h"
 #include "../Function/misc.h"
 #include "../Operator/SimpleOperator.h"
@@ -2103,5 +2104,24 @@ Sequence op_pick_fn1(const Sequence& input_seq, const Sequence& one)
     catch (const std::invalid_argument& e) {
         (void)e;  // Needed to suppress C4101 warning.
         return Sequence();
+    }
+}
+
+Ket op_random_int_fn2(const Sequence& input_seq, const Sequence& one, const Sequence& two)
+{
+    if (one.is_empty_ket() || two.is_empty_ket()) { return Ket(); }
+    try
+    {
+        int lower_bound = std::stoi(one.to_ket().label());
+        int upper_bound = std::stoi(two.to_ket().label());
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> distribution(lower_bound, upper_bound);
+        int result = distribution(gen);
+        return Ket(std::to_string(result));
+    }
+    catch (const std::invalid_argument& e) {
+        (void)e;  // Needed to suppress C4101 warning.
+        return Ket();
     }
 }

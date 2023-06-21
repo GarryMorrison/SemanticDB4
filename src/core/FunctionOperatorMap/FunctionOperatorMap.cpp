@@ -587,6 +587,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("tensor-product");
     fn_map.compound_seq_fn.emplace(idx, &op_tensor_product);
 
+    idx = ket_map.get_idx("random-int");
+    fn_map.whitelist_2.emplace(idx, &op_random_int_fn2);
+
+
 
     // Template machine related operators and functions:
     idx = ket_map.get_idx("TM-ngram-partition");
@@ -612,6 +616,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
  
     idx = ket_map.get_idx("TM-learn-patches");
     fn_map.context_seq_fn.emplace(idx, &op_TM_learn_patches);
+
 }
 
 

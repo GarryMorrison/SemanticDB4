@@ -5096,6 +5096,19 @@ OperatorUsageMap::OperatorUsageMap() {
         "    see also:\n"
         "        ggraph, gdump\n";
 
+    operator_usage_map.map["random-int"] =
+        "\nrandom-int:\n"
+        "    description:\n"
+        "        random-int(|min>, |max>)\n"
+        "        returns a random integer between |min> and |max>\n"
+        "        if |min> or |max> are not integers, then it returns the empty ket |>\n\n"
+        "    examples:\n"
+        "        -- generate a number between 1 and 50:\n"
+        "        random-int(|1>, |50>)\n"
+        "            |27>\n\n"
+        "    see also:\n\n";
+        
+
 
     // fill out statement_prototypes map:
     operator_usage_map.statement_prototypes["context"] =
