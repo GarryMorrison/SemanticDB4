@@ -72,12 +72,14 @@ if(BUILD_GUI)
     file(GLOB GUIInterface_SRC CONFIGURE_DEPENDS "src/GUI/Interface/*.h" "src/GUI/Interface/*.cpp")
     file(GLOB GUIAssociated_SRC CONFIGURE_DEPENDS "src/GUI/Associated/*.h" "src/GUI/Associated/*.cpp")
     file(GLOB GUIOperatorLibrary_SRC CONFIGURE_DEPENDS "src/GUI/OperatorLibrary/*.h" "src/GUI/OperatorLibrary/*.cpp")
+    file(GLOB GUILexerColorMap_SRC CONFIGURE_DEPENDS "src/GUI/LexerColorMap/*.h" "src/GUI/LexerColorMap/*.cpp")
 
     # SDB GUI code
     set(GUI_SOURCE_FILES
         ${GUIInterface_SRC}
         ${GUIAssociated_SRC}
         ${GUIOperatorLibrary_SRC}
+        ${GUILexerColorMap_SRC}
     )
 
     # BUILD TARGETS
