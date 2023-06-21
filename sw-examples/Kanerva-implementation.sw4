@@ -1,0 +1,114 @@
+-- The intent of this script is to implement some of the ideas of Kanerva
+-- https://link.springer.com/article/10.1007/s12559-009-9009-8
+--
+-- Author: Garry Morrison
+-- Created: 2023/6/21
+-- Updated: 2023/6/21
+
+|context> => |Kanerva implementation>
+
+
+-- define some parameters of our hypervectors:
+-- the largest bit number:
+-- start with something small during testing, eg, 1000:
+the |max> => |1000>
+
+-- the number of on bits in our hypervectors:
+on |bits> => |100>
+
+-- the current max "seq ket":
+max |seq ket> => |0>
+
+
+-- construct some hypervectors:
+-- first, a hypervector with all bits on:
+the |full vector> => |0> .. the |max>
+
+-- now a couple of examples of random hypervectors:
+the |X> => pick( on |bits>) the |full vector>
+the |A> => pick( on |bits>) the |full vector>
+
+
+-- now define our distance metric:
+d (*,*) #=> extract-value how-many XOR( |__self2>) |__self1>
+
+-- a quick test:
+-- we expect: |0> and commutivity respectively:
+sprint["X vs X: "] d( the |X>, the |X>)
+sprint["X vs A: "] d( the |X>, the |A>)
+sprint["A vs X: "] d( the |A>, the |X>)
+
+
+-- next, define our permutation operator:
+-- NB: there may be collisions, but it shouldn't harm things too much due to the hypervector robustness
+P |*> !=> (|_self> ++ random-int(|1>, the |max>) |> ) %% the |max>
+
+-- next, the inverse permutation operator:
+-- note, the inverse map is not guaranteed to be collision free because P isn't
+-- NB: this operator must be invoked after "P X" has been used at least once!
+create-inverse-P |*> #=>
+     unlearn[inverse-P] rel-kets[inverse-P]
+     find-inverse[P]
+
+-- a quick test of our permutation operator:
+sprint["X vs P X: "] d( the |X>, P the |X>)
+
+-- now learn the inverse permutations, since we have just invoked "P the |X>"
+create-inverse-P
+
+sprint["X vs P^-1 P X: "] d( the |X>, inverse-P P the |X>)
+
+
+
+-- next, define "op seq1 => seq2", using learn-seq and fuzzy-recall-seq:
+-- where: 
+-- parameter 1 is the operator ket, eg |op: foo>
+-- parameter 2 is the destination sequence, eg seq2
+-- the input sequence is seq1
+-- this operator returns seq2, so they can be easily chained in an operator sequence
+learn-seq (*,*) #=>
+    max |seq ket> => plus[1] max |seq ket>
+    the |ket> => |seq ket> :_ max |seq ket>
+    seq-pattern the |ket> => |__self0>
+    learn( |__self1>, the |ket>, |__self2>)
+    |__self2>
+
+
+-- where:
+-- parameter 1 is the operator ket, eg |op: foo>
+-- the input sequence is just that, the input seqence
+-- the returned value is the best matching pattern for the given input sequence:
+fuzzy-seq-recall (*) #=> apply(|__self1>, clean select[1,1] drop-below[0.5] similar-input[seq-pattern] |__self0>)
+
+
+-- now test it by applying the idea of "cleaning" the sequence:
+-- the idea is you learn "clean-seq seq1 => seq1"
+-- using: learn-seq( |op: clean-seq>, seq1) seq1
+-- then you can apply: fuzzy-seq-recall( |op: clean-seq>) approx-seq1
+-- and it will return a clean version of seq1
+-- then: d( seq1, cleaned approx-seq1) should be exactly |0>
+
+-- let's define X' to be the approximate version of X:
+the |X'> => inverse-P P the |X>
+
+-- and now learn the clean mapping for X:
+learn-seq( |op: clean-seq>, the |X>) the |X>
+
+-- and now let's clean up X':
+the-clean |X'> => fuzzy-seq-recall( |op: clean-seq>) the |X'>
+
+-- now let's compare them:
+sprint["X vs X': "] d( the |X>, the |X'>)
+sprint["X vs clean X': "] d( the |X>, the-clean |X'>)
+
+
+
+-- now a couple of notes:
+-- the multiplication: D * C * B * A
+-- is implemented as this operator sequence:
+-- XOR(D) XOR(C) XOR(B) A
+
+-- we learn the sequence: A -> B -> C -> D
+-- using this operator sequence:
+-- learn-seq( |op: foo>, D) learn-seq( |op: foo>, C) learn-seq( |op: foo>, B) A
+
