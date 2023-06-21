@@ -219,6 +219,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("pick");
     fn_map.compound_built_in.emplace(idx, &Sequence::op_pick1);
+    fn_map.whitelist_1.emplace(idx, &op_pick_fn1);
 
     idx = ket_map.get_idx("ket-sort");
     fn_map.built_in.emplace(idx, &Sequence::ket_sort);

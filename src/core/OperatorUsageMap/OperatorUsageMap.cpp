@@ -1848,6 +1848,7 @@ OperatorUsageMap::OperatorUsageMap() {
         "\npick:\n"
         "    description:\n"
         "        pick[n] input-seq\n"
+        "        pick(|n>) input-seq\n"
         "        randomly pick n elements from each superposition in the input sequence\n"
         "        if n is greater than the size of the superposition, then only return size(superposition) elements\n"
         "        if n is less than or equal 0, return the empty ket\n\n"

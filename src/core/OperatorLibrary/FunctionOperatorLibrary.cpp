@@ -2092,3 +2092,16 @@ Ket op_print_dot_fn1(ContextList& context, const Sequence& input_seq, const Sequ
     return Ket("dot file");
 }
 
+Sequence op_pick_fn1(const Sequence& input_seq, const Sequence& one)
+{
+    if (input_seq.is_empty_ket() || one.is_empty_ket()) { return Sequence(); }
+    try
+    {
+        size_t n = std::stoul(one.to_ket().label());
+        return input_seq.pick(n);
+    }
+    catch (const std::invalid_argument& e) {
+        (void)e;  // Needed to suppress C4101 warning.
+        return Sequence();
+    }
+}
