@@ -80,4 +80,5 @@ std::string generate_dot_string(ContextList& context, const Sequence& input_seq,
 Ket op_print_dot_fn1(ContextList& context, const Sequence& input_seq, const Sequence& one);
 Sequence op_pick_fn1(const Sequence& input_seq, const Sequence& one);
 Ket op_random_int_fn2(const Sequence& input_seq, const Sequence& one, const Sequence& two);
+Sequence op_xor_fn1(const Sequence& input_seq, const Sequence& one);
 

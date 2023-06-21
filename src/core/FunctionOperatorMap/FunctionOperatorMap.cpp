@@ -590,6 +590,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("random-int");
     fn_map.whitelist_2.emplace(idx, &op_random_int_fn2);
 
+    idx = ket_map.get_idx("XOR");
+    fn_map.whitelist_1.emplace(idx, &op_xor_fn1);
 
 
     // Template machine related operators and functions:

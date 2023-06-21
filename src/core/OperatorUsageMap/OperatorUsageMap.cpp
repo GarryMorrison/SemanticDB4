@@ -5108,6 +5108,25 @@ OperatorUsageMap::OperatorUsageMap() {
         "            |27>\n\n"
         "    see also:\n\n";
         
+    operator_usage_map.map["XOR"] =  // Name clash with xor(), the simple xor function!
+        "\nXOR:\n"
+        "    description:\n"
+        "        XOR(seq2) seq1\n"
+        "        for sp2_i in seq2 and for sp1_i in seq1\n"
+        "        take the XOR of their coefficients\n"
+        "        we take that to mean absolute-value(c_i - c_j)\n"
+        "        this reproduces the standard case when all coefficients are in {0,1}\n"
+        "        but should generalize to the case where the coefficients are arbitrary floats\n"
+        "        note that if a ket is absent from one of the superpositions, its coefficient is taken to be 0\n"
+        "        kets with final coefficient 0 are \"dropped\" from the final result\n"
+        "        note, the above definition implies \"XOR(seq1) seq1\" returns the empty ket |>\n\n"
+        "    examples:\n"
+        "        -- an abstract example:\n"
+        "        -- XOR of the sets {a,c,d} and {a,b,c,e}\n"
+        "        XOR(|a> + |c> + |d>) (|a> + |b> + |c> + |e>)\n"
+        "            |d> + |b> + |e>\n\n"
+        "    see also:\n"
+        "        union, intersection, drop\n\n";
 
 
     // fill out statement_prototypes map:

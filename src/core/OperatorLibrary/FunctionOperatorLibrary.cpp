@@ -2125,3 +2125,38 @@ Ket op_random_int_fn2(const Sequence& input_seq, const Sequence& one, const Sequ
         return Ket();
     }
 }
+
+Sequence op_xor_fn1(const Sequence& input_seq, const Sequence& one)
+{
+    size_t size = std::max(input_seq.size(), one.size());
+    Sequence result;
+    for (size_t i = 0; i < size; i++)
+    {
+        Superposition result_sp;
+        Superposition sp1 = input_seq.get(i);
+        Superposition sp2 = one.get(i);
+        std::vector<ulong> sp1_vec = sp1.get_idx_vector();
+        std::vector<ulong> sp2_vec = sp2.get_idx_vector();
+        std::set<ulong> sp_indices;
+        for (ulong idx : sp1_vec)
+        {
+            sp_indices.insert(idx);
+        }
+        for (ulong idx : sp2_vec)
+        {
+            sp_indices.insert(idx);
+        }
+        for (ulong idx : sp_indices)
+        {
+            double v1 = sp1.find_value(idx);
+            double v2 = sp2.find_value(idx);
+            double v = std::abs(v1 - v2);
+            if (v > 0)
+            {
+                result_sp.add(idx, v);
+            }
+        }
+        result.append(result_sp);
+    }
+    return result;
+}
