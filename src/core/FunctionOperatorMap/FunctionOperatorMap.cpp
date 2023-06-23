@@ -106,7 +106,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.ket_fn.emplace(idx, &print_ket);
 
     
-    /*
+    
     // Old ket based versions of extract-*
     // Deprecated, for now, by the Sequence versions, which are hopefully faster:
     idx = ket_map.get_idx("extract-head");
@@ -123,9 +123,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("extract-headless");
     fn_map.ket_fn.emplace(idx, &extract_headless);
-    */
+    
 
     
+    /*  // These are currently broken! There are bugs in the corresponding Superposition:: methods.
     // New sequence based versions of extract-*
     idx = ket_map.get_idx("extract-head");
     fn_map.seq_fn.emplace(idx, &op_extract_head);
@@ -141,7 +142,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("extract-headless");
     fn_map.seq_fn.emplace(idx, &op_extract_headless);
-    
+    */
 
 
     idx = ket_map.get_idx("floor");

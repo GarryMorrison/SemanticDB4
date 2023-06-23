@@ -898,12 +898,22 @@ void Superposition::extract_value()
 {
     for (size_t i = 0; i < sort_order.size(); i++)
     {
+        /*  // Broken!!!
         ulong idx = sort_order[i];
         ulong new_idx = ket_map.get_value_idx(idx);
         if (idx != new_idx)
         {
             sort_order[i] = new_idx;
             sp[new_idx] = sp[idx];
+            sp.erase(idx);
+        }
+        */
+        ulong idx = sort_order[i];
+        ulong new_idx = ket_map.get_value_idx(idx);
+        if (idx != new_idx)
+        {
+            double v = sp[idx];  // Still broken, and now it crashes!
+            this->add(new_idx, v);
             sp.erase(idx);
         }
     }
