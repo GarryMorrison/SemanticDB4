@@ -7,15 +7,21 @@
 
 
 |context> => |Kanerva implementation>
-
+
+print |Exploring some of Kanerva's ideas using the SDB language:>
+print |--------------------------------------------------------->
+print | >
 
 -- define some parameters of our hypervectors:
 -- the largest bit number:
 -- start with something small during testing, eg, 1000:
-the |max> => |1000>
+the |max> => |1000>
+sprint["largest bit number: "] the |max>
 
 -- the number of on bits in our hypervectors:
-on |bits> => |100>
+on |bits> => |100>
+sprint["number of on bits: "] on |bits>
+
 
 -- the current max "seq ket":
 max |seq ket> => |0>
@@ -41,7 +47,7 @@ set-time-stamp (*) #=>
 -- first, a hypervector with all bits on:
 the |full vector> => |0> .. the |max>
 
--- now a couple of examples of random hypervectors:
+-- now learn some random hypervectors:
 the |X> => pick( on |bits>) the |full vector>
 the |A> => pick( on |bits>) the |full vector>
 the |B> => pick( on |bits>) the |full vector>
@@ -56,12 +62,14 @@ d (*,*) #=> extract-value measure-currency XOR( |__self2>) |__self1>
 
 
 -- a quick test:
--- we expect: |0>, |100>, |200> and commutivity respectively:
-sprint["X vs X: "] d( the |X>, the |X>)
-sprint["X vs 0: "] d( the |X>, |>)
-sprint["X vs - X: "] d( the |X>, - the |X>)
-sprint["X vs A: "] d( the |X>, the |A>)
-sprint["A vs X: "] d( the |A>, the |X>)
+-- we expect: |0>, |100>, |200> and commutivity respectively:
+print | >
+print |Testing our Hamming distance metric:>
+sprint["    d(X, X): "] d( the |X>, the |X>)
+sprint["    d(X, 0): "] d( the |X>, |>)
+sprint["    d(X, - X): "] d( the |X>, - the |X>)
+sprint["    d(X, A): "] d( the |X>, the |A>)
+sprint["    d(A, X): "] d( the |A>, the |X>)
 
 
 -- next, define our permutation operator:
@@ -75,14 +83,20 @@ create-inverse-P |*> #=>
      unlearn[inverse-P] rel-kets[inverse-P]
      find-inverse[P]
 
--- a quick test of our permutation operator:
-sprint["X vs P X: "] d( the |X>, P the |X>)
-
+-- a quick test of our permutation operator:
+print | >
+print |Test the Hamming distance after applying our permutation operator P>
+print |And its inverse P^-1>
+print |Noting that the inverse is almost never perfect,>
+print |but because of hypervector robustness this is not a problem>
+sprint["    d(X, P X): "] d( the |X>, P the |X>)
 
 -- now learn the inverse permutations, since we have just invoked "P the |X>"
 create-inverse-P
-
-sprint["X vs P^-1 P X: "] d( the |X>, inverse-P P the |X>)
+
+-- noting that the inverse is not perfect:
+sprint["    d(X, P^-1 P X): "] d( the |X>, inverse-P P the |X>)
+
 
 
 -- next, define "op seq1 => seq2", using learn-seq and fuzzy-recall-seq:
@@ -113,18 +127,25 @@ fuzzy-seq-recall (*) #=> apply(|__self1>, clean select[1,1] filter( |ops: clean 
 -- and it will return a clean version of seq1
 -- then: d( seq1, cleaned approx-seq1) should be exactly |0>
 
--- let's define X' to be the approximate version of X:
+-- let's define X' to be the approximate version of X:
+print | >
+print |Define X' to be the approximate version of X>
+print |The easiest way is to use the imperfect nature of: P^-1 P X>
 the |X'> => inverse-P P the |X>
 
--- and now learn the identity mapping for X:
+-- and now learn the identity mapping for X:
+print |Learn the identity mapping: identity X maps-to X>
 learn-seq( |op: identity>, the |X>) the |X>
 
--- and now let's clean up X':
-the-clean |X'> => fuzzy-seq-recall( |op: identity>) the |X'>
+-- and now let's clean up X':
+print |Then use the stored identity mapping to clean X'>
+print |Define: clean X' = identity X'>
+the |clean X'> => fuzzy-seq-recall( |op: identity>) the |X'>
 
--- now let's compare them:
-sprint["X vs X': "] d( the |X>, the |X'>)
-sprint["X vs clean X': "] d( the |X>, the-clean |X'>)
+-- now let's compare them:
+print |Now compare them:>
+sprint["    d(X, X'): "] d( the |X>, the |X'>)
+sprint["    d(X, clean X'): "] d( the |X>, the |clean X'>)
 
 
 
@@ -151,66 +172,90 @@ learn-seq (*,*,*) #=>
 fuzzy-recall-label (*) #=> label filter( |ops: clean extract-value>, the |time stamp>) drop-below[0.5] similar-input[seq-pattern] |__self>
 
 
--- now, lets' learn a short sequence:
+-- now, lets' learn a short sequence:
+print | >
+print |Learn the sequence: A . B . C . D>
+print |Along with associated labels>
 learn-seq(|op: foo>, |C>, the |D>) learn-seq(|op: foo>, |B>, the |C>) learn-seq(|op: foo>, |A>, the |B>) the |A>
 
 
--- now let's recall some labels:
-sprint["fuzzy recall label A: "] fuzzy-recall-label the |A>
-sprint["fuzzy recall label B: "] fuzzy-recall-label the |B>
-sprint["fuzzy recall label C: "] fuzzy-recall-label the |C>
+-- now let's recall some labels:
+print |Fuzzy recall the labels:>
+sprint["    fuzzy recall label A: "] fuzzy-recall-label the |A>
+sprint["    fuzzy recall label B: "] fuzzy-recall-label the |B>
+sprint["    fuzzy recall label C: "] fuzzy-recall-label the |C>
 
 
--- now, let's store A -> A a couple of times:
+-- now, let's store A -> A a couple of times:
+print | >
+print |Learn: identity A maps-to A, two more times>
 learn-seq(|op: identity>, |A>, the |A>) the |A>
 learn-seq(|op: identity>, |A>, the |A>) the |A>
 
 
 -- now see what happens when we ask about A:
--- the expectation is we will get 3|A>
-sprint["fuzzy recall label A: "] fuzzy-recall-label the |A>
+-- the expectation is we will get 3|A>
+print |Now fuzzy recall the label for A>
+print |And observe we have now stored it 3 times:>
+sprint["    fuzzy recall label A: "] fuzzy-recall-label the |A>
 
 
--- let's build P for A:
+-- let's build P for A:
+print | >
+print |Apply P to A once, to invoke the memoizing feature of the P operator>
 the |temp> => P the |A>
 
--- learn the inverses:
+-- learn the inverses:
+print |Now we know P, learn the correspoding inverse: P^-1>
 create-inverse-P
 
 
--- let's construct a A' hypervector using the imperfect inverse of:  inverse-P P
+-- let's construct a A' hypervector using the imperfect inverse of:  inverse-P P
+print |Define A' using: A' = P^-1 P A>
 the |A'> => inverse-P P the |A>
 
 -- let's check the distance between A and A':
--- we expect a small but non-zero number:
-sprint["d(A, A'): "] d( the |A>, the |A'>)
+-- we expect a small but non-zero number:
+print |Check the distance between A and A'>
+sprint["    d(A, A'): "] d( the |A>, the |A'>)
 
 -- now, let's fuzzy recall the label of A':
--- we expect the coeff to be less than 3:
-sprint["fuzzy recall label A': "] fuzzy-recall-label the |A'>
+-- we expect the coeff to be less than 3:
+print | >
+print |Now ask it to fuzzy recall the label for A'>
+print |Observing, if A' == A it should be: 3 A>
+print |But because A' != A, it is a little lower than that>
+sprint["    fuzzy recall label A': "] fuzzy-recall-label the |A'>
 
 
 -- next, let's learn an inhibition:
--- let's say A' inhibits A
+-- let's say A' inhibits A
+print | >
+print |Now make use of the fact we can learn inhibition too>
+print |Learn the mapping: foo A' maps-to -A>
 learn-seq(|op: foo>, -|A>, - the |A>) the |A'>
 
 
 -- now see what we get when we fuzzy recall label of A:
--- we expect the coeff to be just above 2:
-sprint["fuzzy recall label A: "] fuzzy-recall-label the |A>
+-- we expect the coeff to be just above 2:
+print |Now see what we get when we fuzzy recall the label for the hypervector A>
+print |Seeing that it is now a little lower than the original: 3 A>
+sprint["    fuzzy recall label A: "] fuzzy-recall-label the |A>
 
 -- now, change the time stamp, and we should not recall anything:
+print | >
+print |To avoid "catastrophic interference" each stored pattern has an associated context>
+print |See: https://en.wikipedia.org/wiki/Catastrophic_interference>
+print |For now we use an integer to represent a given context, but any string will work>
+print |So if we change to a new "context" and then ask to fuzzy recall the label for A, we get the empty ket:>
 the |time stamp> => |1>
-sprint["fuzzy recall label A: "] fuzzy-recall-label the |A>
+sprint["    fuzzy recall label A: "] fuzzy-recall-label the |A>
 
+print | >
+print |If we change it back to a known context, we get the expected result:>
+the |time stamp> => |0>
+sprint["    fuzzy recall label A: "] fuzzy-recall-label the |A>
 
-
--- bug hunting:
--- solved! A bug in a re-implementation of extract-value:
--- sprint  drop-below[0.5] similar-input[seq-pattern] the |A'>
--- sprint  extract-value drop-below[0.5] similar-input[seq-pattern] the |A'>
--- sprint  clean extract-value drop-below[0.5] similar-input[seq-pattern] the |A'>
-
 
 
 -- now a couple of notes:
