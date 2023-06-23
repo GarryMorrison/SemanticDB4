@@ -3,7 +3,7 @@
 --
 -- Author: Garry Morrison
 -- Created: 2023/6/21
--- Updated: 2023/6/21
+-- Updated: 2023/6/23
 
 |context> => |Kanerva implementation>
 
@@ -19,6 +19,22 @@ on |bits> => |100>
 -- the current max "seq ket":
 max |seq ket> => |0>
 
+-- to avoid "catastrophic forgetting and interference",
+-- https://en.wikipedia.org/wiki/Catastrophic_interference
+-- the problem is given: A -> B, then A -> C
+-- and we ask what follows A, then what do we answer? C?
+-- we need some way to provide "context", one way is just define an integer
+-- then that integer labels those patterns that context label:
+the |time stamp> => |0>
+
+inc-time-stamp (*) #=>
+    the |time stamp> => plus[1] the |time stamp>
+    |__self>
+
+set-time-stamp (*) #=>
+    the |time stamp> => |__self>
+    |__self0>
+
 
 -- construct some hypervectors:
 -- first, a hypervector with all bits on:
@@ -27,14 +43,22 @@ the |full vector> => |0> .. the |max>
 -- now a couple of examples of random hypervectors:
 the |X> => pick( on |bits>) the |full vector>
 the |A> => pick( on |bits>) the |full vector>
+the |B> => pick( on |bits>) the |full vector>
+the |C> => pick( on |bits>) the |full vector>
+the |D> => pick( on |bits>) the |full vector>
 
 
 -- now define our distance metric:
-d (*,*) #=> extract-value how-many XOR( |__self2>) |__self1>
+-- we swapped from "how-many" to "measure-currency" so we can also handle coeffs outside of {0,1}
+-- d (*,*) #=> extract-value how-many XOR( |__self2>) |__self1>
+d (*,*) #=> extract-value measure-currency XOR( |__self2>) |__self1>
+
 
 -- a quick test:
--- we expect: |0> and commutivity respectively:
+-- we expect: |0>, |100>, |200> and commutivity respectively:
 sprint["X vs X: "] d( the |X>, the |X>)
+sprint["X vs 0: "] d( the |X>, |>)
+sprint["X vs - X: "] d( the |X>, - the |X>)
 sprint["X vs A: "] d( the |X>, the |A>)
 sprint["A vs X: "] d( the |A>, the |X>)
 
@@ -68,7 +92,7 @@ sprint["X vs P^-1 P X: "] d( the |X>, inverse-P P the |X>)
 -- this operator returns seq2, so they can be easily chained in an operator sequence
 learn-seq (*,*) #=>
     max |seq ket> => plus[1] max |seq ket>
-    the |ket> => |seq ket> :_ max |seq ket>
+    the |ket> => |seq ket> :_ max |seq ket> :_ the |time stamp>
     seq-pattern the |ket> => |__self0>
     learn( |__self1>, the |ket>, |__self2>)
     |__self2>
@@ -78,7 +102,7 @@ learn-seq (*,*) #=>
 -- parameter 1 is the operator ket, eg |op: foo>
 -- the input sequence is just that, the input seqence
 -- the returned value is the best matching pattern for the given input sequence:
-fuzzy-seq-recall (*) #=> apply(|__self1>, clean select[1,1] drop-below[0.5] similar-input[seq-pattern] |__self0>)
+fuzzy-seq-recall (*) #=> apply(|__self1>, clean select[1,1] filter( |op: extract-value>, the |time stamp>) drop-below[0.5] similar-input[seq-pattern] |__self0>)
 
 
 -- now test it by applying the idea of "cleaning" the sequence:
@@ -91,15 +115,89 @@ fuzzy-seq-recall (*) #=> apply(|__self1>, clean select[1,1] drop-below[0.5] simi
 -- let's define X' to be the approximate version of X:
 the |X'> => inverse-P P the |X>
 
--- and now learn the clean mapping for X:
-learn-seq( |op: clean-seq>, the |X>) the |X>
+-- and now learn the identity mapping for X:
+learn-seq( |op: identity>, the |X>) the |X>
 
 -- and now let's clean up X':
-the-clean |X'> => fuzzy-seq-recall( |op: clean-seq>) the |X'>
+the-clean |X'> => fuzzy-seq-recall( |op: identity>) the |X'>
 
 -- now let's compare them:
 sprint["X vs X': "] d( the |X>, the |X'>)
 sprint["X vs clean X': "] d( the |X>, the-clean |X'>)
+
+
+
+-- next, define "op seq1 => seq2", using learn-seq and fuzzy-recall-seq:
+-- and in the process learn a label for seq1
+-- where: 
+-- parameter 1 is the operator ket, eg |op: foo>
+-- parameter 2 is the text label for the input sequence seq1
+-- parameter 3 is the destination sequence, eg seq2
+-- the input sequence is seq1
+-- this operator returns seq2, so they can be easily chained in an operator sequence
+learn-seq (*,*,*) #=>
+    max |seq ket> => plus[1] max |seq ket>
+    the |ket> => |seq ket> :_ max |seq ket> :_ the |time stamp>
+    seq-pattern the |ket> => |__self0>
+    label the |ket> => |__self2>
+    learn( |__self1>, the |ket>, |__self3>)
+    |__self3>
+
+
+-- given an input pattern, return its' text label:
+-- we may need to tweak the drop-below threshold
+fuzzy-recall-label (*) #=> label drop-below[0.5] similar-input[seq-pattern] |__self>
+-- fuzzy-recall-label (*) #=> label filter( |op: extract-value>, the |time stamp>) drop-below[0.5] similar-input[seq-pattern] |__self>
+
+
+-- now, lets' learn a short sequence:
+learn-seq(|op: foo>, |C>, the |D>) learn-seq(|op: foo>, |B>, the |C>) learn-seq(|op: foo>, |A>, the |B>) the |A>
+
+
+-- now let's recall some labels:
+sprint["fuzzy recall label A: "] fuzzy-recall-label the |A>
+sprint["fuzzy recall label B: "] fuzzy-recall-label the |B>
+sprint["fuzzy recall label C: "] fuzzy-recall-label the |C>
+
+-- now, let's store A -> A a couple of times:
+learn-seq(|op: identity>, |A>, the |A>) the |A>
+learn-seq(|op: identity>, |A>, the |A>) the |A>
+
+-- now see what happens when we ask about A:
+-- the expectation is we will get 3|A>
+sprint["fuzzy recall label A: "] fuzzy-recall-label the |A>
+
+-- let's build P for A:
+the |temp> => P the |A>
+
+-- learn the inverses:
+create-inverse-P
+
+-- let's construct a A' hypervector using the imperfect inverse of:  inverse-P P
+the |A'> => inverse-P P the |A>
+
+-- let's check the distance between A and A':
+-- we expect a small but non-zero number:
+sprint["d(A, A'): "] d( the |A>, the |A'>)
+
+-- now, let's fuzzy recall the label of A':
+-- we expect the coeff to be less than 3:
+sprint["fuzzy recall label A': "] fuzzy-recall-label the |A'>
+
+
+-- next, let's learn an inhibition:
+-- let's say A' inhibits A
+learn-seq(|op: foo>, -|A>, - the |A>) the |A'>
+
+-- now see what we get when we fuzzy recall label of A:
+-- we expect the coeff to be just above 2:
+sprint["fuzzy recall label A: "] fuzzy-recall-label the |A>
+
+
+-- bug hunting:
+sprint  drop-below[0.5] similar-input[seq-pattern] the |A'>
+sprint  extract-value drop-below[0.5] similar-input[seq-pattern] the |A'>
+sprint  clean extract-value drop-below[0.5] similar-input[seq-pattern] the |A'>
 
 
 
