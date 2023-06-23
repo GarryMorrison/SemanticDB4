@@ -1,0 +1,39 @@
+-- Define the pack and unpack operators
+-- So we can store a superposition or sequence inside a ket
+-- Ket pack seq
+-- Seq unpack ket
+--
+-- Author: Garry Morrison
+-- Created: 2023/6/23
+-- Updated: 2023/6/23
+
+
+|context> => |packing and unpacking>
+
+
+pack (*) #=>
+    unlearn[the] |result>
+    sfor( the |sp> in |__self>):
+        the |result> .=> smerge[" +++ "] push-float the |sp>
+    end:
+    |packed> :_ smerge[" ... "] the |result>
+
+unpack |packed: *> #=> pop-float split[" +++ "] ssplit[" ... "] extract-tail |_self>
+
+
+-- Now a quick test:
+the |sp1> => rank split |ABCDE>
+
+sprint["sp1: "] the |sp1>
+sprint["pack sp1: "] pack the |sp1>
+sprint["unpack pack sp1: "] unpack pack the |sp1>
+
+
+the |sp2> => split |XYZ>
+the |seq1> => the |sp1> . the |sp2>
+
+print | >
+sprint["seq1: "] the |seq1>
+sprint["pack seq1: "] pack the |seq1>
+sprint["unpack pack seq1: "] unpack pack the |seq1>
+
