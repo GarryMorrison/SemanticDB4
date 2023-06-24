@@ -1,0 +1,18 @@
+|context> => |testing apply function>
+
+age |Fred> => |35>
+nick-name |Fred> => |Freddie>
+mother |Fred> => |Jude>
+father |Fred> => |Tom>
+age |Jude> => |61>
+
+sprint apply(|op: age>, |Fred>)
+sprint apply(|op: age> + |op: mother> + |op: father>, |Fred>)
+sprint apply(|op: age> . |op: mother> . |op: father>, |Fred>)
+
+star |*> #=> apply(supported-ops |_self>, |_self>)
+
+sprint star |Fred>
+
+sprint apply(|ops: age mother>, |Fred>)
+

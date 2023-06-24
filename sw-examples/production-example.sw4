@@ -1,0 +1,38 @@
+-- quick exploration of the idea of production:
+-- see: https://en.wikipedia.org/wiki/Production_(computer_science)
+--
+-- Author: Garry Morrison
+-- Created: 2023/6/24
+-- Updated: 2023/6/24
+
+
+|context> => |production example>
+
+-- define our toy productions:
+op1 |*> #=> |_self>
+op2 |*> #=> |_self>
+op1 |S> => |a> . |S> . |b>
+op2 |S> => |b> . |a>
+
+-- list of productions, with weights:
+list-of |production rules> => |op: op1> + 0.2 |op: op2>
+
+contains-S (*) #=> is-mbr(|S>) seq2sp |__self>
+
+-- generate string:
+generate-string (*) #=>
+    the |seq> => |__self>
+    while( contains-S the |seq>):
+        the |op> => clean weighted-pick-elt list-of |production rules>
+        the |seq> => apply( the |op>, the |seq>)
+        -- sprint["op: "] the |op>
+        -- sprint["seq: "] the |seq>
+    end:
+    smerge the |seq>
+
+-- now test it a few times:
+sprint["Generated string: "] generate-string |S>
+sprint["Generated string: "] generate-string |S>
+sprint["Generated string: "] generate-string |S>
+sprint["Generated string: "] generate-string |S>
+sprint["Generated string: "] generate-string |S>

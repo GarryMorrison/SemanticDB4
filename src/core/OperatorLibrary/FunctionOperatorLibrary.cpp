@@ -850,9 +850,34 @@ Sequence op_apply(ContextList& context, const Sequence& input_seq, const Sequenc
                     r.add(seq);
                 }
                 else {
+                    /*  // Buggy when two is a sequence!
                     for (const auto& k : two.to_sp()) {
                         Sequence seq = op.Compile(context, k.to_seq());
                         r.add(seq);
+                    }
+                    */
+                    for (const auto& two_sp : two)
+                    {
+                        // Superposition local_sp;
+                        Sequence local_seq;
+                        for (const auto& k : two_sp)
+                        {
+                            Sequence seq = op.Compile(context, k.to_seq());
+                            // local_sp.add(seq);
+                            // local_seq.add(seq);
+                            local_seq.append(seq);
+                        }
+                        // r.append(local_sp);
+                        // r.append(local_seq);
+                        // r.add(local_seq);
+                        if (sp.size() > 1)  // if sp is a superposition with more than 1 ket: // Surely there is a better way to do this!
+                        {
+                            r.add(local_seq);
+                        }
+                        else                  // else if sp is a single ket:
+                        {
+                            r.append(local_seq);
+                        }
                     }
                 }
             }
@@ -871,7 +896,7 @@ Sequence op_apply(ContextList& context, const Sequence& input_seq, const Sequenc
                     r.add(seq);
                 }
                 else {
-                    for (const auto& k : two.to_sp()) {
+                    for (const auto& k : two.to_sp()) {  // Buggy when two is a full sequence! FIXME!
                         Sequence seq = k.to_seq();
                         for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
                             seq = (*it).Compile(context, seq);
