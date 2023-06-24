@@ -3,7 +3,7 @@
 --
 -- Author: Garry Morrison
 -- Created: 2023/6/21
--- Updated: 2023/6/23
+-- Updated: 2023/6/24
 
 
 |context> => |Kanerva implementation>
@@ -48,11 +48,17 @@ set-time-stamp (*) #=>
 the |full vector> => |0> .. the |max>
 
 -- now learn some random hypervectors:
-the |X> => pick( on |bits>) the |full vector>
+the |X> => pick( on |bits>) the |full vector>
+the |Y> => pick( on |bits>) the |full vector>
+the |Z> => pick( on |bits>) the |full vector>
+
 the |A> => pick( on |bits>) the |full vector>
 the |B> => pick( on |bits>) the |full vector>
 the |C> => pick( on |bits>) the |full vector>
-the |D> => pick( on |bits>) the |full vector>
+the |D> => pick( on |bits>) the |full vector>
+the |E> => pick( on |bits>) the |full vector>
+the |F> => pick( on |bits>) the |full vector>
+the |G> => pick( on |bits>) the |full vector>
 
 
 -- now define our distance metric:
@@ -67,10 +73,47 @@ print | >
 print |Testing our Hamming distance metric:>
 sprint["    d(X, X): "] d( the |X>, the |X>)
 sprint["    d(X, 0): "] d( the |X>, |>)
-sprint["    d(X, - X): "] d( the |X>, - the |X>)
+sprint["    d(X, - X): "] d( the |X>, - the |X>)
+sprint["    d(X, 6 X): "] d( the |X>, 6 the |X>)
 sprint["    d(X, A): "] d( the |X>, the |A>)
 sprint["    d(A, X): "] d( the |A>, the |X>)
-
+
+print | >
+print |Verify we have a proper metric:>
+print |https://en.wikipedia.org/wiki/Metric_space>
+print |1) the point to itself is zero:>
+sprint["    d(X, X): "] d( the |X>, the |X>)
+
+print | >
+print |2) positivity, if x != y then greater than zero:>
+sprint["    d(X, Y): "] d( the |X>, the |Y>)
+
+print | >
+print |3) symmetry:>
+sprint["    d(X, Y): "] d( the |X>, the |Y>)
+sprint["    d(Y, X): "] d( the |Y>, the |X>)
+
+print | >
+print |4) triangle inequality:>
+sprint["    d(X, Z): "] d( the |X>, the |Z>)
+sprint["    d(X, Y): "] d( the |X>, the |Y>)
+sprint["    d(Y, Z): "] d( the |Y>, the |Z>)
+sprint["    d(X, Y) + d(Y, Z): "] ( d( the |X>, the |Y>) |> ++ d( the |Y>, the |Z>) |> )
+
+
+print | >
+print |Test metric invariance properties under multiplication by A:>
+the |X * A> => XOR( the |A>) the |X>
+the |Y * A> => XOR( the |A>) the |Y>
+the |X * A * A> => XOR( the |A>)^2 the |X>
+the |Y * A * A> => XOR( the |A>)^2 the |Y>
+sprint["    d(X, Y): "] d( the |X>, the |Y>)
+sprint["    d(X, X * A): "] d( the |X>, the |X * A>)
+sprint["    d(Y, Y * A): "] d( the |Y>, the |Y * A>)
+sprint["    d(X * A, Y * A): "] d( the |X * A>, the |Y * A>)
+sprint["    d(X, X * A * A): "] d( the |X>, the |X * A * A>)
+sprint["    d(Y, Y * A * A): "] d( the |Y>, the |Y * A * A>)
+
 
 -- next, define our permutation operator:
 -- NB: there may be collisions, but it shouldn't harm things too much due to the hypervector robustness
@@ -84,6 +127,7 @@ create-inverse-P |*> #=>
      find-inverse[P]
 
 -- a quick test of our permutation operator:
+print | >
 print | >
 print |Test the Hamming distance after applying our permutation operator P>
 print |And its inverse P^-1>
@@ -118,7 +162,9 @@ learn-seq (*,*) #=>
 -- the input sequence is just that, the input seqence
 -- the returned value is the best matching pattern for the given input sequence:
 fuzzy-seq-recall (*) #=> apply(|__self1>, clean select[1,1] filter( |ops: clean extract-value>, the |time stamp>) drop-below[0.5] similar-input[seq-pattern] |__self0>)
-
+-- fuzzy-recall-seq (*) #=> apply(|__self1>, clean select[1,1] filter( |ops: clean extract-value>, the |time stamp>) drop-below[0.5] similar-input[seq-pattern] |__self0>)
+fuzzy-recall-seq (*) #=> apply(|__self1>, clean select[1,5] filter( |ops: clean extract-value>, the |time stamp>) drop-below[0.25] similar-input[seq-pattern] |__self0>)
+
 
 -- now test it by applying the idea of "cleaning" the sequence:
 -- the idea is you learn "clean-seq seq1 => seq1"
@@ -174,9 +220,9 @@ fuzzy-recall-label (*) #=> label filter( |ops: clean extract-value>, the |time s
 
 -- now, lets' learn a short sequence:
 print | >
-print |Learn the sequence: A . B . C . D>
+print |Learn the sequence: A . B . C . D . E . F . G>
 print |Along with associated labels>
-learn-seq(|op: foo>, |C>, the |D>) learn-seq(|op: foo>, |B>, the |C>) learn-seq(|op: foo>, |A>, the |B>) the |A>
+learn-seq(|op: ignore>, |G>, |>) learn-seq(|op: foo>, |F>, the |G>) learn-seq(|op: foo>, |E>, the |F>) learn-seq(|op: foo>, |D>, the |E>) learn-seq(|op: foo>, |C>, the |D>) learn-seq(|op: foo>, |B>, the |C>) learn-seq(|op: foo>, |A>, the |B>) the |A>
 
 
 -- now let's recall some labels:
@@ -184,9 +230,46 @@ print |Fuzzy recall the labels:>
 sprint["    fuzzy recall label A: "] fuzzy-recall-label the |A>
 sprint["    fuzzy recall label B: "] fuzzy-recall-label the |B>
 sprint["    fuzzy recall label C: "] fuzzy-recall-label the |C>
-
+
+
+-- set the max index for our walk operator to prevent a potential infinite loop:
+max |idx> => |10>
+
+-- now let's walk a sequence:
+walk-seq (*) #=>
+    the |seq> => |__self0>
+    the |idx> => |0>
+    while( (do-you-know fuzzy-recall-label the |seq>) && (the |idx> < max |idx>)):
+        the |idx> => plus[1] the |idx>
+        sprint( |    > _ the |idx> _ |): >) fuzzy-recall-label the |seq>
+        the |seq> => fuzzy-recall-seq(|__self>) the |seq>
+    end:
+
+print | >
+print |Let's walk a sequence starting with A:>
+-- now invoke it for A:
+walk-seq(|op: foo>) the |A>
+
+print | >
+print |Now let's learn the sequence: B . X . Y . Z>
+learn-seq(|op: ignore>, |Z>, |>) learn-seq(|op: foo>, |Y>, the |Z>) learn-seq(|op: foo>, |X>, the |Y>) learn-seq(|op: foo>, |B>, the |X>)  the |B>
+
+print | >
+print |Let's again walk the sequence starting with A:>
+walk-seq(|op: foo>) the |A>
+
+print | >
+print |Let's again walk the sequence starting with B:>
+walk-seq(|op: foo>) the |B>
+
+print | >
+print |Once more, this time walk the sequence starting with C:>
+walk-seq(|op: foo>) the |C>
+
+
 
 -- now, let's store A -> A a couple of times:
+print | >
 print | >
 print |Learn: identity A maps-to A, two more times>
 learn-seq(|op: identity>, |A>, the |A>) the |A>
@@ -256,7 +339,19 @@ print |If we change it back to a known context, we get the expected result:>
 the |time stamp> => |0>
 sprint["    fuzzy recall label A: "] fuzzy-recall-label the |A>
 
-
+
+print | >
+print |Let's do some testing of simm:>
+print |And use this to calibrate our drop-below[t] threshold parameter:>
+sprint["    simm(A, A): "] simm( the |A>, the |A>)
+sprint["    simm(A, A + B): "] simm( the |A>, the |A> + the |B>)
+sprint["    simm(A, A + B + C): "] simm( the |A>, the |A> + the |B> + the |C>)
+sprint["    simm(A, A + B + C + D): "] simm( the |A>, the |A> + the |B> + the |C> + the |D>)
+sprint["    simm(A, A + B + C + D + E): "] simm( the |A>, the |A> + the |B> + the |C> + the |D> + the |E>)
+sprint["    simm(A, A + B + C + D + E + F): "] simm( the |A>, the |A> + the |B> + the |C> + the |D> + the |E> + the |F>)
+sprint["    simm(A, B): "] simm( the |A>, the |B>)
+
+
 
 -- now a couple of notes:
 -- the multiplication: D * C * B * A
