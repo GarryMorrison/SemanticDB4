@@ -856,6 +856,7 @@ Sequence op_apply(ContextList& context, const Sequence& input_seq, const Sequenc
                         r.add(seq);
                     }
                     */
+                    /*  // This attempt is buggy too!
                     for (const auto& two_sp : two)
                     {
                         // Superposition local_sp;
@@ -879,6 +880,16 @@ Sequence op_apply(ContextList& context, const Sequence& input_seq, const Sequenc
                             r.append(local_seq);
                         }
                     }
+                    */
+                    Sequence seq = op.Compile(context, two);
+                    if (sp.size() > 1)  // if sp is a superposition with more than 1 ket: // Surely there is a better way to do this!
+                    {
+                        r.add(seq);
+                    }
+                    else                  // else if sp is a single ket:
+                    {
+                        r.append(seq);
+                    }
                 }
             }
             else if (k_vec[0] == ket_map.get_idx("ops")) {
@@ -896,12 +907,27 @@ Sequence op_apply(ContextList& context, const Sequence& input_seq, const Sequenc
                     r.add(seq);
                 }
                 else {
+                    /*  // Buggy when two is a sequence!
                     for (const auto& k : two.to_sp()) {  // Buggy when two is a full sequence! FIXME!
                         Sequence seq = k.to_seq();
                         for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
                             seq = (*it).Compile(context, seq);
                         }
                         r.add(seq);
+                    }
+                    */
+                    Sequence seq = two;
+                    for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                        seq = (*it).Compile(context, seq);
+                    }
+
+                    if (sp.size() > 1)  // if sp is a superposition with more than 1 ket: // Surely there is a better way to do this!
+                    {
+                        r.add(seq);
+                    }
+                    else                  // else if sp is a single ket:
+                    {
+                        r.append(seq);
                     }
                 }
             }
